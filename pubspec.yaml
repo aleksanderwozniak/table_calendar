@@ -1,0 +1,21 @@
+name: table_calendar
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  intl: ^0.15.7
+  date_utils: ^0.1.0+2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
