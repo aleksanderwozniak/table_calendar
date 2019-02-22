@@ -1,5 +1,6 @@
 library table_calendar;
 
+import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/calendar_logic.dart';
 
@@ -81,7 +82,7 @@ class TableCalendarState extends State<TableCalendar> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Table(
-        border: TableBorder.all(), // TODO
+        // Makes this Table fill its parent horizontally
         defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
         children: children,
       ),
@@ -106,9 +107,8 @@ class TableCalendarState extends State<TableCalendar> {
 
   Widget _buildCellContent(DateTime date) {
     Widget content;
-    final now = DateTime.now();
 
-    if (date.isAtSameMomentAs(_calendarLogic.selectedDate)) {
+    if (Utils.isSameDay(date, _calendarLogic.selectedDate)) {
       content = Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -118,7 +118,7 @@ class TableCalendarState extends State<TableCalendar> {
         alignment: Alignment.center,
         child: Text('${date.day}'),
       );
-    } else if (date.isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
+    } else if (Utils.isSameDay(date, DateTime.now())) {
       content = Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
