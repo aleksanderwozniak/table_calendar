@@ -10,8 +10,8 @@ class CalendarLogic {
   }
 
   List<DateTime> get visibleMonth => _visibleMonth;
-  DateFormat get dateFormat => DateFormat.MMMM();
-  String get headerText => dateFormat.format(_focusedDate);
+  String get headerText => DateFormat.yMMMM().format(_focusedDate);
+  List<String> get daysOfWeek => _visibleMonth.take(7).map((date) => DateFormat.E().format(date)).toList();
 
   DateTime _focusedDate;
   DateTime _selectedDate;
@@ -62,5 +62,25 @@ class CalendarLogic {
     }
 
     return Utils.daysInRange(firstToDisplay, lastToDisplay).toList();
+  }
+
+  bool isSelected(DateTime day) {
+    return Utils.isSameDay(day, selectedDate);
+  }
+
+  bool isToday(DateTime day) {
+    return Utils.isSameDay(day, DateTime.now());
+  }
+
+  bool isWeekend(DateTime day) {
+    return day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
+  }
+
+  bool isExtraDay(DateTime day) {
+    final isBefore = _visibleMonth.take(7).where((date) => date.day > 10).any((date) => Utils.isSameDay(date, day));
+    final isAfter =
+        _visibleMonth.skip(_visibleMonth.length - 1 - 7).where((date) => date.day < 10).any((date) => Utils.isSameDay(date, day));
+
+    return isBefore || isAfter;
   }
 }
