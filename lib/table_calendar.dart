@@ -6,12 +6,15 @@ import 'package:table_calendar/cell_widget.dart';
 
 typedef void OnDaySelected(DateTime day);
 
+enum CalendarFormat { month, week }
+
 class TableCalendar extends StatefulWidget {
   final Map<DateTime, List> events;
   final OnDaySelected onDaySelected;
   final Color selectedColor;
   final Color todayColor;
   final Color eventMarkerColor;
+  final CalendarFormat calendarFormat;
 
   TableCalendar({
     Key key,
@@ -20,6 +23,7 @@ class TableCalendar extends StatefulWidget {
     this.selectedColor,
     this.todayColor,
     this.eventMarkerColor,
+    this.calendarFormat = CalendarFormat.month,
   }) : super(key: key);
 
   @override
@@ -61,7 +65,11 @@ class TableCalendarState extends State<TableCalendar> {
           icon: Icon(Icons.chevron_left),
           onPressed: () {
             setState(() {
-              _calendarLogic.selectPreviousMonth();
+              if (widget.calendarFormat == CalendarFormat.week) {
+                _calendarLogic.selectPreviousWeek();
+              } else {
+                _calendarLogic.selectPreviousMonth();
+              }
             });
           },
         ),
@@ -77,7 +85,11 @@ class TableCalendarState extends State<TableCalendar> {
           icon: Icon(Icons.chevron_right),
           onPressed: () {
             setState(() {
-              _calendarLogic.selectNextMonth();
+              if (widget.calendarFormat == CalendarFormat.week) {
+                _calendarLogic.selectNextWeek();
+              } else {
+                _calendarLogic.selectNextMonth();
+              }
             });
           },
         ),
@@ -92,10 +104,14 @@ class TableCalendarState extends State<TableCalendar> {
 
     children.add(_buildDaysOfWeek());
 
-    int x = 0;
-    while (x < _calendarLogic.visibleMonth.length) {
-      children.add(_buildTableRow(_calendarLogic.visibleMonth.skip(x).take(daysInWeek).toList()));
-      x += daysInWeek;
+    if (widget.calendarFormat == CalendarFormat.week) {
+      children.add(_buildTableRow(_calendarLogic.visibleWeek.toList()));
+    } else {
+      int x = 0;
+      while (x < _calendarLogic.visibleMonth.length) {
+        children.add(_buildTableRow(_calendarLogic.visibleMonth.skip(x).take(daysInWeek).toList()));
+        x += daysInWeek;
+      }
     }
 
     return Container(

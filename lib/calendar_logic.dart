@@ -10,33 +10,50 @@ class CalendarLogic {
   }
 
   List<DateTime> get visibleMonth => _visibleMonth;
+  List<DateTime> get visibleWeek => _visibleWeek;
   String get headerText => DateFormat.yMMMM().format(_focusedDate);
   List<String> get daysOfWeek => _visibleMonth.take(7).map((date) => DateFormat.E().format(date)).toList();
 
   DateTime _focusedDate;
   DateTime _selectedDate;
   List<DateTime> _visibleMonth;
+  List<DateTime> _visibleWeek;
 
   CalendarLogic() {
     _focusedDate = DateTime.now();
     _selectedDate = _focusedDate;
-    _visibleMonth = Utils.daysInMonth(_focusedDate);
+    _updateVisible();
   }
 
   void selectPreviousMonth() {
     _focusedDate = Utils.previousMonth(_focusedDate);
-    _visibleMonth = _daysInMonth(_focusedDate);
+    _updateVisible();
   }
 
   void selectNextMonth() {
     _focusedDate = Utils.nextMonth(_focusedDate);
+    _updateVisible();
+  }
+
+  void selectPreviousWeek() {
+    _focusedDate = Utils.previousWeek(_focusedDate);
+    _updateVisible();
+  }
+
+  void selectNextWeek() {
+    _focusedDate = Utils.nextWeek(_focusedDate);
+    _updateVisible();
+  }
+
+  void _updateVisible() {
     _visibleMonth = _daysInMonth(_focusedDate);
+    _visibleWeek = _daysInWeek(_focusedDate);
   }
 
   List<DateTime> _daysInMonth(DateTime month) {
     var first = Utils.firstDayOfMonth(month);
     var daysBefore = first.weekday;
-    var firstToDisplay = first.subtract(new Duration(days: daysBefore));
+    var firstToDisplay = first.subtract(Duration(days: daysBefore));
 
     if (firstToDisplay.hour == 23) {
       firstToDisplay = firstToDisplay.add(Duration(hours: 1));
@@ -55,13 +72,21 @@ class CalendarLogic {
       daysAfter = 7;
     }
 
-    var lastToDisplay = last.add(new Duration(days: daysAfter));
+    var lastToDisplay = last.add(Duration(days: daysAfter));
 
     if (lastToDisplay.hour == 1) {
       lastToDisplay = lastToDisplay.subtract(Duration(hours: 1));
     }
 
     return Utils.daysInRange(firstToDisplay, lastToDisplay).toList();
+  }
+
+  List<DateTime> _daysInWeek(DateTime week) {
+    final first = Utils.firstDayOfWeek(week);
+    final last = Utils.lastDayOfWeek(week);
+
+    final days = Utils.daysInRange(first, last);
+    return days.map((day) => DateTime(day.year, day.month, day.day)).toList();
   }
 
   bool isSelected(DateTime day) {

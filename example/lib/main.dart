@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
             selectedColor: Colors.deepOrange[400],
             todayColor: Colors.deepOrange[200],
             eventMarkerColor: Colors.brown[700],
+            calendarFormat: CalendarFormat.week,
             events: _events,
             onDaySelected: (day) {
               setState(() {
