@@ -58,38 +58,45 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          TableCalendar(
-            selectedColor: Colors.deepOrange[400],
-            todayColor: Colors.deepOrange[200],
-            eventMarkerColor: Colors.brown[700],
-            calendarFormat: CalendarFormat.week,
-            events: _events,
-            onDaySelected: (day) {
-              setState(() {
-                _selectedDay = day;
-                _selectedEvents = _events[_selectedDay] ?? [];
-              });
-            },
-          ),
-          Expanded(
-            child: ListView(
-              children: _selectedEvents
-                  .map((event) => Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 0.8),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                        child: ListTile(
-                          title: Text(event.toString()),
-                          onTap: () => print('$event tapped!'),
-                        ),
-                      ))
-                  .toList(),
-            ),
-          ),
+          _buildTableCalendar(),
+          Expanded(child: _buildEventList()),
         ],
       ),
+    );
+  }
+
+  // Configure the calendar here
+  Widget _buildTableCalendar() {
+    return TableCalendar(
+      selectedColor: Colors.deepOrange[400],
+      todayColor: Colors.deepOrange[200],
+      eventMarkerColor: Colors.brown[700],
+      calendarFormat: CalendarFormat.week,
+      events: _events,
+      onDaySelected: (day) {
+        setState(() {
+          _selectedDay = day;
+          _selectedEvents = _events[_selectedDay] ?? [];
+        });
+      },
+    );
+  }
+
+  Widget _buildEventList() {
+    return ListView(
+      children: _selectedEvents
+          .map((event) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 0.8),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                child: ListTile(
+                  title: Text(event.toString()),
+                  onTap: () => print('$event tapped!'),
+                ),
+              ))
+          .toList(),
     );
   }
 }

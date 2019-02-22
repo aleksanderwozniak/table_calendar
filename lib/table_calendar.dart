@@ -4,8 +4,9 @@
 library table_calendar;
 
 import 'package:flutter/material.dart';
-import 'package:table_calendar/calendar_logic.dart';
-import 'package:table_calendar/cell_widget.dart';
+
+import 'src/calendar_logic.dart';
+import 'src/cell_widget.dart';
 
 typedef void OnDaySelected(DateTime day);
 
