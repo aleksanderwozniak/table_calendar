@@ -106,20 +106,38 @@ class TableCalendarState extends State<TableCalendar> {
 
   Widget _buildCellContent(DateTime date) {
     Widget content;
+    final now = DateTime.now();
+
+    if (date.isAtSameMomentAs(_calendarLogic.selectedDate)) {
+      content = Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.amber,
+        ),
+        margin: const EdgeInsets.all(6.0),
+        alignment: Alignment.center,
+        child: Text('${date.day}'),
+      );
+    } else if (date.isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
+      content = Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.amber[200],
+        ),
+        margin: const EdgeInsets.all(6.0),
+        alignment: Alignment.center,
+        child: Text('${date.day}'),
+      );
+    } else {
+      content = Container(
+        margin: const EdgeInsets.all(6.0),
+        alignment: Alignment.center,
+        child: Text('${date.day}'),
+      );
+    }
 
     if (widget.events.containsKey(date) && widget.events[date].isNotEmpty) {
-      final children = <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.amber, // TODO
-          ),
-          margin: const EdgeInsets.all(6.0),
-          alignment: Alignment.center,
-          child: Text('${date.day}'),
-        ),
-      ];
-
+      final children = <Widget>[content];
       final maxMarks = 4;
 
       children.add(
@@ -147,12 +165,6 @@ class TableCalendarState extends State<TableCalendar> {
       content = Stack(
         alignment: Alignment.bottomCenter,
         children: children,
-      );
-    } else {
-      content = Container(
-        margin: const EdgeInsets.all(6.0),
-        alignment: Alignment.center,
-        child: Text('${date.day}'),
       );
     }
 
