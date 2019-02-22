@@ -1,3 +1,6 @@
+//  Copyright (c) 2019 Aleksander Woźniak
+//  Licensed under Apache License v2.0
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 

@@ -1,8 +1,8 @@
 name: table_calendar
-description: A new Flutter package project.
+description: Flutter Calendar organized neatly into a Table
 version: 0.0.1
-author:
-homepage:
+author: Aleksander Woźniak <aleksanderwozniak96@gmail.com>
+homepage: https://github.com/aleksanderwozniak/table_calendar
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
