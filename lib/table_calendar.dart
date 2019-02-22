@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/calendar_logic.dart';
 import 'package:table_calendar/cell_widget.dart';
 
+typedef void OnDaySelected(DateTime day);
+
 class TableCalendar extends StatefulWidget {
   final Map<DateTime, List> events;
+  final OnDaySelected onDaySelected;
 
   TableCalendar({
     Key key,
     this.events = const {},
+    this.onDaySelected,
   }) : super(key: key);
 
   @override
@@ -32,11 +36,11 @@ class TableCalendarState extends State<TableCalendar> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(height: 12.0),
+        const SizedBox(height: 6.0),
         _buildHeader(),
-        const SizedBox(height: 12.0),
+        const SizedBox(height: 10.0),
         _buildTable(),
-        const SizedBox(height: 12.0),
+        const SizedBox(height: 4.0),
       ],
     );
   }
@@ -89,7 +93,7 @@ class TableCalendarState extends State<TableCalendar> {
     }
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Table(
         // Makes this Table fill its parent horizontally
         defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
@@ -170,6 +174,8 @@ class TableCalendarState extends State<TableCalendar> {
         setState(() {
           _calendarLogic.selectedDate = date;
         });
+
+        widget.onDaySelected(date);
       },
       child: content,
     );

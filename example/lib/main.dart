@@ -26,21 +26,62 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  DateTime _selectedDay;
+  Map<DateTime, List> _events;
+  List _selectedEvents;
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    _selectedDay = DateTime(now.year, now.month, now.day);
+    _events = {
+      DateTime(2019, 2, 22): ['Event A', 'Event B', 'Event C'],
+      DateTime(2019, 2, 23): ['Event A'],
+      DateTime(2019, 2, 24): ['Event B', 'Event C'],
+      DateTime(2019, 3, 1): ['Event A', 'Event B', 'Event C', 'Event D', 'Event E', 'Event F', 'Event G'],
+      DateTime(2019, 1, 29): Set.from(['Event A', 'Event A', 'Event B']).toList(),
+      DateTime(2019, 1, 30): ['Event A', 'Event A', 'Event B'],
+    };
+    _selectedEvents = _events[_selectedDay] ?? [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: TableCalendar(
-        events: {
-          DateTime(2019, 2, 22): ['a', 'b', 'c'],
-          DateTime(2019, 2, 23): ['a'],
-          DateTime(2019, 2, 24): ['b', 'c'],
-          DateTime(2019, 3, 1): ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
-          DateTime(2019, 1, 29): Set.from(['a', 'a']).toList(),
-          DateTime(2019, 1, 30): ['a', 'a'],
-        },
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          TableCalendar(
+            events: _events,
+            onDaySelected: (day) {
+              setState(() {
+                _selectedDay = day;
+                _selectedEvents = _events[_selectedDay] ?? [];
+              });
+            },
+          ),
+          Expanded(
+            child: ListView(
+              children: _selectedEvents
+                  .map((event) => Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0.8),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                        child: ListTile(
+                          title: Text(event.toString()),
+                          onTap: () => print('$event tapped!'),
+                        ),
+                      ))
+                  .toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
