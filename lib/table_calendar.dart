@@ -9,11 +9,17 @@ typedef void OnDaySelected(DateTime day);
 class TableCalendar extends StatefulWidget {
   final Map<DateTime, List> events;
   final OnDaySelected onDaySelected;
+  final Color selectedColor;
+  final Color todayColor;
+  final Color eventMarkerColor;
 
   TableCalendar({
     Key key,
     this.events = const {},
     this.onDaySelected,
+    this.selectedColor,
+    this.todayColor,
+    this.eventMarkerColor,
   }) : super(key: key);
 
   @override
@@ -146,6 +152,8 @@ class TableCalendarState extends State<TableCalendar> {
       isToday: _calendarLogic.isToday(date),
       isWeekend: _calendarLogic.isWeekend(date),
       isOutsideMonth: _calendarLogic.isExtraDay(date),
+      selectedColor: widget.selectedColor,
+      todayColor: widget.todayColor,
     );
 
     if (widget.events.containsKey(date) && widget.events[date].isNotEmpty) {
@@ -188,7 +196,7 @@ class TableCalendarState extends State<TableCalendar> {
       margin: const EdgeInsets.symmetric(horizontal: 0.3),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.blueGrey[900],
+        color: widget.eventMarkerColor ?? Colors.blueGrey[900],
       ),
     );
   }

@@ -56,6 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           TableCalendar(
+            selectedColor: Colors.deepOrange[400],
+            todayColor: Colors.deepOrange[200],
+            eventMarkerColor: Colors.brown[700],
             events: _events,
             onDaySelected: (day) {
               setState(() {

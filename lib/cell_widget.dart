@@ -6,6 +6,8 @@ class CellWidget extends StatelessWidget {
   final bool isToday;
   final bool isWeekend;
   final bool isOutsideMonth;
+  final Color selectedColor;
+  final Color todayColor;
 
   const CellWidget({
     Key key,
@@ -14,6 +16,8 @@ class CellWidget extends StatelessWidget {
     this.isToday = false,
     this.isWeekend = false,
     this.isOutsideMonth = false,
+    this.selectedColor,
+    this.todayColor,
   })  : assert(text != null),
         super(key: key);
 
@@ -34,12 +38,12 @@ class CellWidget extends StatelessWidget {
     if (isSelected) {
       return BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.indigo[400],
+        color: selectedColor ?? Colors.indigo[400],
       );
     } else if (isToday) {
       return BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.indigo[200],
+        color: todayColor ?? Colors.indigo[200],
       );
     } else {
       return BoxDecoration();
