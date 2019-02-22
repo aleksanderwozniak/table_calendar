@@ -32,7 +32,16 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: TableCalendar(),
+      body: TableCalendar(
+        events: {
+          DateTime(2019, 2, 22): ['a', 'b', 'c'],
+          DateTime(2019, 2, 23): ['a'],
+          DateTime(2019, 2, 24): ['b', 'c'],
+          DateTime(2019, 3, 1): ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
+          DateTime(2019, 1, 29): Set.from(['a', 'a']).toList(),
+          DateTime(2019, 1, 30): ['a', 'a'],
+        },
+      ),
     );
   }
 }

@@ -4,6 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/calendar_logic.dart';
 
 class TableCalendar extends StatefulWidget {
+  final Map<DateTime, List> events;
+
+  TableCalendar({
+    Key key,
+    this.events = const {},
+  }) : super(key: key);
+
   @override
   TableCalendarState createState() {
     return new TableCalendarState();
@@ -63,46 +70,100 @@ class TableCalendarState extends State<TableCalendar> {
 
   Widget _buildTable() {
     final children = <TableRow>[];
+    final daysInWeek = 7;
 
     int x = 0;
     while (x < _calendarLogic.visibleMonth.length) {
-      children.add(_buildTableRow(_calendarLogic.visibleMonth.skip(x).take(7).toList()));
-      x += 7;
+      children.add(_buildTableRow(_calendarLogic.visibleMonth.skip(x).take(daysInWeek).toList()));
+      x += daysInWeek;
     }
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Table(
         border: TableBorder.all(), // TODO
-        defaultColumnWidth: FractionColumnWidth(1.0 / 7.0),
+        defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
         children: children,
       ),
     );
   }
 
   TableRow _buildTableRow(List<DateTime> days) {
-    return TableRow(
-      children: days
-          .map(
-            (date) => LayoutBuilder(
-                  builder: (context, constraints) => ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: constraints.maxWidth,
-                          minHeight: constraints.maxWidth,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.blue, // TODO
-                          ),
-                          margin: const EdgeInsets.all(6.0),
-                          alignment: Alignment.center,
-                          child: Text('${date.day}'),
+    return TableRow(children: days.map((date) => _buildTableCell(date)).toList());
+  }
+
+  Widget _buildTableCell(DateTime date) {
+    return LayoutBuilder(
+      builder: (context, constraints) => ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: constraints.maxWidth,
+              minHeight: constraints.maxWidth,
+            ),
+            child: _buildCellContent(date),
+          ),
+    );
+  }
+
+  Widget _buildCellContent(DateTime date) {
+    Widget content;
+
+    if (widget.events.containsKey(date) && widget.events[date].isNotEmpty) {
+      final children = <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.amber, // TODO
+          ),
+          margin: const EdgeInsets.all(6.0),
+          alignment: Alignment.center,
+          child: Text('${date.day}'),
+        ),
+      ];
+
+      final maxMarks = 4;
+
+      children.add(
+        Positioned(
+          bottom: 5.0,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: widget.events[date]
+                .take(maxMarks)
+                .map(
+                  (_) => Container(
+                        width: 8.0,
+                        height: 8.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
                         ),
                       ),
-                ),
-          )
-          .toList(),
+                )
+                .toList(),
+          ),
+        ),
+      );
+
+      content = Stack(
+        alignment: Alignment.bottomCenter,
+        children: children,
+      );
+    } else {
+      content = Container(
+        margin: const EdgeInsets.all(6.0),
+        alignment: Alignment.center,
+        child: Text('${date.day}'),
+      );
+    }
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        setState(() {
+          _calendarLogic.selectedDate = date;
+        });
+      },
+      child: content,
     );
   }
 }

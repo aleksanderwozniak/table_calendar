@@ -3,6 +3,12 @@ import 'package:intl/intl.dart';
 
 class CalendarLogic {
   DateTime get selectedDate => _selectedDate;
+  set selectedDate(DateTime value) {
+    _selectedDate = value;
+    _focusedDate = value;
+    _visibleMonth = _daysInMonth(value);
+  }
+
   List<DateTime> get visibleMonth => _visibleMonth;
   DateFormat get dateFormat => DateFormat.MMMM();
   String get headerText => dateFormat.format(_focusedDate);
@@ -19,15 +25,15 @@ class CalendarLogic {
 
   void selectPreviousMonth() {
     _focusedDate = Utils.previousMonth(_focusedDate);
-    _visibleMonth = daysInMonth(_focusedDate);
+    _visibleMonth = _daysInMonth(_focusedDate);
   }
 
   void selectNextMonth() {
     _focusedDate = Utils.nextMonth(_focusedDate);
-    _visibleMonth = daysInMonth(_focusedDate);
+    _visibleMonth = _daysInMonth(_focusedDate);
   }
 
-  List<DateTime> daysInMonth(DateTime month) {
+  List<DateTime> _daysInMonth(DateTime month) {
     var first = Utils.firstDayOfMonth(month);
     var daysBefore = first.weekday;
     var firstToDisplay = first.subtract(new Duration(days: daysBefore));
