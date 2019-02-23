@@ -7,10 +7,10 @@ Flutter Calendar organized neatly into a Table. Autosizes vertically, saving spa
 <div style="text-align: center">
   <table><tr>
   <td style="text-align: center">
-    <img src="https://github.com/aleksanderwozniak/table_calendar/blob/assets/calendar_month.png" width="250" />
+    <img src="https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/calendar_month.png" width="250" />
   </td>
   <td style="text-align: center">
-    <img src="https://github.com/aleksanderwozniak/table_calendar/blob/assets/calendar_week.png" width="250" />
+    <img src="https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/calendar_week.png" width="250" />
   </td>
   </tr></table>
   Taken from Example project.
@@ -33,5 +33,5 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^0.1.0
+  table_calendar: ^0.1.1
 ```

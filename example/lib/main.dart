@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           _buildTableCalendar(),
+          const SizedBox(height: 8.0),
           Expanded(child: _buildEventList()),
         ],
       ),
@@ -72,8 +73,13 @@ class _MyHomePageState extends State<MyHomePage> {
       todayColor: Colors.deepOrange[200],
       eventMarkerColor: Colors.brown[700],
       calendarFormat: CalendarFormat.week,
-      formatToggleVisible: true,
       centerHeaderTitle: false,
+      formatToggleVisible: true,
+      formatToggleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+      formatToggleDecoration: BoxDecoration(
+        color: Colors.deepOrange[400],
+        borderRadius: BorderRadius.circular(16.0),
+      ),
       events: _events,
       onDaySelected: (day) {
         setState(() {

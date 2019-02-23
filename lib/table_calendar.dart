@@ -20,6 +20,9 @@ class TableCalendar extends StatefulWidget {
   final Color eventMarkerColor;
   final Color iconColor;
   final CalendarFormat calendarFormat;
+  final TextStyle formatToggleTextStyle;
+  final Decoration formatToggleDecoration;
+  final EdgeInsets formatTogglePadding;
   final bool formatToggleVisible;
   final bool centerHeaderTitle;
 
@@ -32,6 +35,9 @@ class TableCalendar extends StatefulWidget {
     this.eventMarkerColor,
     this.iconColor = Colors.black,
     this.calendarFormat = CalendarFormat.month,
+    this.formatToggleTextStyle,
+    this.formatToggleDecoration,
+    this.formatTogglePadding,
     this.formatToggleVisible = false,
     this.centerHeaderTitle = true,
   }) : super(key: key);
@@ -120,12 +126,16 @@ class _TableCalendarState extends State<TableCalendar> {
         });
       },
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          borderRadius: BorderRadius.circular(12.0),
+        decoration: widget.formatToggleDecoration ??
+            BoxDecoration(
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+        padding: widget.formatTogglePadding ?? const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        child: Text(
+          _calendarLogic.headerToggleText,
+          style: widget.formatToggleTextStyle ?? TextStyle(),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Text(_calendarLogic.headerToggleText),
       ),
     );
   }
