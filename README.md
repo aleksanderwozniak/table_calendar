@@ -4,6 +4,20 @@
 
 Flutter Calendar organized neatly into a Table. Autosizes vertically, saving space for other widgets.
 
+<div style="text-align: center">
+  <table><tr>
+  <td style="text-align: center">
+    <img src="https://github.com/aleksanderwozniak/table_calendar/blob/assets/calendar_month.png" width="250" />
+  </td>
+  <td style="text-align: center">
+    <img src="https://github.com/aleksanderwozniak/table_calendar/blob/assets/calendar_week.png" width="250" />
+  </td>
+  </tr></table>
+  Taken from Example project.
+  Displays TableCalendar with ListView underneath it.
+</div>
+
+
 
 ## Features
 
@@ -11,7 +25,7 @@ Flutter Calendar organized neatly into a Table. Autosizes vertically, saving spa
 * Display event markers for each day
 * Use different calendar view formats (month, week)
 * Toggle calendar view formats on the fly
-* Use custom colors
+* Customize colors
 
 ## Installation
 
