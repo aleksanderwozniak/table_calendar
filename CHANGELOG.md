@@ -1,3 +1,8 @@
+## [0.1.0]
+
+* Added CalendarFormat button - toggle between month view and week view
+* Additional customization is now available
+
 ## [0.0.2]
 
 * Revamped example

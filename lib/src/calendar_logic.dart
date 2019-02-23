@@ -4,28 +4,51 @@
 import 'package:date_utils/date_utils.dart';
 import 'package:intl/intl.dart';
 
+import '../table_calendar.dart';
+
 class CalendarLogic {
   DateTime get selectedDate => _selectedDate;
   set selectedDate(DateTime value) {
     _selectedDate = value;
     _focusedDate = value;
-    _visibleMonth = _daysInMonth(value);
+    _updateVisible();
   }
 
+  CalendarFormat get calendarFormat => _calendarFormat;
   List<DateTime> get visibleMonth => _visibleMonth;
   List<DateTime> get visibleWeek => _visibleWeek;
-  String get headerText => DateFormat.yMMMM().format(_focusedDate);
   List<String> get daysOfWeek => _visibleMonth.take(7).map((date) => DateFormat.E().format(date)).toList();
+  String get headerText => DateFormat.yMMMM().format(_focusedDate);
+  String get headerToggleText {
+    switch (_calendarFormat) {
+      case CalendarFormat.month:
+        return 'Compact';
+      case CalendarFormat.week:
+        return 'Full';
+      default:
+        assert(false);
+        return null;
+    }
+  }
 
   DateTime _focusedDate;
   DateTime _selectedDate;
   List<DateTime> _visibleMonth;
   List<DateTime> _visibleWeek;
+  CalendarFormat _calendarFormat;
 
-  CalendarLogic() {
+  CalendarLogic(this._calendarFormat) {
     _focusedDate = DateTime.now();
     _selectedDate = _focusedDate;
     _updateVisible();
+  }
+
+  void toggleCalendarFormat() {
+    if (_calendarFormat == CalendarFormat.month) {
+      _calendarFormat = CalendarFormat.week;
+    } else {
+      _calendarFormat = CalendarFormat.month;
+    }
   }
 
   void selectPreviousMonth() {

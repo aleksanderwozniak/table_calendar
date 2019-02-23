@@ -18,7 +18,10 @@ class TableCalendar extends StatefulWidget {
   final Color selectedColor;
   final Color todayColor;
   final Color eventMarkerColor;
+  final Color iconColor;
   final CalendarFormat calendarFormat;
+  final bool formatToggleVisible;
+  final bool centerHeaderTitle;
 
   TableCalendar({
     Key key,
@@ -27,22 +30,25 @@ class TableCalendar extends StatefulWidget {
     this.selectedColor,
     this.todayColor,
     this.eventMarkerColor,
+    this.iconColor = Colors.black,
     this.calendarFormat = CalendarFormat.month,
+    this.formatToggleVisible = false,
+    this.centerHeaderTitle = true,
   }) : super(key: key);
 
   @override
-  TableCalendarState createState() {
-    return new TableCalendarState();
+  _TableCalendarState createState() {
+    return new _TableCalendarState();
   }
 }
 
-class TableCalendarState extends State<TableCalendar> {
+class _TableCalendarState extends State<TableCalendar> {
   CalendarLogic _calendarLogic;
 
   @override
   void initState() {
     super.initState();
-    _calendarLogic = CalendarLogic();
+    _calendarLogic = CalendarLogic(widget.calendarFormat);
   }
 
   @override
@@ -61,44 +67,66 @@ class TableCalendarState extends State<TableCalendar> {
 
   Widget _buildHeader() {
     final headerStyle = TextStyle().copyWith(fontSize: 17.0);
+    final children = [
+      const SizedBox(width: 20.0),
+      IconButton(
+        icon: Icon(Icons.chevron_left, color: widget.iconColor),
+        onPressed: () {
+          setState(() {
+            if (_calendarLogic.calendarFormat == CalendarFormat.week) {
+              _calendarLogic.selectPreviousWeek();
+            } else {
+              _calendarLogic.selectPreviousMonth();
+            }
+          });
+        },
+      ),
+      const SizedBox(width: 12.0),
+      Expanded(
+        child: Text(
+          _calendarLogic.headerText,
+          style: headerStyle,
+          textAlign: widget.centerHeaderTitle ? TextAlign.center : TextAlign.start,
+        ),
+      ),
+      const SizedBox(width: 12.0),
+      IconButton(
+        icon: Icon(Icons.chevron_right, color: widget.iconColor),
+        onPressed: () {
+          setState(() {
+            if (_calendarLogic.calendarFormat == CalendarFormat.week) {
+              _calendarLogic.selectNextWeek();
+            } else {
+              _calendarLogic.selectNextMonth();
+            }
+          });
+        },
+      ),
+      const SizedBox(width: 20.0),
+    ];
 
-    return Row(
-      children: <Widget>[
-        const SizedBox(width: 20.0),
-        IconButton(
-          icon: Icon(Icons.chevron_left),
-          onPressed: () {
-            setState(() {
-              if (widget.calendarFormat == CalendarFormat.week) {
-                _calendarLogic.selectPreviousWeek();
-              } else {
-                _calendarLogic.selectPreviousMonth();
-              }
-            });
-          },
+    if (widget.formatToggleVisible) {
+      children.insert(4, _buildHeaderToggle());
+    }
+
+    return Row(children: children);
+  }
+
+  Widget _buildHeaderToggle() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _calendarLogic.toggleCalendarFormat();
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(12.0),
         ),
-        Expanded(
-          child: Center(
-            child: Text(
-              _calendarLogic.headerText,
-              style: headerStyle,
-            ),
-          ),
-        ),
-        IconButton(
-          icon: Icon(Icons.chevron_right),
-          onPressed: () {
-            setState(() {
-              if (widget.calendarFormat == CalendarFormat.week) {
-                _calendarLogic.selectNextWeek();
-              } else {
-                _calendarLogic.selectNextMonth();
-              }
-            });
-          },
-        ),
-        const SizedBox(width: 20.0),
-      ],
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: Text(_calendarLogic.headerToggleText),
+      ),
     );
   }
 
@@ -108,7 +136,7 @@ class TableCalendarState extends State<TableCalendar> {
 
     children.add(_buildDaysOfWeek());
 
-    if (widget.calendarFormat == CalendarFormat.week) {
+    if (_calendarLogic.calendarFormat == CalendarFormat.week) {
       children.add(_buildTableRow(_calendarLogic.visibleWeek.toList()));
     } else {
       int x = 0;

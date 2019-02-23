@@ -72,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
       todayColor: Colors.deepOrange[200],
       eventMarkerColor: Colors.brown[700],
       calendarFormat: CalendarFormat.week,
+      formatToggleVisible: true,
+      centerHeaderTitle: false,
       events: _events,
       onDaySelected: (day) {
         setState(() {
