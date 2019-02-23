@@ -1,16 +1,16 @@
-# example
+# TableCalendar example
 
-A new Flutter project.
+Demonstrates how to use [table_calendar](https://pub.dartlang.org/packages/table_calendar) package.
 
-## Getting Started
+<div style="text-align: center">
+  <table><tr>
+  <td style="text-align: center">
+    <img src="https://github.com/aleksanderwozniak/table_calendar/blob/assets/calendar_month.png" width="250" />
+  </td>
+  <td style="text-align: center">
+    <img src="https://github.com/aleksanderwozniak/table_calendar/blob/assets/calendar_week.png" width="250" />
+  </td>
+  </tr></table>
+</div>
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Displays TableCalendar with custom colors. Underneath it is a ListView containing all events from selected day.
