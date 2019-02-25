@@ -1,3 +1,7 @@
+## [0.1.2]
+
+* Added OnFormatChanged callback
+
 ## [0.1.1]
 
 * Added CalendarFormat button customization

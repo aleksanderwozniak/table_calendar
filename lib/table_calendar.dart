@@ -9,12 +9,14 @@ import 'src/calendar_logic.dart';
 import 'src/cell_widget.dart';
 
 typedef void OnDaySelected(DateTime day);
+typedef void OnFormatChanged(CalendarFormat format);
 
 enum CalendarFormat { month, week }
 
 class TableCalendar extends StatefulWidget {
   final Map<DateTime, List> events;
   final OnDaySelected onDaySelected;
+  final OnFormatChanged onFormatChanged;
   final Color selectedColor;
   final Color todayColor;
   final Color eventMarkerColor;
@@ -30,6 +32,7 @@ class TableCalendar extends StatefulWidget {
     Key key,
     this.events = const {},
     this.onDaySelected,
+    this.onFormatChanged,
     this.selectedColor,
     this.todayColor,
     this.eventMarkerColor,
@@ -124,6 +127,8 @@ class _TableCalendarState extends State<TableCalendar> {
         setState(() {
           _calendarLogic.toggleCalendarFormat();
         });
+
+        widget.onFormatChanged(_calendarLogic.calendarFormat);
       },
       child: Container(
         decoration: widget.formatToggleDecoration ??
