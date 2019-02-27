@@ -1,3 +1,8 @@
+## [0.1.3]
+
+* Added chevron button customization
+* Calendar header can be hidden now
+
 ## [0.1.2]
 
 * Added OnFormatChanged callback
