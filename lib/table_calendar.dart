@@ -27,6 +27,11 @@ class TableCalendar extends StatefulWidget {
   final EdgeInsets formatTogglePadding;
   final bool formatToggleVisible;
   final bool centerHeaderTitle;
+  final bool headerVisible;
+  final EdgeInsets leftChevronPadding;
+  final EdgeInsets rightChevronPadding;
+  final EdgeInsets leftChevronMargin;
+  final EdgeInsets rightChevronMargin;
 
   TableCalendar({
     Key key,
@@ -43,6 +48,11 @@ class TableCalendar extends StatefulWidget {
     this.formatTogglePadding,
     this.formatToggleVisible = false,
     this.centerHeaderTitle = true,
+    this.headerVisible = true,
+    this.leftChevronPadding = const EdgeInsets.all(12.0),
+    this.rightChevronPadding = const EdgeInsets.all(12.0),
+    this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
   }) : super(key: key);
 
   @override
@@ -62,35 +72,49 @@ class _TableCalendarState extends State<TableCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
+    final children = <Widget>[];
+
+    if (widget.headerVisible) {
+      children.addAll([
         const SizedBox(height: 6.0),
         _buildHeader(),
-        const SizedBox(height: 10.0),
-        _buildTable(),
-        const SizedBox(height: 4.0),
-      ],
+      ]);
+    }
+
+    children.addAll([
+      const SizedBox(height: 10.0),
+      _buildTable(),
+      const SizedBox(height: 4.0),
+    ]);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: children,
     );
   }
 
   Widget _buildHeader() {
     final headerStyle = TextStyle().copyWith(fontSize: 17.0);
     final children = [
-      const SizedBox(width: 20.0),
-      IconButton(
-        icon: Icon(Icons.chevron_left, color: widget.iconColor),
-        onPressed: () {
-          setState(() {
-            if (_calendarLogic.calendarFormat == CalendarFormat.week) {
-              _calendarLogic.selectPreviousWeek();
-            } else {
-              _calendarLogic.selectPreviousMonth();
-            }
-          });
-        },
+      Padding(
+        padding: widget.leftChevronMargin,
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              if (_calendarLogic.calendarFormat == CalendarFormat.week) {
+                _calendarLogic.selectPreviousWeek();
+              } else {
+                _calendarLogic.selectPreviousMonth();
+              }
+            });
+          },
+          borderRadius: BorderRadius.circular(100.0),
+          child: Padding(
+            padding: widget.leftChevronPadding,
+            child: Icon(Icons.chevron_left, color: widget.iconColor),
+          ),
+        ),
       ),
-      const SizedBox(width: 12.0),
       Expanded(
         child: Text(
           _calendarLogic.headerText,
@@ -98,27 +122,36 @@ class _TableCalendarState extends State<TableCalendar> {
           textAlign: widget.centerHeaderTitle ? TextAlign.center : TextAlign.start,
         ),
       ),
-      const SizedBox(width: 12.0),
-      IconButton(
-        icon: Icon(Icons.chevron_right, color: widget.iconColor),
-        onPressed: () {
-          setState(() {
-            if (_calendarLogic.calendarFormat == CalendarFormat.week) {
-              _calendarLogic.selectNextWeek();
-            } else {
-              _calendarLogic.selectNextMonth();
-            }
-          });
-        },
+      Padding(
+        padding: widget.rightChevronMargin,
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              if (_calendarLogic.calendarFormat == CalendarFormat.week) {
+                _calendarLogic.selectNextWeek();
+              } else {
+                _calendarLogic.selectNextMonth();
+              }
+            });
+          },
+          borderRadius: BorderRadius.circular(100.0),
+          child: Padding(
+            padding: widget.rightChevronPadding,
+            child: Icon(Icons.chevron_right, color: widget.iconColor),
+          ),
+        ),
       ),
-      const SizedBox(width: 20.0),
     ];
 
     if (widget.formatToggleVisible) {
-      children.insert(4, _buildHeaderToggle());
+      children.insert(2, const SizedBox(width: 8.0));
+      children.insert(3, _buildHeaderToggle());
     }
 
-    return Row(children: children);
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: children,
+    );
   }
 
   Widget _buildHeaderToggle() {
@@ -128,7 +161,9 @@ class _TableCalendarState extends State<TableCalendar> {
           _calendarLogic.toggleCalendarFormat();
         });
 
-        widget.onFormatChanged(_calendarLogic.calendarFormat);
+        if (widget.onFormatChanged != null) {
+          widget.onFormatChanged(_calendarLogic.calendarFormat);
+        }
       },
       child: Container(
         decoration: widget.formatToggleDecoration ??
@@ -246,7 +281,9 @@ class _TableCalendarState extends State<TableCalendar> {
           _calendarLogic.selectedDate = date;
         });
 
-        widget.onDaySelected(date);
+        if (widget.onDaySelected != null) {
+          widget.onDaySelected(date);
+        }
       },
       child: content,
     );
