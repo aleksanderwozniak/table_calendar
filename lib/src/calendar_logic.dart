@@ -51,22 +51,38 @@ class CalendarLogic {
     }
   }
 
-  void selectPreviousMonth() {
+  void selectPrevious() {
+    if (calendarFormat == CalendarFormat.week) {
+      _selectPreviousWeek();
+    } else {
+      _selectPreviousMonth();
+    }
+  }
+
+  void selectNext() {
+    if (calendarFormat == CalendarFormat.week) {
+      _selectNextWeek();
+    } else {
+      _selectNextMonth();
+    }
+  }
+
+  void _selectPreviousMonth() {
     _focusedDate = Utils.previousMonth(_focusedDate);
     _updateVisible();
   }
 
-  void selectNextMonth() {
+  void _selectNextMonth() {
     _focusedDate = Utils.nextMonth(_focusedDate);
     _updateVisible();
   }
 
-  void selectPreviousWeek() {
+  void _selectPreviousWeek() {
     _focusedDate = Utils.previousWeek(_focusedDate);
     _updateVisible();
   }
 
-  void selectNextWeek() {
+  void _selectNextWeek() {
     _focusedDate = Utils.nextWeek(_focusedDate);
     _updateVisible();
   }

@@ -39,12 +39,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final now = DateTime.now();
     _selectedDay = DateTime(now.year, now.month, now.day);
     _events = {
-      DateTime(2019, 2, 22): ['Event A', 'Event B', 'Event C'],
-      DateTime(2019, 2, 23): ['Event A'],
-      DateTime(2019, 2, 24): ['Event B', 'Event C'],
-      DateTime(2019, 3, 1): ['Event A', 'Event B', 'Event C', 'Event D', 'Event E', 'Event F', 'Event G'],
-      DateTime(2019, 1, 29): Set.from(['Event A', 'Event A', 'Event B']).toList(),
-      DateTime(2019, 1, 30): ['Event A', 'Event A', 'Event B'],
+      DateTime(2019, 3, 1): ['Event A', 'Event B', 'Event C'],
+      DateTime(2019, 3, 4): ['Event A'],
+      DateTime(2019, 3, 5): ['Event B', 'Event C'],
+      DateTime(2019, 3, 13): ['Event A', 'Event B', 'Event C'],
+      DateTime(2019, 3, 15): ['Event A', 'Event B', 'Event C', 'Event D', 'Event E', 'Event F', 'Event G'],
+      DateTime(2019, 2, 26): Set.from(['Event A', 'Event A', 'Event B']).toList(),
+      DateTime(2019, 2, 18): ['Event A', 'Event A', 'Event B'],
     };
     _selectedEvents = _events[_selectedDay] ?? [];
   }

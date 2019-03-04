@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'src/calendar_logic.dart';
 import 'src/cell_widget.dart';
+import 'src/custom_icon_button.dart';
 
 typedef void OnDaySelected(DateTime day);
 typedef void OnFormatChanged(CalendarFormat format);
@@ -43,9 +44,9 @@ class TableCalendar extends StatefulWidget {
     this.eventMarkerColor,
     this.iconColor = Colors.black,
     this.calendarFormat = CalendarFormat.month,
-    this.formatToggleTextStyle,
+    this.formatToggleTextStyle = const TextStyle(),
     this.formatToggleDecoration,
-    this.formatTogglePadding,
+    this.formatTogglePadding = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
     this.formatToggleVisible = false,
     this.centerHeaderTitle = true,
     this.headerVisible = true,
@@ -68,6 +69,38 @@ class _TableCalendarState extends State<TableCalendar> {
   void initState() {
     super.initState();
     _calendarLogic = CalendarLogic(widget.calendarFormat);
+  }
+
+  void _selectPrevious() {
+    setState(() {
+      _calendarLogic.selectPrevious();
+    });
+  }
+
+  void _selectNext() {
+    setState(() {
+      _calendarLogic.selectNext();
+    });
+  }
+
+  void _selectDate(DateTime date) {
+    setState(() {
+      _calendarLogic.selectedDate = date;
+    });
+
+    if (widget.onDaySelected != null) {
+      widget.onDaySelected(date);
+    }
+  }
+
+  void _toggleCalendarFormat() {
+    setState(() {
+      _calendarLogic.toggleCalendarFormat();
+    });
+
+    if (widget.onFormatChanged != null) {
+      widget.onFormatChanged(_calendarLogic.calendarFormat);
+    }
   }
 
   @override
@@ -96,24 +129,11 @@ class _TableCalendarState extends State<TableCalendar> {
   Widget _buildHeader() {
     final headerStyle = TextStyle().copyWith(fontSize: 17.0);
     final children = [
-      Padding(
-        padding: widget.leftChevronMargin,
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              if (_calendarLogic.calendarFormat == CalendarFormat.week) {
-                _calendarLogic.selectPreviousWeek();
-              } else {
-                _calendarLogic.selectPreviousMonth();
-              }
-            });
-          },
-          borderRadius: BorderRadius.circular(100.0),
-          child: Padding(
-            padding: widget.leftChevronPadding,
-            child: Icon(Icons.chevron_left, color: widget.iconColor),
-          ),
-        ),
+      CustomIconButton(
+        icon: Icon(Icons.chevron_left, color: widget.iconColor),
+        onTap: _selectPrevious,
+        margin: widget.leftChevronMargin,
+        padding: widget.leftChevronPadding,
       ),
       Expanded(
         child: Text(
@@ -122,24 +142,11 @@ class _TableCalendarState extends State<TableCalendar> {
           textAlign: widget.centerHeaderTitle ? TextAlign.center : TextAlign.start,
         ),
       ),
-      Padding(
-        padding: widget.rightChevronMargin,
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              if (_calendarLogic.calendarFormat == CalendarFormat.week) {
-                _calendarLogic.selectNextWeek();
-              } else {
-                _calendarLogic.selectNextMonth();
-              }
-            });
-          },
-          borderRadius: BorderRadius.circular(100.0),
-          child: Padding(
-            padding: widget.rightChevronPadding,
-            child: Icon(Icons.chevron_right, color: widget.iconColor),
-          ),
-        ),
+      CustomIconButton(
+        icon: Icon(Icons.chevron_right, color: widget.iconColor),
+        onTap: _selectNext,
+        margin: widget.rightChevronMargin,
+        padding: widget.rightChevronPadding,
       ),
     ];
 
@@ -156,25 +163,17 @@ class _TableCalendarState extends State<TableCalendar> {
 
   Widget _buildHeaderToggle() {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _calendarLogic.toggleCalendarFormat();
-        });
-
-        if (widget.onFormatChanged != null) {
-          widget.onFormatChanged(_calendarLogic.calendarFormat);
-        }
-      },
+      onTap: _toggleCalendarFormat,
       child: Container(
         decoration: widget.formatToggleDecoration ??
             BoxDecoration(
               border: Border.all(),
               borderRadius: BorderRadius.circular(12.0),
             ),
-        padding: widget.formatTogglePadding ?? const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        padding: widget.formatTogglePadding,
         child: Text(
           _calendarLogic.headerToggleText,
-          style: widget.formatToggleTextStyle ?? TextStyle(),
+          style: widget.formatToggleTextStyle,
         ),
       ),
     );
@@ -276,15 +275,7 @@ class _TableCalendarState extends State<TableCalendar> {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        setState(() {
-          _calendarLogic.selectedDate = date;
-        });
-
-        if (widget.onDaySelected != null) {
-          widget.onDaySelected(date);
-        }
-      },
+      onTap: () => _selectDate(date),
       child: content,
     );
   }
