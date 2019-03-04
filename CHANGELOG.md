@@ -1,3 +1,8 @@
+## [0.1.4]
+
+* Refactored code
+* Updated example project
+
 ## [0.1.3]
 
 * Added chevron button customization
