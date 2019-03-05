@@ -195,12 +195,25 @@ class _TableCalendarState extends State<TableCalendar> {
       }
     }
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Table(
-        // Makes this Table fill its parent horizontally
-        defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
-        children: children,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 350),
+      transitionBuilder: (child, animation) {
+        return SizeTransition(
+          sizeFactor: animation,
+          child: ScaleTransition(
+            scale: animation,
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        key: ValueKey(_calendarLogic.calendarFormat),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Table(
+          // Makes this Table fill its parent horizontally
+          defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
+          children: children,
+        ),
       ),
     );
   }
