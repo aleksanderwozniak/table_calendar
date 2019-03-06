@@ -26,7 +26,8 @@ class CellWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
       decoration: _buildCellDecoration(),
       margin: const EdgeInsets.all(6.0),
       alignment: Alignment.center,
@@ -49,7 +50,7 @@ class CellWidget extends StatelessWidget {
         color: todayColor ?? Colors.indigo[200],
       );
     } else {
-      return BoxDecoration();
+      return BoxDecoration(shape: BoxShape.circle);
     }
   }
 

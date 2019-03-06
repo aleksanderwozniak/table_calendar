@@ -73,7 +73,12 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedColor: Colors.deepOrange[400],
       todayColor: Colors.deepOrange[200],
       eventMarkerColor: Colors.brown[700],
-      calendarFormat: CalendarFormat.week,
+      initialCalendarFormat: CalendarFormat.week,
+      availableCalendarFormats: [
+        CalendarFormat.month,
+        CalendarFormat.twoWeeks,
+        CalendarFormat.week,
+      ],
       centerHeaderTitle: false,
       formatToggleVisible: true,
       formatToggleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),

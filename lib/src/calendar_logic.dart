@@ -7,24 +7,28 @@ import 'package:intl/intl.dart';
 import '../table_calendar.dart';
 
 class CalendarLogic {
+  DateTime get focusedDate => _focusedDate;
   DateTime get selectedDate => _selectedDate;
   set selectedDate(DateTime value) {
     _selectedDate = value;
     _focusedDate = value;
-    _updateVisible();
+    _updateVisible(updateTwoWeeks: _calendarFormat != CalendarFormat.twoWeeks);
   }
 
   CalendarFormat get calendarFormat => _calendarFormat;
   List<DateTime> get visibleMonth => _visibleMonth;
   List<DateTime> get visibleWeek => _visibleWeek;
+  List<DateTime> get visibleTwoWeeks => _visibleTwoWeeks;
   List<String> get daysOfWeek => _visibleMonth.take(7).map((date) => DateFormat.E().format(date)).toList();
   String get headerText => DateFormat.yMMMM().format(_focusedDate);
   String get headerToggleText {
-    switch (_calendarFormat) {
+    switch (_nextFormat()) {
       case CalendarFormat.month:
+        return 'Full';
+      case CalendarFormat.twoWeeks:
         return 'Compact';
       case CalendarFormat.week:
-        return 'Full';
+        return 'Minimal';
       default:
         assert(false);
         return null;
@@ -35,25 +39,36 @@ class CalendarLogic {
   DateTime _selectedDate;
   List<DateTime> _visibleMonth;
   List<DateTime> _visibleWeek;
+  List<DateTime> _visibleTwoWeeks;
   CalendarFormat _calendarFormat;
+  List<CalendarFormat> _availableCalendarFormats;
 
-  CalendarLogic(this._calendarFormat) {
+  CalendarLogic(this._calendarFormat, this._availableCalendarFormats) {
     _focusedDate = DateTime.now();
     _selectedDate = _focusedDate;
+    _visibleTwoWeeks = _daysInWeek(_focusedDate)
+      ..addAll(_daysInWeek(
+        _focusedDate.add(const Duration(days: 7)),
+      ));
     _updateVisible();
   }
 
+  CalendarFormat _nextFormat() {
+    int id = _availableCalendarFormats.indexOf(_calendarFormat);
+    id = (id + 1) % _availableCalendarFormats.length;
+
+    return _availableCalendarFormats[id];
+  }
+
   void toggleCalendarFormat() {
-    if (_calendarFormat == CalendarFormat.month) {
-      _calendarFormat = CalendarFormat.week;
-    } else {
-      _calendarFormat = CalendarFormat.month;
-    }
+    _calendarFormat = _nextFormat();
   }
 
   void selectPrevious() {
     if (calendarFormat == CalendarFormat.week) {
       _selectPreviousWeek();
+    } else if (calendarFormat == CalendarFormat.twoWeeks) {
+      _selectPreviousTwoWeeks();
     } else {
       _selectPreviousMonth();
     }
@@ -62,6 +77,8 @@ class CalendarLogic {
   void selectNext() {
     if (calendarFormat == CalendarFormat.week) {
       _selectNextWeek();
+    } else if (calendarFormat == CalendarFormat.twoWeeks) {
+      _selectNextTwoWeeks();
     } else {
       _selectNextMonth();
     }
@@ -77,8 +94,30 @@ class CalendarLogic {
     _updateVisible();
   }
 
+  void _selectPreviousTwoWeeks() {
+    if (_visibleTwoWeeks.take(7).contains(_focusedDate)) {
+      // in top row
+      _focusedDate = Utils.previousWeek(_focusedDate);
+    } else {
+      // in bottom row OR not visible
+      _focusedDate = Utils.previousWeek(_focusedDate.subtract(const Duration(days: 7)));
+    }
+
+    _updateVisible();
+  }
+
+  void _selectNextTwoWeeks() {
+    if (!_visibleTwoWeeks.skip(7).contains(_focusedDate)) {
+      // not in bottom row [eg: in top row OR not visible]
+      _focusedDate = Utils.nextWeek(_focusedDate);
+    }
+
+    _updateVisible();
+  }
+
   void _selectPreviousWeek() {
     _focusedDate = Utils.previousWeek(_focusedDate);
+
     _updateVisible();
   }
 
@@ -87,9 +126,16 @@ class CalendarLogic {
     _updateVisible();
   }
 
-  void _updateVisible() {
+  void _updateVisible({bool updateTwoWeeks: true}) {
     _visibleMonth = _daysInMonth(_focusedDate);
     _visibleWeek = _daysInWeek(_focusedDate);
+
+    if (updateTwoWeeks) {
+      _visibleTwoWeeks = _daysInWeek(_focusedDate)
+        ..addAll(_daysInWeek(
+          _focusedDate.add(const Duration(days: 7)),
+        ));
+    }
   }
 
   List<DateTime> _daysInMonth(DateTime month) {
