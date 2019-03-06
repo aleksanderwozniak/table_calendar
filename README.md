@@ -1,6 +1,9 @@
-# TableCalendar
+# Table Calendar
 
 [![pub package](https://img.shields.io/pub/v/table_calendar.svg?style=flat-square)](https://pub.dartlang.org/packages/table_calendar)
+<a href="https://github.com/Solido/awesome-flutter">
+  <img src="https://img.shields.io/badge/Awesome-Flutter-52bdeb.svg?longCache=true&style=flat-square" alt="Awesome Flutter" />
+</a>
 
 Flutter Calendar organized neatly into a Table. Autosizes vertically, saving space for other widgets.
 
