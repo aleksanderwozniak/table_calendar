@@ -157,7 +157,7 @@ class _TableCalendarState extends State<TableCalendar> {
       ),
     ];
 
-    if (widget.formatToggleVisible) {
+    if (widget.formatToggleVisible && widget.availableCalendarFormats.length > 1) {
       children.insert(2, const SizedBox(width: 8.0));
       children.insert(3, _buildHeaderToggle());
     }
