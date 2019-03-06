@@ -1,3 +1,10 @@
+## [0.2.0]
+
+* Added animations to CalendarFormat change
+* Added animations to Date selection
+* Added new CalendarFormat - TwoWeeks
+* Available CalendarFormats can now be specified
+
 ## [0.1.4]
 
 * Refactored code

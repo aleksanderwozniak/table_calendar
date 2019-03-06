@@ -26,8 +26,8 @@ Flutter Calendar organized neatly into a Table. Autosizes vertically, saving spa
 
 * Display interactive calendar table
 * Display event markers for each day
-* Use different calendar view formats (month, week)
-* Toggle calendar view formats on the fly
+* Use and specify different calendar view formats (month, two weeks, week)
+* Toggle calendar view formats on the fly - including beautiful animations
 * Customize colors
 
 ## Installation
@@ -36,5 +36,5 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^0.1.4
+  table_calendar: ^0.2.0
 ```
