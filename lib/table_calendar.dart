@@ -12,7 +12,7 @@ import 'src/custom_icon_button.dart';
 typedef void OnDaySelected(DateTime day);
 typedef void OnFormatChanged(CalendarFormat format);
 
-enum CalendarFormat { month, week }
+enum CalendarFormat { month, twoWeeks, week }
 
 class TableCalendar extends StatefulWidget {
   final Map<DateTime, List> events;
@@ -22,7 +22,8 @@ class TableCalendar extends StatefulWidget {
   final Color todayColor;
   final Color eventMarkerColor;
   final Color iconColor;
-  final CalendarFormat calendarFormat;
+  final CalendarFormat initialCalendarFormat;
+  final List<CalendarFormat> availableCalendarFormats;
   final TextStyle formatToggleTextStyle;
   final Decoration formatToggleDecoration;
   final EdgeInsets formatTogglePadding;
@@ -43,7 +44,8 @@ class TableCalendar extends StatefulWidget {
     this.todayColor,
     this.eventMarkerColor,
     this.iconColor = Colors.black,
-    this.calendarFormat = CalendarFormat.month,
+    this.initialCalendarFormat = CalendarFormat.month,
+    this.availableCalendarFormats = const [CalendarFormat.month, CalendarFormat.twoWeeks, CalendarFormat.week],
     this.formatToggleTextStyle = const TextStyle(),
     this.formatToggleDecoration,
     this.formatTogglePadding = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
@@ -54,7 +56,9 @@ class TableCalendar extends StatefulWidget {
     this.rightChevronPadding = const EdgeInsets.all(12.0),
     this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-  }) : super(key: key);
+  })  : assert(availableCalendarFormats.contains(initialCalendarFormat)),
+        assert(availableCalendarFormats.length <= CalendarFormat.values.length),
+        super(key: key);
 
   @override
   _TableCalendarState createState() {
@@ -68,7 +72,10 @@ class _TableCalendarState extends State<TableCalendar> {
   @override
   void initState() {
     super.initState();
-    _calendarLogic = CalendarLogic(widget.calendarFormat);
+    _calendarLogic = CalendarLogic(
+      widget.initialCalendarFormat,
+      widget.availableCalendarFormats,
+    );
   }
 
   void _selectPrevious() {
@@ -187,6 +194,9 @@ class _TableCalendarState extends State<TableCalendar> {
 
     if (_calendarLogic.calendarFormat == CalendarFormat.week) {
       children.add(_buildTableRow(_calendarLogic.visibleWeek.toList()));
+    } else if (_calendarLogic.calendarFormat == CalendarFormat.twoWeeks) {
+      children.add(_buildTableRow(_calendarLogic.visibleTwoWeeks.take(daysInWeek).toList()));
+      children.add(_buildTableRow(_calendarLogic.visibleTwoWeeks.skip(daysInWeek).toList()));
     } else {
       int x = 0;
       while (x < _calendarLogic.visibleMonth.length) {
