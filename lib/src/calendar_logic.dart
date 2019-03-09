@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import '../table_calendar.dart';
 
 class CalendarLogic {
-  DateTime get focusedDate => _focusedDate;
   DateTime get selectedDate => _selectedDate;
   set selectedDate(DateTime value) {
     _selectedDate = value;

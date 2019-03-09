@@ -23,6 +23,7 @@ class TableCalendar extends StatefulWidget {
   final Color eventMarkerColor;
   final Color iconColor;
   final CalendarFormat initialCalendarFormat;
+  final CalendarFormat forcedCalendarFormat;
   final List<CalendarFormat> availableCalendarFormats;
   final TextStyle formatToggleTextStyle;
   final Decoration formatToggleDecoration;
@@ -45,6 +46,7 @@ class TableCalendar extends StatefulWidget {
     this.eventMarkerColor,
     this.iconColor = Colors.black,
     this.initialCalendarFormat = CalendarFormat.month,
+    this.forcedCalendarFormat,
     this.availableCalendarFormats = const [CalendarFormat.month, CalendarFormat.twoWeeks, CalendarFormat.week],
     this.formatToggleTextStyle = const TextStyle(),
     this.formatToggleDecoration,
@@ -157,7 +159,7 @@ class _TableCalendarState extends State<TableCalendar> {
       ),
     ];
 
-    if (widget.formatToggleVisible && widget.availableCalendarFormats.length > 1) {
+    if (widget.formatToggleVisible && widget.availableCalendarFormats.length > 1 && widget.forcedCalendarFormat == null) {
       children.insert(2, const SizedBox(width: 8.0));
       children.insert(3, _buildHeaderToggle());
     }
@@ -189,12 +191,13 @@ class _TableCalendarState extends State<TableCalendar> {
   Widget _buildTable() {
     final children = <TableRow>[];
     final daysInWeek = 7;
+    final calendarFormat = widget.forcedCalendarFormat != null ? widget.forcedCalendarFormat : _calendarLogic.calendarFormat;
 
     children.add(_buildDaysOfWeek());
 
-    if (_calendarLogic.calendarFormat == CalendarFormat.week) {
+    if (calendarFormat == CalendarFormat.week) {
       children.add(_buildTableRow(_calendarLogic.visibleWeek.toList()));
-    } else if (_calendarLogic.calendarFormat == CalendarFormat.twoWeeks) {
+    } else if (calendarFormat == CalendarFormat.twoWeeks) {
       children.add(_buildTableRow(_calendarLogic.visibleTwoWeeks.take(daysInWeek).toList()));
       children.add(_buildTableRow(_calendarLogic.visibleTwoWeeks.skip(daysInWeek).toList()));
     } else {
