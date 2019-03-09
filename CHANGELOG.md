@@ -1,3 +1,8 @@
+## [0.2.1]
+
+* Added animated Swipe gesture
+* CalendarFormat can be now enforced programmatically
+
 ## [0.2.0]
 
 * Added animations to CalendarFormat change

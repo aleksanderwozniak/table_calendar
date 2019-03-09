@@ -1,9 +1,7 @@
 # Table Calendar
 
-[![pub package](https://img.shields.io/pub/v/table_calendar.svg?style=flat-square)](https://pub.dartlang.org/packages/table_calendar)
-<a href="https://github.com/Solido/awesome-flutter">
-  <img src="https://img.shields.io/badge/Awesome-Flutter-52bdeb.svg?longCache=true&style=flat-square" alt="Awesome Flutter" />
-</a>
+[![Pub Package](https://img.shields.io/pub/v/table_calendar.svg?style=flat-square)](https://pub.dartlang.org/packages/table_calendar)
+[![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-52bdeb.svg?longCache=true&style=flat-square)](https://github.com/Solido/awesome-flutter)
 
 Flutter Calendar organized neatly into a Table. Autosizes vertically, saving space for other widgets.
 
@@ -36,5 +34,5 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^0.2.0
+  table_calendar: ^0.2.1
 ```
