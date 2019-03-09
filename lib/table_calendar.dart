@@ -70,6 +70,7 @@ class TableCalendar extends StatefulWidget {
 
 class _TableCalendarState extends State<TableCalendar> {
   CalendarLogic _calendarLogic;
+  double _dx;
 
   @override
   void initState() {
@@ -78,18 +79,23 @@ class _TableCalendarState extends State<TableCalendar> {
       widget.initialCalendarFormat,
       widget.availableCalendarFormats,
     );
+    _dx = 0;
   }
 
   void _selectPrevious() {
     setState(() {
       _calendarLogic.selectPrevious();
     });
+
+    _dx = -1.2;
   }
 
   void _selectNext() {
     setState(() {
       _calendarLogic.selectNext();
     });
+
+    _dx = 1.2;
   }
 
   void _selectDate(DateTime date) {
@@ -109,6 +115,16 @@ class _TableCalendarState extends State<TableCalendar> {
 
     if (widget.onFormatChanged != null) {
       widget.onFormatChanged(_calendarLogic.calendarFormat);
+    }
+  }
+
+  void _onSwipe(DismissDirection direction) {
+    if (direction == DismissDirection.startToEnd) {
+      // Swipe right
+      _selectPrevious();
+    } else {
+      // Swipe left
+      _selectNext();
     }
   }
 
@@ -222,10 +238,27 @@ class _TableCalendarState extends State<TableCalendar> {
       child: Container(
         key: ValueKey(_calendarLogic.calendarFormat),
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Table(
-          // Makes this Table fill its parent horizontally
-          defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
-          children: children,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 350),
+          switchInCurve: Curves.decelerate,
+          transitionBuilder: (child, animation) {
+            return SlideTransition(
+              position: Tween<Offset>(begin: Offset(_dx, 0), end: Offset(0, 0)).animate(animation),
+              child: child,
+            );
+          },
+          layoutBuilder: (currentChild, _) => currentChild,
+          child: Dismissible(
+            key: ValueKey(_calendarLogic.pageId),
+            resizeDuration: null,
+            onDismissed: _onSwipe,
+            direction: DismissDirection.horizontal,
+            child: Table(
+              // Makes this Table fill its parent horizontally
+              defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
+              children: children,
+            ),
+          ),
         ),
       ),
     );
