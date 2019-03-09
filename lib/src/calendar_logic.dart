@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import '../table_calendar.dart';
 
 class CalendarLogic {
-  DateTime get focusedDate => _focusedDate;
   DateTime get selectedDate => _selectedDate;
   set selectedDate(DateTime value) {
     _selectedDate = value;
@@ -15,6 +14,7 @@ class CalendarLogic {
     _updateVisible(updateTwoWeeks: _calendarFormat != CalendarFormat.twoWeeks);
   }
 
+  int get pageId => _pageId;
   CalendarFormat get calendarFormat => _calendarFormat;
   List<DateTime> get visibleMonth => _visibleMonth;
   List<DateTime> get visibleWeek => _visibleWeek;
@@ -42,8 +42,9 @@ class CalendarLogic {
   List<DateTime> _visibleTwoWeeks;
   CalendarFormat _calendarFormat;
   List<CalendarFormat> _availableCalendarFormats;
+  int _pageId;
 
-  CalendarLogic(this._calendarFormat, this._availableCalendarFormats) {
+  CalendarLogic(this._calendarFormat, this._availableCalendarFormats) : _pageId = 0 {
     _focusedDate = DateTime.now();
     _selectedDate = _focusedDate;
     _visibleTwoWeeks = _daysInWeek(_focusedDate)
@@ -72,6 +73,8 @@ class CalendarLogic {
     } else {
       _selectPreviousMonth();
     }
+
+    _pageId--;
   }
 
   void selectNext() {
@@ -82,6 +85,8 @@ class CalendarLogic {
     } else {
       _selectNextMonth();
     }
+
+    _pageId++;
   }
 
   void _selectPreviousMonth() {
