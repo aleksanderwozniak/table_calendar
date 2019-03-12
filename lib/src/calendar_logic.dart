@@ -44,8 +44,9 @@ class CalendarLogic {
   List<CalendarFormat> _availableCalendarFormats;
   int _pageId;
 
-  CalendarLogic(this._calendarFormat, this._availableCalendarFormats) : _pageId = 0 {
-    _focusedDate = DateTime.now();
+  CalendarLogic(this._calendarFormat, this._availableCalendarFormats, {DateTime initialDate}) : _pageId = 0 {
+    final now = DateTime.now();
+    _focusedDate = initialDate ?? DateTime(now.year, now.month, now.day);
     _selectedDate = _focusedDate;
     _visibleTwoWeeks = _daysInWeek(_focusedDate)
       ..addAll(_daysInWeek(

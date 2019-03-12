@@ -22,6 +22,7 @@ class TableCalendar extends StatefulWidget {
   final Color todayColor;
   final Color eventMarkerColor;
   final Color iconColor;
+  final DateTime initialDate;
   final CalendarFormat initialCalendarFormat;
   final CalendarFormat forcedCalendarFormat;
   final List<CalendarFormat> availableCalendarFormats;
@@ -45,6 +46,7 @@ class TableCalendar extends StatefulWidget {
     this.todayColor,
     this.eventMarkerColor,
     this.iconColor = Colors.black,
+    this.initialDate,
     this.initialCalendarFormat = CalendarFormat.month,
     this.forcedCalendarFormat,
     this.availableCalendarFormats = const [CalendarFormat.month, CalendarFormat.twoWeeks, CalendarFormat.week],
@@ -78,6 +80,7 @@ class _TableCalendarState extends State<TableCalendar> {
     _calendarLogic = CalendarLogic(
       widget.initialCalendarFormat,
       widget.availableCalendarFormats,
+      initialDate: widget.initialDate,
     );
     _dx = 0;
   }
