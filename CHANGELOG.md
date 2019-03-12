@@ -1,3 +1,7 @@
+## [0.2.2]
+
+* Added optional initial Date (defaults to DateTime.now())
+
 ## [0.2.1]
 
 * Added animated Swipe gesture
