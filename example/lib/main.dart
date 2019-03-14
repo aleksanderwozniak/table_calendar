@@ -83,8 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
         eventMarkerColor: Colors.brown[700],
       ),
       headerStyle: HeaderStyle(
-        formatToggleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
-        formatToggleDecoration: BoxDecoration(
+        formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+        formatButtonDecoration: BoxDecoration(
           color: Colors.deepOrange[400],
           borderRadius: BorderRadius.circular(16.0),
         ),

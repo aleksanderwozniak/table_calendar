@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
 
+/// Class containing styling for `TableCalendar`'s content.
 class CalendarStyle {
+  /// Style of foreground Text for regular weekdays.
   final TextStyle weekdayStyle;
+
+  /// Style of foreground Text for regular weekends.
   final TextStyle weekendStyle;
+
+  /// Style of foreground Text for selected day.
   final TextStyle selectedStyle;
+
+  /// Style of foreground Text for today.
   final TextStyle todayStyle;
+
+  /// Style of foreground Text for weekdays outside of current month.
   final TextStyle outsideStyle;
+
+  /// Style of foreground Text for weekends outside of current month.
   final TextStyle outsideWeekendStyle;
+
+  /// Background Color of selected day.
   final Color selectedColor;
+
+  /// Background Color of today.
   final Color todayColor;
+
+  /// Color of event markers placed on the bottom of every day containing events.
   final Color eventMarkerColor;
 
   const CalendarStyle({

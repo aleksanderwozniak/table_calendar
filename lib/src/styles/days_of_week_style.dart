@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// Class containing styling for `TableCalendar`'s days of week panel.
 class DaysOfWeekStyle {
+  /// Style for weekdays on the top of Calendar.
   final TextStyle weekdayStyle;
+
+  /// Style for weekend days on the top of Calendar.
   final TextStyle weekendStyle;
 
   const DaysOfWeekStyle({

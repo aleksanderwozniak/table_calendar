@@ -11,25 +11,51 @@ import 'src/widgets/widgets.dart';
 
 export 'src/styles/styles.dart';
 
-typedef void OnDaySelected(DateTime day);
-typedef void OnFormatChanged(CalendarFormat format);
+typedef void _OnDaySelected(DateTime day);
+typedef void _OnFormatChanged(CalendarFormat format);
 
+/// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
+/// Highly customizable Calendar widget organized neatly into a `Table`.
+/// Autosizes vertically, saving space for other widgets.
 class TableCalendar extends StatefulWidget {
+  /// Contains a `List` of objects (eg. events) assigned to particular `DateTime`s.
+  /// Each `DateTime` inside this `Map` should get its own `List` of above mentioned objects.
   final Map<DateTime, List> events;
-  final OnDaySelected onDaySelected;
-  final OnFormatChanged onFormatChanged;
 
+  /// Called whenever any day gets tapped.
+  final _OnDaySelected onDaySelected;
+
+  /// Called whenever `CalendarFormat` changes.
+  final _OnFormatChanged onFormatChanged;
+
+  /// Initially selected DateTime. Usually it will be `DateTime.now()`.
   final DateTime initialDate;
+
+  /// `CalendarFormat` which will be displayed first.
   final CalendarFormat initialCalendarFormat;
+
+  /// `CalendarFormat` which overrides any internal logic.
+  /// Use if you need total programmatic control over `TableCalendar`'s format.
+  ///
+  /// Makes `initialCalendarFormat` and `availableCalendarFormats` obsolete.
   final CalendarFormat forcedCalendarFormat;
+
+  /// `List` of `CalendarFormat`s which internal logic can use to manage `TableCalendar`'s format.
+  /// Order of items will reflect order of format changes when FormatButton is pressed.
   final List<CalendarFormat> availableCalendarFormats;
 
+  /// Used to show/hide Header.
   final bool headerVisible;
 
+  /// Style for `TableCalendar`'s content.
   final CalendarStyle calendarStyle;
+
+  /// Style for DaysOfWeek displayed between `TableCalendar`'s Header and content.
   final DaysOfWeekStyle daysOfWeekStyle;
+
+  /// Style for `TableCalendar`'s Header.
   final HeaderStyle headerStyle;
 
   TableCalendar({
@@ -162,9 +188,9 @@ class _TableCalendarState extends State<TableCalendar> {
       ),
     ];
 
-    if (widget.headerStyle.formatToggleVisible && widget.availableCalendarFormats.length > 1 && widget.forcedCalendarFormat == null) {
+    if (widget.headerStyle.formatButtonVisible && widget.availableCalendarFormats.length > 1 && widget.forcedCalendarFormat == null) {
       children.insert(2, const SizedBox(width: 8.0));
-      children.insert(3, _buildHeaderToggle());
+      children.insert(3, _buildFormatButton());
     }
 
     return Row(
@@ -173,15 +199,15 @@ class _TableCalendarState extends State<TableCalendar> {
     );
   }
 
-  Widget _buildHeaderToggle() {
+  Widget _buildFormatButton() {
     return GestureDetector(
       onTap: _toggleCalendarFormat,
       child: Container(
-        decoration: widget.headerStyle.formatToggleDecoration,
-        padding: widget.headerStyle.formatTogglePadding,
+        decoration: widget.headerStyle.formatButtonDecoration,
+        padding: widget.headerStyle.formatButtonPadding,
         child: Text(
           _calendarLogic.headerToggleText,
-          style: widget.headerStyle.formatToggleTextStyle,
+          style: widget.headerStyle.formatButtonTextStyle,
         ),
       ),
     );
