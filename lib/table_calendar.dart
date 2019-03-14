@@ -21,7 +21,7 @@ class TableCalendar extends StatefulWidget {
   final Color selectedColor;
   final Color todayColor;
   final Color eventMarkerColor;
-  final Color iconColor;
+  final Color headerIconColor;
   final DateTime initialDate;
   final CalendarFormat initialCalendarFormat;
   final CalendarFormat forcedCalendarFormat;
@@ -37,6 +37,16 @@ class TableCalendar extends StatefulWidget {
   final EdgeInsets leftChevronMargin;
   final EdgeInsets rightChevronMargin;
 
+  final TextStyle weekdayStyle;
+  final TextStyle weekendStyle;
+  final TextStyle selectedStyle;
+  final TextStyle todayStyle;
+  final TextStyle outsideStyle;
+  final TextStyle outsideWeekendStyle;
+
+  final TextStyle headerWeekdayStyle;
+  final TextStyle headerWeekendStyle;
+
   TableCalendar({
     Key key,
     this.events = const {},
@@ -45,7 +55,7 @@ class TableCalendar extends StatefulWidget {
     this.selectedColor,
     this.todayColor,
     this.eventMarkerColor,
-    this.iconColor = Colors.black,
+    this.headerIconColor = Colors.black,
     this.initialDate,
     this.initialCalendarFormat = CalendarFormat.month,
     this.forcedCalendarFormat,
@@ -60,6 +70,14 @@ class TableCalendar extends StatefulWidget {
     this.rightChevronPadding = const EdgeInsets.all(12.0),
     this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.weekdayStyle,
+    this.weekendStyle,
+    this.selectedStyle,
+    this.todayStyle,
+    this.outsideStyle,
+    this.outsideWeekendStyle,
+    this.headerWeekdayStyle,
+    this.headerWeekendStyle,
   })  : assert(availableCalendarFormats.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         super(key: key);
@@ -158,7 +176,7 @@ class _TableCalendarState extends State<TableCalendar> {
     final headerStyle = TextStyle().copyWith(fontSize: 17.0);
     final children = [
       CustomIconButton(
-        icon: Icon(Icons.chevron_left, color: widget.iconColor),
+        icon: Icon(Icons.chevron_left, color: widget.headerIconColor),
         onTap: _selectPrevious,
         margin: widget.leftChevronMargin,
         padding: widget.leftChevronPadding,
@@ -171,7 +189,7 @@ class _TableCalendarState extends State<TableCalendar> {
         ),
       ),
       CustomIconButton(
-        icon: Icon(Icons.chevron_right, color: widget.iconColor),
+        icon: Icon(Icons.chevron_right, color: widget.headerIconColor),
         onTap: _selectNext,
         margin: widget.rightChevronMargin,
         padding: widget.rightChevronPadding,
@@ -271,18 +289,18 @@ class _TableCalendarState extends State<TableCalendar> {
     final daysOfWeek = _calendarLogic.daysOfWeek;
     final children = <Widget>[];
 
-    final weekdayStyle = TextStyle().copyWith(color: Colors.grey[700], fontSize: 15.0);
-    final weekendStyle = TextStyle().copyWith(color: Colors.red[500], fontSize: 15.0);
+    final _headerWeekdayStyle = widget.headerWeekdayStyle ?? TextStyle().copyWith(color: Colors.grey[700], fontSize: 15.0);
+    final _headerWeekendStyle = widget.headerWeekendStyle ?? TextStyle().copyWith(color: Colors.red[500], fontSize: 15.0);
 
-    children.add(Center(child: Text(daysOfWeek.first, style: weekendStyle)));
+    children.add(Center(child: Text(daysOfWeek.first, style: _headerWeekendStyle)));
     children.addAll(
       daysOfWeek.sublist(1, daysOfWeek.length - 1).map(
             (text) => Center(
-                  child: Text(text, style: weekdayStyle),
+                  child: Text(text, style: _headerWeekdayStyle),
                 ),
           ),
     );
-    children.add(Center(child: Text(daysOfWeek.last, style: weekendStyle)));
+    children.add(Center(child: Text(daysOfWeek.last, style: _headerWeekendStyle)));
 
     return TableRow(children: children);
   }
@@ -313,6 +331,12 @@ class _TableCalendarState extends State<TableCalendar> {
       isOutsideMonth: _calendarLogic.isExtraDay(date),
       selectedColor: widget.selectedColor,
       todayColor: widget.todayColor,
+      weekdayStyle: widget.weekdayStyle,
+      weekendStyle: widget.weekendStyle,
+      selectedStyle: widget.selectedStyle,
+      todayStyle: widget.todayStyle,
+      outsideStyle: widget.outsideStyle,
+      outsideWeekendStyle: widget.outsideWeekendStyle,
     );
 
     if (widget.events.containsKey(date) && widget.events[date].isNotEmpty) {

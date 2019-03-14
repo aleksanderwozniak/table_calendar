@@ -11,6 +11,12 @@ class CellWidget extends StatelessWidget {
   final bool isOutsideMonth;
   final Color selectedColor;
   final Color todayColor;
+  final TextStyle weekdayStyle;
+  final TextStyle weekendStyle;
+  final TextStyle selectedStyle;
+  final TextStyle todayStyle;
+  final TextStyle outsideStyle;
+  final TextStyle outsideWeekendStyle;
 
   const CellWidget({
     Key key,
@@ -21,6 +27,12 @@ class CellWidget extends StatelessWidget {
     this.isOutsideMonth = false,
     this.selectedColor,
     this.todayColor,
+    this.weekdayStyle,
+    this.weekendStyle,
+    this.selectedStyle,
+    this.todayStyle,
+    this.outsideStyle,
+    this.outsideWeekendStyle,
   })  : assert(text != null),
         super(key: key);
 
@@ -55,23 +67,25 @@ class CellWidget extends StatelessWidget {
   }
 
   TextStyle _buildCellTextStyle() {
-    final highlightStyle = TextStyle().copyWith(color: Colors.grey[50], fontSize: 16.0);
-    final outsideStyle = TextStyle().copyWith(color: Colors.grey[500]);
-    final weekendStyle = TextStyle().copyWith(color: Colors.red[500]);
-    final outsideWeekendStyle = TextStyle().copyWith(color: Colors.red[200]);
-
-    if (isSelected || isToday) {
-      return highlightStyle;
-    }
+    final _weekdayStyle = weekdayStyle ?? TextStyle();
+    final _weekendStyle = weekendStyle ?? TextStyle().copyWith(color: Colors.red[500]);
+    final _selectedStyle = selectedStyle ?? TextStyle().copyWith(color: Colors.grey[50], fontSize: 16.0);
+    final _todayStyle = todayStyle ?? TextStyle().copyWith(color: Colors.grey[50], fontSize: 16.0);
+    final _outsideStyle = outsideStyle ?? TextStyle().copyWith(color: Colors.grey[500]);
+    final _outsideWeekendStyle = outsideWeekendStyle ?? TextStyle().copyWith(color: Colors.red[200]);
 
     if (isWeekend && isOutsideMonth) {
-      return outsideWeekendStyle;
+      return _outsideWeekendStyle;
     } else if (isWeekend) {
-      return weekendStyle;
+      return _weekendStyle;
     } else if (isOutsideMonth) {
-      return outsideStyle;
+      return _outsideStyle;
+    } else if (isSelected) {
+      return _selectedStyle;
+    } else if (isToday) {
+      return _todayStyle;
     } else {
-      return TextStyle();
+      return _weekdayStyle;
     }
   }
 }
