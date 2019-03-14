@@ -70,23 +70,25 @@ class _MyHomePageState extends State<MyHomePage> {
   // Configure the calendar here
   Widget _buildTableCalendar() {
     return TableCalendar(
-      selectedColor: Colors.deepOrange[400],
-      todayColor: Colors.deepOrange[200],
-      eventMarkerColor: Colors.brown[700],
+      events: _events,
       initialCalendarFormat: CalendarFormat.week,
       availableCalendarFormats: [
         CalendarFormat.month,
         CalendarFormat.twoWeeks,
         CalendarFormat.week,
       ],
-      centerHeaderTitle: false,
-      formatToggleVisible: true,
-      formatToggleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
-      formatToggleDecoration: BoxDecoration(
-        color: Colors.deepOrange[400],
-        borderRadius: BorderRadius.circular(16.0),
+      calendarStyle: CalendarStyle(
+        selectedColor: Colors.deepOrange[400],
+        todayColor: Colors.deepOrange[200],
+        eventMarkerColor: Colors.brown[700],
       ),
-      events: _events,
+      headerStyle: HeaderStyle(
+        formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+        formatButtonDecoration: BoxDecoration(
+          color: Colors.deepOrange[400],
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+      ),
       onDaySelected: (day) {
         setState(() {
           _selectedDay = day;

@@ -3,14 +3,15 @@
 
 import 'package:flutter/material.dart';
 
+import '../styles/calendar_style.dart';
+
 class CellWidget extends StatelessWidget {
   final String text;
   final bool isSelected;
   final bool isToday;
   final bool isWeekend;
   final bool isOutsideMonth;
-  final Color selectedColor;
-  final Color todayColor;
+  final CalendarStyle calendarStyle;
 
   const CellWidget({
     Key key,
@@ -19,9 +20,9 @@ class CellWidget extends StatelessWidget {
     this.isToday = false,
     this.isWeekend = false,
     this.isOutsideMonth = false,
-    this.selectedColor,
-    this.todayColor,
+    @required this.calendarStyle,
   })  : assert(text != null),
+        assert(calendarStyle != null),
         super(key: key);
 
   @override
@@ -42,12 +43,12 @@ class CellWidget extends StatelessWidget {
     if (isSelected) {
       return BoxDecoration(
         shape: BoxShape.circle,
-        color: selectedColor ?? Colors.indigo[400],
+        color: calendarStyle.selectedColor,
       );
     } else if (isToday) {
       return BoxDecoration(
         shape: BoxShape.circle,
-        color: todayColor ?? Colors.indigo[200],
+        color: calendarStyle.todayColor,
       );
     } else {
       return BoxDecoration(shape: BoxShape.circle);
@@ -55,23 +56,18 @@ class CellWidget extends StatelessWidget {
   }
 
   TextStyle _buildCellTextStyle() {
-    final highlightStyle = TextStyle().copyWith(color: Colors.grey[50], fontSize: 16.0);
-    final outsideStyle = TextStyle().copyWith(color: Colors.grey[500]);
-    final weekendStyle = TextStyle().copyWith(color: Colors.red[500]);
-    final outsideWeekendStyle = TextStyle().copyWith(color: Colors.red[200]);
-
-    if (isSelected || isToday) {
-      return highlightStyle;
-    }
-
     if (isWeekend && isOutsideMonth) {
-      return outsideWeekendStyle;
+      return calendarStyle.outsideWeekendStyle;
     } else if (isWeekend) {
-      return weekendStyle;
+      return calendarStyle.weekendStyle;
     } else if (isOutsideMonth) {
-      return outsideStyle;
+      return calendarStyle.outsideStyle;
+    } else if (isSelected) {
+      return calendarStyle.selectedStyle;
+    } else if (isToday) {
+      return calendarStyle.todayStyle;
     } else {
-      return TextStyle();
+      return calendarStyle.weekdayStyle;
     }
   }
 }

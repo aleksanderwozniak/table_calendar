@@ -5,61 +5,72 @@ library table_calendar;
 
 import 'package:flutter/material.dart';
 
-import 'src/calendar_logic.dart';
-import 'src/cell_widget.dart';
-import 'src/custom_icon_button.dart';
+import 'src/logic/calendar_logic.dart';
+import 'src/styles/styles.dart';
+import 'src/widgets/widgets.dart';
 
-typedef void OnDaySelected(DateTime day);
-typedef void OnFormatChanged(CalendarFormat format);
+export 'src/styles/styles.dart';
 
+typedef void _OnDaySelected(DateTime day);
+typedef void _OnFormatChanged(CalendarFormat format);
+
+/// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
+/// Highly customizable Calendar widget organized neatly into a `Table`.
+/// Autosizes vertically, saving space for other widgets.
 class TableCalendar extends StatefulWidget {
+  /// Contains a `List` of objects (eg. events) assigned to particular `DateTime`s.
+  /// Each `DateTime` inside this `Map` should get its own `List` of above mentioned objects.
   final Map<DateTime, List> events;
-  final OnDaySelected onDaySelected;
-  final OnFormatChanged onFormatChanged;
-  final Color selectedColor;
-  final Color todayColor;
-  final Color eventMarkerColor;
-  final Color iconColor;
+
+  /// Called whenever any day gets tapped.
+  final _OnDaySelected onDaySelected;
+
+  /// Called whenever `CalendarFormat` changes.
+  final _OnFormatChanged onFormatChanged;
+
+  /// Initially selected DateTime. Usually it will be `DateTime.now()`.
   final DateTime initialDate;
+
+  /// `CalendarFormat` which will be displayed first.
   final CalendarFormat initialCalendarFormat;
+
+  /// `CalendarFormat` which overrides any internal logic.
+  /// Use if you need total programmatic control over `TableCalendar`'s format.
+  ///
+  /// Makes `initialCalendarFormat` and `availableCalendarFormats` obsolete.
   final CalendarFormat forcedCalendarFormat;
+
+  /// `List` of `CalendarFormat`s which internal logic can use to manage `TableCalendar`'s format.
+  /// Order of items will reflect order of format changes when FormatButton is pressed.
   final List<CalendarFormat> availableCalendarFormats;
-  final TextStyle formatToggleTextStyle;
-  final Decoration formatToggleDecoration;
-  final EdgeInsets formatTogglePadding;
-  final bool formatToggleVisible;
-  final bool centerHeaderTitle;
+
+  /// Used to show/hide Header.
   final bool headerVisible;
-  final EdgeInsets leftChevronPadding;
-  final EdgeInsets rightChevronPadding;
-  final EdgeInsets leftChevronMargin;
-  final EdgeInsets rightChevronMargin;
+
+  /// Style for `TableCalendar`'s content.
+  final CalendarStyle calendarStyle;
+
+  /// Style for DaysOfWeek displayed between `TableCalendar`'s Header and content.
+  final DaysOfWeekStyle daysOfWeekStyle;
+
+  /// Style for `TableCalendar`'s Header.
+  final HeaderStyle headerStyle;
 
   TableCalendar({
     Key key,
     this.events = const {},
     this.onDaySelected,
     this.onFormatChanged,
-    this.selectedColor,
-    this.todayColor,
-    this.eventMarkerColor,
-    this.iconColor = Colors.black,
     this.initialDate,
     this.initialCalendarFormat = CalendarFormat.month,
     this.forcedCalendarFormat,
     this.availableCalendarFormats = const [CalendarFormat.month, CalendarFormat.twoWeeks, CalendarFormat.week],
-    this.formatToggleTextStyle = const TextStyle(),
-    this.formatToggleDecoration,
-    this.formatTogglePadding = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-    this.formatToggleVisible = false,
-    this.centerHeaderTitle = true,
     this.headerVisible = true,
-    this.leftChevronPadding = const EdgeInsets.all(12.0),
-    this.rightChevronPadding = const EdgeInsets.all(12.0),
-    this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.calendarStyle = const CalendarStyle(),
+    this.daysOfWeekStyle = const DaysOfWeekStyle(),
+    this.headerStyle = const HeaderStyle(),
   })  : assert(availableCalendarFormats.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         super(key: key);
@@ -155,32 +166,31 @@ class _TableCalendarState extends State<TableCalendar> {
   }
 
   Widget _buildHeader() {
-    final headerStyle = TextStyle().copyWith(fontSize: 17.0);
     final children = [
       CustomIconButton(
-        icon: Icon(Icons.chevron_left, color: widget.iconColor),
+        icon: Icon(Icons.chevron_left, color: widget.headerStyle.iconColor),
         onTap: _selectPrevious,
-        margin: widget.leftChevronMargin,
-        padding: widget.leftChevronPadding,
+        margin: widget.headerStyle.leftChevronMargin,
+        padding: widget.headerStyle.leftChevronPadding,
       ),
       Expanded(
         child: Text(
           _calendarLogic.headerText,
-          style: headerStyle,
-          textAlign: widget.centerHeaderTitle ? TextAlign.center : TextAlign.start,
+          style: widget.headerStyle.titleTextStyle,
+          textAlign: widget.headerStyle.centerHeaderTitle ? TextAlign.center : TextAlign.start,
         ),
       ),
       CustomIconButton(
-        icon: Icon(Icons.chevron_right, color: widget.iconColor),
+        icon: Icon(Icons.chevron_right, color: widget.headerStyle.iconColor),
         onTap: _selectNext,
-        margin: widget.rightChevronMargin,
-        padding: widget.rightChevronPadding,
+        margin: widget.headerStyle.rightChevronMargin,
+        padding: widget.headerStyle.rightChevronPadding,
       ),
     ];
 
-    if (widget.formatToggleVisible && widget.availableCalendarFormats.length > 1 && widget.forcedCalendarFormat == null) {
+    if (widget.headerStyle.formatButtonVisible && widget.availableCalendarFormats.length > 1 && widget.forcedCalendarFormat == null) {
       children.insert(2, const SizedBox(width: 8.0));
-      children.insert(3, _buildHeaderToggle());
+      children.insert(3, _buildFormatButton());
     }
 
     return Row(
@@ -189,19 +199,15 @@ class _TableCalendarState extends State<TableCalendar> {
     );
   }
 
-  Widget _buildHeaderToggle() {
+  Widget _buildFormatButton() {
     return GestureDetector(
       onTap: _toggleCalendarFormat,
       child: Container(
-        decoration: widget.formatToggleDecoration ??
-            BoxDecoration(
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-        padding: widget.formatTogglePadding,
+        decoration: widget.headerStyle.formatButtonDecoration,
+        padding: widget.headerStyle.formatButtonPadding,
         child: Text(
           _calendarLogic.headerToggleText,
-          style: widget.formatToggleTextStyle,
+          style: widget.headerStyle.formatButtonTextStyle,
         ),
       ),
     );
@@ -271,18 +277,15 @@ class _TableCalendarState extends State<TableCalendar> {
     final daysOfWeek = _calendarLogic.daysOfWeek;
     final children = <Widget>[];
 
-    final weekdayStyle = TextStyle().copyWith(color: Colors.grey[700], fontSize: 15.0);
-    final weekendStyle = TextStyle().copyWith(color: Colors.red[500], fontSize: 15.0);
-
-    children.add(Center(child: Text(daysOfWeek.first, style: weekendStyle)));
+    children.add(Center(child: Text(daysOfWeek.first, style: widget.daysOfWeekStyle.weekendStyle)));
     children.addAll(
       daysOfWeek.sublist(1, daysOfWeek.length - 1).map(
             (text) => Center(
-                  child: Text(text, style: weekdayStyle),
+                  child: Text(text, style: widget.daysOfWeekStyle.weekdayStyle),
                 ),
           ),
     );
-    children.add(Center(child: Text(daysOfWeek.last, style: weekendStyle)));
+    children.add(Center(child: Text(daysOfWeek.last, style: widget.daysOfWeekStyle.weekendStyle)));
 
     return TableRow(children: children);
   }
@@ -311,8 +314,7 @@ class _TableCalendarState extends State<TableCalendar> {
       isToday: _calendarLogic.isToday(date),
       isWeekend: _calendarLogic.isWeekend(date),
       isOutsideMonth: _calendarLogic.isExtraDay(date),
-      selectedColor: widget.selectedColor,
-      todayColor: widget.todayColor,
+      calendarStyle: widget.calendarStyle,
     );
 
     if (widget.events.containsKey(date) && widget.events[date].isNotEmpty) {
@@ -349,7 +351,7 @@ class _TableCalendarState extends State<TableCalendar> {
       margin: const EdgeInsets.symmetric(horizontal: 0.3),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: widget.eventMarkerColor ?? Colors.blueGrey[900],
+        color: widget.calendarStyle.eventMarkerColor,
       ),
     );
   }
