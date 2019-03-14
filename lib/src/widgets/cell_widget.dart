@@ -3,20 +3,15 @@
 
 import 'package:flutter/material.dart';
 
+import '../styles/calendar_style.dart';
+
 class CellWidget extends StatelessWidget {
   final String text;
   final bool isSelected;
   final bool isToday;
   final bool isWeekend;
   final bool isOutsideMonth;
-  final Color selectedColor;
-  final Color todayColor;
-  final TextStyle weekdayStyle;
-  final TextStyle weekendStyle;
-  final TextStyle selectedStyle;
-  final TextStyle todayStyle;
-  final TextStyle outsideStyle;
-  final TextStyle outsideWeekendStyle;
+  final CalendarStyle calendarStyle;
 
   const CellWidget({
     Key key,
@@ -25,15 +20,9 @@ class CellWidget extends StatelessWidget {
     this.isToday = false,
     this.isWeekend = false,
     this.isOutsideMonth = false,
-    this.selectedColor,
-    this.todayColor,
-    this.weekdayStyle,
-    this.weekendStyle,
-    this.selectedStyle,
-    this.todayStyle,
-    this.outsideStyle,
-    this.outsideWeekendStyle,
+    @required this.calendarStyle,
   })  : assert(text != null),
+        assert(calendarStyle != null),
         super(key: key);
 
   @override
@@ -54,12 +43,12 @@ class CellWidget extends StatelessWidget {
     if (isSelected) {
       return BoxDecoration(
         shape: BoxShape.circle,
-        color: selectedColor ?? Colors.indigo[400],
+        color: calendarStyle.selectedColor,
       );
     } else if (isToday) {
       return BoxDecoration(
         shape: BoxShape.circle,
-        color: todayColor ?? Colors.indigo[200],
+        color: calendarStyle.todayColor,
       );
     } else {
       return BoxDecoration(shape: BoxShape.circle);
@@ -67,25 +56,18 @@ class CellWidget extends StatelessWidget {
   }
 
   TextStyle _buildCellTextStyle() {
-    final _weekdayStyle = weekdayStyle ?? TextStyle();
-    final _weekendStyle = weekendStyle ?? TextStyle().copyWith(color: Colors.red[500]);
-    final _selectedStyle = selectedStyle ?? TextStyle().copyWith(color: Colors.grey[50], fontSize: 16.0);
-    final _todayStyle = todayStyle ?? TextStyle().copyWith(color: Colors.grey[50], fontSize: 16.0);
-    final _outsideStyle = outsideStyle ?? TextStyle().copyWith(color: Colors.grey[500]);
-    final _outsideWeekendStyle = outsideWeekendStyle ?? TextStyle().copyWith(color: Colors.red[200]);
-
     if (isWeekend && isOutsideMonth) {
-      return _outsideWeekendStyle;
+      return calendarStyle.outsideWeekendStyle;
     } else if (isWeekend) {
-      return _weekendStyle;
+      return calendarStyle.weekendStyle;
     } else if (isOutsideMonth) {
-      return _outsideStyle;
+      return calendarStyle.outsideStyle;
     } else if (isSelected) {
-      return _selectedStyle;
+      return calendarStyle.selectedStyle;
     } else if (isToday) {
-      return _todayStyle;
+      return calendarStyle.todayStyle;
     } else {
-      return _weekdayStyle;
+      return calendarStyle.weekdayStyle;
     }
   }
 }

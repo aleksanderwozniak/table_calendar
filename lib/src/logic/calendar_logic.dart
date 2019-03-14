@@ -4,7 +4,7 @@
 import 'package:date_utils/date_utils.dart';
 import 'package:intl/intl.dart';
 
-import '../table_calendar.dart';
+import '../../table_calendar.dart';
 
 class CalendarLogic {
   DateTime get selectedDate => _selectedDate;
