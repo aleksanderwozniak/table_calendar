@@ -1,3 +1,10 @@
+## [0.3.0]
+
+* Any style can be now customized
+* Grouped properties into Classes
+* Refactored code for better readability
+* Added full documentation
+
 ## [0.2.2]
 
 * Added optional initial Date (defaults to DateTime.now())
