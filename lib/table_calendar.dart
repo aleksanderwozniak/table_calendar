@@ -4,6 +4,7 @@
 library table_calendar;
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'src/logic/calendar_logic.dart';
 import 'src/styles/styles.dart';
@@ -19,6 +20,11 @@ enum CalendarFormat { month, twoWeeks, week }
 
 /// Available animations to update the `CalendarFormat` with.
 enum FormatAnimation { slide, scale }
+
+/// Available day of week formats. `TableCalendar` will start the week with chosen day.
+/// * `StartingDayOfWeek.monday`: Monday - Sunday
+/// * `StartingDayOfWeek.sunday`: Sunday - Saturday
+enum StartingDayOfWeek { monday, sunday }
 
 /// Highly customizable Calendar widget organized neatly into a `Table`.
 /// Autosizes vertically, saving space for other widgets.
@@ -55,6 +61,11 @@ class TableCalendar extends StatefulWidget {
   /// Animation to run when `CalendarFormat` gets changed.
   final FormatAnimation formatAnimation;
 
+  /// `TableCalendar` will start weeks with provided day.
+  /// Use `StartingDayOfWeek.monday` for Monday - Sunday week format.
+  /// Use `StartingDayOfWeek.sunday` for Sunday - Saturday week format.
+  final StartingDayOfWeek startingDayOfWeek;
+
   /// Style for `TableCalendar`'s content.
   final CalendarStyle calendarStyle;
 
@@ -75,6 +86,7 @@ class TableCalendar extends StatefulWidget {
     this.availableCalendarFormats = const [CalendarFormat.month, CalendarFormat.twoWeeks, CalendarFormat.week],
     this.headerVisible = true,
     this.formatAnimation = FormatAnimation.slide,
+    this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
@@ -98,6 +110,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     _calendarLogic = CalendarLogic(
       widget.initialCalendarFormat,
       widget.availableCalendarFormats,
+      widget.startingDayOfWeek,
       initialDate: widget.initialDate,
     );
     _dx = 0;
@@ -297,20 +310,16 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   TableRow _buildDaysOfWeek() {
-    final daysOfWeek = _calendarLogic.daysOfWeek;
-    final children = <Widget>[];
-
-    children.add(Center(child: Text(daysOfWeek.first, style: widget.daysOfWeekStyle.weekendStyle)));
-    children.addAll(
-      daysOfWeek.sublist(1, daysOfWeek.length - 1).map(
-            (text) => Center(
-                  child: Text(text, style: widget.daysOfWeekStyle.weekdayStyle),
-                ),
+    return TableRow(
+      children: _calendarLogic.visibleWeek.map((date) {
+        return Center(
+          child: Text(
+            DateFormat.E().format(date),
+            style: _calendarLogic.isWeekend(date) ? widget.daysOfWeekStyle.weekendStyle : widget.daysOfWeekStyle.weekdayStyle,
           ),
+        );
+      }).toList(),
     );
-    children.add(Center(child: Text(daysOfWeek.last, style: widget.daysOfWeekStyle.weekendStyle)));
-
-    return TableRow(children: children);
   }
 
   TableRow _buildTableRow(List<DateTime> days) {
