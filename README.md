@@ -3,7 +3,7 @@
 [![Pub Package](https://img.shields.io/pub/v/table_calendar.svg?style=flat-square)](https://pub.dartlang.org/packages/table_calendar)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-52bdeb.svg?longCache=true&style=flat-square)](https://github.com/Solido/awesome-flutter)
 
-Flutter Calendar organized neatly into a Table. Autosizes vertically, saving space for other widgets.
+Highly customizable Flutter Calendar organized neatly into a Table. Autosizes vertically, saving space for other widgets.
 
 <div style="text-align: center">
   <table><tr>
@@ -25,6 +25,7 @@ Flutter Calendar organized neatly into a Table. Autosizes vertically, saving spa
 * Display interactive calendar table
 * Display event markers for each day
 * Use and specify different calendar view formats (month, two weeks, week)
+* Select starting day of week (Monday, Sunday)
 * Toggle calendar view formats on the fly - including beautiful animations
 * Customize all styles to your liking
 
@@ -34,5 +35,5 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^0.3.0
+  table_calendar: ^0.3.1
 ```

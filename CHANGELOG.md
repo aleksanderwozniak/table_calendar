@@ -1,3 +1,10 @@
+## [0.3.1]
+
+* Added slide animation for CalendarFormat
+* CalendarFormat animation can be now specified (slide, scale)
+* Added Monday-Sunday week format
+* Week format can be now specified with StartingDayOfWeek enum
+
 ## [0.3.0]
 
 * Any style can be now customized
