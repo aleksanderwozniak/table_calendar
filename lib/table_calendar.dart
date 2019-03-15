@@ -17,6 +17,9 @@ typedef void _OnFormatChanged(CalendarFormat format);
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
+/// Available animations to update the `CalendarFormat` with.
+enum FormatAnimation { slide, scale }
+
 /// Highly customizable Calendar widget organized neatly into a `Table`.
 /// Autosizes vertically, saving space for other widgets.
 class TableCalendar extends StatefulWidget {
@@ -49,6 +52,9 @@ class TableCalendar extends StatefulWidget {
   /// Used to show/hide Header.
   final bool headerVisible;
 
+  /// Animation to run when `CalendarFormat` gets changed.
+  final FormatAnimation formatAnimation;
+
   /// Style for `TableCalendar`'s content.
   final CalendarStyle calendarStyle;
 
@@ -68,6 +74,7 @@ class TableCalendar extends StatefulWidget {
     this.forcedCalendarFormat,
     this.availableCalendarFormats = const [CalendarFormat.month, CalendarFormat.twoWeeks, CalendarFormat.week],
     this.headerVisible = true,
+    this.formatAnimation = FormatAnimation.slide,
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
@@ -81,7 +88,7 @@ class TableCalendar extends StatefulWidget {
   }
 }
 
-class _TableCalendarState extends State<TableCalendar> {
+class _TableCalendarState extends State<TableCalendar> with SingleTickerProviderStateMixin {
   CalendarLogic _calendarLogic;
   double _dx;
 
@@ -155,7 +162,7 @@ class _TableCalendarState extends State<TableCalendar> {
 
     children.addAll([
       const SizedBox(height: 10.0),
-      _buildTable(),
+      _buildCalendarContent(),
       const SizedBox(height: 4.0),
     ]);
 
@@ -213,7 +220,35 @@ class _TableCalendarState extends State<TableCalendar> {
     );
   }
 
-  Widget _buildTable() {
+  Widget _buildCalendarContent() {
+    if (widget.formatAnimation == FormatAnimation.slide) {
+      return AnimatedSize(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.fastOutSlowIn,
+        alignment: Alignment(0, -1),
+        vsync: this,
+        child: _buildTable(),
+      );
+    } else {
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 350),
+        transitionBuilder: (child, animation) {
+          return SizeTransition(
+            sizeFactor: animation,
+            child: ScaleTransition(
+              scale: animation,
+              child: child,
+            ),
+          );
+        },
+        child: _buildTable(
+          key: ValueKey(_calendarLogic.calendarFormat),
+        ),
+      );
+    }
+  }
+
+  Widget _buildTable({Key key}) {
     final children = <TableRow>[];
     final daysInWeek = 7;
     final calendarFormat = widget.forcedCalendarFormat != null ? widget.forcedCalendarFormat : _calendarLogic.calendarFormat;
@@ -233,40 +268,28 @@ class _TableCalendarState extends State<TableCalendar> {
       }
     }
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 350),
-      transitionBuilder: (child, animation) {
-        return SizeTransition(
-          sizeFactor: animation,
-          child: ScaleTransition(
-            scale: animation,
+    return Container(
+      key: key,
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 350),
+        switchInCurve: Curves.decelerate,
+        transitionBuilder: (child, animation) {
+          return SlideTransition(
+            position: Tween<Offset>(begin: Offset(_dx, 0), end: Offset(0, 0)).animate(animation),
             child: child,
-          ),
-        );
-      },
-      child: Container(
-        key: ValueKey(_calendarLogic.calendarFormat),
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 350),
-          switchInCurve: Curves.decelerate,
-          transitionBuilder: (child, animation) {
-            return SlideTransition(
-              position: Tween<Offset>(begin: Offset(_dx, 0), end: Offset(0, 0)).animate(animation),
-              child: child,
-            );
-          },
-          layoutBuilder: (currentChild, _) => currentChild,
-          child: Dismissible(
-            key: ValueKey(_calendarLogic.pageId),
-            resizeDuration: null,
-            onDismissed: _onSwipe,
-            direction: DismissDirection.horizontal,
-            child: Table(
-              // Makes this Table fill its parent horizontally
-              defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
-              children: children,
-            ),
+          );
+        },
+        layoutBuilder: (currentChild, _) => currentChild,
+        child: Dismissible(
+          key: ValueKey(_calendarLogic.pageId),
+          resizeDuration: null,
+          onDismissed: _onSwipe,
+          direction: DismissDirection.horizontal,
+          child: Table(
+            // Makes this Table fill its parent horizontally
+            defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
+            children: children,
           ),
         ),
       ),
