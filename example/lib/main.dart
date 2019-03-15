@@ -72,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return TableCalendar(
       events: _events,
       initialCalendarFormat: CalendarFormat.week,
+      formatAnimation: FormatAnimation.slide,
+      startingDayOfWeek: StartingDayOfWeek.monday,
       availableCalendarFormats: [
         CalendarFormat.month,
         CalendarFormat.twoWeeks,

@@ -19,7 +19,6 @@ class CalendarLogic {
   List<DateTime> get visibleMonth => _visibleMonth;
   List<DateTime> get visibleWeek => _visibleWeek;
   List<DateTime> get visibleTwoWeeks => _visibleTwoWeeks;
-  List<String> get daysOfWeek => _visibleMonth.take(7).map((date) => DateFormat.E().format(date)).toList();
   String get headerText => DateFormat.yMMMM().format(_focusedDate);
   String get headerToggleText {
     switch (_nextFormat()) {
@@ -40,11 +39,17 @@ class CalendarLogic {
   List<DateTime> _visibleMonth;
   List<DateTime> _visibleWeek;
   List<DateTime> _visibleTwoWeeks;
+  StartingDayOfWeek _startingDayOfWeek;
   CalendarFormat _calendarFormat;
   List<CalendarFormat> _availableCalendarFormats;
   int _pageId;
 
-  CalendarLogic(this._calendarFormat, this._availableCalendarFormats, {DateTime initialDate}) : _pageId = 0 {
+  CalendarLogic(
+    this._calendarFormat,
+    this._availableCalendarFormats,
+    this._startingDayOfWeek, {
+    DateTime initialDate,
+  }) : _pageId = 0 {
     final now = DateTime.now();
     _focusedDate = initialDate ?? DateTime(now.year, now.month, now.day);
     _selectedDate = _focusedDate;
@@ -146,7 +151,7 @@ class CalendarLogic {
 
   List<DateTime> _daysInMonth(DateTime month) {
     var first = Utils.firstDayOfMonth(month);
-    var daysBefore = first.weekday;
+    var daysBefore = _startingDayOfWeek == StartingDayOfWeek.sunday ? first.weekday : first.weekday - 1;
     var firstToDisplay = first.subtract(Duration(days: daysBefore));
 
     if (firstToDisplay.hour == 23) {
@@ -161,9 +166,13 @@ class CalendarLogic {
 
     var daysAfter = 7 - last.weekday;
 
-    // If the last day is sunday (7) the entire week must be rendered
-    if (daysAfter == 0) {
-      daysAfter = 7;
+    if (_startingDayOfWeek == StartingDayOfWeek.sunday) {
+      // If the last day is Sunday (7) the entire week must be rendered
+      if (daysAfter == 0) {
+        daysAfter = 7;
+      }
+    } else {
+      daysAfter++;
     }
 
     var lastToDisplay = last.add(Duration(days: daysAfter));
@@ -176,11 +185,25 @@ class CalendarLogic {
   }
 
   List<DateTime> _daysInWeek(DateTime week) {
-    final first = Utils.firstDayOfWeek(week);
-    final last = Utils.lastDayOfWeek(week);
+    final first = _firstDayOfWeek(week);
+    final last = _lastDayOfWeek(week);
 
     final days = Utils.daysInRange(first, last);
     return days.map((day) => DateTime(day.year, day.month, day.day)).toList();
+  }
+
+  DateTime _firstDayOfWeek(DateTime day) {
+    day = DateTime.utc(day.year, day.month, day.day, 12);
+
+    final decreaseNum = _startingDayOfWeek == StartingDayOfWeek.sunday ? day.weekday % 7 : day.weekday - 1;
+    return day.subtract(Duration(days: decreaseNum));
+  }
+
+  DateTime _lastDayOfWeek(DateTime day) {
+    day = DateTime.utc(day.year, day.month, day.day, 12);
+
+    final increaseNum = _startingDayOfWeek == StartingDayOfWeek.sunday ? day.weekday % 7 : day.weekday - 1;
+    return day.add(Duration(days: 7 - increaseNum));
   }
 
   bool isSelected(DateTime day) {
