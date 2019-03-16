@@ -1,3 +1,9 @@
+## [0.3.2]
+
+* Added SwipeToExpand for CalendarFormat
+* AvailableGestures can be now specified (none, horizontalSwipe, verticalSwipe, all)
+* Fixed styling issue with SelectedDay on weekends
+
 ## [0.3.1]
 
 * Added slide animation for CalendarFormat

@@ -71,6 +71,19 @@ class CalendarLogic {
     _calendarFormat = _nextFormat();
   }
 
+  void swipeCalendarFormat(bool isSwipeUp) {
+    int id = _availableCalendarFormats.indexOf(_calendarFormat);
+
+    // Order of CalendarFormats must be from biggest to smallest,
+    // eg.: [month, twoWeeks, week]
+    if (isSwipeUp) {
+      id = _clamp(0, _availableCalendarFormats.length - 1, id + 1);
+    } else {
+      id = _clamp(0, _availableCalendarFormats.length - 1, id - 1);
+    }
+    _calendarFormat = _availableCalendarFormats[id];
+  }
+
   void selectPrevious() {
     if (calendarFormat == CalendarFormat.week) {
       _selectPreviousWeek();
@@ -224,5 +237,15 @@ class CalendarLogic {
         _visibleMonth.skip(_visibleMonth.length - 1 - 7).where((date) => date.day < 10).any((date) => Utils.isSameDay(date, day));
 
     return isBefore || isAfter;
+  }
+
+  int _clamp(int min, int max, int value) {
+    if (value > max) {
+      return max;
+    } else if (value < min) {
+      return min;
+    } else {
+      return value;
+    }
   }
 }
