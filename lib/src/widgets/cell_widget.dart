@@ -56,16 +56,16 @@ class CellWidget extends StatelessWidget {
   }
 
   TextStyle _buildCellTextStyle() {
-    if (isWeekend && isOutsideMonth) {
-      return calendarStyle.outsideWeekendStyle;
-    } else if (isWeekend) {
-      return calendarStyle.weekendStyle;
-    } else if (isOutsideMonth) {
-      return calendarStyle.outsideStyle;
-    } else if (isSelected) {
+    if (isSelected) {
       return calendarStyle.selectedStyle;
     } else if (isToday) {
       return calendarStyle.todayStyle;
+    } else if (isOutsideMonth && isWeekend) {
+      return calendarStyle.outsideWeekendStyle;
+    } else if (isOutsideMonth) {
+      return calendarStyle.outsideStyle;
+    } else if (isWeekend) {
+      return calendarStyle.weekendStyle;
     } else {
       return calendarStyle.weekdayStyle;
     }

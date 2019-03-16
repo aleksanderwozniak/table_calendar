@@ -5,6 +5,7 @@ library table_calendar;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import 'src/logic/calendar_logic.dart';
 import 'src/styles/styles.dart';
@@ -25,6 +26,9 @@ enum FormatAnimation { slide, scale }
 /// * `StartingDayOfWeek.monday`: Monday - Sunday
 /// * `StartingDayOfWeek.sunday`: Sunday - Saturday
 enum StartingDayOfWeek { monday, sunday }
+
+/// Gestures available to interal `TableCalendar`'s logic.
+enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
 /// Highly customizable Calendar widget organized neatly into a `Table`.
 /// Autosizes vertically, saving space for other widgets.
@@ -53,6 +57,11 @@ class TableCalendar extends StatefulWidget {
 
   /// `List` of `CalendarFormat`s which internal logic can use to manage `TableCalendar`'s format.
   /// Order of items will reflect order of format changes when FormatButton is pressed.
+  ///
+  /// If vertical swipe Gesture is available, the `List`'s order must be from biggest format to smallest.
+  ///
+  /// For example:
+  /// [CalendarFormat.month, CalendarFormat.week]
   final List<CalendarFormat> availableCalendarFormats;
 
   /// Used to show/hide Header.
@@ -65,6 +74,10 @@ class TableCalendar extends StatefulWidget {
   /// Use `StartingDayOfWeek.monday` for Monday - Sunday week format.
   /// Use `StartingDayOfWeek.sunday` for Sunday - Saturday week format.
   final StartingDayOfWeek startingDayOfWeek;
+
+  /// Specify Gestures available to `TableCalendar`.
+  /// If `AvailableGestures.none` is used, the Calendar will only be interactive via buttons.
+  final AvailableGestures availableGestures;
 
   /// Style for `TableCalendar`'s content.
   final CalendarStyle calendarStyle;
@@ -87,6 +100,7 @@ class TableCalendar extends StatefulWidget {
     this.headerVisible = true,
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
+    this.availableGestures = AvailableGestures.all,
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
@@ -152,7 +166,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     }
   }
 
-  void _onSwipe(DismissDirection direction) {
+  void _onHorizontalSwipe(DismissDirection direction) {
     if (direction == DismissDirection.startToEnd) {
       // Swipe right
       _selectPrevious();
@@ -236,11 +250,11 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   Widget _buildCalendarContent() {
     if (widget.formatAnimation == FormatAnimation.slide) {
       return AnimatedSize(
-        duration: const Duration(milliseconds: 400),
+        duration: Duration(milliseconds: _calendarLogic.calendarFormat == CalendarFormat.month ? 330 : 220),
         curve: Curves.fastOutSlowIn,
         alignment: Alignment(0, -1),
         vsync: this,
-        child: _buildTable(),
+        child: _buildWrapper(),
       );
     } else {
       return AnimatedSwitcher(
@@ -254,14 +268,87 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
             ),
           );
         },
-        child: _buildTable(
+        child: _buildWrapper(
           key: ValueKey(_calendarLogic.calendarFormat),
         ),
       );
     }
   }
 
-  Widget _buildTable({Key key}) {
+  Widget _buildWrapper({Key key}) {
+    Widget wrappedChild = _buildTable();
+
+    switch (widget.availableGestures) {
+      case AvailableGestures.all:
+        wrappedChild = _buildVerticalSwipeWrapper(
+          child: _buildHorizontalSwipeWrapper(
+            child: wrappedChild,
+          ),
+        );
+        break;
+      case AvailableGestures.verticalSwipe:
+        wrappedChild = _buildVerticalSwipeWrapper(
+          child: wrappedChild,
+        );
+        break;
+      case AvailableGestures.horizontalSwipe:
+        wrappedChild = _buildHorizontalSwipeWrapper(
+          child: wrappedChild,
+        );
+        break;
+      case AvailableGestures.none:
+        break;
+    }
+
+    return Container(
+      key: key,
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: wrappedChild,
+    );
+  }
+
+  Widget _buildVerticalSwipeWrapper({Widget child}) {
+    return SimpleGestureDetector(
+      child: child,
+      onSwipeUp: () {
+        setState(() {
+          _calendarLogic.swipeCalendarFormat(true);
+        });
+      },
+      onSwipeDown: () {
+        setState(() {
+          _calendarLogic.swipeCalendarFormat(false);
+        });
+      },
+      swipeConfig: SimpleSwipeConfig(
+        verticalThreshold: 30.0,
+        swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
+      ),
+    );
+  }
+
+  Widget _buildHorizontalSwipeWrapper({Widget child}) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 350),
+      switchInCurve: Curves.decelerate,
+      transitionBuilder: (child, animation) {
+        return SlideTransition(
+          position: Tween<Offset>(begin: Offset(_dx, 0), end: Offset(0, 0)).animate(animation),
+          child: child,
+        );
+      },
+      layoutBuilder: (currentChild, _) => currentChild,
+      child: Dismissible(
+        key: ValueKey(_calendarLogic.pageId),
+        resizeDuration: null,
+        onDismissed: _onHorizontalSwipe,
+        direction: DismissDirection.horizontal,
+        child: child,
+      ),
+    );
+  }
+
+  Widget _buildTable() {
     final children = <TableRow>[];
     final daysInWeek = 7;
     final calendarFormat = widget.forcedCalendarFormat != null ? widget.forcedCalendarFormat : _calendarLogic.calendarFormat;
@@ -281,31 +368,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       }
     }
 
-    return Container(
-      key: key,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 350),
-        switchInCurve: Curves.decelerate,
-        transitionBuilder: (child, animation) {
-          return SlideTransition(
-            position: Tween<Offset>(begin: Offset(_dx, 0), end: Offset(0, 0)).animate(animation),
-            child: child,
-          );
-        },
-        layoutBuilder: (currentChild, _) => currentChild,
-        child: Dismissible(
-          key: ValueKey(_calendarLogic.pageId),
-          resizeDuration: null,
-          onDismissed: _onSwipe,
-          direction: DismissDirection.horizontal,
-          child: Table(
-            // Makes this Table fill its parent horizontally
-            defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
-            children: children,
-          ),
-        ),
-      ),
+    return Table(
+      // Makes this Table fill its parent horizontally
+      defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
+      children: children,
     );
   }
 

@@ -74,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
       initialCalendarFormat: CalendarFormat.week,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.monday,
+      availableGestures: AvailableGestures.all,
       availableCalendarFormats: [
         CalendarFormat.month,
         CalendarFormat.twoWeeks,
