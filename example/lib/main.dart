@@ -97,6 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
           _selectedDay = day;
           _selectedEvents = _events[_selectedDay] ?? [];
         });
+
+        print('Selected day: $day');
+      },
+      onFormatChanged: (format) {
+        print('Current format: $format');
       },
     );
   }

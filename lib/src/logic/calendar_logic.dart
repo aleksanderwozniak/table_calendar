@@ -2,20 +2,21 @@
 //  Licensed under Apache License v2.0
 
 import 'package:date_utils/date_utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import '../../table_calendar.dart';
 
 class CalendarLogic {
-  DateTime get selectedDate => _selectedDate;
+  DateTime get selectedDate => _selectedDate.value;
   set selectedDate(DateTime value) {
-    _selectedDate = value;
+    _selectedDate.value = value;
     _focusedDate = value;
-    _updateVisible(updateTwoWeeks: _calendarFormat != CalendarFormat.twoWeeks);
+    _updateVisible(updateTwoWeeks: _calendarFormat.value != CalendarFormat.twoWeeks);
   }
 
   int get pageId => _pageId;
-  CalendarFormat get calendarFormat => _calendarFormat;
+  CalendarFormat get calendarFormat => _calendarFormat.value;
   List<DateTime> get visibleMonth => _visibleMonth;
   List<DateTime> get visibleWeek => _visibleWeek;
   List<DateTime> get visibleTwoWeeks => _visibleTwoWeeks;
@@ -35,44 +36,60 @@ class CalendarLogic {
   }
 
   DateTime _focusedDate;
-  DateTime _selectedDate;
   List<DateTime> _visibleMonth;
   List<DateTime> _visibleWeek;
   List<DateTime> _visibleTwoWeeks;
   StartingDayOfWeek _startingDayOfWeek;
-  CalendarFormat _calendarFormat;
+  ValueNotifier<CalendarFormat> _calendarFormat;
+  ValueNotifier<DateTime> _selectedDate;
   List<CalendarFormat> _availableCalendarFormats;
   int _pageId;
 
   CalendarLogic(
-    this._calendarFormat,
     this._availableCalendarFormats,
     this._startingDayOfWeek, {
     DateTime initialDate,
+    CalendarFormat initialFormat,
+    OnFormatChanged onFormatChanged,
+    OnDaySelected onDaySelected,
   }) : _pageId = 0 {
     final now = DateTime.now();
     _focusedDate = initialDate ?? DateTime(now.year, now.month, now.day);
-    _selectedDate = _focusedDate;
-    _visibleTwoWeeks = _daysInWeek(_focusedDate)
-      ..addAll(_daysInWeek(
-        _focusedDate.add(const Duration(days: 7)),
-      ));
-    _updateVisible();
+    _calendarFormat = ValueNotifier(initialFormat);
+    _selectedDate = ValueNotifier(_focusedDate);
+
+    _updateVisible(updateTwoWeeks: true);
+
+    if (onFormatChanged != null) {
+      _calendarFormat.addListener(
+        () => onFormatChanged(_calendarFormat.value),
+      );
+    }
+
+    if (onDaySelected != null) {
+      _selectedDate.addListener(
+        () => onDaySelected(_selectedDate.value),
+      );
+    }
+  }
+
+  void dispose() {
+    _calendarFormat.dispose();
   }
 
   CalendarFormat _nextFormat() {
-    int id = _availableCalendarFormats.indexOf(_calendarFormat);
+    int id = _availableCalendarFormats.indexOf(_calendarFormat.value);
     id = (id + 1) % _availableCalendarFormats.length;
 
     return _availableCalendarFormats[id];
   }
 
   void toggleCalendarFormat() {
-    _calendarFormat = _nextFormat();
+    _calendarFormat.value = _nextFormat();
   }
 
   void swipeCalendarFormat(bool isSwipeUp) {
-    int id = _availableCalendarFormats.indexOf(_calendarFormat);
+    int id = _availableCalendarFormats.indexOf(_calendarFormat.value);
 
     // Order of CalendarFormats must be from biggest to smallest,
     // eg.: [month, twoWeeks, week]
@@ -81,7 +98,7 @@ class CalendarLogic {
     } else {
       id = _clamp(0, _availableCalendarFormats.length - 1, id - 1);
     }
-    _calendarFormat = _availableCalendarFormats[id];
+    _calendarFormat.value = _availableCalendarFormats[id];
   }
 
   void selectPrevious() {

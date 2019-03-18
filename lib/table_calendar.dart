@@ -13,8 +13,11 @@ import 'src/widgets/widgets.dart';
 
 export 'src/styles/styles.dart';
 
-typedef void _OnDaySelected(DateTime day);
-typedef void _OnFormatChanged(CalendarFormat format);
+/// Callback exposing currently selected day.
+typedef void OnDaySelected(DateTime day);
+
+/// Callback exposing current `CalendarFormat`.
+typedef void OnFormatChanged(CalendarFormat format);
 
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
@@ -38,10 +41,10 @@ class TableCalendar extends StatefulWidget {
   final Map<DateTime, List> events;
 
   /// Called whenever any day gets tapped.
-  final _OnDaySelected onDaySelected;
+  final OnDaySelected onDaySelected;
 
   /// Called whenever `CalendarFormat` changes.
-  final _OnFormatChanged onFormatChanged;
+  final OnFormatChanged onFormatChanged;
 
   /// Initially selected DateTime. Usually it will be `DateTime.now()`.
   final DateTime initialDate;
@@ -122,12 +125,20 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   void initState() {
     super.initState();
     _calendarLogic = CalendarLogic(
-      widget.initialCalendarFormat,
       widget.availableCalendarFormats,
       widget.startingDayOfWeek,
+      initialFormat: widget.initialCalendarFormat,
       initialDate: widget.initialDate,
+      onFormatChanged: widget.onFormatChanged,
+      onDaySelected: widget.onDaySelected,
     );
     _dx = 0;
+  }
+
+  @override
+  void dispose() {
+    _calendarLogic.dispose();
+    super.dispose();
   }
 
   void _selectPrevious() {
@@ -150,20 +161,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     setState(() {
       _calendarLogic.selectedDate = date;
     });
-
-    if (widget.onDaySelected != null) {
-      widget.onDaySelected(date);
-    }
   }
 
   void _toggleCalendarFormat() {
     setState(() {
       _calendarLogic.toggleCalendarFormat();
     });
-
-    if (widget.onFormatChanged != null) {
-      widget.onFormatChanged(_calendarLogic.calendarFormat);
-    }
   }
 
   void _onHorizontalSwipe(DismissDirection direction) {
