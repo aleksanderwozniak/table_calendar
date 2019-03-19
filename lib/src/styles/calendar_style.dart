@@ -29,6 +29,13 @@ class CalendarStyle {
   /// Color of event markers placed on the bottom of every day containing events.
   final Color eventMarkerColor;
 
+  final Alignment markersAlignment;
+  final double markersPositionTop;
+  final double markersPositionBottom;
+  final double markersPositionLeft;
+  final double markersPositionRight;
+  final int markersMaxAmount;
+
   const CalendarStyle({
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
@@ -39,5 +46,11 @@ class CalendarStyle {
     this.selectedColor = const Color(0xFF5C6BC0), // Material indigo[400]
     this.todayColor = const Color(0xFF9FA8DA), // Material indigo[200]
     this.eventMarkerColor = const Color(0xFF263238), // Material blueGrey[900]
+    this.markersAlignment = Alignment.bottomCenter,
+    this.markersPositionTop,
+    this.markersPositionBottom = 5.0,
+    this.markersPositionLeft,
+    this.markersPositionRight,
+    this.markersMaxAmount = 4,
   });
 }

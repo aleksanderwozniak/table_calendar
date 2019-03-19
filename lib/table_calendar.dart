@@ -19,6 +19,9 @@ typedef void OnDaySelected(DateTime day);
 /// Callback exposing current `CalendarFormat`.
 typedef void OnFormatChanged(CalendarFormat format);
 
+typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List events);
+typedef SingleMarkerBuilder = Widget Function(BuildContext context, DateTime date, dynamic event);
+
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
@@ -91,6 +94,12 @@ class TableCalendar extends StatefulWidget {
   /// Style for `TableCalendar`'s Header.
   final HeaderStyle headerStyle;
 
+  final FullBuilder dayBuilder;
+  final FullBuilder selectedDayBuilder;
+  final FullBuilder todayDayBuilder;
+  final FullBuilder markersBuilder;
+  final SingleMarkerBuilder singleMarkerBuilder;
+
   TableCalendar({
     Key key,
     this.events = const {},
@@ -107,8 +116,14 @@ class TableCalendar extends StatefulWidget {
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
+    this.dayBuilder,
+    this.todayDayBuilder,
+    this.selectedDayBuilder,
+    this.markersBuilder,
+    this.singleMarkerBuilder,
   })  : assert(availableCalendarFormats.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
+        assert(!(singleMarkerBuilder != null && markersBuilder != null)),
         super(key: key);
 
   @override
@@ -409,31 +424,61 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildCellContent(DateTime date) {
-    Widget content = CellWidget(
-      text: '${date.day}',
-      isSelected: _calendarLogic.isSelected(date),
-      isToday: _calendarLogic.isToday(date),
-      isWeekend: _calendarLogic.isWeekend(date),
-      isOutsideMonth: _calendarLogic.isExtraDay(date),
-      calendarStyle: widget.calendarStyle,
-    );
+    Widget content;
+    if (_calendarLogic.isSelected(date) && widget.selectedDayBuilder != null) {
+      content = Builder(
+        builder: (context) => widget.selectedDayBuilder(context, date, widget.events[date]),
+      );
+    } else if (_calendarLogic.isToday(date) && widget.todayDayBuilder != null) {
+      content = Builder(
+        builder: (context) => widget.todayDayBuilder(context, date, widget.events[date]),
+      );
+    } else if (widget.dayBuilder != null) {
+      content = Builder(
+        builder: (context) => widget.dayBuilder(context, date, widget.events[date]),
+      );
+    } else {
+      content = CellWidget(
+        text: '${date.day}',
+        isSelected: _calendarLogic.isSelected(date),
+        isToday: _calendarLogic.isToday(date),
+        isWeekend: _calendarLogic.isWeekend(date),
+        isOutsideMonth: _calendarLogic.isExtraDay(date),
+        calendarStyle: widget.calendarStyle,
+      );
+    }
 
     if (widget.events.containsKey(date) && widget.events[date].isNotEmpty) {
       final children = <Widget>[content];
-      final maxMarkers = 4;
 
-      children.add(
-        Positioned(
-          bottom: 5.0,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: widget.events[date].take(maxMarkers).map((_) => _buildMarker()).toList(),
+      if (widget.markersBuilder != null) {
+        children.add(
+          Builder(
+            builder: (context) => widget.markersBuilder(context, date, widget.events[date]),
           ),
-        ),
-      );
+        );
+      } else {
+        children.add(
+          Positioned(
+            top: widget.calendarStyle.markersPositionTop,
+            bottom: widget.calendarStyle.markersPositionBottom,
+            left: widget.calendarStyle.markersPositionLeft,
+            right: widget.calendarStyle.markersPositionRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: widget.events[date]
+                  .take(widget.calendarStyle.markersMaxAmount)
+                  .map(
+                    (event) => _buildMarker(date, event),
+                  )
+                  .toList(),
+            ),
+          ),
+        );
+      }
 
       content = Stack(
-        alignment: Alignment.bottomCenter,
+        alignment: widget.calendarStyle.markersAlignment,
         children: children,
       );
     }
@@ -445,15 +490,21 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     );
   }
 
-  Widget _buildMarker() {
-    return Container(
-      width: 8.0,
-      height: 8.0,
-      margin: const EdgeInsets.symmetric(horizontal: 0.3),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: widget.calendarStyle.eventMarkerColor,
-      ),
-    );
+  Widget _buildMarker(DateTime date, dynamic event) {
+    if (widget.singleMarkerBuilder != null) {
+      return Builder(
+        builder: (context) => widget.singleMarkerBuilder(context, date, event),
+      );
+    } else {
+      return Container(
+        width: 8.0,
+        height: 8.0,
+        margin: const EdgeInsets.symmetric(horizontal: 0.3),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: widget.calendarStyle.eventMarkerColor,
+        ),
+      );
+    }
   }
 }
