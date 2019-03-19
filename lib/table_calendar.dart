@@ -126,7 +126,6 @@ class TableCalendar extends StatefulWidget {
 
 class _TableCalendarState extends State<TableCalendar> with SingleTickerProviderStateMixin {
   CalendarLogic _calendarLogic;
-  double _dx;
 
   @override
   void initState() {
@@ -138,7 +137,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       initialDate: widget.initialDate,
       onFormatChanged: widget.onFormatChanged,
     );
-    _dx = 0;
   }
 
   @override
@@ -151,16 +149,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     setState(() {
       _calendarLogic.selectPrevious();
     });
-
-    _dx = -1.2;
   }
 
   void _selectNext() {
     setState(() {
       _calendarLogic.selectNext();
     });
-
-    _dx = 1.2;
   }
 
   void _selectDate(DateTime date) {
@@ -344,7 +338,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       switchInCurve: Curves.decelerate,
       transitionBuilder: (child, animation) {
         return SlideTransition(
-          position: Tween<Offset>(begin: Offset(_dx, 0), end: Offset(0, 0)).animate(animation),
+          position: Tween<Offset>(begin: Offset(_calendarLogic.dx, 0), end: Offset(0, 0)).animate(animation),
           child: child,
         );
       },

@@ -7,15 +7,25 @@ import 'package:intl/intl.dart';
 
 import '../../table_calendar.dart';
 
+const double _dxMax = 1.2;
+const double _dxMin = -1.2;
+
 class CalendarLogic {
   DateTime get selectedDate => _selectedDate;
   set selectedDate(DateTime value) {
+    if (_isExtraDayBefore(value)) {
+      _decrementPage();
+    } else if (_isExtraDayAfter(value)) {
+      _incrementPage();
+    }
+
     _selectedDate = value;
     _focusedDate = value;
     _updateVisible(updateTwoWeeks: _calendarFormat.value != CalendarFormat.twoWeeks);
   }
 
   int get pageId => _pageId;
+  double get dx => _dx;
   CalendarFormat get calendarFormat => _calendarFormat.value;
   List<DateTime> get visibleMonth => _visibleMonth;
   List<DateTime> get visibleWeek => _visibleWeek;
@@ -44,6 +54,7 @@ class CalendarLogic {
   ValueNotifier<CalendarFormat> _calendarFormat;
   List<CalendarFormat> _availableCalendarFormats;
   int _pageId;
+  double _dx;
 
   CalendarLogic(
     this._availableCalendarFormats,
@@ -51,7 +62,8 @@ class CalendarLogic {
     DateTime initialDate,
     CalendarFormat initialFormat,
     OnFormatChanged onFormatChanged,
-  }) : _pageId = 0 {
+  })  : _pageId = 0,
+        _dx = 0 {
     final now = DateTime.now();
     _focusedDate = initialDate ?? DateTime(now.year, now.month, now.day);
     _selectedDate = _focusedDate;
@@ -103,7 +115,7 @@ class CalendarLogic {
       _selectPreviousMonth();
     }
 
-    _pageId--;
+    _decrementPage();
   }
 
   void selectNext() {
@@ -115,7 +127,7 @@ class CalendarLogic {
       _selectNextMonth();
     }
 
-    _pageId++;
+    _incrementPage();
   }
 
   void _selectPreviousMonth() {
@@ -170,6 +182,16 @@ class CalendarLogic {
           _focusedDate.add(const Duration(days: 7)),
         ));
     }
+  }
+
+  void _decrementPage() {
+    _pageId--;
+    _dx = _dxMin;
+  }
+
+  void _incrementPage() {
+    _pageId++;
+    _dx = _dxMax;
   }
 
   List<DateTime> _daysInMonth(DateTime month) {
@@ -242,11 +264,15 @@ class CalendarLogic {
   }
 
   bool isExtraDay(DateTime day) {
-    final isBefore = _visibleMonth.take(7).where((date) => date.day > 10).any((date) => Utils.isSameDay(date, day));
-    final isAfter =
-        _visibleMonth.skip(_visibleMonth.length - 1 - 7).where((date) => date.day < 10).any((date) => Utils.isSameDay(date, day));
+    return _isExtraDayBefore(day) || _isExtraDayAfter(day);
+  }
 
-    return isBefore || isAfter;
+  bool _isExtraDayBefore(DateTime day) {
+    return _visibleMonth.take(7).where((date) => date.day > 10).any((date) => Utils.isSameDay(date, day));
+  }
+
+  bool _isExtraDayAfter(DateTime day) {
+    return _visibleMonth.skip(_visibleMonth.length - 1 - 7).where((date) => date.day < 10).any((date) => Utils.isSameDay(date, day));
   }
 
   int _clamp(int min, int max, int value) {
