@@ -13,15 +13,17 @@ const double _dxMin = -1.2;
 class CalendarLogic {
   DateTime get selectedDate => _selectedDate;
   set selectedDate(DateTime value) {
-    if (_isExtraDayBefore(value)) {
-      _decrementPage();
-    } else if (_isExtraDayAfter(value)) {
-      _incrementPage();
+    if (calendarFormat == CalendarFormat.month) {
+      if (_isExtraDayBefore(value)) {
+        _decrementPage();
+      } else if (_isExtraDayAfter(value)) {
+        _incrementPage();
+      }
     }
 
     _selectedDate = value;
     _focusedDate = value;
-    _updateVisible(updateTwoWeeks: _calendarFormat.value != CalendarFormat.twoWeeks);
+    _updateVisible(updateTwoWeeks: calendarFormat != CalendarFormat.twoWeeks);
   }
 
   int get pageId => _pageId;
@@ -268,11 +270,11 @@ class CalendarLogic {
   }
 
   bool _isExtraDayBefore(DateTime day) {
-    return _visibleMonth.take(7).where((date) => date.day > 10).any((date) => Utils.isSameDay(date, day));
+    return day.month < _focusedDate.month;
   }
 
   bool _isExtraDayAfter(DateTime day) {
-    return _visibleMonth.skip(_visibleMonth.length - 1 - 7).where((date) => date.day < 10).any((date) => Utils.isSameDay(date, day));
+    return day.month > _focusedDate.month;
   }
 
   int _clamp(int min, int max, int value) {

@@ -35,6 +35,7 @@ class CalendarStyle {
   final double markersPositionLeft;
   final double markersPositionRight;
   final int markersMaxAmount;
+  final bool outsideDaysVisible;
 
   const CalendarStyle({
     this.weekdayStyle = const TextStyle(),
@@ -52,5 +53,6 @@ class CalendarStyle {
     this.markersPositionLeft,
     this.markersPositionRight,
     this.markersMaxAmount = 4,
+    this.outsideDaysVisible = true,
   });
 }

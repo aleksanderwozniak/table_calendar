@@ -79,6 +79,8 @@ class TableCalendar extends StatefulWidget {
   /// Use `StartingDayOfWeek.sunday` for Sunday - Saturday week format.
   final StartingDayOfWeek startingDayOfWeek;
 
+  final HitTestBehavior dayHitTestBehavior;
+
   /// Specify Gestures available to `TableCalendar`.
   /// If `AvailableGestures.none` is used, the Calendar will only be interactive via buttons.
   final AvailableGestures availableGestures;
@@ -108,6 +110,7 @@ class TableCalendar extends StatefulWidget {
     this.headerVisible = true,
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
+    this.dayHitTestBehavior = HitTestBehavior.deferToChild,
     this.availableGestures = AvailableGestures.all,
     this.simpleSwipeConfig = const SimpleSwipeConfig(verticalThreshold: 20.0, swipeDetectionMoment: SwipeDetectionMoment.onUpdate),
     this.calendarStyle = const CalendarStyle(),
@@ -411,6 +414,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildCell(DateTime date) {
+    if (!widget.calendarStyle.outsideDaysVisible &&
+        _calendarLogic.isExtraDay(date) &&
+        _calendarLogic.calendarFormat == CalendarFormat.month) {
+      return Container();
+    }
+
     Widget content = _buildCellContent(date);
 
     final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
@@ -450,7 +459,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     }
 
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+      behavior: widget.dayHitTestBehavior,
       onTap: () => _selectDate(date),
       child: content,
     );
