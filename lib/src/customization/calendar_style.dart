@@ -27,7 +27,7 @@ class CalendarStyle {
   final Color todayColor;
 
   /// Color of event markers placed on the bottom of every day containing events.
-  final Color eventMarkerColor;
+  final Color markersColor;
 
   final Alignment markersAlignment;
   final double markersPositionTop;
@@ -45,7 +45,7 @@ class CalendarStyle {
     this.outsideWeekendStyle = const TextStyle(color: const Color(0xFFEF9A9A)), // Material red[200]
     this.selectedColor = const Color(0xFF5C6BC0), // Material indigo[400]
     this.todayColor = const Color(0xFF9FA8DA), // Material indigo[200]
-    this.eventMarkerColor = const Color(0xFF263238), // Material blueGrey[900]
+    this.markersColor = const Color(0xFF263238), // Material blueGrey[900]
     this.markersAlignment = Alignment.bottomCenter,
     this.markersPositionTop,
     this.markersPositionBottom = 5.0,

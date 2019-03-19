@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
         todayColor: Colors.deepOrange[200],
-        eventMarkerColor: Colors.brown[700],
+        markersColor: Colors.brown[700],
       ),
       headerStyle: HeaderStyle(
         formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
@@ -149,61 +149,63 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         centerHeaderTitle: true,
         formatButtonVisible: false,
       ),
-      selectedDayBuilder: (context, date, _) {
-        return FadeTransition(
-          opacity: Tween(begin: 0.0, end: 1.0).animate(_controller),
-          child: Container(
+      builders: CalendarBuilders(
+        selectedDayBuilder: (context, date, _) {
+          return FadeTransition(
+            opacity: Tween(begin: 0.0, end: 1.0).animate(_controller),
+            child: Container(
+              margin: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+              color: Colors.deepOrange[300],
+              width: 100,
+              height: 100,
+              child: Text(
+                '${date.day}',
+                style: TextStyle().copyWith(fontSize: 16.0),
+              ),
+            ),
+          );
+        },
+        todayDayBuilder: (context, date, _) {
+          return Container(
             margin: const EdgeInsets.all(4.0),
             padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-            color: Colors.deepOrange[300],
+            color: Colors.amber[400],
             width: 100,
             height: 100,
             child: Text(
               '${date.day}',
               style: TextStyle().copyWith(fontSize: 16.0),
             ),
-          ),
-        );
-      },
-      todayDayBuilder: (context, date, _) {
-        return Container(
-          margin: const EdgeInsets.all(4.0),
-          padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-          color: Colors.amber[400],
-          width: 100,
-          height: 100,
-          child: Text(
-            '${date.day}',
-            style: TextStyle().copyWith(fontSize: 16.0),
-          ),
-        );
-      },
-      markersBuilder: (context, date, events) {
-        return Positioned(
-          right: 1,
-          bottom: 1,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 400),
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: Utils.isSameDay(date, _selectedDay)
-                  ? Colors.brown[400]
-                  : Utils.isSameDay(date, DateTime.now()) ? Colors.brown[300] : Colors.blue[400],
-            ),
-            width: 16.0,
-            height: 16.0,
-            child: Center(
-              child: Text(
-                '${events.length}',
-                style: TextStyle().copyWith(
-                  color: Colors.white,
-                  fontSize: 12.0,
+          );
+        },
+        markersBuilder: (context, date, events) {
+          return Positioned(
+            right: 1,
+            bottom: 1,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Utils.isSameDay(date, _selectedDay)
+                    ? Colors.brown[400]
+                    : Utils.isSameDay(date, DateTime.now()) ? Colors.brown[300] : Colors.blue[400],
+              ),
+              width: 16.0,
+              height: 16.0,
+              child: Center(
+                child: Text(
+                  '${events.length}',
+                  style: TextStyle().copyWith(
+                    color: Colors.white,
+                    fontSize: 12.0,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
       onDaySelected: (date, events) {
         _onDaySelected(date, events);
         _controller.forward(from: 0.0);

@@ -8,20 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
+import 'src/customization/customization.dart';
 import 'src/logic/calendar_logic.dart';
-import 'src/styles/styles.dart';
 import 'src/widgets/widgets.dart';
 
-export 'src/styles/styles.dart';
+export 'src/customization/customization.dart';
 
 /// Callback exposing currently selected day.
 typedef void OnDaySelected(DateTime day, List events);
 
 /// Callback exposing current `CalendarFormat`.
 typedef void OnFormatChanged(CalendarFormat format);
-
-typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List events);
-typedef SingleMarkerBuilder = Widget Function(BuildContext context, DateTime date, dynamic event);
 
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
@@ -97,14 +94,7 @@ class TableCalendar extends StatefulWidget {
   /// Style for `TableCalendar`'s Header.
   final HeaderStyle headerStyle;
 
-  final FullBuilder dayBuilder;
-  final FullBuilder selectedDayBuilder;
-  final FullBuilder todayDayBuilder;
-  final FullBuilder weekendDayBuilder;
-  final FullBuilder outsideDayBuilder;
-  final FullBuilder outsideWeekendDayBuilder;
-  final FullBuilder markersBuilder;
-  final SingleMarkerBuilder singleMarkerBuilder;
+  final CalendarBuilders builders;
 
   TableCalendar({
     Key key,
@@ -123,17 +113,9 @@ class TableCalendar extends StatefulWidget {
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
-    this.dayBuilder,
-    this.selectedDayBuilder,
-    this.todayDayBuilder,
-    this.weekendDayBuilder,
-    this.outsideDayBuilder,
-    this.outsideWeekendDayBuilder,
-    this.markersBuilder,
-    this.singleMarkerBuilder,
+    this.builders = const CalendarBuilders(),
   })  : assert(availableCalendarFormats.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
-        assert(!(singleMarkerBuilder != null && markersBuilder != null)),
         super(key: key);
 
   @override
@@ -441,10 +423,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     if (key != null && widget.events[key].isNotEmpty) {
       final children = <Widget>[content];
 
-      if (widget.markersBuilder != null) {
+      if (widget.builders.markersBuilder != null) {
         children.add(
           Builder(
-            builder: (context) => widget.markersBuilder(context, key, widget.events[key]),
+            builder: (context) => widget.builders.markersBuilder(context, key, widget.events[key]),
           ),
         );
       } else {
@@ -481,29 +463,29 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildCellContent(DateTime date) {
-    if (widget.selectedDayBuilder != null && _calendarLogic.isSelected(date)) {
+    if (widget.builders.selectedDayBuilder != null && _calendarLogic.isSelected(date)) {
       return Builder(
-        builder: (context) => widget.selectedDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.selectedDayBuilder(context, date, widget.events[date]),
       );
-    } else if (widget.todayDayBuilder != null && _calendarLogic.isToday(date)) {
+    } else if (widget.builders.todayDayBuilder != null && _calendarLogic.isToday(date)) {
       return Builder(
-        builder: (context) => widget.todayDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.todayDayBuilder(context, date, widget.events[date]),
       );
-    } else if (widget.outsideWeekendDayBuilder != null && _calendarLogic.isExtraDay(date) && _calendarLogic.isWeekend(date)) {
+    } else if (widget.builders.outsideWeekendDayBuilder != null && _calendarLogic.isExtraDay(date) && _calendarLogic.isWeekend(date)) {
       return Builder(
-        builder: (context) => widget.outsideWeekendDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.outsideWeekendDayBuilder(context, date, widget.events[date]),
       );
-    } else if (widget.outsideDayBuilder != null && _calendarLogic.isExtraDay(date)) {
+    } else if (widget.builders.outsideDayBuilder != null && _calendarLogic.isExtraDay(date)) {
       return Builder(
-        builder: (context) => widget.outsideDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.outsideDayBuilder(context, date, widget.events[date]),
       );
-    } else if (widget.weekendDayBuilder != null && _calendarLogic.isWeekend(date)) {
+    } else if (widget.builders.weekendDayBuilder != null && _calendarLogic.isWeekend(date)) {
       return Builder(
-        builder: (context) => widget.weekendDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.weekendDayBuilder(context, date, widget.events[date]),
       );
-    } else if (widget.dayBuilder != null) {
+    } else if (widget.builders.dayBuilder != null) {
       return Builder(
-        builder: (context) => widget.dayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.dayBuilder(context, date, widget.events[date]),
       );
     } else {
       return CellWidget(
@@ -518,9 +500,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildMarker(DateTime date, dynamic event) {
-    if (widget.singleMarkerBuilder != null) {
+    if (widget.builders.singleMarkerBuilder != null) {
       return Builder(
-        builder: (context) => widget.singleMarkerBuilder(context, date, event),
+        builder: (context) => widget.builders.singleMarkerBuilder(context, date, event),
       );
     } else {
       return Container(
@@ -529,7 +511,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         margin: const EdgeInsets.symmetric(horizontal: 0.3),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: widget.calendarStyle.eventMarkerColor,
+          color: widget.calendarStyle.markersColor,
         ),
       );
     }

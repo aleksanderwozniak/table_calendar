@@ -3,7 +3,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../styles/calendar_style.dart';
+import '../customization/calendar_style.dart';
 
 class CellWidget extends StatelessWidget {
   final String text;
