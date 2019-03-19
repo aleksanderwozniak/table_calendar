@@ -3,6 +3,7 @@
 
 library table_calendar;
 
+import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -14,7 +15,7 @@ import 'src/widgets/widgets.dart';
 export 'src/styles/styles.dart';
 
 /// Callback exposing currently selected day.
-typedef void OnDaySelected(DateTime day);
+typedef void OnDaySelected(DateTime day, List events);
 
 /// Callback exposing current `CalendarFormat`.
 typedef void OnFormatChanged(CalendarFormat format);
@@ -145,7 +146,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       initialFormat: widget.initialCalendarFormat,
       initialDate: widget.initialDate,
       onFormatChanged: widget.onFormatChanged,
-      onDaySelected: widget.onDaySelected,
     );
     _dx = 0;
   }
@@ -175,6 +175,11 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   void _selectDate(DateTime date) {
     setState(() {
       _calendarLogic.selectedDate = date;
+
+      if (widget.onDaySelected != null) {
+        final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
+        widget.onDaySelected(date, widget.events[key] ?? []);
+      }
     });
   }
 
@@ -448,13 +453,14 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       );
     }
 
-    if (widget.events.containsKey(date) && widget.events[date].isNotEmpty) {
+    final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
+    if (key != null && widget.events[key].isNotEmpty) {
       final children = <Widget>[content];
 
       if (widget.markersBuilder != null) {
         children.add(
           Builder(
-            builder: (context) => widget.markersBuilder(context, date, widget.events[date]),
+            builder: (context) => widget.markersBuilder(context, key, widget.events[key]),
           ),
         );
       } else {
@@ -466,10 +472,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
             right: widget.calendarStyle.markersPositionRight,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: widget.events[date]
+              children: widget.events[key]
                   .take(widget.calendarStyle.markersMaxAmount)
                   .map(
-                    (event) => _buildMarker(date, event),
+                    (event) => _buildMarker(key, event),
                   )
                   .toList(),
             ),

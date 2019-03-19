@@ -8,9 +8,9 @@ import 'package:intl/intl.dart';
 import '../../table_calendar.dart';
 
 class CalendarLogic {
-  DateTime get selectedDate => _selectedDate.value;
+  DateTime get selectedDate => _selectedDate;
   set selectedDate(DateTime value) {
-    _selectedDate.value = value;
+    _selectedDate = value;
     _focusedDate = value;
     _updateVisible(updateTwoWeeks: _calendarFormat.value != CalendarFormat.twoWeeks);
   }
@@ -36,12 +36,12 @@ class CalendarLogic {
   }
 
   DateTime _focusedDate;
+  DateTime _selectedDate;
   List<DateTime> _visibleMonth;
   List<DateTime> _visibleWeek;
   List<DateTime> _visibleTwoWeeks;
   StartingDayOfWeek _startingDayOfWeek;
   ValueNotifier<CalendarFormat> _calendarFormat;
-  ValueNotifier<DateTime> _selectedDate;
   List<CalendarFormat> _availableCalendarFormats;
   int _pageId;
 
@@ -51,24 +51,17 @@ class CalendarLogic {
     DateTime initialDate,
     CalendarFormat initialFormat,
     OnFormatChanged onFormatChanged,
-    OnDaySelected onDaySelected,
   }) : _pageId = 0 {
     final now = DateTime.now();
     _focusedDate = initialDate ?? DateTime(now.year, now.month, now.day);
+    _selectedDate = _focusedDate;
     _calendarFormat = ValueNotifier(initialFormat);
-    _selectedDate = ValueNotifier(_focusedDate);
 
     _updateVisible(updateTwoWeeks: true);
 
     if (onFormatChanged != null) {
       _calendarFormat.addListener(
         () => onFormatChanged(_calendarFormat.value),
-      );
-    }
-
-    if (onDaySelected != null) {
-      _selectedDate.addListener(
-        () => onDaySelected(_selectedDate.value),
       );
     }
   }

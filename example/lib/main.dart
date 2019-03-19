@@ -1,6 +1,7 @@
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
 
+import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -37,16 +38,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
-    _selectedDay = DateTime(now.year, now.month, now.day);
+    _selectedDay = DateTime.now();
     _events = {
-      DateTime(2019, 3, 1): ['Event A', 'Event B', 'Event C'],
-      DateTime(2019, 3, 4): ['Event A'],
-      DateTime(2019, 3, 5): ['Event B', 'Event C'],
-      DateTime(2019, 3, 13): ['Event A', 'Event B', 'Event C'],
-      DateTime(2019, 3, 15): ['Event A', 'Event B', 'Event C', 'Event D', 'Event E', 'Event F', 'Event G'],
-      DateTime(2019, 2, 26): Set.from(['Event A', 'Event A', 'Event B']).toList(),
-      DateTime(2019, 2, 18): ['Event A', 'Event A', 'Event B'],
+      _selectedDay.subtract(Duration(days: 30)): ['Event A1', 'Event B1', 'Event C1'],
+      _selectedDay.subtract(Duration(days: 27)): ['Event A2'],
+      _selectedDay.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
+      _selectedDay.subtract(Duration(days: 10)): ['Event A4', 'Event B4', 'Event C4'],
+      _selectedDay.subtract(Duration(days: 4)): ['Event A5', 'Event B5', 'Event C5'],
+      _selectedDay.subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
+      _selectedDay: ['Event A7', 'Event B7', 'Event C7', 'Event D7'],
+      _selectedDay.add(Duration(days: 1)): ['Event A8', 'Event B8', 'Event C8', 'Event D8', 'Event E8', 'Event F8', 'Event G8'],
+      _selectedDay.add(Duration(days: 3)): Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
+      _selectedDay.add(Duration(days: 7)): ['Event A10', 'Event B10', 'Event C10'],
+      _selectedDay.add(Duration(days: 10)): ['Event A11', 'Event B11'],
+      _selectedDay.add(Duration(days: 11)): ['Event A12', 'Event B12', 'Event C12'],
     };
     _selectedEvents = _events[_selectedDay] ?? [];
 
@@ -58,10 +63,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _controller.forward();
   }
 
-  void _onDaySelected(DateTime day) {
+  void _onDaySelected(DateTime day, List events) {
     setState(() {
       _selectedDay = day;
-      _selectedEvents = _events[_selectedDay] ?? [];
+      _selectedEvents = events;
     });
 
     print('Selected day: $day');
@@ -135,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ],
       calendarStyle: CalendarStyle(
         weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
+        outsideWeekendStyle: TextStyle().copyWith(color: Colors.blue[800].withAlpha(127)),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
@@ -147,10 +153,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         return FadeTransition(
           opacity: Tween(begin: 0.0, end: 1.0).animate(_controller),
           child: Container(
-            margin: const EdgeInsets.all(2.0),
+            margin: const EdgeInsets.all(4.0),
             padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-            color: Colors.orange,
-            width: 50,
+            color: Colors.deepOrange[300],
+            width: 100,
             height: 100,
             child: Text(
               '${date.day}',
@@ -161,11 +167,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       },
       todayDayBuilder: (context, date, _) {
         return Container(
-          margin: const EdgeInsets.all(2.0),
+          margin: const EdgeInsets.all(4.0),
           padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-          color: Colors.amber,
+          color: Colors.amber[400],
           width: 100,
-          height: 50,
+          height: 100,
           child: Text(
             '${date.day}',
             style: TextStyle().copyWith(fontSize: 16.0),
@@ -174,13 +180,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       },
       markersBuilder: (context, date, events) {
         return Positioned(
-          right: 3,
-          bottom: 2,
+          right: 1,
+          bottom: 1,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 400),
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              color: date == _selectedDay ? Colors.brown[700] : Colors.blue[600],
+              color: Utils.isSameDay(date, _selectedDay)
+                  ? Colors.brown[400]
+                  : Utils.isSameDay(date, DateTime.now()) ? Colors.brown[300] : Colors.blue[400],
             ),
             width: 16.0,
             height: 16.0,
@@ -196,8 +204,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ),
         );
       },
-      onDaySelected: (date) {
-        _onDaySelected(date);
+      onDaySelected: (date, events) {
+        _onDaySelected(date, events);
         _controller.forward(from: 0.0);
       },
       onFormatChanged: _onFormatChanged,
