@@ -98,6 +98,9 @@ class TableCalendar extends StatefulWidget {
   final FullBuilder dayBuilder;
   final FullBuilder selectedDayBuilder;
   final FullBuilder todayDayBuilder;
+  final FullBuilder weekendDayBuilder;
+  final FullBuilder outsideDayBuilder;
+  final FullBuilder outsideWeekendDayBuilder;
   final FullBuilder markersBuilder;
   final SingleMarkerBuilder singleMarkerBuilder;
 
@@ -118,8 +121,11 @@ class TableCalendar extends StatefulWidget {
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
     this.dayBuilder,
-    this.todayDayBuilder,
     this.selectedDayBuilder,
+    this.todayDayBuilder,
+    this.weekendDayBuilder,
+    this.outsideDayBuilder,
+    this.outsideWeekendDayBuilder,
     this.markersBuilder,
     this.singleMarkerBuilder,
   })  : assert(availableCalendarFormats.contains(initialCalendarFormat)),
@@ -423,35 +429,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
               maxHeight: constraints.maxWidth,
               minHeight: constraints.maxWidth,
             ),
-            child: _buildCellContent(date),
+            child: _buildCell(date),
           ),
     );
   }
 
-  Widget _buildCellContent(DateTime date) {
-    Widget content;
-    if (_calendarLogic.isSelected(date) && widget.selectedDayBuilder != null) {
-      content = Builder(
-        builder: (context) => widget.selectedDayBuilder(context, date, widget.events[date]),
-      );
-    } else if (_calendarLogic.isToday(date) && widget.todayDayBuilder != null) {
-      content = Builder(
-        builder: (context) => widget.todayDayBuilder(context, date, widget.events[date]),
-      );
-    } else if (widget.dayBuilder != null) {
-      content = Builder(
-        builder: (context) => widget.dayBuilder(context, date, widget.events[date]),
-      );
-    } else {
-      content = CellWidget(
-        text: '${date.day}',
-        isSelected: _calendarLogic.isSelected(date),
-        isToday: _calendarLogic.isToday(date),
-        isWeekend: _calendarLogic.isWeekend(date),
-        isOutsideMonth: _calendarLogic.isExtraDay(date),
-        calendarStyle: widget.calendarStyle,
-      );
-    }
+  Widget _buildCell(DateTime date) {
+    Widget content = _buildCellContent(date);
 
     final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
     if (key != null && widget.events[key].isNotEmpty) {
@@ -494,6 +478,43 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       onTap: () => _selectDate(date),
       child: content,
     );
+  }
+
+  Widget _buildCellContent(DateTime date) {
+    if (widget.selectedDayBuilder != null && _calendarLogic.isSelected(date)) {
+      return Builder(
+        builder: (context) => widget.selectedDayBuilder(context, date, widget.events[date]),
+      );
+    } else if (widget.todayDayBuilder != null && _calendarLogic.isToday(date)) {
+      return Builder(
+        builder: (context) => widget.todayDayBuilder(context, date, widget.events[date]),
+      );
+    } else if (widget.outsideWeekendDayBuilder != null && _calendarLogic.isExtraDay(date) && _calendarLogic.isWeekend(date)) {
+      return Builder(
+        builder: (context) => widget.outsideWeekendDayBuilder(context, date, widget.events[date]),
+      );
+    } else if (widget.outsideDayBuilder != null && _calendarLogic.isExtraDay(date)) {
+      return Builder(
+        builder: (context) => widget.outsideDayBuilder(context, date, widget.events[date]),
+      );
+    } else if (widget.weekendDayBuilder != null && _calendarLogic.isWeekend(date)) {
+      return Builder(
+        builder: (context) => widget.weekendDayBuilder(context, date, widget.events[date]),
+      );
+    } else if (widget.dayBuilder != null) {
+      return Builder(
+        builder: (context) => widget.dayBuilder(context, date, widget.events[date]),
+      );
+    } else {
+      return CellWidget(
+        text: '${date.day}',
+        isSelected: _calendarLogic.isSelected(date),
+        isToday: _calendarLogic.isToday(date),
+        isWeekend: _calendarLogic.isWeekend(date),
+        isOutsideMonth: _calendarLogic.isExtraDay(date),
+        calendarStyle: widget.calendarStyle,
+      );
+    }
   }
 
   Widget _buildMarker(DateTime date, dynamic event) {
