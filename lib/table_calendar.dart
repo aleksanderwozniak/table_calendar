@@ -86,6 +86,8 @@ class TableCalendar extends StatefulWidget {
   /// If `AvailableGestures.none` is used, the Calendar will only be interactive via buttons.
   final AvailableGestures availableGestures;
 
+  final SimpleSwipeConfig simpleSwipeConfig;
+
   /// Style for `TableCalendar`'s content.
   final CalendarStyle calendarStyle;
 
@@ -117,6 +119,7 @@ class TableCalendar extends StatefulWidget {
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.availableGestures = AvailableGestures.all,
+    this.simpleSwipeConfig = const SimpleSwipeConfig(verticalThreshold: 20.0, swipeDetectionMoment: SwipeDetectionMoment.onUpdate),
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
@@ -349,10 +352,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           _calendarLogic.swipeCalendarFormat(false);
         });
       },
-      swipeConfig: SimpleSwipeConfig(
-        verticalThreshold: 30.0,
-        swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
-      ),
+      swipeConfig: widget.simpleSwipeConfig,
     );
   }
 
