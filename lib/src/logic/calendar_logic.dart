@@ -1,6 +1,7 @@
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
 
+import 'package:collection/collection.dart';
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
@@ -23,15 +24,16 @@ class CalendarLogic {
 
     _selectedDate = value;
     _focusedDate = value;
-    _updateVisible(updateTwoWeeks: calendarFormat != CalendarFormat.twoWeeks);
+
+    if (calendarFormat != CalendarFormat.twoWeeks) {
+      _visibleDays.value = _getVisibleDays();
+    }
   }
 
   int get pageId => _pageId;
   double get dx => _dx;
   CalendarFormat get calendarFormat => _calendarFormat.value;
-  List<DateTime> get visibleMonth => _visibleMonth;
-  List<DateTime> get visibleWeek => _visibleWeek;
-  List<DateTime> get visibleTwoWeeks => _visibleTwoWeeks;
+  List<DateTime> get visibleDays => _visibleDays.value;
   String get headerText => DateFormat.yMMMM().format(_focusedDate);
   String get headerToggleText {
     switch (_nextFormat()) {
@@ -49,11 +51,10 @@ class CalendarLogic {
 
   DateTime _focusedDate;
   DateTime _selectedDate;
-  List<DateTime> _visibleMonth;
-  List<DateTime> _visibleWeek;
-  List<DateTime> _visibleTwoWeeks;
   StartingDayOfWeek _startingDayOfWeek;
   ValueNotifier<CalendarFormat> _calendarFormat;
+  ValueNotifier<List<DateTime>> _visibleDays;
+  List<DateTime> _previousVisibleDays;
   List<CalendarFormat> _availableCalendarFormats;
   int _pageId;
   double _dx;
@@ -64,24 +65,38 @@ class CalendarLogic {
     DateTime initialDate,
     CalendarFormat initialFormat,
     OnFormatChanged onFormatChanged,
+    OnVisibleDaysChanged onVisibleDaysChanged,
   })  : _pageId = 0,
         _dx = 0 {
     final now = DateTime.now();
     _focusedDate = initialDate ?? DateTime(now.year, now.month, now.day);
     _selectedDate = _focusedDate;
     _calendarFormat = ValueNotifier(initialFormat);
-
-    _updateVisible(updateTwoWeeks: true);
+    _visibleDays = ValueNotifier(_getVisibleDays());
+    _previousVisibleDays = _visibleDays.value;
 
     if (onFormatChanged != null) {
-      _calendarFormat.addListener(
-        () => onFormatChanged(_calendarFormat.value),
-      );
+      _calendarFormat.addListener(() {
+        _visibleDays.value = _getVisibleDays();
+        onFormatChanged(_calendarFormat.value);
+      });
+    }
+
+    if (onVisibleDaysChanged != null) {
+      final equals = const ListEquality<DateTime>().equals;
+
+      _visibleDays.addListener(() {
+        if (!equals(_visibleDays.value, _previousVisibleDays)) {
+          _previousVisibleDays = _visibleDays.value;
+          onVisibleDaysChanged(_visibleDays.value.first, _visibleDays.value.last);
+        }
+      });
     }
   }
 
   void dispose() {
     _calendarFormat.dispose();
+    _visibleDays.dispose();
   }
 
   CalendarFormat _nextFormat() {
@@ -109,80 +124,74 @@ class CalendarLogic {
   }
 
   void selectPrevious() {
-    if (calendarFormat == CalendarFormat.week) {
-      _selectPreviousWeek();
+    if (calendarFormat == CalendarFormat.month) {
+      _selectPreviousMonth();
     } else if (calendarFormat == CalendarFormat.twoWeeks) {
       _selectPreviousTwoWeeks();
     } else {
-      _selectPreviousMonth();
+      _selectPreviousWeek();
     }
 
+    _visibleDays.value = _getVisibleDays();
     _decrementPage();
   }
 
   void selectNext() {
-    if (calendarFormat == CalendarFormat.week) {
-      _selectNextWeek();
+    if (calendarFormat == CalendarFormat.month) {
+      _selectNextMonth();
     } else if (calendarFormat == CalendarFormat.twoWeeks) {
       _selectNextTwoWeeks();
     } else {
-      _selectNextMonth();
+      _selectNextWeek();
     }
 
+    _visibleDays.value = _getVisibleDays();
     _incrementPage();
   }
 
   void _selectPreviousMonth() {
     _focusedDate = Utils.previousMonth(_focusedDate);
-    _updateVisible();
   }
 
   void _selectNextMonth() {
     _focusedDate = Utils.nextMonth(_focusedDate);
-    _updateVisible();
   }
 
   void _selectPreviousTwoWeeks() {
-    if (_visibleTwoWeeks.take(7).contains(_focusedDate)) {
+    if (_visibleDays.value.take(7).contains(_focusedDate)) {
       // in top row
       _focusedDate = Utils.previousWeek(_focusedDate);
     } else {
       // in bottom row OR not visible
       _focusedDate = Utils.previousWeek(_focusedDate.subtract(const Duration(days: 7)));
     }
-
-    _updateVisible();
   }
 
   void _selectNextTwoWeeks() {
-    if (!_visibleTwoWeeks.skip(7).contains(_focusedDate)) {
+    if (!_visibleDays.value.skip(7).contains(_focusedDate)) {
       // not in bottom row [eg: in top row OR not visible]
       _focusedDate = Utils.nextWeek(_focusedDate);
     }
-
-    _updateVisible();
   }
 
   void _selectPreviousWeek() {
     _focusedDate = Utils.previousWeek(_focusedDate);
-
-    _updateVisible();
   }
 
   void _selectNextWeek() {
     _focusedDate = Utils.nextWeek(_focusedDate);
-    _updateVisible();
   }
 
-  void _updateVisible({bool updateTwoWeeks: true}) {
-    _visibleMonth = _daysInMonth(_focusedDate);
-    _visibleWeek = _daysInWeek(_focusedDate);
-
-    if (updateTwoWeeks) {
-      _visibleTwoWeeks = _daysInWeek(_focusedDate)
+  List<DateTime> _getVisibleDays() {
+    if (calendarFormat == CalendarFormat.month) {
+      return _daysInMonth(_focusedDate);
+    } else if (calendarFormat == CalendarFormat.twoWeeks) {
+      return _daysInWeek(_focusedDate)
         ..addAll(_daysInWeek(
           _focusedDate.add(const Duration(days: 7)),
         ));
+    } else {
+      return _daysInWeek(_focusedDate);
     }
   }
 

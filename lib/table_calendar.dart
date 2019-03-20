@@ -20,6 +20,8 @@ typedef void OnDaySelected(DateTime day, List events);
 /// Callback exposing current `CalendarFormat`.
 typedef void OnFormatChanged(CalendarFormat format);
 
+typedef void OnVisibleDaysChanged(DateTime first, DateTime last);
+
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
@@ -46,6 +48,8 @@ class TableCalendar extends StatefulWidget {
 
   /// Called whenever `CalendarFormat` changes.
   final OnFormatChanged onFormatChanged;
+
+  final OnVisibleDaysChanged onVisibleDaysChanged;
 
   /// Initially selected DateTime. Usually it will be `DateTime.now()`.
   final DateTime initialDate;
@@ -103,6 +107,7 @@ class TableCalendar extends StatefulWidget {
     this.events = const {},
     this.onDaySelected,
     this.onFormatChanged,
+    this.onVisibleDaysChanged,
     this.initialDate,
     this.initialCalendarFormat = CalendarFormat.month,
     this.forcedCalendarFormat,
@@ -139,6 +144,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       initialFormat: widget.initialCalendarFormat,
       initialDate: widget.initialDate,
       onFormatChanged: widget.onFormatChanged,
+      onVisibleDaysChanged: widget.onVisibleDaysChanged,
     );
   }
 
@@ -357,23 +363,15 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildTable() {
-    final children = <TableRow>[];
     final daysInWeek = 7;
-    final calendarFormat = widget.forcedCalendarFormat != null ? widget.forcedCalendarFormat : _calendarLogic.calendarFormat;
+    final children = <TableRow>[
+      _buildDaysOfWeek(),
+    ];
 
-    children.add(_buildDaysOfWeek());
-
-    if (calendarFormat == CalendarFormat.week) {
-      children.add(_buildTableRow(_calendarLogic.visibleWeek.toList()));
-    } else if (calendarFormat == CalendarFormat.twoWeeks) {
-      children.add(_buildTableRow(_calendarLogic.visibleTwoWeeks.take(daysInWeek).toList()));
-      children.add(_buildTableRow(_calendarLogic.visibleTwoWeeks.skip(daysInWeek).toList()));
-    } else {
-      int x = 0;
-      while (x < _calendarLogic.visibleMonth.length) {
-        children.add(_buildTableRow(_calendarLogic.visibleMonth.skip(x).take(daysInWeek).toList()));
-        x += daysInWeek;
-      }
+    int x = 0;
+    while (x < _calendarLogic.visibleDays.length) {
+      children.add(_buildTableRow(_calendarLogic.visibleDays.skip(x).take(daysInWeek).toList()));
+      x += daysInWeek;
     }
 
     return Table(
@@ -385,7 +383,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   TableRow _buildDaysOfWeek() {
     return TableRow(
-      children: _calendarLogic.visibleWeek.map((date) {
+      children: _calendarLogic.visibleDays.take(7).map((date) {
         return Center(
           child: Text(
             DateFormat.E().format(date),

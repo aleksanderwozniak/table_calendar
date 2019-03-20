@@ -32,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   DateTime _selectedDay;
   Map<DateTime, List> _events;
+  Map<DateTime, List> _visibleEvents;
   List _selectedEvents;
   AnimationController _controller;
 
@@ -40,8 +41,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.initState();
     _selectedDay = DateTime.now();
     _events = {
-      _selectedDay.subtract(Duration(days: 30)): ['Event A1', 'Event B1', 'Event C1'],
-      _selectedDay.subtract(Duration(days: 27)): ['Event A2'],
+      _selectedDay.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
+      _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
+      _selectedDay.subtract(Duration(days: 20)): ['Event A2', 'Event B2', 'Event C2', 'Event D2'],
       _selectedDay.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
       _selectedDay.subtract(Duration(days: 10)): ['Event A4', 'Event B4', 'Event C4'],
       _selectedDay.subtract(Duration(days: 4)): ['Event A5', 'Event B5', 'Event C5'],
@@ -50,10 +52,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       _selectedDay.add(Duration(days: 1)): ['Event A8', 'Event B8', 'Event C8', 'Event D8', 'Event E8', 'Event F8', 'Event G8'],
       _selectedDay.add(Duration(days: 3)): Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
       _selectedDay.add(Duration(days: 7)): ['Event A10', 'Event B10', 'Event C10'],
-      _selectedDay.add(Duration(days: 10)): ['Event A11', 'Event B11'],
-      _selectedDay.add(Duration(days: 11)): ['Event A12', 'Event B12', 'Event C12'],
+      _selectedDay.add(Duration(days: 11)): ['Event A11', 'Event B11'],
+      _selectedDay.add(Duration(days: 17)): ['Event A12', 'Event B12', 'Event C12', 'Event D12'],
+      _selectedDay.add(Duration(days: 22)): ['Event A13', 'Event B13'],
+      _selectedDay.add(Duration(days: 26)): ['Event A14', 'Event B14', 'Event C14'],
     };
     _selectedEvents = _events[_selectedDay] ?? [];
+    _visibleEvents = _events;
 
     _controller = AnimationController(
       vsync: this,
@@ -76,6 +81,19 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     print('Current format: $format');
   }
 
+  void _onVisibleDaysChanged(DateTime first, DateTime last) {
+    setState(() {
+      _visibleEvents = Map.fromEntries(
+        _events.entries.where(
+          (entry) => entry.key.isAfter(first.subtract(const Duration(days: 1))) && entry.key.isBefore(last.add(const Duration(days: 1))),
+        ),
+      );
+    });
+
+    print('First visible day: $first');
+    print('Last visible day: $last');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          // Switch out lines 85 and 86 to play with TableCalendar's settings
+          // Switch out 2 lines below to play with TableCalendar's settings
           //-----------------------
           // _buildTableCalendar(),
           _buildTableCalendarWithBuilders(),
@@ -99,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // Simple TableCalendar configuration is here (using Styles)
   Widget _buildTableCalendar() {
     return TableCalendar(
-      events: _events,
+      events: _visibleEvents,
       initialCalendarFormat: CalendarFormat.week,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.monday,
@@ -123,22 +141,24 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       onDaySelected: _onDaySelected,
       onFormatChanged: _onFormatChanged,
+      onVisibleDaysChanged: _onVisibleDaysChanged,
     );
   }
 
   // More advanced TableCalendar configuration is here (using Styles & Builders)
   Widget _buildTableCalendarWithBuilders() {
     return TableCalendar(
-      events: _events,
+      events: _visibleEvents,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
-      startingDayOfWeek: StartingDayOfWeek.monday,
+      startingDayOfWeek: StartingDayOfWeek.sunday,
       availableGestures: AvailableGestures.all,
       availableCalendarFormats: [
         CalendarFormat.month,
         CalendarFormat.week,
       ],
       calendarStyle: CalendarStyle(
+        outsideDaysVisible: false,
         weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
         outsideWeekendStyle: TextStyle().copyWith(color: Colors.blue[800].withAlpha(127)),
       ),
@@ -211,6 +231,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         _controller.forward(from: 0.0);
       },
       onFormatChanged: _onFormatChanged,
+      onVisibleDaysChanged: _onVisibleDaysChanged,
     );
   }
 
