@@ -1,19 +1,30 @@
+## [1.0.0]
+
+* Added custom Builders API
+* Added DateTime truncation logic
+* onDaySelected callback now contains list of events associated with that day
+* Added onVisibleDaysChanged callback
+* SwipeConfig can now be customized
+* Days outside of current month can be shown/hidden
+* Refactored code
+* Updated example project
+
 ## [0.3.2]
 
 * Added SwipeToExpand for CalendarFormat
-* AvailableGestures can be now specified (none, horizontalSwipe, verticalSwipe, all)
+* AvailableGestures can now be specified (none, horizontalSwipe, verticalSwipe, all)
 * Fixed styling issue with SelectedDay on weekends
 
 ## [0.3.1]
 
 * Added slide animation for CalendarFormat
-* CalendarFormat animation can be now specified (slide, scale)
+* CalendarFormat animation can now be specified (slide, scale)
 * Added Monday-Sunday week format
-* Week format can be now specified with StartingDayOfWeek enum
+* Week format can now be specified with StartingDayOfWeek enum
 
 ## [0.3.0]
 
-* Any style can be now customized
+* Any style can now be customized
 * Grouped properties into Classes
 * Refactored code for better readability
 * Added full documentation
@@ -25,7 +36,7 @@
 ## [0.2.1]
 
 * Added animated Swipe gesture
-* CalendarFormat can be now enforced programmatically
+* CalendarFormat can now be enforced programmatically
 
 ## [0.2.0]
 

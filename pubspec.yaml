@@ -1,16 +1,17 @@
 name: table_calendar
-description: Highly customizable Flutter Calendar organized neatly into a Table. Autosizes vertically, saving space for other widgets.
-version: 0.3.2
+description: Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
+version: 1.0.0
 author: Aleksander Woźniak <aleksanderwozniak96@gmail.com>
 homepage: https://github.com/aleksanderwozniak/table_calendar
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   
+  collection: ^1.14.11
   intl: ^0.15.7
   date_utils: ^0.1.0+2
   simple_gesture_detector: ^0.1.0
