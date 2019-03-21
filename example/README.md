@@ -1,16 +1,19 @@
-# TableCalendar example
+# Table Calendar example
 
 Demonstrates how to use [table_calendar](https://pub.dartlang.org/packages/table_calendar) package.
+Displays `TableCalendar` widget with a `ListView` underneath it.
 
-<div style="text-align: center">
-  <table><tr>
-  <td style="text-align: center">
-    <img src="https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/calendar_month.png" width="250" />
-  </td>
-  <td style="text-align: center">
-    <img src="https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/calendar_week.png" width="250" />
-  </td>
-  </tr></table>
-</div>
+| ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_styles.gif) | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_builders.gif) |
+| :------------: | :------------: |
+| **Table Calendar** with custom styles | **Table Calendar** with Builders |
 
-Displays TableCalendar with custom colors. Underneath it is a ListView containing all events from selected day.
+`TableCalendar` offers a lot of customization:
+* by using custom Styles
+* by using custom Builders (accompanied by custom Styles)
+
+Using just Styles is a great way to get nice results with little effort.
+That being said, using Builders will give you full control over Calendar's UI.
+
+This example project will show you both of aforementioned methods.
+
+For more info please refer to [API docs](https://pub.dartlang.org/documentation/table_calendar/latest/table_calendar/table_calendar-library.html).

@@ -75,12 +75,13 @@ class CalendarLogic {
     _visibleDays = ValueNotifier(_getVisibleDays());
     _previousVisibleDays = _visibleDays.value;
 
-    if (onFormatChanged != null) {
-      _calendarFormat.addListener(() {
-        _visibleDays.value = _getVisibleDays();
+    _calendarFormat.addListener(() {
+      _visibleDays.value = _getVisibleDays();
+
+      if (onFormatChanged != null) {
         onFormatChanged(_calendarFormat.value);
-      });
-    }
+      }
+    });
 
     if (onVisibleDaysChanged != null) {
       final equals = const ListEquality<DateTime>().equals;

@@ -1,3 +1,7 @@
+## [1.0.1]
+
+* Fixed CalendarFormat issue when not using a callback
+
 ## [1.0.0]
 
 * Added custom Builders API

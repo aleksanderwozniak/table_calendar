@@ -5,7 +5,7 @@
 
 Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
 
-| <img src="https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_styles.gif" width="280" />  | <img src="https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_builder.gif" width="280" /> |
+| ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_styles.gif) | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_builders.gif) |
 | :------------: | :------------: |
 | **Table Calendar** with custom styles | **Table Calendar** with Builders |
 
@@ -31,5 +31,5 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^1.0.0
+  table_calendar: ^1.0.1
 ```
