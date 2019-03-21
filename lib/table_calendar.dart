@@ -20,6 +20,7 @@ typedef void OnDaySelected(DateTime day, List events);
 /// Callback exposing current `CalendarFormat`.
 typedef void OnFormatChanged(CalendarFormat format);
 
+/// Callback exposing currently visible days (first and last of them).
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last);
 
 /// Format to display the `TableCalendar` with.
@@ -36,8 +37,7 @@ enum StartingDayOfWeek { monday, sunday }
 /// Gestures available to interal `TableCalendar`'s logic.
 enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
-/// Highly customizable Calendar widget organized neatly into a `Table`.
-/// Autosizes vertically, saving space for other widgets.
+/// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
 class TableCalendar extends StatefulWidget {
   /// Contains a `List` of objects (eg. events) assigned to particular `DateTime`s.
   /// Each `DateTime` inside this `Map` should get its own `List` of above mentioned objects.
@@ -49,6 +49,7 @@ class TableCalendar extends StatefulWidget {
   /// Called whenever `CalendarFormat` changes.
   final OnFormatChanged onFormatChanged;
 
+  /// Called whenever the range of visible days changes.
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
   /// Initially selected DateTime. Usually it will be `DateTime.now()`.
@@ -83,12 +84,14 @@ class TableCalendar extends StatefulWidget {
   /// Use `StartingDayOfWeek.sunday` for Sunday - Saturday week format.
   final StartingDayOfWeek startingDayOfWeek;
 
+  /// `HitTestBehavior` for every day cell inside `TableCalendar`.
   final HitTestBehavior dayHitTestBehavior;
 
   /// Specify Gestures available to `TableCalendar`.
   /// If `AvailableGestures.none` is used, the Calendar will only be interactive via buttons.
   final AvailableGestures availableGestures;
 
+  /// Configuration for vertical Swipe detector.
   final SimpleSwipeConfig simpleSwipeConfig;
 
   /// Style for `TableCalendar`'s content.
@@ -100,6 +103,7 @@ class TableCalendar extends StatefulWidget {
   /// Style for `TableCalendar`'s Header.
   final HeaderStyle headerStyle;
 
+  /// Set of Builders for `TableCalendar` to work with.
   final CalendarBuilders builders;
 
   TableCalendar({
@@ -210,9 +214,11 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       const SizedBox(height: 4.0),
     ]);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: children,
+    return ClipRect(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: children,
+      ),
     );
   }
 
@@ -464,29 +470,30 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildCellContent(DateTime date) {
+    final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
     if (widget.builders.selectedDayBuilder != null && _calendarLogic.isSelected(date)) {
       return Builder(
-        builder: (context) => widget.builders.selectedDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.selectedDayBuilder(context, date, widget.events[key]),
       );
     } else if (widget.builders.todayDayBuilder != null && _calendarLogic.isToday(date)) {
       return Builder(
-        builder: (context) => widget.builders.todayDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.todayDayBuilder(context, date, widget.events[key]),
       );
     } else if (widget.builders.outsideWeekendDayBuilder != null && _calendarLogic.isExtraDay(date) && _calendarLogic.isWeekend(date)) {
       return Builder(
-        builder: (context) => widget.builders.outsideWeekendDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.outsideWeekendDayBuilder(context, date, widget.events[key]),
       );
     } else if (widget.builders.outsideDayBuilder != null && _calendarLogic.isExtraDay(date)) {
       return Builder(
-        builder: (context) => widget.builders.outsideDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.outsideDayBuilder(context, date, widget.events[key]),
       );
     } else if (widget.builders.weekendDayBuilder != null && _calendarLogic.isWeekend(date)) {
       return Builder(
-        builder: (context) => widget.builders.weekendDayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.weekendDayBuilder(context, date, widget.events[key]),
       );
     } else if (widget.builders.dayBuilder != null) {
       return Builder(
-        builder: (context) => widget.builders.dayBuilder(context, date, widget.events[date]),
+        builder: (context) => widget.builders.dayBuilder(context, date, widget.events[key]),
       );
     } else {
       return CellWidget(

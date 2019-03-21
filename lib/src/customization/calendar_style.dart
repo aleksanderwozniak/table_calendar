@@ -29,12 +29,29 @@ class CalendarStyle {
   /// Color of event markers placed on the bottom of every day containing events.
   final Color markersColor;
 
+  /// General `Alignment` for event markers.
   final Alignment markersAlignment;
+
+  /// `top` property of `Positioned` widget used for event markers.
   final double markersPositionTop;
+
+  /// `bottom` property of `Positioned` widget used for event markers.
+  /// NOTE: This defaults to `5.0`, so you might occasionally want to set it to `null`.
   final double markersPositionBottom;
+
+  /// `left` property of `Positioned` widget used for event markers.
   final double markersPositionLeft;
+
+  /// `right` property of `Positioned` widget used for event markers.
   final double markersPositionRight;
+
+  /// Maximum amount of event markers to be displayed.
   final int markersMaxAmount;
+
+  /// Specifies whether or not days outside of current month should be displayed.
+  ///
+  /// Sometimes a fragment of previous month's last week (or next month's first week) appears in current month's view.
+  /// This property defines if those should be visible (eg. with custom style) or hidden.
   final bool outsideDaysVisible;
 
   const CalendarStyle({
