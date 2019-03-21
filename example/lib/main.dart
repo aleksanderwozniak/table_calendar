@@ -105,8 +105,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         children: <Widget>[
           // Switch out 2 lines below to play with TableCalendar's settings
           //-----------------------
-          // _buildTableCalendar(),
-          _buildTableCalendarWithBuilders(),
+          _buildTableCalendar(),
+          // _buildTableCalendarWithBuilders(),
           const SizedBox(height: 8.0),
           Expanded(child: _buildEventList()),
         ],
@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-  // Simple TableCalendar configuration is here (using Styles)
+  // Simple TableCalendar configuration (using Styles)
   Widget _buildTableCalendar() {
     return TableCalendar(
       events: _visibleEvents,
@@ -145,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-  // More advanced TableCalendar configuration is here (using Styles & Builders)
+  // More advanced TableCalendar configuration (using Builders & Styles)
   Widget _buildTableCalendarWithBuilders() {
     return TableCalendar(
       events: _visibleEvents,
