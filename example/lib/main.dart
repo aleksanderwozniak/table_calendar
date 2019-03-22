@@ -118,6 +118,16 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget _buildTableCalendar() {
     return TableCalendar(
       events: _visibleEvents,
+      getFormatName: (format) {
+        switch (format) {
+          case CalendarFormat.month:
+            return 'Month';
+          case CalendarFormat.twoWeeks:
+            return 'Bi-Weekly';
+          case CalendarFormat.week:
+            return 'Week';
+        }
+      },
       initialCalendarFormat: CalendarFormat.week,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.monday,

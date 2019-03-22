@@ -23,6 +23,9 @@ typedef void OnFormatChanged(CalendarFormat format);
 /// Callback exposing currently visible days (first and last of them).
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last);
 
+/// Callback for getting the calendar format name
+typedef String GetFormatName(CalendarFormat nextCalendarFormat);
+
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
@@ -48,6 +51,9 @@ class TableCalendar extends StatefulWidget {
 
   /// Called whenever `CalendarFormat` changes.
   final OnFormatChanged onFormatChanged;
+
+  /// Called whenever `CalendarFormat` changes.
+  final GetFormatName getFormatName;
 
   /// Called whenever the range of visible days changes.
   final OnVisibleDaysChanged onVisibleDaysChanged;
@@ -111,6 +117,7 @@ class TableCalendar extends StatefulWidget {
     this.events = const {},
     this.onDaySelected,
     this.onFormatChanged,
+    this.getFormatName,
     this.onVisibleDaysChanged,
     this.initialDate,
     this.initialCalendarFormat = CalendarFormat.month,
@@ -263,7 +270,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         decoration: widget.headerStyle.formatButtonDecoration,
         padding: widget.headerStyle.formatButtonPadding,
         child: Text(
-          _calendarLogic.headerToggleText,
+          widget.getFormatName != null
+              ? widget.getFormatName(_calendarLogic.nextFormat())
+              : _calendarLogic.headerToggleText,
           style: widget.headerStyle.formatButtonTextStyle,
         ),
       ),

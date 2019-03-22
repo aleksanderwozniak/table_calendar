@@ -36,7 +36,7 @@ class CalendarLogic {
   List<DateTime> get visibleDays => _visibleDays.value;
   String get headerText => DateFormat.yMMMM().format(_focusedDate);
   String get headerToggleText {
-    switch (_nextFormat()) {
+    switch (nextFormat()) {
       case CalendarFormat.month:
         return 'Full';
       case CalendarFormat.twoWeeks:
@@ -100,7 +100,7 @@ class CalendarLogic {
     _visibleDays.dispose();
   }
 
-  CalendarFormat _nextFormat() {
+  CalendarFormat nextFormat() {
     int id = _availableCalendarFormats.indexOf(_calendarFormat.value);
     id = (id + 1) % _availableCalendarFormats.length;
 
@@ -108,7 +108,7 @@ class CalendarLogic {
   }
 
   void toggleCalendarFormat() {
-    _calendarFormat.value = _nextFormat();
+    _calendarFormat.value = nextFormat();
   }
 
   void swipeCalendarFormat(bool isSwipeUp) {
