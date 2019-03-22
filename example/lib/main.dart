@@ -122,11 +122,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.monday,
       availableGestures: AvailableGestures.all,
-      availableCalendarFormats: [
-        CalendarFormat.month,
-        CalendarFormat.twoWeeks,
-        CalendarFormat.week,
-      ],
+      availableCalendarFormats: const {
+        CalendarFormat.month: 'Month',
+        CalendarFormat.twoWeeks: '2 weeks',
+        CalendarFormat.week: 'Week',
+      },
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
         todayColor: Colors.deepOrange[200],
@@ -153,10 +153,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,
       availableGestures: AvailableGestures.all,
-      availableCalendarFormats: [
-        CalendarFormat.month,
-        CalendarFormat.week,
-      ],
+      availableCalendarFormats: const {
+        CalendarFormat.month: '',
+        CalendarFormat.week: '',
+      },
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
         weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),

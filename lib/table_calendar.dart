@@ -64,14 +64,19 @@ class TableCalendar extends StatefulWidget {
   /// Makes `initialCalendarFormat` and `availableCalendarFormats` obsolete.
   final CalendarFormat forcedCalendarFormat;
 
-  /// `List` of `CalendarFormat`s which internal logic can use to manage `TableCalendar`'s format.
-  /// Order of items will reflect order of format changes when FormatButton is pressed.
+  /// `Map` of `CalendarFormat`s and `String` names associated with them.
+  /// Those `CalendarFormat`s will be used by internal logic to manage displayed format.
   ///
-  /// If vertical swipe Gesture is available, the `List`'s order must be from biggest format to smallest.
+  /// To ensure proper vertical Swipe behavior, `CalendarFormat`s should be in descending order (eg. from biggest to smallest).
   ///
   /// For example:
-  /// [CalendarFormat.month, CalendarFormat.week]
-  final List<CalendarFormat> availableCalendarFormats;
+  /// ```dart
+  /// availableCalendarFormats: const {
+  ///   CalendarFormat.month: 'Month',
+  ///   CalendarFormat.week: 'Week',
+  /// }
+  /// ```
+  final Map<CalendarFormat, String> availableCalendarFormats;
 
   /// Used to show/hide Header.
   final bool headerVisible;
@@ -115,7 +120,11 @@ class TableCalendar extends StatefulWidget {
     this.initialDate,
     this.initialCalendarFormat = CalendarFormat.month,
     this.forcedCalendarFormat,
-    this.availableCalendarFormats = const [CalendarFormat.month, CalendarFormat.twoWeeks, CalendarFormat.week],
+    this.availableCalendarFormats = const {
+      CalendarFormat.month: 'Full',
+      CalendarFormat.twoWeeks: 'Compact',
+      CalendarFormat.week: 'Minimal',
+    },
     this.headerVisible = true,
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -126,7 +135,7 @@ class TableCalendar extends StatefulWidget {
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
     this.builders = const CalendarBuilders(),
-  })  : assert(availableCalendarFormats.contains(initialCalendarFormat)),
+  })  : assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         super(key: key);
 
@@ -263,7 +272,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         decoration: widget.headerStyle.formatButtonDecoration,
         padding: widget.headerStyle.formatButtonPadding,
         child: Text(
-          _calendarLogic.headerToggleText,
+          _calendarLogic.formatButtonText,
           style: widget.headerStyle.formatButtonTextStyle,
         ),
       ),

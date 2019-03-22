@@ -35,19 +35,7 @@ class CalendarLogic {
   CalendarFormat get calendarFormat => _calendarFormat.value;
   List<DateTime> get visibleDays => _visibleDays.value;
   String get headerText => DateFormat.yMMMM().format(_focusedDate);
-  String get headerToggleText {
-    switch (_nextFormat()) {
-      case CalendarFormat.month:
-        return 'Full';
-      case CalendarFormat.twoWeeks:
-        return 'Compact';
-      case CalendarFormat.week:
-        return 'Minimal';
-      default:
-        assert(false);
-        return null;
-    }
-  }
+  String get formatButtonText => _availableCalendarFormats[_nextFormat()];
 
   DateTime _focusedDate;
   DateTime _selectedDate;
@@ -55,7 +43,7 @@ class CalendarLogic {
   ValueNotifier<CalendarFormat> _calendarFormat;
   ValueNotifier<List<DateTime>> _visibleDays;
   List<DateTime> _previousVisibleDays;
-  List<CalendarFormat> _availableCalendarFormats;
+  Map<CalendarFormat, String> _availableCalendarFormats;
   int _pageId;
   double _dx;
 
@@ -101,10 +89,11 @@ class CalendarLogic {
   }
 
   CalendarFormat _nextFormat() {
-    int id = _availableCalendarFormats.indexOf(_calendarFormat.value);
-    id = (id + 1) % _availableCalendarFormats.length;
+    final formats = _availableCalendarFormats.keys.toList();
+    int id = formats.indexOf(_calendarFormat.value);
+    id = (id + 1) % formats.length;
 
-    return _availableCalendarFormats[id];
+    return formats[id];
   }
 
   void toggleCalendarFormat() {
@@ -112,16 +101,17 @@ class CalendarLogic {
   }
 
   void swipeCalendarFormat(bool isSwipeUp) {
-    int id = _availableCalendarFormats.indexOf(_calendarFormat.value);
+    final formats = _availableCalendarFormats.keys.toList();
+    int id = formats.indexOf(_calendarFormat.value);
 
     // Order of CalendarFormats must be from biggest to smallest,
     // eg.: [month, twoWeeks, week]
     if (isSwipeUp) {
-      id = _clamp(0, _availableCalendarFormats.length - 1, id + 1);
+      id = _clamp(0, formats.length - 1, id + 1);
     } else {
-      id = _clamp(0, _availableCalendarFormats.length - 1, id - 1);
+      id = _clamp(0, formats.length - 1, id - 1);
     }
-    _calendarFormat.value = _availableCalendarFormats[id];
+    _calendarFormat.value = formats[id];
   }
 
   void selectPrevious() {
