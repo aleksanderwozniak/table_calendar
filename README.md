@@ -13,6 +13,7 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 
 * Extensive, yet easy to use API
 * Custom Builders for true UI control
+* Vertical autosizing
 * Beautiful animations
 * Gesture handling
 * Multiple Calendar formats
@@ -31,5 +32,5 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^1.0.1
+  table_calendar: ^1.0.2
 ```

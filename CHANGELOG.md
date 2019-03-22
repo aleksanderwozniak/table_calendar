@@ -1,3 +1,7 @@
+## [1.0.2]
+
+* FormatButton text can now be customized
+
 ## [1.0.1]
 
 * Fixed CalendarFormat issue when not using a callback
