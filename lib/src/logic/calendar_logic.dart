@@ -1,7 +1,6 @@
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
 
-import 'package:collection/collection.dart';
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
@@ -42,7 +41,8 @@ class CalendarLogic {
   StartingDayOfWeek _startingDayOfWeek;
   ValueNotifier<CalendarFormat> _calendarFormat;
   ValueNotifier<List<DateTime>> _visibleDays;
-  List<DateTime> _previousVisibleDays;
+  DateTime _previousFirstDay;
+  DateTime _previousLastDay;
   Map<CalendarFormat, String> _availableCalendarFormats;
   int _pageId;
   double _dx;
@@ -62,7 +62,8 @@ class CalendarLogic {
     _selectedDate = _focusedDate;
     _calendarFormat = ValueNotifier(initialFormat);
     _visibleDays = ValueNotifier(_getVisibleDays());
-    _previousVisibleDays = _visibleDays.value;
+    _previousFirstDay = _visibleDays.value.first;
+    _previousLastDay = _visibleDays.value.last;
 
     _calendarFormat.addListener(() {
       _visibleDays.value = _getVisibleDays();
@@ -73,11 +74,10 @@ class CalendarLogic {
     });
 
     if (onVisibleDaysChanged != null) {
-      final equals = const ListEquality<DateTime>().equals;
-
       _visibleDays.addListener(() {
-        if (!equals(_visibleDays.value, _previousVisibleDays)) {
-          _previousVisibleDays = _visibleDays.value;
+        if (!Utils.isSameDay(_visibleDays.value.first, _previousFirstDay) || !Utils.isSameDay(_visibleDays.value.last, _previousLastDay)) {
+          _previousFirstDay = _visibleDays.value.first;
+          _previousLastDay = _visibleDays.value.last;
           onVisibleDaysChanged(_getFirstDay(includeInvisibleDays), _getLastDay(includeInvisibleDays));
         }
       });
@@ -184,7 +184,11 @@ class CalendarLogic {
 
   DateTime _getLastDay(bool includeInvisible) {
     if (_calendarFormat.value == CalendarFormat.month && !includeInvisible) {
-      return Utils.lastDayOfMonth(_focusedDate);
+      var last = Utils.lastDayOfMonth(_focusedDate);
+      if (last.hour == 23) {
+        last = last.add(Duration(hours: 1));
+      }
+      return last;
     } else {
       return _visibleDays.value.last;
     }
