@@ -197,8 +197,8 @@ class CalendarLogic {
   }
 
   List<DateTime> _daysInMonth(DateTime month) {
-    var first = Utils.firstDayOfMonth(month);
-    var daysBefore = _startingDayOfWeek == StartingDayOfWeek.sunday ? first.weekday : first.weekday - 1;
+    final first = Utils.firstDayOfMonth(month);
+    final daysBefore = _startingDayOfWeek == StartingDayOfWeek.sunday ? first.weekday % 7 : first.weekday - 1;
     var firstToDisplay = first.subtract(Duration(days: daysBefore));
 
     if (firstToDisplay.hour == 23) {
