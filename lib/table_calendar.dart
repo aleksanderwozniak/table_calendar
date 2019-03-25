@@ -158,6 +158,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       initialDate: widget.initialDate,
       onFormatChanged: widget.onFormatChanged,
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
+      includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
     );
   }
 

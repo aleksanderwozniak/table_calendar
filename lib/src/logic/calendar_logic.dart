@@ -54,6 +54,7 @@ class CalendarLogic {
     CalendarFormat initialFormat,
     OnFormatChanged onFormatChanged,
     OnVisibleDaysChanged onVisibleDaysChanged,
+    bool includeInvisibleDays = false,
   })  : _pageId = 0,
         _dx = 0 {
     final now = DateTime.now();
@@ -77,7 +78,7 @@ class CalendarLogic {
       _visibleDays.addListener(() {
         if (!equals(_visibleDays.value, _previousVisibleDays)) {
           _previousVisibleDays = _visibleDays.value;
-          onVisibleDaysChanged(_visibleDays.value.first, _visibleDays.value.last);
+          onVisibleDaysChanged(_getFirstDay(includeInvisibleDays), _getLastDay(includeInvisibleDays));
         }
       });
     }
@@ -171,6 +172,22 @@ class CalendarLogic {
 
   void _selectNextWeek() {
     _focusedDate = Utils.nextWeek(_focusedDate);
+  }
+
+  DateTime _getFirstDay(bool includeInvisible) {
+    if (_calendarFormat.value == CalendarFormat.month && !includeInvisible) {
+      return Utils.firstDayOfMonth(_focusedDate);
+    } else {
+      return _visibleDays.value.first;
+    }
+  }
+
+  DateTime _getLastDay(bool includeInvisible) {
+    if (_calendarFormat.value == CalendarFormat.month && !includeInvisible) {
+      return Utils.lastDayOfMonth(_focusedDate);
+    } else {
+      return _visibleDays.value.last;
+    }
   }
 
   List<DateTime> _getVisibleDays() {
