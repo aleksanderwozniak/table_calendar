@@ -121,9 +121,9 @@ class TableCalendar extends StatefulWidget {
     this.initialCalendarFormat = CalendarFormat.month,
     this.forcedCalendarFormat,
     this.availableCalendarFormats = const {
-      CalendarFormat.month: 'Full',
-      CalendarFormat.twoWeeks: 'Compact',
-      CalendarFormat.week: 'Minimal',
+      CalendarFormat.month: 'Month',
+      CalendarFormat.twoWeeks: '2 weeks',
+      CalendarFormat.week: 'Week',
     },
     this.headerVisible = true,
     this.formatAnimation = FormatAnimation.slide,
