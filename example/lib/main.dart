@@ -77,11 +77,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     print('Selected day: $day');
   }
 
-  void _onFormatChanged(CalendarFormat format) {
-    print('Current format: $format');
-  }
-
-  void _onVisibleDaysChanged(DateTime first, DateTime last) {
+  void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
     setState(() {
       _visibleEvents = Map.fromEntries(
         _events.entries.where(
@@ -92,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
     print('First visible day: $first');
     print('Last visible day: $last');
+    print('Current format: $format');
   }
 
   @override
@@ -140,7 +137,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         ),
       ),
       onDaySelected: _onDaySelected,
-      onFormatChanged: _onFormatChanged,
       onVisibleDaysChanged: _onVisibleDaysChanged,
     );
   }
@@ -230,7 +226,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         _onDaySelected(date, events);
         _controller.forward(from: 0.0);
       },
-      onFormatChanged: _onFormatChanged,
       onVisibleDaysChanged: _onVisibleDaysChanged,
     );
   }
