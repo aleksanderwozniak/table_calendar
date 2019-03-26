@@ -18,6 +18,7 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 * Gesture handling
 * Multiple Calendar formats
 * Multiple days of the week formats
+* Optional programmatic control
 * Nice, configurable UI out of the box
 
 ## Usage
@@ -32,5 +33,5 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^1.0.2
+  table_calendar: ^1.1.0
 ```

@@ -1,3 +1,12 @@
+## [1.1.0]
+
+* Added programmatic selectedDay
+* Removed onFormatChanged callback - it is now integrated into onVisibleDaysChanged callback
+* Improved onVisibleDaysChanged behavior 
+* Fixed issue with empty Calendar row
+* Changed default FormatButton texts
+* Updated example project
+
 ## [1.0.2]
 
 * FormatButton text can now be customized
