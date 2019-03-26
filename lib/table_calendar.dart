@@ -5,6 +5,7 @@ library table_calendar;
 
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -17,11 +18,8 @@ export 'src/customization/customization.dart';
 /// Callback exposing currently selected day.
 typedef void OnDaySelected(DateTime day, List events);
 
-/// Callback exposing current `CalendarFormat`.
-typedef void OnFormatChanged(CalendarFormat format);
-
-/// Callback exposing currently visible days (first and last of them).
-typedef void OnVisibleDaysChanged(DateTime first, DateTime last);
+/// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
+typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
 
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
@@ -46,14 +44,17 @@ class TableCalendar extends StatefulWidget {
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
 
-  /// Called whenever `CalendarFormat` changes.
-  final OnFormatChanged onFormatChanged;
-
   /// Called whenever the range of visible days changes.
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
   /// Initially selected DateTime. Usually it will be `DateTime.now()`.
-  final DateTime initialDate;
+  /// This property can be used to programmatically select a new date.
+  ///
+  /// If `TableCalendar` Widget gets rebuilt with a different `selectedDay` than previously,
+  /// `onDaySelected` callback will run.
+  ///
+  /// To animate programmatic selection, use `animateProgSelectedDay` property.
+  final DateTime selectedDay;
 
   /// `CalendarFormat` which will be displayed first.
   final CalendarFormat initialCalendarFormat;
@@ -80,6 +81,10 @@ class TableCalendar extends StatefulWidget {
 
   /// Used to show/hide Header.
   final bool headerVisible;
+
+  /// Used to enable animations for programmatically set `selectedDay`.
+  /// Most of the time it should be `false`.
+  final bool animateProgSelectedDay;
 
   /// Animation to run when `CalendarFormat` gets changed.
   final FormatAnimation formatAnimation;
@@ -115,17 +120,17 @@ class TableCalendar extends StatefulWidget {
     Key key,
     this.events = const {},
     this.onDaySelected,
-    this.onFormatChanged,
     this.onVisibleDaysChanged,
-    this.initialDate,
+    this.selectedDay,
     this.initialCalendarFormat = CalendarFormat.month,
     this.forcedCalendarFormat,
     this.availableCalendarFormats = const {
-      CalendarFormat.month: 'Full',
-      CalendarFormat.twoWeeks: 'Compact',
-      CalendarFormat.week: 'Minimal',
+      CalendarFormat.month: 'Month',
+      CalendarFormat.twoWeeks: '2 weeks',
+      CalendarFormat.week: 'Week',
     },
     this.headerVisible = true,
+    this.animateProgSelectedDay = false,
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.dayHitTestBehavior = HitTestBehavior.deferToChild,
@@ -155,10 +160,33 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       widget.availableCalendarFormats,
       widget.startingDayOfWeek,
       initialFormat: widget.initialCalendarFormat,
-      initialDate: widget.initialDate,
-      onFormatChanged: widget.onFormatChanged,
+      initialDay: widget.selectedDay,
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
+      includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
     );
+  }
+
+  @override
+  void didUpdateWidget(TableCalendar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedDay != null && widget.selectedDay != null) {
+      if (!Utils.isSameDay(oldWidget.selectedDay, widget.selectedDay)) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          setState(() {
+            final runCallback = _calendarLogic.setSelectedDay(
+              widget.selectedDay,
+              isAnimated: widget.animateProgSelectedDay,
+              isProgrammatic: true,
+            );
+
+            if (runCallback && widget.onDaySelected != null) {
+              final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, widget.selectedDay), orElse: () => null);
+              widget.onDaySelected(widget.selectedDay, widget.events[key] ?? []);
+            }
+          });
+        });
+      }
+    }
   }
 
   @override
@@ -181,7 +209,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   void _selectDate(DateTime date) {
     setState(() {
-      _calendarLogic.selectedDate = date;
+      _calendarLogic.setSelectedDay(date);
 
       if (widget.onDaySelected != null) {
         final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
