@@ -3,9 +3,12 @@
 
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  initializeDateFormatting().then((_) => runApp(MyApp()));
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -114,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // Simple TableCalendar configuration (using Styles)
   Widget _buildTableCalendar() {
     return TableCalendar(
+      locale: 'en_US',
       events: _visibleEvents,
       initialCalendarFormat: CalendarFormat.week,
       formatAnimation: FormatAnimation.slide,
@@ -144,6 +148,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // More advanced TableCalendar configuration (using Builders & Styles)
   Widget _buildTableCalendarWithBuilders() {
     return TableCalendar(
+      locale: 'pl_PL',
       events: _visibleEvents,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,

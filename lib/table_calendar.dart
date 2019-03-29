@@ -37,6 +37,10 @@ enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
 /// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
 class TableCalendar extends StatefulWidget {
+  /// Locale to format `TableCalendar` dates with.
+  /// Will use default locale if none is provided.
+  final dynamic locale;
+
   /// Contains a `List` of objects (eg. events) assigned to particular `DateTime`s.
   /// Each `DateTime` inside this `Map` should get its own `List` of above mentioned objects.
   final Map<DateTime, List> events;
@@ -118,6 +122,7 @@ class TableCalendar extends StatefulWidget {
 
   TableCalendar({
     Key key,
+    this.locale,
     this.events = const {},
     this.onDaySelected,
     this.onVisibleDaysChanged,
@@ -269,7 +274,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ),
       Expanded(
         child: Text(
-          _calendarLogic.headerText,
+          _calendarLogic.getHeaderText(locale: widget.locale),
           style: widget.headerStyle.titleTextStyle,
           textAlign: widget.headerStyle.centerHeaderTitle ? TextAlign.center : TextAlign.start,
         ),
@@ -429,7 +434,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       children: _calendarLogic.visibleDays.take(7).map((date) {
         return Center(
           child: Text(
-            DateFormat.E().format(date),
+            DateFormat.E(widget.locale).format(date),
             style: _calendarLogic.isWeekend(date) ? widget.daysOfWeekStyle.weekendStyle : widget.daysOfWeekStyle.weekdayStyle,
           ),
         );
