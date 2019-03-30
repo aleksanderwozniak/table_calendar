@@ -262,7 +262,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   Widget _buildHeader() {
     final children = [
       CustomIconButton(
-        icon: Icon(Icons.chevron_left, color: widget.headerStyle.iconColor),
+        icon: widget.headerStyle.leftChevronIcon,
         onTap: _selectPrevious,
         margin: widget.headerStyle.leftChevronMargin,
         padding: widget.headerStyle.leftChevronPadding,
@@ -275,7 +275,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         ),
       ),
       CustomIconButton(
-        icon: Icon(Icons.chevron_right, color: widget.headerStyle.iconColor),
+        icon: widget.headerStyle.rightChevronIcon,
         onTap: _selectNext,
         margin: widget.headerStyle.rightChevronMargin,
         padding: widget.headerStyle.rightChevronPadding,
