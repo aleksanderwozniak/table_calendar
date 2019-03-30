@@ -33,5 +33,5 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^1.1.0
+  table_calendar: ^1.1.1
 ```

@@ -1,3 +1,7 @@
+## [1.1.1]
+
+* Improved chevron customization
+
 ## [1.1.0]
 
 * Added programmatic selectedDay
