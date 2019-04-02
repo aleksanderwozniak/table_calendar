@@ -13,6 +13,7 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 
 * Extensive, yet easy to use API
 * Custom Builders for true UI control
+* Locale support
 * Vertical autosizing
 * Beautiful animations
 * Gesture handling
@@ -23,9 +24,8 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 
 ## Usage
 
-Make sure to check out [example project](https://github.com/aleksanderwozniak/table_calendar/tree/master/example).
-
-For more info please refer to [API docs](https://pub.dartlang.org/documentation/table_calendar/latest/table_calendar/table_calendar-library.html).
+Make sure to check out [example project](https://github.com/aleksanderwozniak/table_calendar/tree/master/example). 
+For additional info please refer to [API docs](https://pub.dartlang.org/documentation/table_calendar/latest/table_calendar/table_calendar-library.html).
 
 ### Installation
 
@@ -35,3 +35,49 @@ Add to pubspec.yaml:
 dependencies:
   table_calendar: ^1.1.1
 ```
+
+### Locale
+
+**Table Calendar** supports locales. To display the Calendar in desired language, use `locale` property. 
+If you don't specify it, a default locale will be used.
+
+#### Initialization
+
+Before you can use a locale, you need to initialize the i18n formatting.
+
+*This is independent of **Table Calendar** package, so I encourage you to do your own research.*
+
+A simple way of doing it is as follows:
+* First of all, add [intl](https://pub.dartlang.org/packages/intl) package to your pubspec.yaml file.
+* Then make modifications to your `main()`:
+
+```dart
+import 'package:intl/date_symbol_data_local.dart';
+
+void main() {
+  initializeDateFormatting().then((_) => runApp(MyApp()));
+}
+```
+
+After those two steps your app should be ready to use **Table Calendar** with different languages.
+
+#### Specifying a language
+
+To specify a language, simply pass it as a String code to `locale` property.
+
+For example, this will make **Table Calendar** use Polish language:
+
+```dart
+TableCalendar(
+  locale: 'pl_PL',
+),
+```
+
+| ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/en_US.png) | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/pl_PL.png) | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/fr_FR.png) | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/zh_CN.png) |
+| :------------: | :------------: | :------------: | :------------: |
+| `'en_US'` | `'pl_PL'` | `'fr_FR'` | `'zh_CN'` |
+
+Note, that if you want to change the language of `FormatButton`'s text, you have to do this yourself. Use `availableCalendarFormats` property and pass the translated Strings there. 
+Use i18n method of your choice.
+
+You can also hide the button altogether by setting `formatButtonVisible` to false.

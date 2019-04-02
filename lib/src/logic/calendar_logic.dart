@@ -16,7 +16,6 @@ class CalendarLogic {
   double get dx => _dx;
   CalendarFormat get calendarFormat => _calendarFormat.value;
   List<DateTime> get visibleDays => _visibleDays.value;
-  String get headerText => DateFormat.yMMMM().format(_focusedDay);
   String get formatButtonText => _availableCalendarFormats[_nextFormat()];
 
   DateTime _focusedDay;
@@ -95,6 +94,10 @@ class CalendarLogic {
       id = _clamp(0, formats.length - 1, id - 1);
     }
     _calendarFormat.value = formats[id];
+  }
+
+  String getHeaderText({dynamic locale}) {
+    return DateFormat.yMMMM(locale).format(_focusedDay);
   }
 
   bool setSelectedDay(DateTime value, {bool isAnimated = true, bool isProgrammatic = false}) {
