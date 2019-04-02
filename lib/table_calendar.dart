@@ -37,8 +37,9 @@ enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
 /// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
 class TableCalendar extends StatefulWidget {
-  /// Locale to format `TableCalendar` dates with.
-  /// Will use default locale if none is provided.
+  /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
+  ///
+  /// If nothing is provided, a default locale will be used.
   final dynamic locale;
 
   /// Contains a `List` of objects (eg. events) assigned to particular `DateTime`s.

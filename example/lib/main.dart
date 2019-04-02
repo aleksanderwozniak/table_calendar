@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       _selectedDay.subtract(Duration(days: 4)): ['Event A5', 'Event B5', 'Event C5'],
       _selectedDay.subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
       _selectedDay: ['Event A7', 'Event B7', 'Event C7', 'Event D7'],
-      _selectedDay.add(Duration(days: 1)): ['Event A8', 'Event B8', 'Event C8', 'Event D8', 'Event E8', 'Event F8', 'Event G8'],
+      _selectedDay.add(Duration(days: 1)): ['Event A8', 'Event B8', 'Event C8', 'Event D8'],
       _selectedDay.add(Duration(days: 3)): Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
       _selectedDay.add(Duration(days: 7)): ['Event A10', 'Event B10', 'Event C10'],
       _selectedDay.add(Duration(days: 11)): ['Event A11', 'Event B11'],
@@ -84,7 +84,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     setState(() {
       _visibleEvents = Map.fromEntries(
         _events.entries.where(
-          (entry) => entry.key.isAfter(first.subtract(const Duration(days: 1))) && entry.key.isBefore(last.add(const Duration(days: 1))),
+          (entry) =>
+              entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
+              entry.key.isBefore(last.add(const Duration(days: 1))),
         ),
       );
     });
