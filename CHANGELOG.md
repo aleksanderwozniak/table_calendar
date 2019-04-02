@@ -1,3 +1,9 @@
+## [1.1.2]
+
+* Added locale support
+* Added locale usage guide
+* Updated example project
+
 ## [1.1.1]
 
 * Improved chevron customization

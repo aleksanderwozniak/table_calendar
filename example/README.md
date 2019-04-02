@@ -1,13 +1,13 @@
 # Table Calendar example
 
 Demonstrates how to use [table_calendar](https://pub.dartlang.org/packages/table_calendar) package.
-Displays `TableCalendar` widget with a `ListView` underneath it.
+Displays **Table Calendar** widget with a `ListView` underneath it.
 
 | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_styles.gif) | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_builders.gif) |
 | :------------: | :------------: |
 | **Table Calendar** with custom styles | **Table Calendar** with Builders |
 
-`TableCalendar` offers a lot of customization:
+**Table Calendar** offers a lot of customization:
 * by using custom Styles
 * by using custom Builders (accompanied by custom Styles)
 
