@@ -52,7 +52,8 @@ class CalendarLogic {
 
     if (onVisibleDaysChanged != null) {
       _visibleDays.addListener(() {
-        if (!Utils.isSameDay(_visibleDays.value.first, _previousFirstDay) || !Utils.isSameDay(_visibleDays.value.last, _previousLastDay)) {
+        if (!Utils.isSameDay(_visibleDays.value.first, _previousFirstDay) ||
+            !Utils.isSameDay(_visibleDays.value.last, _previousLastDay)) {
           _previousFirstDay = _visibleDays.value.first;
           _previousLastDay = _visibleDays.value.last;
           onVisibleDaysChanged(
@@ -96,8 +97,8 @@ class CalendarLogic {
     _calendarFormat.value = formats[id];
   }
 
-  String getHeaderText({dynamic locale}) {
-    return DateFormat.yMMMM(locale).format(_focusedDay);
+  String getHeaderText({String skeleton = 'yMMMM', dynamic locale}) {
+    return DateFormat(skeleton, locale).format(_focusedDay);
   }
 
   bool setSelectedDay(DateTime value, {bool isAnimated = true, bool isProgrammatic = false}) {
