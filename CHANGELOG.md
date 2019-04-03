@@ -1,3 +1,9 @@
+## [1.1.3]
+
+* Added title text customization with format skeleton
+* Added day of the week text customization with format skeleton
+* Rolled-back intl dependency
+
 ## [1.1.2]
 
 * Added locale support

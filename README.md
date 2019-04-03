@@ -33,7 +33,7 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^1.1.2
+  table_calendar: ^1.1.3
 ```
 
 ### Locale
