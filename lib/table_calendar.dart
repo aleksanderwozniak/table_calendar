@@ -141,7 +141,10 @@ class TableCalendar extends StatefulWidget {
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.dayHitTestBehavior = HitTestBehavior.deferToChild,
     this.availableGestures = AvailableGestures.all,
-    this.simpleSwipeConfig = const SimpleSwipeConfig(verticalThreshold: 20.0, swipeDetectionMoment: SwipeDetectionMoment.onUpdate),
+    this.simpleSwipeConfig = const SimpleSwipeConfig(
+      verticalThreshold: 20.0,
+      swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
+    ),
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
@@ -186,7 +189,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
             );
 
             if (runCallback && widget.onDaySelected != null) {
-              final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, widget.selectedDay), orElse: () => null);
+              final key = widget.events.keys.firstWhere(
+                (it) => Utils.isSameDay(it, widget.selectedDay),
+                orElse: () => null,
+              );
               widget.onDaySelected(widget.selectedDay, widget.events[key] ?? []);
             }
           });
@@ -275,7 +281,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ),
       Expanded(
         child: Text(
-          _calendarLogic.getHeaderText(locale: widget.locale),
+          _calendarLogic.getHeaderText(skeleton: widget.headerStyle.titleFormatSkeleton, locale: widget.locale),
           style: widget.headerStyle.titleTextStyle,
           textAlign: widget.headerStyle.centerHeaderTitle ? TextAlign.center : TextAlign.start,
         ),
@@ -288,7 +294,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ),
     ];
 
-    if (widget.headerStyle.formatButtonVisible && widget.availableCalendarFormats.length > 1 && widget.forcedCalendarFormat == null) {
+    if (widget.headerStyle.formatButtonVisible &&
+        widget.availableCalendarFormats.length > 1 &&
+        widget.forcedCalendarFormat == null) {
       children.insert(2, const SizedBox(width: 8.0));
       children.insert(3, _buildFormatButton());
     }
@@ -435,8 +443,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       children: _calendarLogic.visibleDays.take(7).map((date) {
         return Center(
           child: Text(
-            DateFormat.E(widget.locale).format(date),
-            style: _calendarLogic.isWeekend(date) ? widget.daysOfWeekStyle.weekendStyle : widget.daysOfWeekStyle.weekdayStyle,
+            DateFormat(widget.daysOfWeekStyle.textFormatSkeleton, widget.locale).format(date),
+            style: _calendarLogic.isWeekend(date)
+                ? widget.daysOfWeekStyle.weekendStyle
+                : widget.daysOfWeekStyle.weekdayStyle,
           ),
         );
       }).toList(),
@@ -522,7 +532,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       return Builder(
         builder: (context) => widget.builders.todayDayBuilder(context, date, widget.events[key]),
       );
-    } else if (widget.builders.outsideWeekendDayBuilder != null && _calendarLogic.isExtraDay(date) && _calendarLogic.isWeekend(date)) {
+    } else if (widget.builders.outsideWeekendDayBuilder != null &&
+        _calendarLogic.isExtraDay(date) &&
+        _calendarLogic.isWeekend(date)) {
       return Builder(
         builder: (context) => widget.builders.outsideWeekendDayBuilder(context, date, widget.events[key]),
       );

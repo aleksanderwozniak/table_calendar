@@ -11,6 +11,13 @@ class HeaderStyle {
   /// Responsible for FormatButton visibility.
   final bool formatButtonVisible;
 
+  /// Skeleton used for formatting the title text.
+  /// Defaults to `'yMMMM'` (eg. January 2019, February 2019, March 2019).
+  ///
+  /// For more info refer to
+  /// https://docs.flutter.io/flutter/intl/DateFormat-class.html
+  final String titleFormatSkeleton;
+
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
 
@@ -46,6 +53,7 @@ class HeaderStyle {
   const HeaderStyle({
     this.centerHeaderTitle = false,
     this.formatButtonVisible = true,
+    this.titleFormatSkeleton = 'yMMMM',
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
     this.formatButtonTextStyle = const TextStyle(),
     this.formatButtonDecoration = const BoxDecoration(
