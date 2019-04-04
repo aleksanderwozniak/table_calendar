@@ -2,6 +2,7 @@
 //  Licensed under Apache License v2.0
 
 import 'package:flutter/material.dart';
+import '../../table_calendar.dart';
 
 /// Class containing styling and configuration of `TableCalendar`'s header.
 class HeaderStyle {
@@ -11,12 +12,15 @@ class HeaderStyle {
   /// Responsible for FormatButton visibility.
   final bool formatButtonVisible;
 
-  /// Skeleton used for formatting the title text.
-  /// Defaults to `'yMMMM'` (eg. January 2019, February 2019, March 2019).
+  /// Use to customize header's title text (eg. with different `DateFormat`).
+  /// You can use `String` transformations to further customize the text.
+  /// Defaults to simple `'yMMMM'` format (eg. January 2019, February 2019, March 2019, etc.).
   ///
-  /// For more info refer to
-  /// https://docs.flutter.io/flutter/intl/DateFormat-class.html
-  final String titleFormatSkeleton;
+  /// Example usage:
+  /// ```dart
+  /// titleTextBuilder: (date, locale) => DateFormat.yM(locale).format(date),
+  /// ```
+  final TextBuilder titleTextBuilder;
 
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
@@ -53,7 +57,7 @@ class HeaderStyle {
   const HeaderStyle({
     this.centerHeaderTitle = false,
     this.formatButtonVisible = true,
-    this.titleFormatSkeleton = 'yMMMM',
+    this.titleTextBuilder,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
     this.formatButtonTextStyle = const TextStyle(),
     this.formatButtonDecoration = const BoxDecoration(

@@ -3,7 +3,6 @@
 
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 
 import '../../table_calendar.dart';
 
@@ -11,6 +10,7 @@ const double _dxMax = 1.2;
 const double _dxMin = -1.2;
 
 class CalendarLogic {
+  DateTime get focusedDay => _focusedDay;
   DateTime get selectedDay => _selectedDay;
   int get pageId => _pageId;
   double get dx => _dx;
@@ -95,10 +95,6 @@ class CalendarLogic {
       id = _clamp(0, formats.length - 1, id - 1);
     }
     _calendarFormat.value = formats[id];
-  }
-
-  String getHeaderText({String skeleton = 'yMMMM', dynamic locale}) {
-    return DateFormat(skeleton, locale).format(_focusedDay);
   }
 
   bool setSelectedDay(DateTime value, {bool isAnimated = true, bool isProgrammatic = false}) {
