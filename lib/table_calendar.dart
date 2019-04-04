@@ -21,6 +21,9 @@ typedef void OnDaySelected(DateTime day, List events);
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
 
+/// Builder signature for any text that can be localized and formatted with `DateFormat`.
+typedef String TextBuilder(DateTime date, dynamic locale);
+
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
@@ -142,8 +145,8 @@ class TableCalendar extends StatefulWidget {
     this.dayHitTestBehavior = HitTestBehavior.deferToChild,
     this.availableGestures = AvailableGestures.all,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
-      verticalThreshold: 20.0,
-      swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
+      verticalThreshold: 25.0,
+      swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
     ),
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
@@ -281,7 +284,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ),
       Expanded(
         child: Text(
-          _calendarLogic.getHeaderText(skeleton: widget.headerStyle.titleFormatSkeleton, locale: widget.locale),
+          widget.headerStyle.titleTextBuilder != null
+              ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
+              : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
           style: widget.headerStyle.titleTextStyle,
           textAlign: widget.headerStyle.centerHeaderTitle ? TextAlign.center : TextAlign.start,
         ),
@@ -384,14 +389,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   Widget _buildVerticalSwipeWrapper({Widget child}) {
     return SimpleGestureDetector(
       child: child,
-      onSwipeUp: () {
+      onVerticalSwipe: (direction) {
         setState(() {
-          _calendarLogic.swipeCalendarFormat(true);
-        });
-      },
-      onSwipeDown: () {
-        setState(() {
-          _calendarLogic.swipeCalendarFormat(false);
+          _calendarLogic.swipeCalendarFormat(direction == SwipeDirection.up);
         });
       },
       swipeConfig: widget.simpleSwipeConfig,
@@ -443,7 +443,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       children: _calendarLogic.visibleDays.take(7).map((date) {
         return Center(
           child: Text(
-            DateFormat(widget.daysOfWeekStyle.textFormatSkeleton, widget.locale).format(date),
+            widget.daysOfWeekStyle.dowTextBuilder != null
+                ? widget.daysOfWeekStyle.dowTextBuilder(date, widget.locale)
+                : DateFormat.E(widget.locale).format(date),
             style: _calendarLogic.isWeekend(date)
                 ? widget.daysOfWeekStyle.weekendStyle
                 : widget.daysOfWeekStyle.weekdayStyle,
