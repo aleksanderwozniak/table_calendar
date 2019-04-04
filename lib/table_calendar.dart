@@ -145,8 +145,8 @@ class TableCalendar extends StatefulWidget {
     this.dayHitTestBehavior = HitTestBehavior.deferToChild,
     this.availableGestures = AvailableGestures.all,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
-      verticalThreshold: 20.0,
-      swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
+      verticalThreshold: 25.0,
+      swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
     ),
     this.calendarStyle = const CalendarStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
@@ -389,14 +389,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   Widget _buildVerticalSwipeWrapper({Widget child}) {
     return SimpleGestureDetector(
       child: child,
-      onSwipeUp: () {
+      onVerticalSwipe: (direction) {
         setState(() {
-          _calendarLogic.swipeCalendarFormat(true);
-        });
-      },
-      onSwipeDown: () {
-        setState(() {
-          _calendarLogic.swipeCalendarFormat(false);
+          _calendarLogic.swipeCalendarFormat(direction == SwipeDirection.up);
         });
       },
       swipeConfig: widget.simpleSwipeConfig,
