@@ -1,3 +1,8 @@
+## [1.1.4]
+
+* Added TextBuilders for Header and DOW panel
+* Improved vertical swipe behavior
+
 ## [1.1.3]
 
 * Added title text customization with format skeleton
