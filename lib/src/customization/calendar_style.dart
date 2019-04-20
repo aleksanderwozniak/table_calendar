@@ -33,6 +33,7 @@ class CalendarStyle {
   final Color markersColor;
 
   /// General `Alignment` for event markers.
+  /// NOTE: `markersPositionBottom` defaults to `5.0`, so you might want to set it to `null` when using `markersAlignment`.
   final Alignment markersAlignment;
 
   /// `top` property of `Positioned` widget used for event markers.

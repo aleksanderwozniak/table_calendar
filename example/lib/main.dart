@@ -203,30 +203,32 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           );
         },
         markersBuilder: (context, date, events) {
-          return Positioned(
-            right: 1,
-            bottom: 1,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 400),
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Utils.isSameDay(date, _selectedDay)
-                    ? Colors.brown[400]
-                    : Utils.isSameDay(date, DateTime.now()) ? Colors.brown[300] : Colors.blue[400],
-              ),
-              width: 16.0,
-              height: 16.0,
-              child: Center(
-                child: Text(
-                  '${events.length}',
-                  style: TextStyle().copyWith(
-                    color: Colors.white,
-                    fontSize: 12.0,
+          return [
+            Positioned(
+              right: 1,
+              bottom: 1,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 400),
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Utils.isSameDay(date, _selectedDay)
+                      ? Colors.brown[500]
+                      : Utils.isSameDay(date, DateTime.now()) ? Colors.brown[300] : Colors.blue[400],
+                ),
+                width: 16.0,
+                height: 16.0,
+                child: Center(
+                  child: Text(
+                    '${events.length}',
+                    style: TextStyle().copyWith(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
                   ),
                 ),
               ),
             ),
-          );
+          ];
         },
       ),
       onDaySelected: (date, events) {

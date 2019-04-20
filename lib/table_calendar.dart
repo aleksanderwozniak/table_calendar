@@ -486,11 +486,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       final children = <Widget>[content];
 
       if (widget.builders.markersBuilder != null) {
-        children.add(
-          Builder(
-            builder: (context) => widget.builders.markersBuilder(context, key, widget.events[key]),
-          ),
-        );
+        children.addAll(widget.builders.markersBuilder(context, key, widget.events[key]));
       } else {
         children.add(
           Positioned(
@@ -527,31 +523,19 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   Widget _buildCellContent(DateTime date) {
     final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
     if (widget.builders.selectedDayBuilder != null && _calendarLogic.isSelected(date)) {
-      return Builder(
-        builder: (context) => widget.builders.selectedDayBuilder(context, date, widget.events[key]),
-      );
+      return widget.builders.selectedDayBuilder(context, date, widget.events[key]);
     } else if (widget.builders.todayDayBuilder != null && _calendarLogic.isToday(date)) {
-      return Builder(
-        builder: (context) => widget.builders.todayDayBuilder(context, date, widget.events[key]),
-      );
+      return widget.builders.todayDayBuilder(context, date, widget.events[key]);
     } else if (widget.builders.outsideWeekendDayBuilder != null &&
         _calendarLogic.isExtraDay(date) &&
         _calendarLogic.isWeekend(date)) {
-      return Builder(
-        builder: (context) => widget.builders.outsideWeekendDayBuilder(context, date, widget.events[key]),
-      );
+      return widget.builders.outsideWeekendDayBuilder(context, date, widget.events[key]);
     } else if (widget.builders.outsideDayBuilder != null && _calendarLogic.isExtraDay(date)) {
-      return Builder(
-        builder: (context) => widget.builders.outsideDayBuilder(context, date, widget.events[key]),
-      );
+      return widget.builders.outsideDayBuilder(context, date, widget.events[key]);
     } else if (widget.builders.weekendDayBuilder != null && _calendarLogic.isWeekend(date)) {
-      return Builder(
-        builder: (context) => widget.builders.weekendDayBuilder(context, date, widget.events[key]),
-      );
+      return widget.builders.weekendDayBuilder(context, date, widget.events[key]);
     } else if (widget.builders.dayBuilder != null) {
-      return Builder(
-        builder: (context) => widget.builders.dayBuilder(context, date, widget.events[key]),
-      );
+      return widget.builders.dayBuilder(context, date, widget.events[key]);
     } else {
       return CellWidget(
         text: '${date.day}',
@@ -566,9 +550,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   Widget _buildMarker(DateTime date, dynamic event) {
     if (widget.builders.singleMarkerBuilder != null) {
-      return Builder(
-        builder: (context) => widget.builders.singleMarkerBuilder(context, date, event),
-      );
+      return widget.builders.singleMarkerBuilder(context, date, event);
     } else {
       return Container(
         width: 8.0,
