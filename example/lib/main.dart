@@ -6,6 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+// Example holidays
+final Map<DateTime, List> _holidays = {
+  DateTime(2019, 1, 1): ['New Year\'s Day'],
+  DateTime(2019, 1, 6): ['Epiphany'],
+  DateTime(2019, 2, 14): ['Valentine\'s Day'],
+  DateTime(2019, 4, 21): ['Easter Sunday'],
+  DateTime(2019, 4, 22): ['Easter Monday'],
+};
+
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
@@ -36,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   DateTime _selectedDay;
   Map<DateTime, List> _events;
   Map<DateTime, List> _visibleEvents;
+  Map<DateTime, List> _visibleHolidays;
   List _selectedEvents;
   AnimationController _controller;
 
@@ -60,8 +70,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       _selectedDay.add(Duration(days: 22)): ['Event A13', 'Event B13'],
       _selectedDay.add(Duration(days: 26)): ['Event A14', 'Event B14', 'Event C14'],
     };
+
     _selectedEvents = _events[_selectedDay] ?? [];
     _visibleEvents = _events;
+    _visibleHolidays = _holidays;
 
     _controller = AnimationController(
       vsync: this,
@@ -76,8 +88,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       _selectedDay = day;
       _selectedEvents = events;
     });
-
-    print('Selected day: $day');
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
@@ -89,11 +99,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               entry.key.isBefore(last.add(const Duration(days: 1))),
         ),
       );
-    });
 
-    print('First visible day: $first');
-    print('Last visible day: $last');
-    print('Current format: $format');
+      _visibleHolidays = Map.fromEntries(
+        _holidays.entries.where(
+          (entry) =>
+              entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
+              entry.key.isBefore(last.add(const Duration(days: 1))),
+        ),
+      );
+    });
   }
 
   @override
@@ -121,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return TableCalendar(
       locale: 'en_US',
       events: _visibleEvents,
+      holidays: _visibleHolidays,
       initialCalendarFormat: CalendarFormat.week,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.monday,
@@ -152,6 +167,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return TableCalendar(
       locale: 'pl_PL',
       events: _visibleEvents,
+      holidays: _visibleHolidays,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -163,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
         weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
-        outsideWeekendStyle: TextStyle().copyWith(color: Colors.blue[800].withAlpha(127)),
+        holidayStyle: TextStyle().copyWith(color: Colors.blue[800]),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
@@ -202,31 +218,30 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             ),
           );
         },
-        markersBuilder: (context, date, events) {
-          return Positioned(
-            right: 1,
-            bottom: 1,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 400),
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Utils.isSameDay(date, _selectedDay)
-                    ? Colors.brown[400]
-                    : Utils.isSameDay(date, DateTime.now()) ? Colors.brown[300] : Colors.blue[400],
+        markersBuilder: (context, date, events, holidays) {
+          final children = <Widget>[];
+
+          if (events != null) {
+            children.add(
+              Positioned(
+                right: 1,
+                bottom: 1,
+                child: _buildEventsMarker(date, events),
               ),
-              width: 16.0,
-              height: 16.0,
-              child: Center(
-                child: Text(
-                  '${events.length}',
-                  style: TextStyle().copyWith(
-                    color: Colors.white,
-                    fontSize: 12.0,
-                  ),
-                ),
+            );
+          }
+
+          if (holidays != null) {
+            children.add(
+              Positioned(
+                right: -2,
+                top: -2,
+                child: _buildHolidaysMarker(),
               ),
-            ),
-          );
+            );
+          }
+
+          return children;
         },
       ),
       onDaySelected: (date, events) {
@@ -234,6 +249,37 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         _controller.forward(from: 0.0);
       },
       onVisibleDaysChanged: _onVisibleDaysChanged,
+    );
+  }
+
+  Widget _buildEventsMarker(DateTime date, List events) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        color: Utils.isSameDay(date, _selectedDay)
+            ? Colors.brown[500]
+            : Utils.isSameDay(date, DateTime.now()) ? Colors.brown[300] : Colors.blue[400],
+      ),
+      width: 16.0,
+      height: 16.0,
+      child: Center(
+        child: Text(
+          '${events.length}',
+          style: TextStyle().copyWith(
+            color: Colors.white,
+            fontSize: 12.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHolidaysMarker() {
+    return Icon(
+      Icons.add_box,
+      size: 20.0,
+      color: Colors.blueGrey[800],
     );
   }
 

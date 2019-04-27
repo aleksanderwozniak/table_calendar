@@ -16,7 +16,9 @@ class CalendarLogic {
   double get dx => _dx;
   CalendarFormat get calendarFormat => _calendarFormat.value;
   List<DateTime> get visibleDays => _visibleDays.value;
-  String get formatButtonText => _availableCalendarFormats[_nextFormat()];
+  String get formatButtonText => _useNextCalendarFormat
+      ? _availableCalendarFormats[_nextFormat()]
+      : _availableCalendarFormats[_calendarFormat.value];
 
   DateTime _focusedDay;
   DateTime _selectedDay;
@@ -28,10 +30,12 @@ class CalendarLogic {
   DateTime _previousLastDay;
   int _pageId;
   double _dx;
+  bool _useNextCalendarFormat;
 
   CalendarLogic(
     this._availableCalendarFormats,
-    this._startingDayOfWeek, {
+    this._startingDayOfWeek,
+    this._useNextCalendarFormat, {
     DateTime initialDay,
     CalendarFormat initialFormat,
     OnVisibleDaysChanged onVisibleDaysChanged,

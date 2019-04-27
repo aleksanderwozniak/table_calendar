@@ -11,6 +11,7 @@ class CellWidget extends StatelessWidget {
   final bool isToday;
   final bool isWeekend;
   final bool isOutsideMonth;
+  final bool isHoliday;
   final CalendarStyle calendarStyle;
 
   const CellWidget({
@@ -20,6 +21,7 @@ class CellWidget extends StatelessWidget {
     this.isToday = false,
     this.isWeekend = false,
     this.isOutsideMonth = false,
+    this.isHoliday = false,
     @required this.calendarStyle,
   })  : assert(text != null),
         assert(calendarStyle != null),
@@ -40,26 +42,28 @@ class CellWidget extends StatelessWidget {
   }
 
   Decoration _buildCellDecoration() {
-    if (isSelected) {
-      return BoxDecoration(
-        shape: BoxShape.circle,
-        color: calendarStyle.selectedColor,
-      );
+    if (isSelected && calendarStyle.renderSelectedFirst) {
+      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.selectedColor);
     } else if (isToday) {
-      return BoxDecoration(
-        shape: BoxShape.circle,
-        color: calendarStyle.todayColor,
-      );
+      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.todayColor);
+    } else if (isSelected) {
+      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.selectedColor);
     } else {
       return BoxDecoration(shape: BoxShape.circle);
     }
   }
 
   TextStyle _buildCellTextStyle() {
-    if (isSelected) {
+    if (isSelected && calendarStyle.renderSelectedFirst) {
       return calendarStyle.selectedStyle;
     } else if (isToday) {
       return calendarStyle.todayStyle;
+    } else if (isSelected) {
+      return calendarStyle.selectedStyle;
+    } else if (isOutsideMonth && isHoliday) {
+      return calendarStyle.outsideHolidayStyle;
+    } else if (isHoliday) {
+      return calendarStyle.holidayStyle;
     } else if (isOutsideMonth && isWeekend) {
       return calendarStyle.outsideWeekendStyle;
     } else if (isOutsideMonth) {

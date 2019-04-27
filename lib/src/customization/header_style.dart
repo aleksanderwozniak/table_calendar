@@ -2,6 +2,7 @@
 //  Licensed under Apache License v2.0
 
 import 'package:flutter/material.dart';
+
 import '../../table_calendar.dart';
 
 /// Class containing styling and configuration of `TableCalendar`'s header.
@@ -11,6 +12,11 @@ class HeaderStyle {
 
   /// Responsible for FormatButton visibility.
   final bool formatButtonVisible;
+
+  /// Controls the text inside FormatButton.
+  /// * `true` - the button will show next CalendarFormat
+  /// * `false` - the button will show current CalendarFormat
+  final bool formatButtonShowsNext;
 
   /// Use to customize header's title text (eg. with different `DateFormat`).
   /// You can use `String` transformations to further customize the text.
@@ -57,6 +63,7 @@ class HeaderStyle {
   const HeaderStyle({
     this.centerHeaderTitle = false,
     this.formatButtonVisible = true,
+    this.formatButtonShowsNext = true,
     this.titleTextBuilder,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
     this.formatButtonTextStyle = const TextStyle(),
