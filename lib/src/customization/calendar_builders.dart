@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List events);
 
 /// Builder signature for a list of event markers. Contains `date` and list of all `events` associated with that `date`.
-/// `events` param can be null.
-typedef FullListBuilder = List<Widget> Function(BuildContext context, DateTime date, List events);
+/// Both `events` and `holidays` params can be null.
+typedef FullListBuilder = List<Widget> Function(BuildContext context, DateTime date, List events, List holidays);
 
 /// Builder signature for a single event marker. Contains `date` and a single `event` associated with that `date`.
 typedef SingleMarkerBuilder = Widget Function(BuildContext context, DateTime date, dynamic event);
@@ -28,6 +28,9 @@ class CalendarBuilders {
   /// Custom Builder for today. Will overwrite `dayBuilder` on today.
   final FullBuilder todayDayBuilder;
 
+  /// Custom Builder for holidays. Will overwrite `dayBuilder` on holidays.
+  final FullBuilder holidayDayBuilder;
+
   /// Custom Builder for weekends. Will overwrite `dayBuilder` on weekends.
   final FullBuilder weekendDayBuilder;
 
@@ -36,6 +39,9 @@ class CalendarBuilders {
 
   /// Custom Builder for weekends outside of current month. Will overwrite `dayBuilder`on weekends outside of current month.
   final FullBuilder outsideWeekendDayBuilder;
+
+  /// Custom Builder for holidays outside of current month. Will overwrite `dayBuilder` on holidays outside of current month.
+  final FullBuilder outsideHolidayDayBuilder;
 
   /// Custom Builder for a whole group of event markers. Use to provide your own marker UI for each day cell.
   /// Every `Widget` passed here will be placed in a `Stack`, above the cell content.
@@ -56,9 +62,11 @@ class CalendarBuilders {
     this.dayBuilder,
     this.selectedDayBuilder,
     this.todayDayBuilder,
+    this.holidayDayBuilder,
     this.weekendDayBuilder,
     this.outsideDayBuilder,
     this.outsideWeekendDayBuilder,
+    this.outsideHolidayDayBuilder,
     this.markersBuilder,
     this.singleMarkerBuilder,
   }) : assert(!(singleMarkerBuilder != null && markersBuilder != null));
