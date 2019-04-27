@@ -13,6 +13,7 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 
 * Extensive, yet easy to use API
 * Custom Builders for true UI control
+* Interface for holidays
 * Locale support
 * Vertical autosizing
 * Beautiful animations
@@ -33,7 +34,7 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^1.1.4
+  table_calendar: ^1.2.0
 ```
 
 ### Locale
@@ -48,7 +49,7 @@ Before you can use a locale, you need to initialize the i18n formatting.
 *This is independent of **Table Calendar** package, so I encourage you to do your own research.*
 
 A simple way of doing it is as follows:
-* First of all, add [intl](https://pub.dartlang.org/packages/intl) package to your pubspec.yaml file.
+* First of all, add [intl](https://pub.dartlang.org/packages/intl) package to your pubspec.yaml file
 * Then make modifications to your `main()`:
 
 ```dart
@@ -81,3 +82,53 @@ Note, that if you want to change the language of `FormatButton`'s text, you have
 Use i18n method of your choice.
 
 You can also hide the button altogether by setting `formatButtonVisible` to false.
+
+### Holidays
+
+**Table Calendar** provides a simple interface for displaying holidays. Here are a few steps to follow:
+
+* Fetch a map of holidays tied to dates. You can search for it manually, or perhaps use some online API
+* Convert it to a proper format - note that these are lists of holidays, since one date could have a couple of holidays: 
+```dart
+{
+  `DateTime A`: [`Holiday A1`, `Holiday A2`, ...],
+  `DateTime B`: [`Holiday B1`, `Holiday B2`, ...],
+  ...
+}
+```
+* Link it to **Table Calendar**. Use `holidays` property
+
+And that's your basic setup! Now you can add some styling:
+
+* By using `CalendarStyle` properties: `holidayStyle` and `outsideHolidayStyle`
+* By using `CalendarBuilders` for complete UI control over calendar cell
+
+You can also add custom holiday markers thanks to improved marker API. Check out [example project](https://github.com/aleksanderwozniak/table_calendar/tree/master/example) for more details.
+
+```dart
+markersBuilder: (context, date, events, holidays) {
+  final children = <Widget>[];
+
+  if (events != null) {
+    children.add(
+      Positioned(
+        right: 1,
+        bottom: 1,
+        child: _buildEventsMarker(date, events),
+      ),
+    );
+  }
+
+  if (holidays != null) {
+    children.add(
+      Positioned(
+        right: -2,
+        top: -2,
+        child: _buildHolidaysMarker(),
+      ),
+    );
+  }
+
+  return children;
+},
+```

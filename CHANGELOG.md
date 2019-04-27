@@ -1,3 +1,11 @@
+## [1.2.0]
+
+* Added holiday support
+* Added holiday usage guide
+* Improved custom markers builder
+* Added rendering priority customization
+* Added FormatButton behavior customization
+
 ## [1.1.4]
 
 * Added TextBuilders for Header and DOW panel
