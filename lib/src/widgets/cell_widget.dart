@@ -42,26 +42,24 @@ class CellWidget extends StatelessWidget {
   }
 
   Decoration _buildCellDecoration() {
-    if (isSelected) {
-      return BoxDecoration(
-        shape: BoxShape.circle,
-        color: calendarStyle.selectedColor,
-      );
+    if (isSelected && calendarStyle.renderSelectedFirst) {
+      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.selectedColor);
     } else if (isToday) {
-      return BoxDecoration(
-        shape: BoxShape.circle,
-        color: calendarStyle.todayColor,
-      );
+      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.todayColor);
+    } else if (isSelected) {
+      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.selectedColor);
     } else {
       return BoxDecoration(shape: BoxShape.circle);
     }
   }
 
   TextStyle _buildCellTextStyle() {
-    if (isSelected) {
+    if (isSelected && calendarStyle.renderSelectedFirst) {
       return calendarStyle.selectedStyle;
     } else if (isToday) {
       return calendarStyle.todayStyle;
+    } else if (isSelected) {
+      return calendarStyle.selectedStyle;
     } else if (isOutsideMonth && isHoliday) {
       return calendarStyle.outsideHolidayStyle;
     } else if (isHoliday) {

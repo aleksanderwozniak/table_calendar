@@ -557,10 +557,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend && !tIsHoliday;
     final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend && !tIsHoliday;
 
-    if (isSelected) {
+    if (isSelected && widget.calendarStyle.renderSelectedFirst) {
       return widget.builders.selectedDayBuilder(context, date, widget.events[eventKey]);
     } else if (isToday) {
       return widget.builders.todayDayBuilder(context, date, widget.events[eventKey]);
+    } else if (isSelected) {
+      return widget.builders.selectedDayBuilder(context, date, widget.events[eventKey]);
     } else if (isOutsideHoliday) {
       return widget.builders.outsideHolidayDayBuilder(context, date, widget.events[eventKey]);
     } else if (isHoliday) {

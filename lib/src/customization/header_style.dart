@@ -14,8 +14,8 @@ class HeaderStyle {
   final bool formatButtonVisible;
 
   /// Controls the text inside FormatButton.
-  /// When `true`, the button will show next CalendarFormat.
-  /// When `false`, the button will show current CalendarFormat.
+  /// * `true` - the button will show next CalendarFormat
+  /// * `false` - the button will show current CalendarFormat
   final bool formatButtonShowsNext;
 
   /// Use to customize header's title text (eg. with different `DateFormat`).
