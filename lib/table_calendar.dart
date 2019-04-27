@@ -176,6 +176,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     _calendarLogic = CalendarLogic(
       widget.availableCalendarFormats,
       widget.startingDayOfWeek,
+      widget.headerStyle.formatButtonShowsNext,
       initialFormat: widget.initialCalendarFormat,
       initialDay: widget.selectedDay,
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
