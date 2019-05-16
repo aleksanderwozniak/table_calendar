@@ -486,12 +486,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     }
 
     Widget content = _buildCellContent(date);
-//for case several events on same day but different time
-    final filteredMap = Map.fromIterable(
-        widget.events.keys.where((it) => Utils.isSameDay(it, date)), key: (it) => it, value: (it) => widget.events[it]);
-    List dayEvents = filteredMap.length == 0 ? null : [];
-    filteredMap.forEach((key, value) => dayEvents.add(value[0]));
-
     final eventKey = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
     final holidayKey = widget.holidays.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
     final key = eventKey ?? holidayKey ?? null;
@@ -504,7 +498,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           widget.builders.markersBuilder(
             context,
             key,
-            dayEvents.take(widget.calendarStyle.markersMaxAmount),
+            widget.events[eventKey].take(widget.calendarStyle.markersMaxAmount).toList(),
             widget.holidays[holidayKey],
           ),
         );
