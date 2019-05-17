@@ -498,7 +498,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           widget.builders.markersBuilder(
             context,
             key,
-            widget.events[eventKey].take(widget.calendarStyle.markersMaxAmount).toList(),
+            (eventKey != null && widget.events[eventKey].isNotEmpty) ? widget.events[eventKey].take(
+                widget.calendarStyle.markersMaxAmount).toList() : null,
             widget.holidays[holidayKey],
           ),
         );
