@@ -32,7 +32,7 @@ class CellWidget extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
       decoration: _buildCellDecoration(),
-      margin: const EdgeInsets.all(6.0),
+      margin: const EdgeInsets.all(4.0),
       alignment: Alignment.center,
       child: Text(
         text,
