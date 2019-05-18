@@ -94,6 +94,9 @@ class TableCalendar extends StatefulWidget {
   /// Used to show/hide Header.
   final bool headerVisible;
 
+    /// Set table row height
+  final double rowHeight;
+
   /// Used to enable animations for programmatically set `selectedDay`.
   /// Most of the time it should be `false`.
   final bool animateProgSelectedDay;
@@ -144,6 +147,7 @@ class TableCalendar extends StatefulWidget {
       CalendarFormat.week: 'Week',
     },
     this.headerVisible = true,
+    this.rowHeight,
     this.animateProgSelectedDay = false,
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -470,8 +474,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     return LayoutBuilder(
       builder: (context, constraints) => ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: constraints.maxWidth,
-              minHeight: constraints.maxWidth,
+              maxHeight: widget.rowHeight ?? constraints.maxWidth,
+              minHeight: widget.rowHeight ?? constraints.maxWidth,
             ),
             child: _buildCell(date),
           ),
