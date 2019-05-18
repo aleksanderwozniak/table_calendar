@@ -94,7 +94,7 @@ class TableCalendar extends StatefulWidget {
   /// Used to show/hide Header.
   final bool headerVisible;
 
-  /// Set table row height
+  /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
   /// Used to enable animations for programmatically set `selectedDay`.

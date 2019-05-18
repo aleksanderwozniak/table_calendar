@@ -1,3 +1,8 @@
+## [1.2.1]
+
+* RowHeight can now be set as a fixed value
+* MaxMarkersAmount will now affect MarkersBuilder
+
 ## [1.2.0]
 
 * Added holiday support
