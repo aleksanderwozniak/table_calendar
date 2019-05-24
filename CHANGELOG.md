@@ -1,3 +1,7 @@
+## [1.2.2]
+
+* Fixed issue with Markers being null
+
 ## [1.2.1]
 
 * RowHeight can now be set as a fixed value

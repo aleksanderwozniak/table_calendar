@@ -34,7 +34,7 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^1.2.1
+  table_calendar: ^1.2.2
 ```
 
 ### Locale
@@ -109,7 +109,7 @@ You can also add custom holiday markers thanks to improved marker API. Check out
 markersBuilder: (context, date, events, holidays) {
   final children = <Widget>[];
 
-  if (events != null) {
+  if (events.isNotEmpty) {
     children.add(
       Positioned(
         right: 1,
@@ -119,7 +119,7 @@ markersBuilder: (context, date, events, holidays) {
     );
   }
 
-  if (holidays != null) {
+  if (holidays.isNotEmpty) {
     children.add(
       Positioned(
         right: -2,
