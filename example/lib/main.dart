@@ -221,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         markersBuilder: (context, date, events, holidays) {
           final children = <Widget>[];
 
-          if (events != null) {
+          if (events.isNotEmpty) {
             children.add(
               Positioned(
                 right: 1,
@@ -231,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             );
           }
 
-          if (holidays != null) {
+          if (holidays.isNotEmpty) {
             children.add(
               Positioned(
                 right: -2,

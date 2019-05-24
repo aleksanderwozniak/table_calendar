@@ -493,36 +493,35 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     final eventKey = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
     final holidayKey = widget.holidays.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
-    final key = eventKey ?? holidayKey ?? null;
+    final key = eventKey ?? holidayKey;
 
     if (key != null) {
       final children = <Widget>[content];
-      final events = widget.events[eventKey].take(widget.calendarStyle.markersMaxAmount);
+      final events = eventKey != null ? widget.events[eventKey].take(widget.calendarStyle.markersMaxAmount) : [];
+      final holidays = holidayKey != null ? widget.holidays[holidayKey] : [];
 
-      if (events.isNotEmpty) {
-        if (widget.builders.markersBuilder != null) {
-          children.addAll(
-            widget.builders.markersBuilder(
-              context,
-              key,
-              events.toList(),
-              widget.holidays[holidayKey],
+      if (widget.builders.markersBuilder != null) {
+        children.addAll(
+          widget.builders.markersBuilder(
+            context,
+            key,
+            events.toList(),
+            holidays,
+          ),
+        );
+      } else {
+        children.add(
+          Positioned(
+            top: widget.calendarStyle.markersPositionTop,
+            bottom: widget.calendarStyle.markersPositionBottom,
+            left: widget.calendarStyle.markersPositionLeft,
+            right: widget.calendarStyle.markersPositionRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: events.map((event) => _buildMarker(eventKey, event)).toList(),
             ),
-          );
-        } else {
-          children.add(
-            Positioned(
-              top: widget.calendarStyle.markersPositionTop,
-              bottom: widget.calendarStyle.markersPositionBottom,
-              left: widget.calendarStyle.markersPositionLeft,
-              right: widget.calendarStyle.markersPositionRight,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: events.map((event) => _buildMarker(eventKey, event)).toList(),
-              ),
-            ),
-          );
-        }
+          ),
+        );
       }
 
       if (children.length > 1) {
