@@ -18,6 +18,9 @@ export 'src/customization/customization.dart';
 /// Callback exposing currently selected day.
 typedef void OnDaySelected(DateTime day, List events);
 
+//Callback exposing the day to start
+typedef void OnInitDay(DateTime day, List events);
+
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
 
@@ -27,7 +30,7 @@ typedef String TextBuilder(DateTime date, dynamic locale);
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
-/// Available animations to update the `CalendarFormat` with.
+/// Available animations to update the `CalendarFormat` with. 
 enum FormatAnimation { slide, scale }
 
 /// Available day of week formats. `TableCalendar` will start the week with chosen day.
@@ -55,6 +58,9 @@ class TableCalendar extends StatefulWidget {
 
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
+
+  //Callback exposing the day to start
+  final OnInitDay onInitDay;
 
   /// Called whenever the range of visible days changes.
   final OnVisibleDaysChanged onVisibleDaysChanged;
@@ -137,6 +143,7 @@ class TableCalendar extends StatefulWidget {
     this.events = const {},
     this.holidays = const {},
     this.onDaySelected,
+    this.onInitDay,
     this.onVisibleDaysChanged,
     this.selectedDay,
     this.initialCalendarFormat = CalendarFormat.month,
@@ -186,26 +193,35 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
     );
+    final keyinit = widget.events.keys.firstWhere(
+                (it) => Utils.isSameDay(it, widget.selectedDay),
+                orElse: () => null,
+              );
+              widget.onInitDay(widget.selectedDay, widget.events[keyinit] ?? []);
   }
 
   @override
   void didUpdateWidget(TableCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedDay != null && widget.selectedDay != null) {
+
+      
       if (!Utils.isSameDay(oldWidget.selectedDay, widget.selectedDay)) {
         SchedulerBinding.instance.addPostFrameCallback((_) {
           setState(() {
+            
             final runCallback = _calendarLogic.setSelectedDay(
               widget.selectedDay,
               isAnimated: widget.animateProgSelectedDay,
               isProgrammatic: true,
             );
-
+            
             if (runCallback && widget.onDaySelected != null) {
               final key = widget.events.keys.firstWhere(
                 (it) => Utils.isSameDay(it, widget.selectedDay),
                 orElse: () => null,
               );
+             
               widget.onDaySelected(widget.selectedDay, widget.events[key] ?? []);
             }
           });
@@ -493,35 +509,36 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     final eventKey = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
     final holidayKey = widget.holidays.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
-    final key = eventKey ?? holidayKey;
+    final key = eventKey ?? holidayKey ?? null;
 
     if (key != null) {
       final children = <Widget>[content];
-      final events = eventKey != null ? widget.events[eventKey].take(widget.calendarStyle.markersMaxAmount) : [];
-      final holidays = holidayKey != null ? widget.holidays[holidayKey] : [];
+      final events = widget.events[eventKey].take(widget.calendarStyle.markersMaxAmount);
 
-      if (widget.builders.markersBuilder != null) {
-        children.addAll(
-          widget.builders.markersBuilder(
-            context,
-            key,
-            events.toList(),
-            holidays,
-          ),
-        );
-      } else {
-        children.add(
-          Positioned(
-            top: widget.calendarStyle.markersPositionTop,
-            bottom: widget.calendarStyle.markersPositionBottom,
-            left: widget.calendarStyle.markersPositionLeft,
-            right: widget.calendarStyle.markersPositionRight,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: events.map((event) => _buildMarker(eventKey, event)).toList(),
+      if (events.isNotEmpty) {
+        if (widget.builders.markersBuilder != null) {
+          children.addAll(
+            widget.builders.markersBuilder(
+              context,
+              key,
+              events.toList(),
+              widget.holidays[holidayKey],
             ),
-          ),
-        );
+          );
+        } else {
+          children.add(
+            Positioned(
+              top: widget.calendarStyle.markersPositionTop,
+              bottom: widget.calendarStyle.markersPositionBottom,
+              left: widget.calendarStyle.markersPositionLeft,
+              right: widget.calendarStyle.markersPositionRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: events.map((event) => _buildMarker(eventKey, event)).toList(),
+              ),
+            ),
+          );
+        }
       }
 
       if (children.length > 1) {
