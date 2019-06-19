@@ -43,6 +43,8 @@ class CalendarBuilders {
   /// Custom Builder for holidays outside of current month. Will overwrite `dayBuilder` on holidays outside of current month.
   final FullBuilder outsideHolidayDayBuilder;
 
+  final FullBuilder unavailableDayBuilder;
+
   /// Custom Builder for a whole group of event markers. Use to provide your own marker UI for each day cell.
   /// Every `Widget` passed here will be placed in a `Stack`, above the cell content.
   /// Wrap them with `Positioned` to gain more control over their placement.
@@ -67,6 +69,7 @@ class CalendarBuilders {
     this.outsideDayBuilder,
     this.outsideWeekendDayBuilder,
     this.outsideHolidayDayBuilder,
+    this.unavailableDayBuilder,
     this.markersBuilder,
     this.singleMarkerBuilder,
   }) : assert(!(singleMarkerBuilder != null && markersBuilder != null));

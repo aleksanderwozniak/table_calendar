@@ -7,6 +7,7 @@ import '../customization/calendar_style.dart';
 
 class CellWidget extends StatelessWidget {
   final String text;
+  final bool isUnavailable;
   final bool isSelected;
   final bool isToday;
   final bool isWeekend;
@@ -17,6 +18,7 @@ class CellWidget extends StatelessWidget {
   const CellWidget({
     Key key,
     @required this.text,
+    this.isUnavailable = false,
     this.isSelected = false,
     this.isToday = false,
     this.isWeekend = false,
@@ -54,7 +56,9 @@ class CellWidget extends StatelessWidget {
   }
 
   TextStyle _buildCellTextStyle() {
-    if (isSelected && calendarStyle.renderSelectedFirst) {
+    if (isUnavailable) {
+      return calendarStyle.unavailableStyle;
+    } else if (isSelected && calendarStyle.renderSelectedFirst) {
       return calendarStyle.selectedStyle;
     } else if (isToday) {
       return calendarStyle.todayStyle;
