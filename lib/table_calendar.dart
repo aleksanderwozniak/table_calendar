@@ -56,6 +56,8 @@ class TableCalendar extends StatefulWidget {
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
 
+  /// Called whenever any unavailable day gets tapped.
+  /// Replaces `onDaySelected` for those days.
   final VoidCallback onUnavailableDaySelected;
 
   /// Called whenever the range of visible days changes.
@@ -70,8 +72,12 @@ class TableCalendar extends StatefulWidget {
   /// To animate programmatic selection, use `animateProgSelectedDay` property.
   final DateTime selectedDay;
 
+  /// The first day of `TableCalendar`.
+  /// Days before it will use `unavailableStyle` and run `onUnavailableDaySelected` callback.
   final DateTime startDay;
 
+  /// The last day of `TableCalendar`.
+  /// Days after it will use `unavailableStyle` and run `onUnavailableDaySelected` callback.
   final DateTime endDay;
 
   /// `CalendarFormat` which will be displayed first.

@@ -29,6 +29,7 @@ class CalendarStyle {
   /// Style of foreground Text for holidays outside of current month.
   final TextStyle outsideHolidayStyle;
 
+  /// Style of foreground Text for days outside of `startDay` - `endDay` Date range.
   final TextStyle unavailableStyle;
 
   /// Background Color of selected day.

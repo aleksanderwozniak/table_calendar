@@ -43,6 +43,7 @@ class CalendarBuilders {
   /// Custom Builder for holidays outside of current month. Will overwrite `dayBuilder` on holidays outside of current month.
   final FullBuilder outsideHolidayDayBuilder;
 
+  /// Custom Builder for days outside of `startDay` - `endDay` Date range. Will overwrite `dayBuilder` for aforementioned days.
   final FullBuilder unavailableDayBuilder;
 
   /// Custom Builder for a whole group of event markers. Use to provide your own marker UI for each day cell.
