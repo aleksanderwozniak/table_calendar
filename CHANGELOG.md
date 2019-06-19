@@ -1,3 +1,10 @@
+## [1.2.3]
+
+* Added startDay and endDay to allow users to specify available date range
+* Added unavailableStyle and unavailableDayBuilder for days outside of given date range
+* Added onUnavailableDaySelected callback
+* Unavailable days will not display event markers
+
 ## [1.2.2]
 
 * Fixed issue with Markers being null
