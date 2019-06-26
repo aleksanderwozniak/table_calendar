@@ -342,9 +342,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       children.insert(3, _buildFormatButton());
     }
 
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: children,
+    return Container(
+        decoration: widget.headerStyle.decoration,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: children,
+        )
     );
   }
 
