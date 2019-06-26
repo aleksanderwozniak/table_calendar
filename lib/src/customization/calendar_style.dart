@@ -72,6 +72,9 @@ class CalendarStyle {
   /// * `false` - Today will have higher priority than SelectedDay
   final bool renderSelectedFirst;
 
+  /// Determines if we need to show the row of days of week
+  final bool renderDaysOfWeek;
+
   const CalendarStyle({
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
@@ -93,5 +96,6 @@ class CalendarStyle {
     this.markersMaxAmount = 4,
     this.outsideDaysVisible = true,
     this.renderSelectedFirst = true,
+    this.renderDaysOfWeek = true,
   });
 }
