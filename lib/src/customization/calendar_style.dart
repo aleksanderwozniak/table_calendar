@@ -75,6 +75,16 @@ class CalendarStyle {
   /// Determines if we need to show the row of days of week
   final bool renderDaysOfWeek;
 
+  /// Content wrapper's margin, allows table to be wrap by other widget's style
+  /// Defaults symmetric(horizontal: 8.0)
+  ///     for backward compatibility
+  final EdgeInsets contentWrapperMargin;
+
+  /// Content's padding, the padding of the main calendar
+  /// Defaults only( top: 10.0, bottom: 4.0 )
+  ///     for backward compatibility, mapped from SizedBox(height: 10.0) and SizedBox(height: 4.0)
+  final EdgeInsets contentPadding;
+
   const CalendarStyle({
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
@@ -97,5 +107,7 @@ class CalendarStyle {
     this.outsideDaysVisible = true,
     this.renderSelectedFirst = true,
     this.renderDaysOfWeek = true,
+    this.contentWrapperMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.contentPadding = const EdgeInsets.only( top: 10.0, bottom: 4.0 )
   });
 }

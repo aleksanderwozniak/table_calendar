@@ -296,11 +296,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ]);
     }
 
-    children.addAll([
-      const SizedBox(height: 10.0),
-      _buildCalendarContent(),
-      const SizedBox(height: 4.0),
-    ]);
+    children.add(
+        Container(
+          padding: widget.calendarStyle.contentPadding,
+          child: _buildCalendarContent(),
+        )
+    );
 
     return ClipRect(
       child: Column(
@@ -420,7 +421,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     return Container(
       key: key,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      margin: widget.calendarStyle.wrapperMargin,
       child: wrappedChild,
     );
   }
