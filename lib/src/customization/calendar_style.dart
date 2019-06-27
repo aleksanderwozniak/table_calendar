@@ -72,6 +72,11 @@ class CalendarStyle {
   /// * `false` - Today will have higher priority than SelectedDay
   final bool renderSelectedFirst;
 
+  /// Specifies if the rendered event markers for a date can overflow the boundaries of that date cell.
+  /// * `true` - The event markers will draw over the cell boundaries
+  /// * `false` - The event markers will not draw over the cell boundaries and will be cut off if they are too big.
+  final bool canEventMarkersOverflow;
+
   const CalendarStyle({
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
@@ -93,5 +98,6 @@ class CalendarStyle {
     this.markersMaxAmount = 4,
     this.outsideDaysVisible = true,
     this.renderSelectedFirst = true,
+    this.canEventMarkersOverflow = false,
   });
 }
