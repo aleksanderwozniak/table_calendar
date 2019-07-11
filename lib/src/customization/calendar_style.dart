@@ -72,9 +72,9 @@ class CalendarStyle {
   /// * `false` - Today will have higher priority than SelectedDay
   final bool renderSelectedFirst;
 
-  /// Specifies if the rendered event markers for a date can overflow the boundaries of that date cell.
-  /// * `true` - The event markers will draw over the cell boundaries
-  /// * `false` - The event markers will not draw over the cell boundaries and will be cut off if they are too big.
+  /// Specifies if event markers rendered for a day cell can overflow cell's boundaries.
+  /// * `true` - Event markers will be drawn over the cell boundaries
+  /// * `false` - Event markers will not be drawn over the cell boundaries and will be clipped if they are too big
   final bool canEventMarkersOverflow;
 
   const CalendarStyle({
