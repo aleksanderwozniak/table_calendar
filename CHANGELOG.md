@@ -1,3 +1,8 @@
+## [1.2.4]
+
+* Improved DateTime logic
+* Event markers can now be set to overflow cell boundaries
+
 ## [1.2.3]
 
 * Added startDay and endDay to allow users to specify available date range
