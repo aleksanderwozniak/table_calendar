@@ -185,7 +185,7 @@ class CalendarLogic {
 
   DateTime _getFirstDay({@required bool includeInvisible}) {
     if (_calendarFormat.value == CalendarFormat.month && !includeInvisible) {
-      return Utils.firstDayOfMonth(_focusedDay);
+      return _firstDayOfMonth(_focusedDay);
     } else {
       return _visibleDays.value.first;
     }
@@ -193,11 +193,7 @@ class CalendarLogic {
 
   DateTime _getLastDay({@required bool includeInvisible}) {
     if (_calendarFormat.value == CalendarFormat.month && !includeInvisible) {
-      var last = Utils.lastDayOfMonth(_focusedDay);
-      if (last.hour == 23) {
-        last = last.add(Duration(hours: 1));
-      }
-      return last;
+      return _lastDayOfMonth(_focusedDay);
     } else {
       return _visibleDays.value.last;
     }
