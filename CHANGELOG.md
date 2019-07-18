@@ -1,3 +1,7 @@
+## [1.2.5]
+
+* Fixed last day of month animation issue
+
 ## [1.2.4]
 
 * Improved DateTime logic
