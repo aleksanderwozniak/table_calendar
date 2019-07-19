@@ -176,20 +176,9 @@ class TableCalendar extends StatefulWidget {
 }
 
 class _TableCalendarState extends State<TableCalendar> with SingleTickerProviderStateMixin {
-  // CalendarController widget.controller;
-
   @override
   void initState() {
     super.initState();
-    // _calendarLogic = CalendarController(
-    //   widget.availableCalendarFormats,
-    //   widget.startingDayOfWeek,
-    //   widget.headerStyle.formatButtonShowsNext,
-    //   initialFormat: widget.initialCalendarFormat,
-    //   initialDay: widget.selectedDay,
-    //   onVisibleDaysChanged: widget.onVisibleDaysChanged,
-    //   includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
-    // );
 
     widget.controller._init(
       _demoSelectedDayCallback,
@@ -202,29 +191,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
     );
   }
-
-  @override
-  void dispose() {
-    // _calendarLogic.dispose();
-    super.dispose();
-  }
-
-  // void setSelectedDay(DateTime date) {
-  //   _calendarLogic.setSelectedDay(date);
-
-  //   // TODO: shouldRunCallback !
-
-  //   if (widget.onDaySelected != null) {
-  //     final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
-  //     widget.onDaySelected(date, widget.events[key] ?? []);
-  //   }
-  // }
-
-  // void setCalendarFormat(CalendarFormat format) {
-  //   _calendarLogic.setCalendarFormat(format);
-
-  //   // TODO: shouldRunCallback ?
-  // }
 
   void _demoSelectedDayCallback(DateTime day) {
     final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
@@ -351,7 +317,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         decoration: widget.headerStyle.formatButtonDecoration,
         padding: widget.headerStyle.formatButtonPadding,
         child: Text(
-          widget.controller.formatButtonText,
+          widget.controller._getFormatButtonText(),
           style: widget.headerStyle.formatButtonTextStyle,
         ),
       ),
@@ -423,7 +389,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       child: child,
       onVerticalSwipe: (direction) {
         setState(() {
-          widget.controller.swipeCalendarFormat(direction == SwipeDirection.up);
+          widget.controller.swipeCalendarFormat(isSwipeUp: direction == SwipeDirection.up);
         });
       },
       swipeConfig: widget.simpleSwipeConfig,
