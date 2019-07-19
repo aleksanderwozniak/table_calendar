@@ -24,6 +24,9 @@ typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat 
 /// Builder signature for any text that can be localized and formatted with `DateFormat`.
 typedef String TextBuilder(DateTime date, dynamic locale);
 
+/// Signature of enableDays Function.
+typedef bool EnableDay(DateTime day);
+
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
@@ -143,6 +146,10 @@ class TableCalendar extends StatefulWidget {
   /// Set of Builders for `TableCalendar` to work with.
   final CalendarBuilders builders;
 
+  /// Called on creation for each day.
+  /// If `false` is returned, this day will be unavailable.
+  final EnableDay enableDay;
+
   TableCalendar({
     Key key,
     this.locale,
@@ -151,6 +158,7 @@ class TableCalendar extends StatefulWidget {
     this.onDaySelected,
     this.onUnavailableDaySelected,
     this.onVisibleDaysChanged,
+    this.enableDay,
     this.selectedDay,
     this.startDay,
     this.endDay,
@@ -280,9 +288,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     }
   }
 
+  bool _isDayEnabled(DateTime day) {
+    return widget.enableDay == null ? true : widget.enableDay(day);
+  }
+
   bool _isDayUnavailable(DateTime day) {
     return (widget.startDay != null && day.isBefore(widget.startDay)) ||
-        (widget.endDay != null && day.isAfter(widget.endDay));
+        (widget.endDay != null && day.isAfter(widget.endDay) || !_isDayEnabled(day));
   }
 
   @override
