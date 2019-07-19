@@ -78,14 +78,6 @@ class CalendarController {
     _visibleDays.dispose();
   }
 
-  CalendarFormat _nextFormat() {
-    final formats = _availableCalendarFormats.keys.toList();
-    int id = formats.indexOf(_calendarFormat.value);
-    id = (id + 1) % formats.length;
-
-    return formats[id];
-  }
-
   void toggleCalendarFormat() {
     _calendarFormat.value = _nextFormat();
   }
@@ -143,6 +135,14 @@ class CalendarController {
     if (calendarFormat != CalendarFormat.twoWeeks || isProgrammatic) {
       _visibleDays.value = _getVisibleDays();
     }
+  }
+
+  CalendarFormat _nextFormat() {
+    final formats = _availableCalendarFormats.keys.toList();
+    int id = formats.indexOf(_calendarFormat.value);
+    id = (id + 1) % formats.length;
+
+    return formats[id];
   }
 
   String _getFormatButtonText() => _useNextCalendarFormat
