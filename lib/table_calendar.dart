@@ -24,7 +24,7 @@ typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat 
 /// Builder signature for any text that can be localized and formatted with `DateFormat`.
 typedef String TextBuilder(DateTime date, dynamic locale);
 
-/// Signature of enableDays Function.
+/// Signature of enableDay Function.
 typedef bool EnableDay(DateTime day);
 
 /// Format to display the `TableCalendar` with.
