@@ -1,7 +1,7 @@
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
 
-import 'package:flutter/material.dart';
+part of table_calendar;
 
 /// Main Builder signature for `TableCalendar`. Contains `date` and list of all `events` associated with that `date`.
 /// Note that most of the time, `events` param will be ommited, however it is there if needed.

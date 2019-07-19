@@ -1,9 +1,7 @@
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
 
-import 'package:flutter/material.dart';
-
-import '../../table_calendar.dart';
+part of table_calendar;
 
 /// Class containing styling and configuration of `TableCalendar`'s header.
 class HeaderStyle {

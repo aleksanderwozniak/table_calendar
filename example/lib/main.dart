@@ -43,11 +43,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   DateTime _selectedDay;
+  CalendarFormat _calendarFormat;
   Map<DateTime, List> _events;
   Map<DateTime, List> _visibleEvents;
   Map<DateTime, List> _visibleHolidays;
   List _selectedEvents;
   AnimationController _controller;
+
+  // TODO: add default CalendarController
+  CalendarController _calendarController;
+
+  // GlobalKey<TableCalendarState> _key;
 
   @override
   void initState() {
@@ -75,6 +81,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _visibleEvents = _events;
     _visibleHolidays = _holidays;
 
+    _calendarFormat = CalendarFormat.twoWeeks;
+
+    // _key = GlobalKey<TableCalendarState>();
+
+    _calendarController = CalendarController();
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
@@ -84,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _onDaySelected(DateTime day, List events) {
+    print('ON DAY SELECTED');
     setState(() {
       _selectedDay = day;
       _selectedEvents = events;
@@ -91,6 +104,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
+    print('ON VISIBLE DAYS CHANGED');
+
+    // print(first);
+    // print(last);
+
+    // THIS SET STATE BUGS THE APP
     setState(() {
       _visibleEvents = Map.fromEntries(
         _events.entries.where(
@@ -98,6 +117,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
               entry.key.isBefore(last.add(const Duration(days: 1))),
         ),
+        // (entry) {
+        //   final day = DateTime.utc(entry.key.year, entry.key.month, entry.key.day, 12);
+
+        //   return day.isAfter(first.subtract(const Duration(days: 1))) &&
+        //       day.isBefore(last.add(const Duration(days: 1)));
+        // }),
       );
 
       _visibleHolidays = Map.fromEntries(
@@ -105,8 +130,19 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           (entry) =>
               entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
               entry.key.isBefore(last.add(const Duration(days: 1))),
+          //     (entry) {
+          //   final day = DateTime.utc(entry.key.year, entry.key.month, entry.key.day, 12);
+
+          //   return day.isAfter(first.subtract(const Duration(days: 1))) &&
+          //       day.isBefore(last.add(const Duration(days: 1)));
+          // }),
         ),
       );
+
+      // if (format == CalendarFormat.month) {
+      //   // _selectedDay = first;
+      //   _key.currentState.setSelectedDay(first);
+      // }
     });
   }
 
@@ -123,8 +159,65 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           //-----------------------
           _buildTableCalendar(),
           // _buildTableCalendarWithBuilders(),
-          const SizedBox(height: 8.0),
-          Expanded(child: _buildEventList()),
+          // const SizedBox(height: 8.0),
+          // Expanded(child: _buildEventList()),
+          const SizedBox(height: 20.0),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              RaisedButton(
+                child: Text('month'),
+                onPressed: () {
+                  // setState(() {
+                  //   _calendarFormat = CalendarFormat.month;
+                  // });
+                  // _key.currentState.setCalendarFormat(CalendarFormat.month);
+                  _calendarController.setCalendarFormat(CalendarFormat.month);
+                },
+              ),
+              RaisedButton(
+                child: Text('2 weeks'),
+                onPressed: () {
+                  // setState(() {
+                  //   _calendarFormat = CalendarFormat.twoWeeks;
+                  // });
+                  // _key.currentState.setCalendarFormat(CalendarFormat.twoWeeks);
+                  _calendarController.setCalendarFormat(CalendarFormat.twoWeeks);
+                },
+              ),
+              RaisedButton(
+                child: Text('week'),
+                onPressed: () {
+                  // setState(() {
+                  //   _calendarFormat = CalendarFormat.week;
+                  // });
+                  // _key.currentState.setCalendarFormat(CalendarFormat.week);
+                  _calendarController.setCalendarFormat(CalendarFormat.week);
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 12.0),
+          Builder(
+            builder: (context) {
+              return RaisedButton(
+                child: Text('set 16.07.2019'),
+                onPressed: () {
+                  // setState(() {
+                  //   // _selectedDay = DateTime(2019, 7, 16);
+                  //   _selectedDay = DateTime(2019, 11, 4);
+                  // });
+                  // TableCalendar.of(context).setSelectedDay(DateTime(2019, 7, 16));
+                  // _key.currentState.setSelectedDay(DateTime(2019, 7, 16));
+
+                  // TODO: watch a video on keys
+
+                  _calendarController.setSelectedDay(DateTime(2019, 4, 10), runCallback: true);
+                },
+              );
+            },
+          ),
         ],
       ),
     );
@@ -133,10 +226,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // Simple TableCalendar configuration (using Styles)
   Widget _buildTableCalendar() {
     return TableCalendar(
+      // key: _key,
       locale: 'en_US',
+      controller: _calendarController,
       events: _visibleEvents,
       holidays: _visibleHolidays,
-      initialCalendarFormat: CalendarFormat.week,
+      // selectedDay: _selectedDay,
+      // calendarFormat: _calendarFormat,
+      // forcedCalendarFormat: _calendarFormat,
+      // initialCalendarFormat: CalendarFormat.week,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.monday,
       availableGestures: AvailableGestures.all,
@@ -149,6 +247,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         selectedColor: Colors.deepOrange[400],
         todayColor: Colors.deepOrange[200],
         markersColor: Colors.brown[700],
+        outsideDaysVisible: false,
       ),
       headerStyle: HeaderStyle(
         formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
@@ -161,6 +260,38 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       onVisibleDaysChanged: _onVisibleDaysChanged,
     );
   }
+
+  // // Simple TableCalendar configuration (using Styles)
+  // Widget _buildTableCalendar() {
+  //   return TableCalendar(
+  //     locale: 'en_US',
+  //     events: _visibleEvents,
+  //     holidays: _visibleHolidays,
+  //     initialCalendarFormat: CalendarFormat.week,
+  //     formatAnimation: FormatAnimation.slide,
+  //     startingDayOfWeek: StartingDayOfWeek.monday,
+  //     availableGestures: AvailableGestures.all,
+  //     availableCalendarFormats: const {
+  //       CalendarFormat.month: 'Month',
+  //       CalendarFormat.twoWeeks: '2 weeks',
+  //       CalendarFormat.week: 'Week',
+  //     },
+  //     calendarStyle: CalendarStyle(
+  //       selectedColor: Colors.deepOrange[400],
+  //       todayColor: Colors.deepOrange[200],
+  //       markersColor: Colors.brown[700],
+  //     ),
+  //     headerStyle: HeaderStyle(
+  //       formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+  //       formatButtonDecoration: BoxDecoration(
+  //         color: Colors.deepOrange[400],
+  //         borderRadius: BorderRadius.circular(16.0),
+  //       ),
+  //     ),
+  //     onDaySelected: _onDaySelected,
+  //     onVisibleDaysChanged: _onVisibleDaysChanged,
+  //   );
+  // }
 
   // More advanced TableCalendar configuration (using Builders & Styles)
   Widget _buildTableCalendarWithBuilders() {
