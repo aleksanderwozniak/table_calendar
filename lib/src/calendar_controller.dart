@@ -12,7 +12,8 @@ class CalendarController {
   DateTime get focusedDay => _focusedDay;
   DateTime get selectedDay => _selectedDay;
   CalendarFormat get calendarFormat => _calendarFormat.value;
-  List<DateTime> get visibleDays => _visibleDays.value;
+  List<DateTime> get visibleDays =>
+      _includeInvisibleDays ? _visibleDays.value : _visibleDays.value.where((day) => !_isExtraDay(day)).toList();
 
   DateTime _focusedDay;
   DateTime _selectedDay;
@@ -25,6 +26,7 @@ class CalendarController {
   int _pageId;
   double _dx;
   bool _useNextCalendarFormat;
+  bool _includeInvisibleDays;
   _SelectedDayCallback _selectedDayCallback;
 
   void _init(
@@ -41,6 +43,7 @@ class CalendarController {
     _startingDayOfWeek = startingDayOfWeek;
     _useNextCalendarFormat = useNextCalendarFormat;
     _selectedDayCallback = selectedDayCallback;
+    _includeInvisibleDays = includeInvisibleDays;
 
     _pageId = 0;
     _dx = 0;
@@ -64,8 +67,8 @@ class CalendarController {
           _previousFirstDay = _visibleDays.value.first;
           _previousLastDay = _visibleDays.value.last;
           onVisibleDaysChanged(
-            _getFirstDay(includeInvisible: includeInvisibleDays),
-            _getLastDay(includeInvisible: includeInvisibleDays),
+            _getFirstDay(includeInvisible: _includeInvisibleDays),
+            _getLastDay(includeInvisible: _includeInvisibleDays),
             _calendarFormat.value,
           );
         }

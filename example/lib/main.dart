@@ -149,8 +149,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         children: <Widget>[
           // Switch out 2 lines below to play with TableCalendar's settings
           //-----------------------
-          // _buildTableCalendar(),
-          _buildTableCalendarWithBuilders(),
+          _buildTableCalendar(),
+          // _buildTableCalendarWithBuilders(),
           const SizedBox(height: 8.0),
           Row(
             mainAxisSize: MainAxisSize.max,
@@ -160,7 +160,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 child: Text('month'),
                 onPressed: () {
                   _calendarController.setCalendarFormat(CalendarFormat.month);
-                  print(_calendarController.visibleDays);
                 },
               ),
               RaisedButton(
