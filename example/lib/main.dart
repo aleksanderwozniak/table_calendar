@@ -42,7 +42,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Map<DateTime, List> _events;
-  Map<DateTime, List> _visibleEvents;
   Map<DateTime, List> _visibleHolidays;
   List _selectedEvents;
   AnimationController _controller;
@@ -72,7 +71,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     };
 
     _selectedEvents = _events[_selectedDay] ?? [];
-    _visibleEvents = _events;
     _visibleHolidays = _holidays;
 
     _calendarController = CalendarController();
@@ -93,14 +91,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _onDaySelected(DateTime day, List events) {
-    print('ON DAY SELECTED');
+    print('CALLBACK: _onDaySelected');
     setState(() {
       _selectedEvents = events;
     });
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    print('ON VISIBLE DAYS CHANGED');
+    print('CALLBACK: _onVisibleDaysChanged');
   }
 
   @override
@@ -124,26 +122,32 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               RaisedButton(
                 child: Text('month'),
                 onPressed: () {
-                  _calendarController.setCalendarFormat(CalendarFormat.month);
+                  setState(() {
+                    _calendarController.setCalendarFormat(CalendarFormat.month);
+                  });
                 },
               ),
               RaisedButton(
                 child: Text('2 weeks'),
                 onPressed: () {
-                  _calendarController.setCalendarFormat(CalendarFormat.twoWeeks);
+                  setState(() {
+                    _calendarController.setCalendarFormat(CalendarFormat.twoWeeks);
+                  });
                 },
               ),
               RaisedButton(
                 child: Text('week'),
                 onPressed: () {
-                  _calendarController.setCalendarFormat(CalendarFormat.week);
+                  setState(() {
+                    _calendarController.setCalendarFormat(CalendarFormat.week);
+                  });
                 },
               ),
             ],
           ),
           const SizedBox(height: 8.0),
           RaisedButton(
-            child: Text('setDay'),
+            child: Text('setDay 10-07-2019'),
             onPressed: () {
               _calendarController.setSelectedDay(DateTime(2019, 7, 10), runCallback: true);
             },
@@ -158,20 +162,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // Simple TableCalendar configuration (using Styles)
   Widget _buildTableCalendar() {
     return TableCalendar(
-      locale: 'en_US',
       calendarController: _calendarController,
       events: _events,
       holidays: _visibleHolidays,
-      initialSelectedDay: DateTime(2019, 10, 10),
-      initialCalendarFormat: CalendarFormat.twoWeeks,
-      formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.monday,
-      availableGestures: AvailableGestures.all,
-      availableCalendarFormats: const {
-        CalendarFormat.month: 'Month',
-        CalendarFormat.twoWeeks: '2 weeks',
-        CalendarFormat.week: 'Week',
-      },
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
         todayColor: Colors.deepOrange[200],
