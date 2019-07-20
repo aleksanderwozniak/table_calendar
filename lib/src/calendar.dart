@@ -175,21 +175,23 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     super.initState();
 
     widget.calendarController._init(
-      widget.events,
-      _demoSelectedDayCallback,
-      widget.availableCalendarFormats,
-      widget.startingDayOfWeek,
-      widget.headerStyle.formatButtonShowsNext,
-      initialFormat: widget.initialCalendarFormat,
+      events: widget.events,
       initialDay: widget.initialSelectedDay,
+      initialFormat: widget.initialCalendarFormat,
+      availableCalendarFormats: widget.availableCalendarFormats,
+      useNextCalendarFormat: widget.headerStyle.formatButtonShowsNext,
+      startingDayOfWeek: widget.startingDayOfWeek,
+      selectedDayCallback: _selectedDayCallback,
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
     );
   }
 
-  void _demoSelectedDayCallback(DateTime day) {
-    final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
-    widget.onDaySelected(day, widget.events[key] ?? []);
+  void _selectedDayCallback(DateTime day) {
+    if (widget.onDaySelected != null) {
+      final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
+      widget.onDaySelected(day, widget.events[key] ?? []);
+    }
   }
 
   void _selectPrevious() {
@@ -204,14 +206,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     });
   }
 
-  void _selectDate(DateTime date) {
+  void _selectDay(DateTime day) {
     setState(() {
-      widget.calendarController.setSelectedDay(date, isProgrammatic: false);
-
-      if (widget.onDaySelected != null) {
-        final key = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
-        widget.onDaySelected(date, widget.events[key] ?? []);
-      }
+      widget.calendarController.setSelectedDay(day, isProgrammatic: false);
+      _selectedDayCallback(day);
     });
   }
 
@@ -519,7 +517,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     return GestureDetector(
       behavior: widget.dayHitTestBehavior,
-      onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDate(date),
+      onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDay(date),
       child: content,
     );
   }

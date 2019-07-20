@@ -42,16 +42,16 @@ class CalendarController {
   bool _includeInvisibleDays;
   _SelectedDayCallback _selectedDayCallback;
 
-  void _init(
-    Map<DateTime, List> events,
-    _SelectedDayCallback selectedDayCallback,
-    Map<CalendarFormat, String> availableCalendarFormats,
-    StartingDayOfWeek startingDayOfWeek,
-    bool useNextCalendarFormat, {
-    DateTime initialDay,
-    CalendarFormat initialFormat,
-    OnVisibleDaysChanged onVisibleDaysChanged,
-    bool includeInvisibleDays = false,
+  void _init({
+    @required Map<DateTime, List> events,
+    @required DateTime initialDay,
+    @required CalendarFormat initialFormat,
+    @required Map<CalendarFormat, String> availableCalendarFormats,
+    @required bool useNextCalendarFormat,
+    @required StartingDayOfWeek startingDayOfWeek,
+    @required _SelectedDayCallback selectedDayCallback,
+    @required OnVisibleDaysChanged onVisibleDaysChanged,
+    @required bool includeInvisibleDays,
   }) {
     _events = events;
     _availableCalendarFormats = availableCalendarFormats;
