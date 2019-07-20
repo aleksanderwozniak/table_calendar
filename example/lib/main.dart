@@ -101,41 +101,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
     print('ON VISIBLE DAYS CHANGED');
-
-    setState(() {
-      _visibleEvents = Map.fromEntries(
-        _events.entries.where(
-          (entry) =>
-              entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
-              entry.key.isBefore(last.add(const Duration(days: 1))),
-        ),
-        // (entry) {
-        //   final day = DateTime.utc(entry.key.year, entry.key.month, entry.key.day, 12);
-
-        //   return day.isAfter(first.subtract(const Duration(days: 1))) &&
-        //       day.isBefore(last.add(const Duration(days: 1)));
-        // }),
-      );
-
-      _visibleHolidays = Map.fromEntries(
-        _holidays.entries.where(
-          (entry) =>
-              entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
-              entry.key.isBefore(last.add(const Duration(days: 1))),
-          //     (entry) {
-          //   final day = DateTime.utc(entry.key.year, entry.key.month, entry.key.day, 12);
-
-          //   return day.isAfter(first.subtract(const Duration(days: 1))) &&
-          //       day.isBefore(last.add(const Duration(days: 1)));
-          // }),
-        ),
-      );
-
-      // if (format == CalendarFormat.month) {
-      //   // _selectedDay = first;
-      //   _key.currentState.setSelectedDay(first);
-      // }
-    });
   }
 
   @override
@@ -195,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return TableCalendar(
       locale: 'en_US',
       calendarController: _calendarController,
-      events: _visibleEvents,
+      events: _events,
       holidays: _visibleHolidays,
       initialSelectedDay: DateTime(2019, 10, 10),
       initialCalendarFormat: CalendarFormat.twoWeeks,
@@ -230,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return TableCalendar(
       locale: 'pl_PL',
       calendarController: _calendarController,
-      events: _visibleEvents,
+      events: _events,
       holidays: _visibleHolidays,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,

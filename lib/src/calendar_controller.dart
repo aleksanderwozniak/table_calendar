@@ -15,6 +15,19 @@ class CalendarController {
   List<DateTime> get visibleDays =>
       _includeInvisibleDays ? _visibleDays.value : _visibleDays.value.where((day) => !_isExtraDay(day)).toList();
 
+  Map<DateTime, List> get visibleEvents => Map.fromEntries(
+        _events.entries.where((entry) {
+          for (final day in visibleDays) {
+            if (Utils.isSameDay(day, entry.key)) {
+              return true;
+            }
+          }
+
+          return false;
+        }),
+      );
+
+  Map<DateTime, List> _events;
   DateTime _focusedDay;
   DateTime _selectedDay;
   StartingDayOfWeek _startingDayOfWeek;
@@ -30,6 +43,7 @@ class CalendarController {
   _SelectedDayCallback _selectedDayCallback;
 
   void _init(
+    Map<DateTime, List> events,
     _SelectedDayCallback selectedDayCallback,
     Map<CalendarFormat, String> availableCalendarFormats,
     StartingDayOfWeek startingDayOfWeek,
@@ -39,6 +53,7 @@ class CalendarController {
     OnVisibleDaysChanged onVisibleDaysChanged,
     bool includeInvisibleDays = false,
   }) {
+    _events = events;
     _availableCalendarFormats = availableCalendarFormats;
     _startingDayOfWeek = startingDayOfWeek;
     _useNextCalendarFormat = useNextCalendarFormat;

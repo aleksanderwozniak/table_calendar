@@ -175,6 +175,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     super.initState();
 
     widget.calendarController._init(
+      widget.events,
       _demoSelectedDayCallback,
       widget.availableCalendarFormats,
       widget.startingDayOfWeek,
