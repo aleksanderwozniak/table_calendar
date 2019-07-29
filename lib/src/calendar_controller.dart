@@ -27,7 +27,20 @@ class CalendarController {
         }),
       );
 
+  Map<DateTime, List> get visibleHolidays => Map.fromEntries(
+        _holidays.entries.where((entry) {
+          for (final day in visibleDays) {
+            if (Utils.isSameDay(day, entry.key)) {
+              return true;
+            }
+          }
+
+          return false;
+        }),
+      );
+
   Map<DateTime, List> _events;
+  Map<DateTime, List> _holidays;
   DateTime _focusedDay;
   DateTime _selectedDay;
   StartingDayOfWeek _startingDayOfWeek;
@@ -44,6 +57,7 @@ class CalendarController {
 
   void _init({
     @required Map<DateTime, List> events,
+    @required Map<DateTime, List> holidays,
     @required DateTime initialDay,
     @required CalendarFormat initialFormat,
     @required Map<CalendarFormat, String> availableCalendarFormats,
@@ -54,6 +68,7 @@ class CalendarController {
     @required bool includeInvisibleDays,
   }) {
     _events = events;
+    _holidays = holidays;
     _availableCalendarFormats = availableCalendarFormats;
     _startingDayOfWeek = startingDayOfWeek;
     _useNextCalendarFormat = useNextCalendarFormat;
