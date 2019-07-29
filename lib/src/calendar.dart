@@ -93,10 +93,6 @@ class TableCalendar extends StatefulWidget {
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
-  /// Used to enable animations for programmatically set `selectedDay`.
-  /// Most of the time it should be `false`.
-  final bool animateProgSelectedDay;
-
   /// Animation to run when `CalendarFormat` gets changed.
   final FormatAnimation formatAnimation;
 
@@ -147,7 +143,6 @@ class TableCalendar extends StatefulWidget {
     },
     this.headerVisible = true,
     this.rowHeight,
-    this.animateProgSelectedDay = false,
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.dayHitTestBehavior = HitTestBehavior.deferToChild,
