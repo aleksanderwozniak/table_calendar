@@ -8,13 +8,37 @@ const double _dxMin = -1.2;
 
 typedef void _SelectedDayCallback(DateTime day);
 
+/// Controller required for `TableCalendar`.
+///
+/// Should be created in `initState()`, and then disposed in `dispose()`:
+/// ```dart
+/// @override
+/// void initState() {
+///   super.initState();
+///   _calendarController = CalendarController();
+/// }
+///
+/// @override
+/// void dispose() {
+///   _calendarController.dispose();
+///   super.dispose();
+/// }
+/// ```
 class CalendarController {
+  /// Currently focused day (used to determine which year/month should be visible).
   DateTime get focusedDay => _focusedDay;
+
+  /// Currently selected day.
   DateTime get selectedDay => _selectedDay;
+
+  /// Currently visible calendar format.
   CalendarFormat get calendarFormat => _calendarFormat.value;
+
+  /// List of currently visible days.
   List<DateTime> get visibleDays =>
       _includeInvisibleDays ? _visibleDays.value : _visibleDays.value.where((day) => !_isExtraDay(day)).toList();
 
+  /// Map of currently visible events.
   Map<DateTime, List> get visibleEvents => Map.fromEntries(
         _events.entries.where((entry) {
           for (final day in visibleDays) {
@@ -27,6 +51,7 @@ class CalendarController {
         }),
       );
 
+  /// Map of currently visible holidays.
   Map<DateTime, List> get visibleHolidays => Map.fromEntries(
         _holidays.entries.where((entry) {
           for (final day in visibleDays) {
@@ -106,15 +131,25 @@ class CalendarController {
     }
   }
 
+  /// Disposes the controller.
+  /// ```dart
+  /// @override
+  /// void dispose() {
+  ///   _calendarController.dispose();
+  ///   super.dispose();
+  /// }
+  /// ```
   void dispose() {
     _calendarFormat.dispose();
     _visibleDays.dispose();
   }
 
+  /// Toggles calendar format. Same as using `FormatButton`.
   void toggleCalendarFormat() {
     _calendarFormat.value = _nextFormat();
   }
 
+  /// Sets calendar format by emulating swipe.
   void swipeCalendarFormat({@required bool isSwipeUp}) {
     assert(isSwipeUp != null);
 
@@ -131,10 +166,13 @@ class CalendarController {
     _calendarFormat.value = formats[id];
   }
 
+  /// Sets calendar format to a given `value`.
   void setCalendarFormat(CalendarFormat value) {
     _calendarFormat.value = value;
   }
 
+  /// Sets selected day to a given `value`.
+  /// Use `runCallback: true` if this should trigger `OnDaySelected` callback.
   void setSelectedDay(
     DateTime value, {
     bool isProgrammatic = true,
@@ -158,7 +196,7 @@ class CalendarController {
     }
   }
 
-  /// Use to set displayed month/year without changing the SelectedDay
+  /// Sets displayed month/year without changing the currently selected day.
   void setFocusedDay(DateTime value) {
     _focusedDay = value;
     _updateVisibleDays(true);
@@ -332,10 +370,12 @@ class CalendarController {
     return date.subtract(const Duration(days: 1));
   }
 
+  /// Returns true if `day` is currently selected.
   bool isSelected(DateTime day) {
     return Utils.isSameDay(day, selectedDay);
   }
 
+  /// Returns true if `day` is the same day as `DateTime.now()`.
   bool isToday(DateTime day) {
     return Utils.isSameDay(day, DateTime.now());
   }
