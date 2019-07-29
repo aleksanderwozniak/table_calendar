@@ -42,9 +42,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Map<DateTime, List> _events;
-  Map<DateTime, List> _visibleHolidays;
   List _selectedEvents;
-  AnimationController _controller;
+  AnimationController _animationController;
   CalendarController _calendarController;
 
   @override
@@ -71,21 +70,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     };
 
     _selectedEvents = _events[_selectedDay] ?? [];
-    _visibleHolidays = _holidays;
 
     _calendarController = CalendarController();
 
-    _controller = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
 
-    _controller.forward();
+    _animationController.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _animationController.dispose();
     _calendarController.dispose();
     super.dispose();
   }
@@ -115,43 +113,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           _buildTableCalendar(),
           // _buildTableCalendarWithBuilders(),
           const SizedBox(height: 8.0),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              RaisedButton(
-                child: Text('month'),
-                onPressed: () {
-                  setState(() {
-                    _calendarController.setCalendarFormat(CalendarFormat.month);
-                  });
-                },
-              ),
-              RaisedButton(
-                child: Text('2 weeks'),
-                onPressed: () {
-                  setState(() {
-                    _calendarController.setCalendarFormat(CalendarFormat.twoWeeks);
-                  });
-                },
-              ),
-              RaisedButton(
-                child: Text('week'),
-                onPressed: () {
-                  setState(() {
-                    _calendarController.setCalendarFormat(CalendarFormat.week);
-                  });
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 8.0),
-          RaisedButton(
-            child: Text('setDay 10-07-2019'),
-            onPressed: () {
-              _calendarController.setSelectedDay(DateTime(2019, 7, 10), runCallback: true);
-            },
-          ),
+          _buildButtons(),
           const SizedBox(height: 8.0),
           Expanded(child: _buildEventList()),
         ],
@@ -164,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return TableCalendar(
       calendarController: _calendarController,
       events: _events,
-      holidays: _visibleHolidays,
+      holidays: _holidays,
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
@@ -190,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       locale: 'pl_PL',
       calendarController: _calendarController,
       events: _events,
-      holidays: _visibleHolidays,
+      holidays: _holidays,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -214,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       builders: CalendarBuilders(
         selectedDayBuilder: (context, date, _) {
           return FadeTransition(
-            opacity: Tween(begin: 0.0, end: 1.0).animate(_controller),
+            opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
             child: Container(
               margin: const EdgeInsets.all(4.0),
               padding: const EdgeInsets.only(top: 5.0, left: 6.0),
@@ -269,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       onDaySelected: (date, events) {
         _onDaySelected(date, events);
-        _controller.forward(from: 0.0);
+        _animationController.forward(from: 0.0);
       },
       onVisibleDaysChanged: _onVisibleDaysChanged,
     );
@@ -303,6 +265,50 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       Icons.add_box,
       size: 20.0,
       color: Colors.blueGrey[800],
+    );
+  }
+
+  Widget _buildButtons() {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('month'),
+              onPressed: () {
+                setState(() {
+                  _calendarController.setCalendarFormat(CalendarFormat.month);
+                });
+              },
+            ),
+            RaisedButton(
+              child: Text('2 weeks'),
+              onPressed: () {
+                setState(() {
+                  _calendarController.setCalendarFormat(CalendarFormat.twoWeeks);
+                });
+              },
+            ),
+            RaisedButton(
+              child: Text('week'),
+              onPressed: () {
+                setState(() {
+                  _calendarController.setCalendarFormat(CalendarFormat.week);
+                });
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 8.0),
+        RaisedButton(
+          child: Text('setDay 10-07-2019'),
+          onPressed: () {
+            _calendarController.setSelectedDay(DateTime(2019, 7, 10), runCallback: true);
+          },
+        ),
+      ],
     );
   }
 
