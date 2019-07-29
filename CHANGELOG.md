@@ -1,3 +1,10 @@
+## [2.0.0]
+
+* Added CalendarController - TableCalendar now features complete programmatic control
+* Removed redundant properties
+* Updated example project
+* Updated README
+
 ## [1.2.5]
 
 * Fixed last day of month animation issue
