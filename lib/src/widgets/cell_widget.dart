@@ -1,11 +1,9 @@
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
 
-import 'package:flutter/material.dart';
+part of table_calendar;
 
-import '../customization/calendar_style.dart';
-
-class CellWidget extends StatelessWidget {
+class _CellWidget extends StatelessWidget {
   final String text;
   final bool isUnavailable;
   final bool isSelected;
@@ -15,7 +13,7 @@ class CellWidget extends StatelessWidget {
   final bool isHoliday;
   final CalendarStyle calendarStyle;
 
-  const CellWidget({
+  const _CellWidget({
     Key key,
     @required this.text,
     this.isUnavailable = false,
