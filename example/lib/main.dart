@@ -238,6 +238,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildEventsMarker(DateTime date, List events) {
+    int cnt = 0;
+    if (null != _events[date]) {
+      cnt = _events[date].length;
+    }
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
@@ -250,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       height: 16.0,
       child: Center(
         child: Text(
-          '${events.length}',
+          '$cnt',
           style: TextStyle().copyWith(
             color: Colors.white,
             fontSize: 12.0,
