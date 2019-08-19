@@ -1,3 +1,7 @@
+## [2.0.1]
+
+* Fixed issue with custom markers for holidays
+
 ## [2.0.0]
 
 * Added CalendarController - TableCalendar now features complete programmatic control
