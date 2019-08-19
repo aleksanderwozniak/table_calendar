@@ -487,7 +487,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       final events = eventKey != null
           ? widget.calendarController.visibleEvents[eventKey].take(widget.calendarStyle.markersMaxAmount)
           : [];
-      final holidays = holidayKey != null ? widget.calendarController.visibleEvents[holidayKey] : [];
+      final holidays = holidayKey != null ? widget.calendarController.visibleHolidays[holidayKey] : [];
 
       if (!_isDayUnavailable(date)) {
         if (widget.builders.markersBuilder != null) {
