@@ -185,8 +185,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   void _selectedDayCallback(DateTime day) {
     if (widget.onDaySelected != null) {
-      final key =
-          widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
+      final key = widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
       widget.onDaySelected(day, widget.calendarController.visibleEvents[key] ?? []);
     }
   }
@@ -233,18 +232,15 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   bool _isDayUnavailable(DateTime day) {
-    return (widget.startDay != null && day.isBefore(widget.startDay)) ||
-        (widget.endDay != null && day.isAfter(widget.endDay));
+    return (widget.startDay != null && day.isBefore(widget.startDay)) || (widget.endDay != null && day.isAfter(widget.endDay));
   }
 
   DateTime _getEventKey(DateTime date) {
-    return widget.calendarController.visibleEvents.keys
-        .firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
+    return widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
   }
 
   DateTime _getHolidayKey(DateTime date) {
-    return widget.calendarController.visibleHolidays.keys
-        .firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
+    return widget.calendarController.visibleHolidays.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
   }
 
   @override
@@ -400,8 +396,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       switchInCurve: Curves.decelerate,
       transitionBuilder: (child, animation) {
         return SlideTransition(
-          position:
-              Tween<Offset>(begin: Offset(widget.calendarController._dx, 0), end: Offset(0, 0)).animate(animation),
+          position: Tween<Offset>(begin: Offset(widget.calendarController._dx, 0), end: Offset(0, 0)).animate(animation),
           child: child,
         );
       },
@@ -443,9 +438,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
             widget.daysOfWeekStyle.dowTextBuilder != null
                 ? widget.daysOfWeekStyle.dowTextBuilder(date, widget.locale)
                 : DateFormat.E(widget.locale).format(date),
-            style: widget.calendarController._isWeekend(date)
-                ? widget.daysOfWeekStyle.weekendStyle
-                : widget.daysOfWeekStyle.weekdayStyle,
+            style: widget.calendarController._isWeekend(date) ? widget.daysOfWeekStyle.weekendStyle : widget.daysOfWeekStyle.weekdayStyle,
           ),
         );
       }).toList(),
@@ -484,9 +477,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     if (key != null) {
       final children = <Widget>[content];
-      final events = eventKey != null
-          ? widget.calendarController.visibleEvents[eventKey].take(widget.calendarStyle.markersMaxAmount)
-          : [];
+      final events = eventKey != null ? widget.calendarController.visibleEvents[eventKey].take(widget.calendarStyle.markersMaxAmount) : [];
       final holidays = holidayKey != null ? widget.calendarController.visibleHolidays[holidayKey] : [];
 
       if (!_isDayUnavailable(date)) {
@@ -546,8 +537,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final isToday = widget.builders.todayDayBuilder != null && tIsToday;
     final isOutsideHoliday = widget.builders.outsideHolidayDayBuilder != null && tIsOutside && tIsHoliday;
     final isHoliday = widget.builders.holidayDayBuilder != null && !tIsOutside && tIsHoliday;
-    final isOutsideWeekend =
-        widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
+    final isOutsideWeekend = widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
     final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend && !tIsHoliday;
     final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend && !tIsHoliday;
 
