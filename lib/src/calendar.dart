@@ -46,6 +46,9 @@ class TableCalendar extends StatefulWidget {
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
 
+  /// Called whenever any day gets long pressed.
+  final OnDaySelected onDayLongPressed;
+
   /// Called whenever any unavailable day gets tapped.
   /// Replaces `onDaySelected` for those days.
   final VoidCallback onUnavailableDaySelected;
@@ -123,6 +126,8 @@ class TableCalendar extends StatefulWidget {
   /// Set of Builders for `TableCalendar` to work with.
   final CalendarBuilders builders;
 
+  final VoidCallback onUnavailableDayLongPressed;
+
   TableCalendar({
     Key key,
     @required this.calendarController,
@@ -130,7 +135,9 @@ class TableCalendar extends StatefulWidget {
     this.events = const {},
     this.holidays = const {},
     this.onDaySelected,
+    this.onDayLongPressed,
     this.onUnavailableDaySelected,
+    this.onUnavailableDayLongPressed,
     this.onVisibleDaysChanged,
     this.initialSelectedDay,
     this.startDay,
@@ -209,6 +216,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     });
   }
 
+  void _onDayLongPressed(DateTime day) {
+    if (widget.onDayLongPressed != null) {
+      final key = widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
+      widget.onDayLongPressed(day, widget.calendarController.visibleEvents[key] ?? []);
+    }
+  }
+
   void _toggleCalendarFormat() {
     setState(() {
       widget.calendarController.toggleCalendarFormat();
@@ -228,6 +242,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   void _onUnavailableDaySelected() {
     if (widget.onUnavailableDaySelected != null) {
       widget.onUnavailableDaySelected();
+    }
+  }
+
+  void _onUnavailableDayLongPressed() {
+    if (widget.onUnavailableDayLongPressed != null) {
+      widget.onUnavailableDayLongPressed();
     }
   }
 
@@ -518,6 +538,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     return GestureDetector(
       behavior: widget.dayHitTestBehavior,
       onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDay(date),
+      onLongPress: () => _isDayUnavailable(date) ? _onUnavailableDayLongPressed() : _onDayLongPressed(date),
       child: content,
     );
   }
