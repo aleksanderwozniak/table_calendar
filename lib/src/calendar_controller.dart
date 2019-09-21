@@ -42,7 +42,7 @@ class CalendarController {
   Map<DateTime, List> get visibleEvents => Map.fromEntries(
         _events.entries.where((entry) {
           for (final day in visibleDays) {
-            if (Utils.isSameDay(day, entry.key)) {
+            if (_isSameDay(day, entry.key)) {
               return true;
             }
           }
@@ -55,7 +55,7 @@ class CalendarController {
   Map<DateTime, List> get visibleHolidays => Map.fromEntries(
         _holidays.entries.where((entry) {
           for (final day in visibleDays) {
-            if (Utils.isSameDay(day, entry.key)) {
+            if (_isSameDay(day, entry.key)) {
               return true;
             }
           }
@@ -117,8 +117,8 @@ class CalendarController {
 
     if (onVisibleDaysChanged != null) {
       _visibleDays.addListener(() {
-        if (!Utils.isSameDay(_visibleDays.value.first, _previousFirstDay) ||
-            !Utils.isSameDay(_visibleDays.value.last, _previousLastDay)) {
+        if (!_isSameDay(_visibleDays.value.first, _previousFirstDay) ||
+            !_isSameDay(_visibleDays.value.last, _previousLastDay)) {
           _previousFirstDay = _visibleDays.value.first;
           _previousLastDay = _visibleDays.value.last;
           onVisibleDaysChanged(
@@ -247,36 +247,36 @@ class CalendarController {
   }
 
   void _selectPreviousMonth() {
-    _focusedDay = Utils.previousMonth(_focusedDay);
+    _focusedDay = _previousMonth(_focusedDay);
   }
 
   void _selectNextMonth() {
-    _focusedDay = Utils.nextMonth(_focusedDay);
+    _focusedDay = _nextMonth(_focusedDay);
   }
 
   void _selectPreviousTwoWeeks() {
     if (_visibleDays.value.take(7).contains(_focusedDay)) {
       // in top row
-      _focusedDay = Utils.previousWeek(_focusedDay);
+      _focusedDay = _previousWeek(_focusedDay);
     } else {
       // in bottom row OR not visible
-      _focusedDay = Utils.previousWeek(_focusedDay.subtract(const Duration(days: 7)));
+      _focusedDay = _previousWeek(_focusedDay.subtract(const Duration(days: 7)));
     }
   }
 
   void _selectNextTwoWeeks() {
     if (!_visibleDays.value.skip(7).contains(_focusedDay)) {
       // not in bottom row [eg: in top row OR not visible]
-      _focusedDay = Utils.nextWeek(_focusedDay);
+      _focusedDay = _nextWeek(_focusedDay);
     }
   }
 
   void _selectPreviousWeek() {
-    _focusedDay = Utils.previousWeek(_focusedDay);
+    _focusedDay = _previousWeek(_focusedDay);
   }
 
   void _selectNextWeek() {
-    _focusedDay = Utils.nextWeek(_focusedDay);
+    _focusedDay = _nextWeek(_focusedDay);
   }
 
   DateTime _getFirstDay({@required bool includeInvisible}) {
@@ -336,14 +336,14 @@ class CalendarController {
     }
 
     final lastToDisplay = last.add(Duration(days: daysAfter));
-    return Utils.daysInRange(firstToDisplay, lastToDisplay).toList();
+    return _daysInRange(firstToDisplay, lastToDisplay).toList();
   }
 
   List<DateTime> _daysInWeek(DateTime week) {
     final first = _firstDayOfWeek(week);
     final last = _lastDayOfWeek(week);
 
-    return Utils.daysInRange(first, last).toList();
+    return _daysInRange(first, last).toList();
   }
 
   DateTime _firstDayOfWeek(DateTime day) {
@@ -370,14 +370,51 @@ class CalendarController {
     return date.subtract(const Duration(days: 1));
   }
 
+  DateTime _previousWeek(DateTime week) {
+    return week.subtract(const Duration(days: 7));
+  }
+
+  DateTime _nextWeek(DateTime week) {
+    return week.add(const Duration(days: 7));
+  }
+
+  DateTime _previousMonth(DateTime month) {
+    if (month.month == 1) {
+      return DateTime(month.year - 1, 12);
+    } else {
+      return DateTime(month.year, month.month - 1);
+    }
+  }
+
+  DateTime _nextMonth(DateTime month) {
+    if (month.month == 12) {
+      return DateTime(month.year + 1, 1);
+    } else {
+      return DateTime(month.year, month.month + 1);
+    }
+  }
+
+  Iterable<DateTime> _daysInRange(DateTime firstDay, DateTime lastDay) sync* {
+    var temp = firstDay;
+
+    while (temp.isBefore(lastDay)) {
+      yield DateTime.utc(temp.year, temp.month, temp.day, 12);
+      temp = temp.add(const Duration(days: 1));
+    }
+  }
+
   /// Returns true if `day` is currently selected.
   bool isSelected(DateTime day) {
-    return Utils.isSameDay(day, selectedDay);
+    return _isSameDay(day, selectedDay);
   }
 
   /// Returns true if `day` is the same day as `DateTime.now()`.
   bool isToday(DateTime day) {
-    return Utils.isSameDay(day, DateTime.now());
+    return _isSameDay(day, DateTime.now());
+  }
+
+  bool _isSameDay(DateTime dayA, DateTime dayB) {
+    return dayA.year == dayB.year && dayA.month == dayB.month && dayA.day == dayB.day;
   }
 
   bool _isWeekend(DateTime day) {

@@ -185,9 +185,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   void _selectedDayCallback(DateTime day) {
     if (widget.onDaySelected != null) {
-      final key =
-          widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
-      widget.onDaySelected(day, widget.calendarController.visibleEvents[key] ?? []);
+      widget.onDaySelected(day, widget.calendarController.visibleEvents[_getEventKey(day)] ?? []);
     }
   }
 
@@ -237,14 +235,14 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         (widget.endDay != null && day.isAfter(widget.endDay));
   }
 
-  DateTime _getEventKey(DateTime date) {
+  DateTime _getEventKey(DateTime day) {
     return widget.calendarController.visibleEvents.keys
-        .firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
+        .firstWhere((it) => widget.calendarController._isSameDay(it, day), orElse: () => null);
   }
 
-  DateTime _getHolidayKey(DateTime date) {
+  DateTime _getHolidayKey(DateTime day) {
     return widget.calendarController.visibleHolidays.keys
-        .firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
+        .firstWhere((it) => widget.calendarController._isSameDay(it, day), orElse: () => null);
   }
 
   @override

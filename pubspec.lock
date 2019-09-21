@@ -29,13 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.11"
-  date_utils:
-    dependency: "direct main"
-    description:
-      name: date_utils
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0+2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -52,7 +45,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.8"
+    version: "0.16.0"
   matcher:
     dependency: transitive
     description:
