@@ -35,7 +35,7 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^2.0.1
+  table_calendar: ^2.0.2
 ```
 
 Then import it to your project:

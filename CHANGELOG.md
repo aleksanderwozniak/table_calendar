@@ -1,3 +1,7 @@
+## [2.0.2]
+
+* Updated dependencies
+
 ## [2.0.1]
 
 * Fixed issue with custom markers for holidays
