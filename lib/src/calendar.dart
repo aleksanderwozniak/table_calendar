@@ -28,6 +28,8 @@ enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
 /// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
 class TableCalendar extends StatefulWidget {
+  /// Controller required for `TableCalendar`.
+  /// Use it to update `events`, `holidays`, etc.
   final CalendarController calendarController;
 
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
