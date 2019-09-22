@@ -72,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _selectedEvents = _events[_selectedDay] ?? [];
 
     _calendarController = CalendarController();
+    _calendarController.events = _events;
+    _calendarController.holidays = _holidays;
 
     _animationController = AnimationController(
       vsync: this,
@@ -125,8 +127,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget _buildTableCalendar() {
     return TableCalendar(
       calendarController: _calendarController,
-      events: _events,
-      holidays: _holidays,
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
@@ -151,8 +151,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return TableCalendar(
       locale: 'pl_PL',
       calendarController: _calendarController,
-      events: _events,
-      holidays: _holidays,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,

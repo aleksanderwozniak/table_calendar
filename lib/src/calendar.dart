@@ -35,14 +35,6 @@ class TableCalendar extends StatefulWidget {
   /// If nothing is provided, a default locale will be used.
   final dynamic locale;
 
-  /// Contains a `List` of objects (eg. events) assigned to particular `DateTime`s.
-  /// Each `DateTime` inside this `Map` should get its own `List` of above mentioned objects.
-  final Map<DateTime, List> events;
-
-  /// `List`s of holidays associated to particular `DateTime`s.
-  /// This property allows you to provide custom holiday rules.
-  final Map<DateTime, List> holidays;
-
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
 
@@ -127,8 +119,6 @@ class TableCalendar extends StatefulWidget {
     Key key,
     @required this.calendarController,
     this.locale,
-    this.events = const {},
-    this.holidays = const {},
     this.onDaySelected,
     this.onUnavailableDaySelected,
     this.onVisibleDaysChanged,
@@ -170,8 +160,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     super.initState();
 
     widget.calendarController._init(
-      events: widget.events,
-      holidays: widget.holidays,
       initialDay: widget.initialSelectedDay,
       initialFormat: widget.initialCalendarFormat,
       availableCalendarFormats: widget.availableCalendarFormats,
@@ -236,13 +224,11 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   DateTime _getEventKey(DateTime day) {
-    return widget.calendarController.visibleEvents.keys
-        .firstWhere((it) => widget.calendarController._isSameDay(it, day), orElse: () => null);
+    return widget.calendarController._getEventKey(day);
   }
 
   DateTime _getHolidayKey(DateTime day) {
-    return widget.calendarController.visibleHolidays.keys
-        .firstWhere((it) => widget.calendarController._isSameDay(it, day), orElse: () => null);
+    return widget.calendarController._getHolidayKey(day);
   }
 
   @override

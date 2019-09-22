@@ -25,6 +25,14 @@ typedef void _SelectedDayCallback(DateTime day);
 /// }
 /// ```
 class CalendarController {
+  /// `Map` of events.
+  /// Each `DateTime` inside this `Map` should get its own `List` of objects (i.e. events).
+  Map<DateTime, List> events;
+
+  /// `Map` of holidays.
+  /// This property allows you to provide custom holiday rules.
+  Map<DateTime, List> holidays;
+
   /// Currently focused day (used to determine which year/month should be visible).
   DateTime get focusedDay => _focusedDay;
 
@@ -38,34 +46,44 @@ class CalendarController {
   List<DateTime> get visibleDays =>
       _includeInvisibleDays ? _visibleDays.value : _visibleDays.value.where((day) => !_isExtraDay(day)).toList();
 
-  /// Map of currently visible events.
-  Map<DateTime, List> get visibleEvents => Map.fromEntries(
-        _events.entries.where((entry) {
-          for (final day in visibleDays) {
-            if (_isSameDay(day, entry.key)) {
-              return true;
-            }
+  /// `Map` of currently visible events.
+  Map<DateTime, List> get visibleEvents {
+    if (events == null) {
+      return {};
+    }
+
+    return Map.fromEntries(
+      events.entries.where((entry) {
+        for (final day in visibleDays) {
+          if (_isSameDay(day, entry.key)) {
+            return true;
           }
+        }
 
-          return false;
-        }),
-      );
+        return false;
+      }),
+    );
+  }
 
-  /// Map of currently visible holidays.
-  Map<DateTime, List> get visibleHolidays => Map.fromEntries(
-        _holidays.entries.where((entry) {
-          for (final day in visibleDays) {
-            if (_isSameDay(day, entry.key)) {
-              return true;
-            }
+  /// `Map` of currently visible holidays.
+  Map<DateTime, List> get visibleHolidays {
+    if (holidays == null) {
+      return {};
+    }
+
+    return Map.fromEntries(
+      holidays.entries.where((entry) {
+        for (final day in visibleDays) {
+          if (_isSameDay(day, entry.key)) {
+            return true;
           }
+        }
 
-          return false;
-        }),
-      );
+        return false;
+      }),
+    );
+  }
 
-  Map<DateTime, List> _events;
-  Map<DateTime, List> _holidays;
   DateTime _focusedDay;
   DateTime _selectedDay;
   StartingDayOfWeek _startingDayOfWeek;
@@ -81,8 +99,6 @@ class CalendarController {
   _SelectedDayCallback _selectedDayCallback;
 
   void _init({
-    @required Map<DateTime, List> events,
-    @required Map<DateTime, List> holidays,
     @required DateTime initialDay,
     @required CalendarFormat initialFormat,
     @required Map<CalendarFormat, String> availableCalendarFormats,
@@ -92,8 +108,6 @@ class CalendarController {
     @required OnVisibleDaysChanged onVisibleDaysChanged,
     @required bool includeInvisibleDays,
   }) {
-    _events = events;
-    _holidays = holidays;
     _availableCalendarFormats = availableCalendarFormats;
     _startingDayOfWeek = startingDayOfWeek;
     _useNextCalendarFormat = useNextCalendarFormat;
@@ -401,6 +415,14 @@ class CalendarController {
       yield DateTime.utc(temp.year, temp.month, temp.day, 12);
       temp = temp.add(const Duration(days: 1));
     }
+  }
+
+  DateTime _getEventKey(DateTime day) {
+    return visibleEvents.keys.firstWhere((it) => _isSameDay(it, day), orElse: () => null);
+  }
+
+  DateTime _getHolidayKey(DateTime day) {
+    return visibleHolidays.keys.firstWhere((it) => _isSameDay(it, day), orElse: () => null);
   }
 
   /// Returns true if `day` is currently selected.
