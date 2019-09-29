@@ -118,7 +118,7 @@ class CalendarController {
     _dx = 0;
 
     final now = DateTime.now();
-    _focusedDay = initialDay ?? DateTime(now.year, now.month, now.day);
+    _focusedDay = initialDay ?? _normalizeDate(now);
     _selectedDay = _focusedDay;
     _calendarFormat = ValueNotifier(initialFormat);
     _visibleDays = ValueNotifier(_getVisibleDays());
@@ -193,26 +193,28 @@ class CalendarController {
     bool animate = true,
     bool runCallback = false,
   }) {
+    final normalizedDate = _normalizeDate(value);
+
     if (animate) {
-      if (value.isBefore(_getFirstDay(includeInvisible: false))) {
+      if (normalizedDate.isBefore(_getFirstDay(includeInvisible: false))) {
         _decrementPage();
-      } else if (value.isAfter(_getLastDay(includeInvisible: false))) {
+      } else if (normalizedDate.isAfter(_getLastDay(includeInvisible: false))) {
         _incrementPage();
       }
     }
 
-    _selectedDay = value;
-    _focusedDay = value;
+    _selectedDay = normalizedDate;
+    _focusedDay = normalizedDate;
     _updateVisibleDays(isProgrammatic);
 
     if (isProgrammatic && runCallback && _selectedDayCallback != null) {
-      _selectedDayCallback(value);
+      _selectedDayCallback(normalizedDate);
     }
   }
 
   /// Sets displayed month/year without changing the currently selected day.
   void setFocusedDay(DateTime value) {
-    _focusedDay = value;
+    _focusedDay = _normalizeDate(value);
     _updateVisibleDays(true);
   }
 
@@ -361,14 +363,14 @@ class CalendarController {
   }
 
   DateTime _firstDayOfWeek(DateTime day) {
-    day = DateTime.utc(day.year, day.month, day.day, 12);
+    day = _normalizeDate(day);
 
     final decreaseNum = _startingDayOfWeek == StartingDayOfWeek.sunday ? day.weekday % 7 : day.weekday - 1;
     return day.subtract(Duration(days: decreaseNum));
   }
 
   DateTime _lastDayOfWeek(DateTime day) {
-    day = DateTime.utc(day.year, day.month, day.day, 12);
+    day = _normalizeDate(day);
 
     final increaseNum = _startingDayOfWeek == StartingDayOfWeek.sunday ? day.weekday % 7 : day.weekday - 1;
     return day.add(Duration(days: 7 - increaseNum));
@@ -412,9 +414,13 @@ class CalendarController {
     var temp = firstDay;
 
     while (temp.isBefore(lastDay)) {
-      yield DateTime.utc(temp.year, temp.month, temp.day, 12);
+      yield _normalizeDate(temp);
       temp = temp.add(const Duration(days: 1));
     }
+  }
+
+  DateTime _normalizeDate(DateTime value) {
+    return DateTime.utc(value.year, value.month, value.day, 12);
   }
 
   DateTime _getEventKey(DateTime day) {
