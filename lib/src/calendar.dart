@@ -464,9 +464,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     if (key != null) {
       final children = <Widget>[content];
-      final events = eventKey != null
-          ? widget.calendarController.visibleEvents[eventKey].take(widget.calendarStyle.markersMaxAmount)
-          : [];
+      final events = eventKey != null ? widget.calendarController.visibleEvents[eventKey] : [];
       final holidays = holidayKey != null ? widget.calendarController.visibleHolidays[holidayKey] : [];
 
       if (!_isDayUnavailable(date)) {
@@ -475,7 +473,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
             widget.builders.markersBuilder(
               context,
               key,
-              events.toList(),
+              events,
               holidays,
             ),
           );
@@ -488,7 +486,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
               right: widget.calendarStyle.markersPositionRight,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: events.map((event) => _buildMarker(eventKey, event)).toList(),
+                children: events
+                    .take(widget.calendarStyle.markersMaxAmount)
+                    .map((event) => _buildMarker(eventKey, event))
+                    .toList(),
               ),
             ),
           );
