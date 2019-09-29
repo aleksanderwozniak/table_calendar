@@ -48,12 +48,6 @@ class TableCalendar extends StatefulWidget {
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
   /// Initially selected DateTime. Usually it will be `DateTime.now()`.
-  /// This property can be used to programmatically select a new date.
-  ///
-  /// If `TableCalendar` Widget gets rebuilt with a different `selectedDay` than previously,
-  /// `onDaySelected` callback will run.
-  ///
-  /// To animate programmatic selection, use `animateProgSelectedDay` property.
   final DateTime initialSelectedDay;
 
   /// The first day of `TableCalendar`.
