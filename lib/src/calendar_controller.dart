@@ -43,8 +43,9 @@ class CalendarController {
   CalendarFormat get calendarFormat => _calendarFormat.value;
 
   /// List of currently visible days.
-  List<DateTime> get visibleDays =>
-      _includeInvisibleDays ? _visibleDays.value : _visibleDays.value.where((day) => !_isExtraDay(day)).toList();
+  List<DateTime> get visibleDays => calendarFormat == CalendarFormat.month && !_includeInvisibleDays
+      ? _visibleDays.value.where((day) => !_isExtraDay(day)).toList()
+      : _visibleDays.value;
 
   /// `Map` of currently visible events.
   Map<DateTime, List> get visibleEvents {
