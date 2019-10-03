@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  intl: ^0.15.7
+  intl: ^0.16.0
   date_utils: ^0.1.0+2
   simple_gesture_detector: ^0.1.3
 
