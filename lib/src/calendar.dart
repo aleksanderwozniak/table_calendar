@@ -21,7 +21,8 @@ enum FormatAnimation { slide, scale }
 /// Available day of week formats. `TableCalendar` will start the week with chosen day.
 /// * `StartingDayOfWeek.monday`: Monday - Sunday
 /// * `StartingDayOfWeek.sunday`: Sunday - Saturday
-enum StartingDayOfWeek { monday, sunday }
+/// * `StartingDayOfWeek.saturday`: Saturday - Friday
+enum StartingDayOfWeek { monday, saturday, sunday }
 
 /// Gestures available to interal `TableCalendar`'s logic.
 enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
