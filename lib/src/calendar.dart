@@ -20,8 +20,25 @@ enum FormatAnimation { slide, scale }
 
 /// Available day of week formats. `TableCalendar` will start the week with chosen day.
 /// * `StartingDayOfWeek.monday`: Monday - Sunday
+/// * `StartingDayOfWeek.tuesday`: Tuesday - Monday
+/// * `StartingDayOfWeek.wednesday`: Wednesday - Tuesday
+/// * `StartingDayOfWeek.thursday`: Thursday - Wednesday
+/// * `StartingDayOfWeek.thursday`: Friday - Thursday
+/// * `StartingDayOfWeek.saturday`: Saturday - Friday
 /// * `StartingDayOfWeek.sunday`: Sunday - Saturday
-enum StartingDayOfWeek { monday, sunday }
+enum StartingDayOfWeek { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
+int getWeekdayNumber(StartingDayOfWeek weekday) {
+  switch (weekday) {
+    case StartingDayOfWeek.monday: return 1;
+    case StartingDayOfWeek.tuesday: return 2;
+    case StartingDayOfWeek.wednesday: return 3;
+    case StartingDayOfWeek.thursday: return 4;
+    case StartingDayOfWeek.friday: return 5;
+    case StartingDayOfWeek.saturday: return 6;
+    case StartingDayOfWeek.sunday: return 7;
+  }
+  return 0;
+}
 
 /// Gestures available to interal `TableCalendar`'s logic.
 enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
