@@ -337,22 +337,22 @@ class CalendarController {
 
   List<DateTime> _daysInMonth(DateTime month) {
     final first = _firstDayOfMonth(month);
-    var daysBefore = getDaysBefore(first);
+    final daysBefore = _getDaysBefore(first);
     final firstToDisplay = first.subtract(Duration(days: daysBefore));
 
     final last = _lastDayOfMonth(month);
-    var daysAfter = _getDaysAfter(last);
+    final daysAfter = _getDaysAfter(last);
 
     final lastToDisplay = last.add(Duration(days: daysAfter));
     return _daysInRange(firstToDisplay, lastToDisplay).toList();
   }
 
-  int getDaysBefore(DateTime firstDay) {
-    return (firstDay.weekday + 7 - getWeekdayNumber(_startingDayOfWeek)) % 7;
+  int _getDaysBefore(DateTime firstDay) {
+    return (firstDay.weekday + 7 - _getWeekdayNumber(_startingDayOfWeek)) % 7;
   }
 
   int _getDaysAfter(DateTime lastDay) {
-    int invertedStartingWeekday = 8 - getWeekdayNumber(_startingDayOfWeek);
+    int invertedStartingWeekday = 8 - _getWeekdayNumber(_startingDayOfWeek);
 
     int daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7) + 1;
     if (daysAfter == 8) {
@@ -372,14 +372,14 @@ class CalendarController {
   DateTime _firstDayOfWeek(DateTime day) {
     day = _normalizeDate(day);
 
-    var decreaseNum = getDaysBefore(day);
+    var decreaseNum = _getDaysBefore(day);
     return day.subtract(Duration(days: decreaseNum));
   }
 
   DateTime _lastDayOfWeek(DateTime day) {
     day = _normalizeDate(day);
 
-    var increaseNum = getDaysBefore(day);
+    var increaseNum = _getDaysBefore(day);
     return day.add(Duration(days: 7 - increaseNum));
   }
 
