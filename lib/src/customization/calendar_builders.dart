@@ -12,6 +12,10 @@ typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List 
 /// Both `events` and `holidays` params can be null.
 typedef FullListBuilder = List<Widget> Function(BuildContext context, DateTime date, List events, List holidays);
 
+/// Builder signature for weekday names row. Contains `weekday` string, which is formatted by `dowTextBuilder`
+/// or by default function (DateFormat.E(widget.locale).format(date)), if `dowTextBuilder` is null.
+typedef WeekdayBuilder = Widget Function(BuildContext context, String weekday);
+
 /// Builder signature for a single event marker. Contains `date` and a single `event` associated with that `date`.
 typedef SingleMarkerBuilder = Widget Function(BuildContext context, DateTime date, dynamic event);
 
@@ -61,6 +65,10 @@ class CalendarBuilders {
   /// Mutually exclusive with `markersBuilder`.
   final SingleMarkerBuilder singleMarkerBuilder;
 
+  /// Custom builder for weekday names. They are displayed below `HeaderRow` and above calendar days.
+  /// Will overwrite `weekdayStyle` and `weekendStyle` from `DaysOfWeekStyle`.
+  final WeekdayBuilder weekdayBuilder;
+
   const CalendarBuilders({
     this.dayBuilder,
     this.selectedDayBuilder,
@@ -73,5 +81,6 @@ class CalendarBuilders {
     this.unavailableDayBuilder,
     this.markersBuilder,
     this.singleMarkerBuilder,
+    this.weekdayBuilder,
   }) : assert(!(singleMarkerBuilder != null && markersBuilder != null));
 }
