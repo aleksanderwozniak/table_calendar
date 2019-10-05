@@ -337,23 +337,29 @@ class CalendarController {
 
   List<DateTime> _daysInMonth(DateTime month) {
     final first = _firstDayOfMonth(month);
-    final daysBefore = _startingDayOfWeek == StartingDayOfWeek.sunday ? first.weekday % 7 : first.weekday - 1;
+    final daysBefore = _getDaysBefore(first);
     final firstToDisplay = first.subtract(Duration(days: daysBefore));
 
     final last = _lastDayOfMonth(month);
-    var daysAfter = 7 - last.weekday;
-
-    if (_startingDayOfWeek == StartingDayOfWeek.sunday) {
-      // If the last day is Sunday (7) the entire week must be rendered
-      if (daysAfter == 0) {
-        daysAfter = 7;
-      }
-    } else {
-      daysAfter++;
-    }
+    final daysAfter = _getDaysAfter(last);
 
     final lastToDisplay = last.add(Duration(days: daysAfter));
     return _daysInRange(firstToDisplay, lastToDisplay).toList();
+  }
+
+  int _getDaysBefore(DateTime firstDay) {
+    return (firstDay.weekday + 7 - _getWeekdayNumber(_startingDayOfWeek)) % 7;
+  }
+
+  int _getDaysAfter(DateTime lastDay) {
+    int invertedStartingWeekday = 8 - _getWeekdayNumber(_startingDayOfWeek);
+
+    int daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7) + 1;
+    if (daysAfter == 8) {
+      daysAfter = 1;
+    }
+
+    return daysAfter;
   }
 
   List<DateTime> _daysInWeek(DateTime week) {
@@ -366,14 +372,14 @@ class CalendarController {
   DateTime _firstDayOfWeek(DateTime day) {
     day = _normalizeDate(day);
 
-    final decreaseNum = _startingDayOfWeek == StartingDayOfWeek.sunday ? day.weekday % 7 : day.weekday - 1;
+    var decreaseNum = _getDaysBefore(day);
     return day.subtract(Duration(days: decreaseNum));
   }
 
   DateTime _lastDayOfWeek(DateTime day) {
     day = _normalizeDate(day);
 
-    final increaseNum = _startingDayOfWeek == StartingDayOfWeek.sunday ? day.weekday % 7 : day.weekday - 1;
+    var increaseNum = _getDaysBefore(day);
     return day.add(Duration(days: 7 - increaseNum));
   }
 
