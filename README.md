@@ -22,6 +22,7 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 * Multiple Calendar formats
 * Multiple days of the week formats
 * Specifying available date range
+* Customisable weekend days
 * Nice, configurable UI out of the box
 
 ## Usage
@@ -161,4 +162,16 @@ markersBuilder: (context, date, events, holidays) {
 
   return children;
 },
+```
+
+### Weekend days
+You could change the weekend days (default is `[DateTime.saturday, DateTime.sunday]`), you just need to use 
+the `weekendDays` property (a list of `DateTime.xday`) like this :
+
+```dart
+TableCalendar(
+  //...
+  weekendDays: const [DateTime.friday, DateTime.saturday],
+  //...
+),
 ```
