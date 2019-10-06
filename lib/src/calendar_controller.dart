@@ -69,6 +69,7 @@ class CalendarController {
   DateTime _focusedDay;
   DateTime _selectedDay;
   StartingDayOfWeek _startingDayOfWeek;
+  List<int> _weekendDays;
   ValueNotifier<CalendarFormat> _calendarFormat;
   ValueNotifier<List<DateTime>> _visibleDays;
   Map<CalendarFormat, String> _availableCalendarFormats;
@@ -88,6 +89,7 @@ class CalendarController {
     @required Map<CalendarFormat, String> availableCalendarFormats,
     @required bool useNextCalendarFormat,
     @required StartingDayOfWeek startingDayOfWeek,
+    @required List<int> weekendDays,
     @required _SelectedDayCallback selectedDayCallback,
     @required OnVisibleDaysChanged onVisibleDaysChanged,
     @required bool includeInvisibleDays,
@@ -96,6 +98,7 @@ class CalendarController {
     _holidays = holidays;
     _availableCalendarFormats = availableCalendarFormats;
     _startingDayOfWeek = startingDayOfWeek;
+    _weekendDays = weekendDays;
     _useNextCalendarFormat = useNextCalendarFormat;
     _selectedDayCallback = selectedDayCallback;
     _includeInvisibleDays = includeInvisibleDays;
@@ -418,7 +421,7 @@ class CalendarController {
   }
 
   bool _isWeekend(DateTime day) {
-    return day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
+    return this._weekendDays.contains(day.weekday);
   }
 
   bool _isExtraDay(DateTime day) {

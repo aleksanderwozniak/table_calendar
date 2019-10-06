@@ -101,6 +101,11 @@ class TableCalendar extends StatefulWidget {
   /// Use `StartingDayOfWeek.sunday` for Sunday - Saturday week format.
   final StartingDayOfWeek startingDayOfWeek;
 
+  /// The provided list of days will be consider as weekend days.
+  /// Use a list of `DateTime.xday`.
+  /// Default is `[DateTime.saturday, DateTime.sunday]`.
+  final List<int> weekendDays;
+
   /// `HitTestBehavior` for every day cell inside `TableCalendar`.
   final HitTestBehavior dayHitTestBehavior;
 
@@ -145,6 +150,7 @@ class TableCalendar extends StatefulWidget {
     this.rowHeight,
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
+    this.weekendDays = const [DateTime.saturday, DateTime.sunday],
     this.dayHitTestBehavior = HitTestBehavior.deferToChild,
     this.availableGestures = AvailableGestures.all,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
@@ -158,6 +164,15 @@ class TableCalendar extends StatefulWidget {
   })  : assert(calendarController != null),
         assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
+        assert(weekendDays.firstWhere(
+              (day) => day != DateTime.monday
+              && day != DateTime.tuesday
+              && day != DateTime.wednesday
+              && day != DateTime.thursday
+              && day != DateTime.friday
+              && day != DateTime.saturday
+              && day != DateTime.sunday,
+          orElse: () => -1,) == -1),
         super(key: key);
 
   @override
@@ -177,6 +192,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       availableCalendarFormats: widget.availableCalendarFormats,
       useNextCalendarFormat: widget.headerStyle.formatButtonShowsNext,
       startingDayOfWeek: widget.startingDayOfWeek,
+      weekendDays: widget.weekendDays,
       selectedDayCallback: _selectedDayCallback,
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
