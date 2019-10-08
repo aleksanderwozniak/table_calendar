@@ -155,8 +155,8 @@ class CalendarController {
   /// }
   /// ```
   void dispose() {
-    _calendarFormat.dispose();
-    _visibleDays.dispose();
+    _calendarFormat?.dispose();
+    _visibleDays?.dispose();
   }
 
   /// Toggles calendar format. Same as using `FormatButton`.
@@ -452,8 +452,8 @@ class CalendarController {
     return dayA.year == dayB.year && dayA.month == dayB.month && dayA.day == dayB.day;
   }
 
-  bool _isWeekend(DateTime day) {
-    return day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
+  bool _isWeekend(DateTime day, List<int> weekendDays) {
+    return weekendDays.contains(day.weekday);
   }
 
   bool _isExtraDay(DateTime day) {

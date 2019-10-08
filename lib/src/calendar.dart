@@ -27,6 +27,7 @@ enum FormatAnimation { slide, scale }
 /// * `StartingDayOfWeek.saturday`: Saturday - Friday
 /// * `StartingDayOfWeek.sunday`: Sunday - Saturday
 enum StartingDayOfWeek { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
+
 int _getWeekdayNumber(StartingDayOfWeek weekday) {
   return StartingDayOfWeek.values.indexOf(weekday) + 1;
 }
@@ -65,6 +66,10 @@ class TableCalendar extends StatefulWidget {
   /// The last day of `TableCalendar`.
   /// Days after it will use `unavailableStyle` and run `onUnavailableDaySelected` callback.
   final DateTime endDay;
+
+  /// List of days treated as weekend days.
+  /// Use built-in `DateTime` weekday constants (e.g. `DateTime.monday`) instead of `int` literals (e.q. `1`).
+  final List<int> weekendDays;
 
   /// `CalendarFormat` which will be displayed first.
   final CalendarFormat initialCalendarFormat;
@@ -129,6 +134,7 @@ class TableCalendar extends StatefulWidget {
     this.initialSelectedDay,
     this.startDay,
     this.endDay,
+    this.weekendDays = const [DateTime.saturday, DateTime.sunday],
     this.initialCalendarFormat = CalendarFormat.month,
     this.availableCalendarFormats = const {
       CalendarFormat.month: 'Month',
@@ -152,6 +158,10 @@ class TableCalendar extends StatefulWidget {
   })  : assert(calendarController != null),
         assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
+        assert(weekendDays != null),
+        assert(weekendDays.isNotEmpty
+            ? weekendDays.every((day) => day >= DateTime.monday && day <= DateTime.sunday)
+            : true),
         super(key: key);
 
   @override
@@ -436,7 +446,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           return Center(
             child: Text(
               weekdayString,
-              style: widget.calendarController._isWeekend(date)
+              style: widget.calendarController._isWeekend(date, widget.weekendDays)
                   ? widget.daysOfWeekStyle.weekendStyle
                   : widget.daysOfWeekStyle.weekdayStyle,
             ),
@@ -534,7 +544,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final tIsToday = widget.calendarController.isToday(date);
     final tIsOutside = widget.calendarController._isExtraDay(date);
     final tIsHoliday = widget.calendarController.visibleHolidays.containsKey(_getHolidayKey(date));
-    final tIsWeekend = widget.calendarController._isWeekend(date);
+    final tIsWeekend = widget.calendarController._isWeekend(date, widget.weekendDays);
 
     final isUnavailable = widget.builders.unavailableDayBuilder != null && tIsUnavailable;
     final isSelected = widget.builders.selectedDayBuilder != null && tIsSelected;
