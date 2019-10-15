@@ -29,6 +29,15 @@ class HeaderStyle {
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
 
+  /// Container decoration for title
+  final BoxDecoration titleDecoration;
+
+  /// Outside Margin for title
+  final EdgeInsets titleMargin;
+
+  /// Inside Padding for title
+  final EdgeInsets titlePadding;
+
   /// Style for FormatButton Text.
   final TextStyle formatButtonTextStyle;
 
@@ -58,6 +67,21 @@ class HeaderStyle {
   /// Defaults to black `Icons.chevron_right`.
   final Icon rightChevronIcon;
 
+  /// Container decoration for left icon
+  final BoxDecoration leftIconDecoration;
+
+  /// Container decoration for right icon
+  final BoxDecoration rightIconDecoration;
+
+  /// Height constraint
+  final double headerHeight;
+
+  /// Outside margin for the header
+  final EdgeInsets headerMargin;
+
+  /// Inside padding for the header
+  final EdgeInsets headerPadding;
+
   const HeaderStyle({
     this.centerHeaderTitle = false,
     this.formatButtonVisible = true,
@@ -69,12 +93,20 @@ class HeaderStyle {
       border: const Border(top: BorderSide(), bottom: BorderSide(), left: BorderSide(), right: BorderSide()),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     ),
-    this.formatButtonPadding = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-    this.leftChevronPadding = const EdgeInsets.all(12.0),
-    this.rightChevronPadding = const EdgeInsets.all(12.0),
-    this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.formatButtonPadding = const EdgeInsets.all(0),
+    this.leftChevronPadding = const EdgeInsets.all(0),
+    this.rightChevronPadding = const EdgeInsets.all(0),
+    this.leftChevronMargin = const EdgeInsets.all(0),
+    this.rightChevronMargin = const EdgeInsets.all(0),
     this.leftChevronIcon = const Icon(Icons.chevron_left, color: Colors.black),
     this.rightChevronIcon = const Icon(Icons.chevron_right, color: Colors.black),
+    this.leftIconDecoration = const BoxDecoration(),
+    this.rightIconDecoration = const BoxDecoration(),
+    this.titleDecoration = const BoxDecoration(),
+    this.titlePadding = const EdgeInsets.all(0),
+    this.titleMargin = const EdgeInsets.all(0),
+    this.headerHeight = 40,
+    this.headerMargin = const EdgeInsets.all(0),
+    this.headerPadding = const EdgeInsets.all(0),
   });
 }

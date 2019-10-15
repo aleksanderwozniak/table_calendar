@@ -8,6 +8,8 @@ class _CustomIconButton extends StatelessWidget {
   final VoidCallback onTap;
   final EdgeInsets margin;
   final EdgeInsets padding;
+  final BoxDecoration decoration;
+  final double height;
 
   const _CustomIconButton({
     Key key,
@@ -15,6 +17,8 @@ class _CustomIconButton extends StatelessWidget {
     @required this.onTap,
     this.margin,
     this.padding,
+    this.decoration,
+    this.height,
   })  : assert(icon != null),
         assert(onTap != null),
         super(key: key);
@@ -26,8 +30,11 @@ class _CustomIconButton extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(100.0),
-        child: Padding(
+        child: Container(
+          alignment: Alignment.center,
           padding: padding,
+          decoration: decoration,
+          height: height,
           child: icon,
         ),
       ),
