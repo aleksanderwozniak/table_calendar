@@ -470,10 +470,14 @@ class _TableCalendarState extends State<TableCalendar>
       x += daysInWeek;
     }
 
-    return Table(
-      // Makes this Table fill its parent horizontally
-      defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
-      children: children,
+    return Container(
+      margin: widget.calendarStyle.calendarMargin,
+      padding: widget.calendarStyle.calendarMargin,
+      child: Table(
+        // Makes this Table fill its parent horizontally
+        defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
+        children: children,
+      ),
     );
   }
 

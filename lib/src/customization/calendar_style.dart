@@ -77,6 +77,13 @@ class CalendarStyle {
   /// * `false` - Event markers will not be drawn over the cell boundaries and will be clipped if they are too big
   final bool canEventMarkersOverflow;
 
+  /// Outer margin for the calendar body
+  final EdgeInsets calendarMargin;
+
+  /// Inner padding for the calendar body
+  final EdgeInsets calendarPadding;
+
+
   const CalendarStyle({
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
@@ -99,5 +106,7 @@ class CalendarStyle {
     this.outsideDaysVisible = true,
     this.renderSelectedFirst = true,
     this.canEventMarkersOverflow = false,
+    this.calendarMargin = const EdgeInsets.all(0),
+    this.calendarPadding = const EdgeInsets.all(0),
   });
 }
