@@ -46,6 +46,14 @@ class TableCalendar extends StatefulWidget {
   /// If nothing is provided, a default locale will be used.
   final dynamic locale;
 
+  /// `Map` of events.
+  /// Each `DateTime` inside this `Map` should get its own `List` of objects (i.e. events).
+  Map<DateTime, List> events;
+
+  /// `Map` of holidays.
+  /// This property allows you to provide custom holiday rules.
+  Map<DateTime, List> holidays;
+
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
 
@@ -128,6 +136,8 @@ class TableCalendar extends StatefulWidget {
     Key key,
     @required this.calendarController,
     this.locale,
+    this.events = const {},
+    this.holidays = const {},
     this.onDaySelected,
     this.onUnavailableDaySelected,
     this.onVisibleDaysChanged,
@@ -174,6 +184,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     super.initState();
 
     widget.calendarController._init(
+      events: widget.events,
+      holidays: widget.holidays,
       initialDay: widget.initialSelectedDay,
       initialFormat: widget.initialCalendarFormat,
       availableCalendarFormats: widget.availableCalendarFormats,
@@ -188,8 +200,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   @override
   void didUpdateWidget(TableCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (oldWidget.events != widget.events) {
       widget.calendarController._events = widget.events;
+    }
+
+    if (oldWidget.holidays != widget.holidays) {
+      widget.calendarController._holidays = widget.holidays;
     }
   }
 
@@ -458,9 +475,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         return Center(
           child: Text(
             weekdayString,
-            style: isWeekend
-                ? widget.daysOfWeekStyle.weekendStyle
-                : widget.daysOfWeekStyle.weekdayStyle,
+            style: isWeekend ? widget.daysOfWeekStyle.weekendStyle : widget.daysOfWeekStyle.weekdayStyle,
           ),
         );
       }).toList(),

@@ -25,14 +25,6 @@ typedef void _SelectedDayCallback(DateTime day);
 /// }
 /// ```
 class CalendarController {
-  /// `Map` of events.
-  /// Each `DateTime` inside this `Map` should get its own `List` of objects (i.e. events).
-  Map<DateTime, List> events;
-
-  /// `Map` of holidays.
-  /// This property allows you to provide custom holiday rules.
-  Map<DateTime, List> holidays;
-
   /// Currently focused day (used to determine which year/month should be visible).
   DateTime get focusedDay => _focusedDay;
 
@@ -49,12 +41,12 @@ class CalendarController {
 
   /// `Map` of currently visible events.
   Map<DateTime, List> get visibleEvents {
-    if (events == null) {
+    if (_events == null) {
       return {};
     }
 
     return Map.fromEntries(
-      events.entries.where((entry) {
+      _events.entries.where((entry) {
         for (final day in visibleDays) {
           if (_isSameDay(day, entry.key)) {
             return true;
@@ -68,12 +60,12 @@ class CalendarController {
 
   /// `Map` of currently visible holidays.
   Map<DateTime, List> get visibleHolidays {
-    if (holidays == null) {
+    if (_holidays == null) {
       return {};
     }
 
     return Map.fromEntries(
-      holidays.entries.where((entry) {
+      _holidays.entries.where((entry) {
         for (final day in visibleDays) {
           if (_isSameDay(day, entry.key)) {
             return true;
@@ -85,6 +77,8 @@ class CalendarController {
     );
   }
 
+  Map<DateTime, List> _events;
+  Map<DateTime, List> _holidays;
   DateTime _focusedDay;
   DateTime _selectedDay;
   StartingDayOfWeek _startingDayOfWeek;
@@ -100,6 +94,8 @@ class CalendarController {
   _SelectedDayCallback _selectedDayCallback;
 
   void _init({
+    @required Map<DateTime, List> events,
+    @required Map<DateTime, List> holidays,
     @required DateTime initialDay,
     @required CalendarFormat initialFormat,
     @required Map<CalendarFormat, String> availableCalendarFormats,
@@ -109,6 +105,8 @@ class CalendarController {
     @required OnVisibleDaysChanged onVisibleDaysChanged,
     @required bool includeInvisibleDays,
   }) {
+    _events = events;
+    _holidays = holidays;
     _availableCalendarFormats = availableCalendarFormats;
     _startingDayOfWeek = startingDayOfWeek;
     _useNextCalendarFormat = useNextCalendarFormat;
