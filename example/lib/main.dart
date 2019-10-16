@@ -72,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _selectedEvents = _events[_selectedDay] ?? [];
 
     _calendarController = CalendarController();
+    _calendarController.events = _events;
+    _calendarController.holidays = _holidays;
 
     _animationController = AnimationController(
       vsync: this,
@@ -125,8 +127,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget _buildTableCalendar() {
     return TableCalendar(
       calendarController: _calendarController,
-      events: _events,
-      holidays: _holidays,
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
@@ -151,8 +151,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return TableCalendar(
       locale: 'pl_PL',
       calendarController: _calendarController,
-      events: _events,
-      holidays: _holidays,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -269,6 +267,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildButtons() {
+    final dateTime = _events.keys.elementAt(_events.length - 2);
+
     return Column(
       children: <Widget>[
         Row(
@@ -276,7 +276,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             RaisedButton(
-              child: Text('month'),
+              child: Text('Month'),
               onPressed: () {
                 setState(() {
                   _calendarController.setCalendarFormat(CalendarFormat.month);
@@ -292,7 +292,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               },
             ),
             RaisedButton(
-              child: Text('week'),
+              child: Text('Week'),
               onPressed: () {
                 setState(() {
                   _calendarController.setCalendarFormat(CalendarFormat.week);
@@ -303,9 +303,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         ),
         const SizedBox(height: 8.0),
         RaisedButton(
-          child: Text('setDay 10-07-2019'),
+          child: Text('Set day ${dateTime.day}-${dateTime.month}-${dateTime.year}'),
           onPressed: () {
-            _calendarController.setSelectedDay(DateTime(2019, 7, 10), runCallback: true);
+            _calendarController.setSelectedDay(
+              DateTime(dateTime.year, dateTime.month, dateTime.day),
+              runCallback: true,
+            );
           },
         ),
       ],
