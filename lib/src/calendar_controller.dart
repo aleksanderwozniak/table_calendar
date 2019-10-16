@@ -370,14 +370,14 @@ class CalendarController {
   DateTime _firstDayOfWeek(DateTime day) {
     day = _normalizeDate(day);
 
-    var decreaseNum = _getDaysBefore(day);
+    final decreaseNum = _getDaysBefore(day);
     return day.subtract(Duration(days: decreaseNum));
   }
 
   DateTime _lastDayOfWeek(DateTime day) {
     day = _normalizeDate(day);
 
-    var increaseNum = _getDaysBefore(day);
+    final increaseNum = _getDaysBefore(day);
     return day.add(Duration(days: 7 - increaseNum));
   }
 

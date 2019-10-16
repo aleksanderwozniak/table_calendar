@@ -48,11 +48,11 @@ class TableCalendar extends StatefulWidget {
 
   /// `Map` of events.
   /// Each `DateTime` inside this `Map` should get its own `List` of objects (i.e. events).
-  Map<DateTime, List> events;
+  final Map<DateTime, List> events;
 
   /// `Map` of holidays.
   /// This property allows you to provide custom holiday rules.
-  Map<DateTime, List> holidays;
+  final Map<DateTime, List> holidays;
 
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;

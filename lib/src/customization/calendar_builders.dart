@@ -65,11 +65,11 @@ class CalendarBuilders {
   /// Mutually exclusive with `markersBuilder`.
   final SingleMarkerBuilder singleMarkerBuilder;
 
-  /// Custom builder for weekday names. They are displayed below `HeaderRow` and above calendar days.
+  /// Custom builder for dow weekday names (displayed between `HeaderRow` and calendar days).
   /// Will overwrite `weekdayStyle` and `weekendStyle` from `DaysOfWeekStyle`.
   final DowBuilder dowWeekdayBuilder;
 
-  /// Custom builder for weekend names (they are displayed below `HeaderRow` and above calendar days).
+  /// Custom builder for dow weekend names (displayed between `HeaderRow` and calendar days).
   /// Will overwrite `weekendStyle` from `DaysOfWeekStyle` and `dowWeekdayBuilder` for weekends, if it also exists.
   final DowBuilder dowWeekendBuilder;
 
