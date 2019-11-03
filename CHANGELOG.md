@@ -1,3 +1,30 @@
+## [2.1.0]
+
+* Added dynamic events and holidays
+* Added StartingDayOfWeek for every weekday
+* Added support for custom weekend days
+* Added dowWeekdayBuilder and dowWeekendBuilder
+* Broadened intl dependency bounds
+* markersMaxAmount no longer affects markersBuilder
+* Fixed twoWeeks format programmatic issue
+* Fixed visibleDays issue
+* Fixed null dispose issue
+
+## [2.0.2]
+
+* Updated dependencies
+
+## [2.0.1]
+
+* Fixed issue with custom markers for holidays
+
+## [2.0.0]
+
+* Added CalendarController - TableCalendar now features complete programmatic control
+* Removed redundant properties
+* Updated example project
+* Updated README
+
 ## [1.2.5]
 
 * Fixed last day of month animation issue
