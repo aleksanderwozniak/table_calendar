@@ -231,9 +231,8 @@ class CalendarController {
     return formats[id];
   }
 
-  String _getFormatButtonText() => _useNextCalendarFormat
-      ? _availableCalendarFormats[_nextFormat()]
-      : _availableCalendarFormats[_calendarFormat.value];
+  String _getFormatButtonText() =>
+      _useNextCalendarFormat ? _availableCalendarFormats[_nextFormat()] : _availableCalendarFormats[_calendarFormat.value];
 
   void _selectPrevious() {
     if (calendarFormat == CalendarFormat.month) {
@@ -386,8 +385,7 @@ class CalendarController {
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
-    final date =
-        month.month < 12 ? DateTime.utc(month.year, month.month + 1, 1, 12) : DateTime.utc(month.year + 1, 1, 1, 12);
+    final date = month.month < 12 ? DateTime.utc(month.year, month.month + 1, 1, 12) : DateTime.utc(month.year + 1, 1, 1, 12);
     return date.subtract(const Duration(days: 1));
   }
 
