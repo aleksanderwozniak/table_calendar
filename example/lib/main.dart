@@ -160,9 +160,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         CalendarFormat.month: '',
         CalendarFormat.week: '',
       },
-      enableDay: (DateTime day) {
-        return day.weekday != DateTime.sunday;
-      }, 
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
         weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),

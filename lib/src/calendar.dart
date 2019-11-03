@@ -12,6 +12,9 @@ typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat 
 /// Builder signature for any text that can be localized and formatted with `DateFormat`.
 typedef String TextBuilder(DateTime date, dynamic locale);
 
+/// Signature for enabling days.
+typedef bool EnabledDayPredicate(DateTime day);
+
 /// Format to display the `TableCalendar` with.
 enum CalendarFormat { month, twoWeeks, week }
 
@@ -102,6 +105,10 @@ class TableCalendar extends StatefulWidget {
   /// Used to show/hide Header.
   final bool headerVisible;
 
+  /// Function deciding whether given day should be enabled or not.
+  /// If `false` is returned, this day will be unavailable.
+  final EnabledDayPredicate enabledDayPredicate;
+
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
@@ -159,6 +166,7 @@ class TableCalendar extends StatefulWidget {
       CalendarFormat.week: 'Week',
     },
     this.headerVisible = true,
+    this.enabledDayPredicate,
     this.rowHeight,
     this.formatAnimation = FormatAnimation.slide,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -244,7 +252,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   void _onDayLongPressed(DateTime day) {
     if (widget.onDayLongPressed != null) {
-      final key = widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
+      final key =
+          widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
       widget.onDayLongPressed(day, widget.calendarController.visibleEvents[key] ?? []);
     }
   }
@@ -278,7 +287,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   bool _isDayUnavailable(DateTime day) {
-    return (widget.startDay != null && day.isBefore(widget.startDay)) || (widget.endDay != null && day.isAfter(widget.endDay));
+    return (widget.startDay != null && day.isBefore(widget.startDay)) ||
+        (widget.endDay != null && day.isAfter(widget.endDay)) ||
+        (!_isDayEnabled(day));
+  }
+
+  bool _isDayEnabled(DateTime day) {
+    return widget.enabledDayPredicate == null ? true : widget.enabledDayPredicate(day);
   }
 
   DateTime _getEventKey(DateTime day) {
@@ -442,7 +457,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       switchInCurve: Curves.decelerate,
       transitionBuilder: (child, animation) {
         return SlideTransition(
-          position: Tween<Offset>(begin: Offset(widget.calendarController._dx, 0), end: Offset(0, 0)).animate(animation),
+          position:
+              Tween<Offset>(begin: Offset(widget.calendarController._dx, 0), end: Offset(0, 0)).animate(animation),
           child: child,
         );
       },
@@ -596,7 +612,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final isToday = widget.builders.todayDayBuilder != null && tIsToday;
     final isOutsideHoliday = widget.builders.outsideHolidayDayBuilder != null && tIsOutside && tIsHoliday;
     final isHoliday = widget.builders.holidayDayBuilder != null && !tIsOutside && tIsHoliday;
-    final isOutsideWeekend = widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
+    final isOutsideWeekend =
+        widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
     final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend && !tIsHoliday;
     final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend && !tIsHoliday;
 
