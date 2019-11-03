@@ -3,7 +3,6 @@
 
 library table_calendar;
 
-import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';

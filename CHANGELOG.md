@@ -1,3 +1,19 @@
+## [2.1.0]
+
+* Added dynamic events and holidays
+* Added StartingDayOfWeek for every weekday
+* Added support for custom weekend days
+* Added dowWeekdayBuilder and dowWeekendBuilder
+* Broadened intl dependency bounds
+* markersMaxAmount no longer affects markersBuilder
+* Fixed twoWeeks format programmatic issue
+* Fixed visibleDays issue
+* Fixed null dispose issue
+
+## [2.0.2]
+
+* Updated dependencies
+
 ## [2.0.1]
 
 * Fixed issue with custom markers for holidays

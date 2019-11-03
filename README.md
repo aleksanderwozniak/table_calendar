@@ -14,6 +14,7 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 * Extensive, yet easy to use API
 * Custom Builders for truly flexible UI
 * Complete programmatic control with CalendarController
+* Dynamic events
 * Interface for holidays
 * Locale support
 * Vertical autosizing
@@ -35,7 +36,7 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^2.0.1
+  table_calendar: ^2.1.0
 ```
 
 Then import it to your project:
