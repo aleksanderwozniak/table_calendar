@@ -304,26 +304,16 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final children = <Widget>[];
-
-    if (widget.headerVisible) {
-      children.addAll([
-        const SizedBox(height: 6.0),
-        _buildHeader(),
-      ]);
-    }
-
-    children.add(
-      Container(
-        padding: widget.calendarStyle.contentPadding,
-        child: _buildCalendarContent(),
-      ),
-    );
-
     return ClipRect(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: children,
+        children: <Widget>[
+          if (widget.headerVisible) _buildHeader(),
+          Padding(
+            padding: widget.calendarStyle.contentPadding,
+            child: _buildCalendarContent(),
+          ),
+        ],
       ),
     );
   }
@@ -360,6 +350,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     return Container(
       decoration: widget.headerStyle.decoration,
+      margin: widget.headerStyle.headerMargin,
+      padding: widget.headerStyle.headerPadding,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: children,
@@ -436,7 +428,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     return Container(
       key: key,
-      margin: widget.calendarStyle.contentWrapperMargin,
       child: wrappedChild,
     );
   }

@@ -29,25 +29,31 @@ class HeaderStyle {
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
 
-  /// Style for FormatButton Text.
+  /// Style for FormatButton `Text`.
   final TextStyle formatButtonTextStyle;
 
-  /// Background Decoration for FormatButton.
+  /// Background `Decoration` for FormatButton.
   final Decoration formatButtonDecoration;
 
-  /// Inside Padding for FormatButton.
+  /// Inside padding of the whole header.
+  final EdgeInsets headerPadding;
+
+  /// Outside margin of the whole header.
+  final EdgeInsets headerMargin;
+
+  /// Inside padding for FormatButton.
   final EdgeInsets formatButtonPadding;
 
-  /// Inside Padding for left chevron.
+  /// Inside padding for left chevron.
   final EdgeInsets leftChevronPadding;
 
-  /// Inside Padding for right chevron.
+  /// Inside padding for right chevron.
   final EdgeInsets rightChevronPadding;
 
-  /// Outside Margin for left chevron.
+  /// Outside margin for left chevron.
   final EdgeInsets leftChevronMargin;
 
-  /// Outside Margin for right chevron.
+  /// Outside margin for right chevron.
   final EdgeInsets rightChevronMargin;
 
   /// Icon used for left chevron.
@@ -73,6 +79,8 @@ class HeaderStyle {
       border: const Border(top: BorderSide(), bottom: BorderSide(), left: BorderSide(), right: BorderSide()),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     ),
+    this.headerMargin,
+    this.headerPadding = const EdgeInsets.symmetric(vertical: 8.0),
     this.formatButtonPadding = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
     this.leftChevronPadding = const EdgeInsets.all(12.0),
     this.rightChevronPadding = const EdgeInsets.all(12.0),
@@ -80,6 +88,6 @@ class HeaderStyle {
     this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.leftChevronIcon = const Icon(Icons.chevron_left, color: Colors.black),
     this.rightChevronIcon = const Icon(Icons.chevron_right, color: Colors.black),
-    this.decoration = const BoxDecoration()
+    this.decoration = const BoxDecoration(),
   });
 }
