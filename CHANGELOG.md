@@ -1,3 +1,13 @@
+## [2.2.0]
+
+* Added LongPress Gesture support
+* Added option to disable days based on a predicate
+* Added option to hide DaysOfWeek row
+* Added header Decoration
+* Added headerMargin property
+* Added headerPadding property
+* Added contentPadding property
+
 ## [2.1.0]
 
 * Added dynamic events and holidays
