@@ -313,11 +313,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ]);
     }
 
-    children.addAll([
-      const SizedBox(height: 10.0),
-      _buildCalendarContent(),
-      const SizedBox(height: 4.0),
-    ]);
+    children.add(
+      Container(
+        padding: widget.calendarStyle.contentPadding,
+        child: _buildCalendarContent(),
+      ),
+    );
 
     return ClipRect(
       child: Column(
@@ -357,9 +358,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       children.insert(3, _buildFormatButton());
     }
 
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: children,
+    return Container(
+      decoration: widget.headerStyle.decoration,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: children,
+      ),
     );
   }
 
@@ -432,7 +436,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
     return Container(
       key: key,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      margin: widget.calendarStyle.contentWrapperMargin,
       child: wrappedChild,
     );
   }
@@ -474,7 +478,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   Widget _buildTable() {
     final daysInWeek = 7;
     final children = <TableRow>[
-      _buildDaysOfWeek(),
+      if (widget.calendarStyle.renderDaysOfWeek) _buildDaysOfWeek(),
     ];
 
     int x = 0;

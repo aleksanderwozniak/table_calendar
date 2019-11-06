@@ -72,6 +72,19 @@ class CalendarStyle {
   /// * `false` - Today will have higher priority than SelectedDay
   final bool renderSelectedFirst;
 
+  /// Determines if we need to show the row of days of week
+  final bool renderDaysOfWeek;
+
+  /// Content wrapper's margin, allows table to be wrap by other widget's style
+  /// Defaults symmetric(horizontal: 8.0)
+  ///     for backward compatibility
+  final EdgeInsets contentWrapperMargin;
+
+  /// Content's padding, the padding of the main calendar
+  /// Defaults only( top: 10.0, bottom: 4.0 )
+  ///     for backward compatibility, mapped from SizedBox(height: 10.0) and SizedBox(height: 4.0)
+  final EdgeInsets contentPadding;
+
   /// Specifies if event markers rendered for a day cell can overflow cell's boundaries.
   /// * `true` - Event markers will be drawn over the cell boundaries
   /// * `false` - Event markers will not be drawn over the cell boundaries and will be clipped if they are too big
@@ -98,6 +111,9 @@ class CalendarStyle {
     this.markersMaxAmount = 4,
     this.outsideDaysVisible = true,
     this.renderSelectedFirst = true,
+    this.renderDaysOfWeek = true,
+    this.contentWrapperMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.contentPadding = const EdgeInsets.only(top: 10.0, bottom: 4.0),
     this.canEventMarkersOverflow = false,
   });
 }
