@@ -1,7 +1,7 @@
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
 
-import 'package:flutter/material.dart';
+part of table_calendar;
 
 /// Class containing styling for `TableCalendar`'s content.
 class CalendarStyle {
@@ -85,6 +85,11 @@ class CalendarStyle {
   ///     for backward compatibility, mapped from SizedBox(height: 10.0) and SizedBox(height: 4.0)
   final EdgeInsets contentPadding;
 
+  /// Specifies if event markers rendered for a day cell can overflow cell's boundaries.
+  /// * `true` - Event markers will be drawn over the cell boundaries
+  /// * `false` - Event markers will not be drawn over the cell boundaries and will be clipped if they are too big
+  final bool canEventMarkersOverflow;
+
   const CalendarStyle({
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
@@ -108,6 +113,7 @@ class CalendarStyle {
     this.renderSelectedFirst = true,
     this.renderDaysOfWeek = true,
     this.contentWrapperMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.contentPadding = const EdgeInsets.only( top: 10.0, bottom: 4.0 )
+    this.contentPadding = const EdgeInsets.only(top: 10.0, bottom: 4.0),
+    this.canEventMarkersOverflow = false,
   });
 }

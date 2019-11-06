@@ -1,7 +1,6 @@
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
 
-import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -42,17 +41,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  DateTime _selectedDay;
   Map<DateTime, List> _events;
-  Map<DateTime, List> _visibleEvents;
-  Map<DateTime, List> _visibleHolidays;
   List _selectedEvents;
-  AnimationController _controller;
+  AnimationController _animationController;
+  CalendarController _calendarController;
 
   @override
   void initState() {
     super.initState();
-    _selectedDay = DateTime.now();
+    final _selectedDay = DateTime.now();
+
     _events = {
       _selectedDay.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
       _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
@@ -72,42 +70,32 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     };
 
     _selectedEvents = _events[_selectedDay] ?? [];
-    _visibleEvents = _events;
-    _visibleHolidays = _holidays;
+    _calendarController = CalendarController();
 
-    _controller = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
 
-    _controller.forward();
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _calendarController.dispose();
+    super.dispose();
   }
 
   void _onDaySelected(DateTime day, List events) {
+    print('CALLBACK: _onDaySelected');
     setState(() {
-      _selectedDay = day;
       _selectedEvents = events;
     });
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    setState(() {
-      _visibleEvents = Map.fromEntries(
-        _events.entries.where(
-          (entry) =>
-              entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
-              entry.key.isBefore(last.add(const Duration(days: 1))),
-        ),
-      );
-
-      _visibleHolidays = Map.fromEntries(
-        _holidays.entries.where(
-          (entry) =>
-              entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
-              entry.key.isBefore(last.add(const Duration(days: 1))),
-        ),
-      );
-    });
+    print('CALLBACK: _onVisibleDaysChanged');
   }
 
   @override
@@ -124,6 +112,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           _buildTableCalendar(),
           // _buildTableCalendarWithBuilders(),
           const SizedBox(height: 8.0),
+          _buildButtons(),
+          const SizedBox(height: 8.0),
           Expanded(child: _buildEventList()),
         ],
       ),
@@ -133,22 +123,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // Simple TableCalendar configuration (using Styles)
   Widget _buildTableCalendar() {
     return TableCalendar(
-      locale: 'en_US',
-      events: _visibleEvents,
-      holidays: _visibleHolidays,
-      initialCalendarFormat: CalendarFormat.week,
-      formatAnimation: FormatAnimation.slide,
+      calendarController: _calendarController,
+      events: _events,
+      holidays: _holidays,
       startingDayOfWeek: StartingDayOfWeek.monday,
-      availableGestures: AvailableGestures.all,
-      availableCalendarFormats: const {
-        CalendarFormat.month: 'Month',
-        CalendarFormat.twoWeeks: '2 weeks',
-        CalendarFormat.week: 'Week',
-      },
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
         todayColor: Colors.deepOrange[200],
         markersColor: Colors.brown[700],
+        outsideDaysVisible: false,
       ),
       headerStyle: HeaderStyle(
         formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
@@ -166,8 +149,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget _buildTableCalendarWithBuilders() {
     return TableCalendar(
       locale: 'pl_PL',
-      events: _visibleEvents,
-      holidays: _visibleHolidays,
+      calendarController: _calendarController,
+      events: _events,
+      holidays: _holidays,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -191,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       builders: CalendarBuilders(
         selectedDayBuilder: (context, date, _) {
           return FadeTransition(
-            opacity: Tween(begin: 0.0, end: 1.0).animate(_controller),
+            opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
             child: Container(
               margin: const EdgeInsets.all(4.0),
               padding: const EdgeInsets.only(top: 5.0, left: 6.0),
@@ -246,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       onDaySelected: (date, events) {
         _onDaySelected(date, events);
-        _controller.forward(from: 0.0);
+        _animationController.forward(from: 0.0);
       },
       onVisibleDaysChanged: _onVisibleDaysChanged,
     );
@@ -257,9 +241,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
-        color: Utils.isSameDay(date, _selectedDay)
+        color: _calendarController.isSelected(date)
             ? Colors.brown[500]
-            : Utils.isSameDay(date, DateTime.now()) ? Colors.brown[300] : Colors.blue[400],
+            : _calendarController.isToday(date) ? Colors.brown[300] : Colors.blue[400],
       ),
       width: 16.0,
       height: 16.0,
@@ -280,6 +264,55 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       Icons.add_box,
       size: 20.0,
       color: Colors.blueGrey[800],
+    );
+  }
+
+  Widget _buildButtons() {
+    final dateTime = _events.keys.elementAt(_events.length - 2);
+
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Month'),
+              onPressed: () {
+                setState(() {
+                  _calendarController.setCalendarFormat(CalendarFormat.month);
+                });
+              },
+            ),
+            RaisedButton(
+              child: Text('2 weeks'),
+              onPressed: () {
+                setState(() {
+                  _calendarController.setCalendarFormat(CalendarFormat.twoWeeks);
+                });
+              },
+            ),
+            RaisedButton(
+              child: Text('Week'),
+              onPressed: () {
+                setState(() {
+                  _calendarController.setCalendarFormat(CalendarFormat.week);
+                });
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 8.0),
+        RaisedButton(
+          child: Text('Set day ${dateTime.day}-${dateTime.month}-${dateTime.year}'),
+          onPressed: () {
+            _calendarController.setSelectedDay(
+              DateTime(dateTime.year, dateTime.month, dateTime.day),
+              runCallback: true,
+            );
+          },
+        ),
+      ],
     );
   }
 
