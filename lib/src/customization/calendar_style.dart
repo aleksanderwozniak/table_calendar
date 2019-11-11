@@ -5,6 +5,9 @@ part of table_calendar;
 
 /// Class containing styling for `TableCalendar`'s content.
 class CalendarStyle {
+  /// Alignment of foreground Text for days.
+  final Alignment dayAlignment;
+
   /// Style of foreground Text for regular weekdays.
   final TextStyle weekdayStyle;
 
@@ -84,6 +87,7 @@ class CalendarStyle {
   final bool canEventMarkersOverflow;
 
   const CalendarStyle({
+    this.dayAlignment = Alignment.center,
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
     this.holidayStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
