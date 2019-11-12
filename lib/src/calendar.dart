@@ -285,8 +285,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   bool _isDayUnavailable(DateTime day) {
-    return (widget.startDay != null && day.isBefore(widget.startDay)) ||
-        (widget.endDay != null && day.isAfter(widget.endDay)) ||
+    return (widget.startDay != null && day.isBefore(widget.calendarController._normalizeDate(widget.startDay))) ||
+        (widget.endDay != null && day.isAfter(widget.calendarController._normalizeDate(widget.endDay))) ||
         (!_isDayEnabled(day));
   }
 
