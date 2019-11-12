@@ -67,6 +67,10 @@ class TableCalendar extends StatefulWidget {
   /// Replaces `onDaySelected` for those days.
   final VoidCallback onUnavailableDaySelected;
 
+  /// Called whenever any unavailable day gets long pressed.
+  /// Replaces `onDaySelected` for those days.
+  final VoidCallback onUnavailableDayLongPressed;
+
   /// Called whenever the range of visible days changes.
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
@@ -141,8 +145,6 @@ class TableCalendar extends StatefulWidget {
 
   /// Set of Builders for `TableCalendar` to work with.
   final CalendarBuilders builders;
-
-  final VoidCallback onUnavailableDayLongPressed;
 
   TableCalendar({
     Key key,
