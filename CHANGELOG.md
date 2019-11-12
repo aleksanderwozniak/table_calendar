@@ -1,3 +1,9 @@
+## [2.2.1]
+
+* Added onHeaderTapped callback
+* Added onHeaderLongPressed callback
+* Fixed endDay issue
+
 ## [2.2.0]
 
 * Added LongPress Gesture support
