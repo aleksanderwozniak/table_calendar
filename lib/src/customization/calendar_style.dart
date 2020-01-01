@@ -83,6 +83,12 @@ class CalendarStyle {
   /// * `false` - Event markers will not be drawn over the cell boundaries and will be clipped if they are too big
   final bool canEventMarkersOverflow;
 
+  /// Highlight selected day.
+  final bool selectedHighlighting;
+
+  /// Highlight today.
+  final bool todayHighlighting;
+
   const CalendarStyle({
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
@@ -107,5 +113,7 @@ class CalendarStyle {
     this.renderDaysOfWeek = true,
     this.contentPadding = const EdgeInsets.only(bottom: 4.0, left: 8.0, right: 8.0),
     this.canEventMarkersOverflow = false,
+    this.selectedHighlighting = true,
+    this.todayHighlighting = true,
   });
 }
