@@ -1,3 +1,8 @@
+## [2.2.2]
+
+* Added highlightSelected property to CalendarStyle
+* Added highlightToday property to CalendarStyle
+
 ## [2.2.1]
 
 * Added onHeaderTapped callback
