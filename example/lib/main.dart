@@ -2,16 +2,17 @@
 //  Licensed under Apache License v2.0
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 // Example holidays
 final Map<DateTime, List> _holidays = {
-  DateTime(2019, 1, 1): ['New Year\'s Day'],
-  DateTime(2019, 1, 6): ['Epiphany'],
-  DateTime(2019, 2, 14): ['Valentine\'s Day'],
-  DateTime(2019, 4, 21): ['Easter Sunday'],
-  DateTime(2019, 4, 22): ['Easter Monday'],
+  DateTime(2020, 1, 1): ['New Year\'s Day'],
+  DateTime(2020, 1, 6): ['Epiphany'],
+  DateTime(2020, 2, 14): ['Valentine\'s Day'],
+  DateTime(2020, 4, 21): ['Easter Sunday'],
+  DateTime(2020, 4, 22): ['Easter Monday'],
 };
 
 void main() {
@@ -43,13 +44,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Map<DateTime, List> _events;
   List _selectedEvents;
+  DateTime _selectedDay;
+  CalendarFormat _calendarFormat;
   AnimationController _animationController;
   CalendarController _calendarController;
 
   @override
   void initState() {
     super.initState();
-    final _selectedDay = DateTime.now();
+    _selectedDay = DateTime.now();
 
     _events = {
       _selectedDay.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
@@ -70,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     };
 
     _selectedEvents = _events[_selectedDay] ?? [];
+    _calendarFormat = CalendarFormat.week;
     _calendarController = CalendarController();
 
     _animationController = AnimationController(
@@ -89,13 +93,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   void _onDaySelected(DateTime day, List events) {
     print('CALLBACK: _onDaySelected');
-    setState(() {
-      _selectedEvents = events;
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _selectedDay = day;
+        _selectedEvents = events;
+      });
     });
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
     print('CALLBACK: _onVisibleDaysChanged');
+
+    if (_calendarFormat != format) {
+      setState(() {
+        _calendarFormat = format;
+      });
+    }
   }
 
   @override
@@ -126,6 +140,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       calendarController: _calendarController,
       events: _events,
       holidays: _holidays,
+      selectedDay: _selectedDay,
+      calendarFormat: _calendarFormat,
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
@@ -152,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       calendarController: _calendarController,
       events: _events,
       holidays: _holidays,
-      initialCalendarFormat: CalendarFormat.month,
+      calendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,
       availableGestures: AvailableGestures.all,
@@ -280,7 +296,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               child: Text('Month'),
               onPressed: () {
                 setState(() {
-                  _calendarController.setCalendarFormat(CalendarFormat.month);
+                  _calendarFormat = CalendarFormat.month;
                 });
               },
             ),
@@ -288,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               child: Text('2 weeks'),
               onPressed: () {
                 setState(() {
-                  _calendarController.setCalendarFormat(CalendarFormat.twoWeeks);
+                  _calendarFormat = CalendarFormat.twoWeeks;
                 });
               },
             ),
@@ -296,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               child: Text('Week'),
               onPressed: () {
                 setState(() {
-                  _calendarController.setCalendarFormat(CalendarFormat.week);
+                  _calendarFormat = CalendarFormat.week;
                 });
               },
             ),
@@ -306,10 +322,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         RaisedButton(
           child: Text('Set day ${dateTime.day}-${dateTime.month}-${dateTime.year}'),
           onPressed: () {
-            _calendarController.setSelectedDay(
-              DateTime(dateTime.year, dateTime.month, dateTime.day),
-              runCallback: true,
-            );
+            setState(() {
+              _selectedDay = dateTime;
+            });
           },
         ),
       ],
