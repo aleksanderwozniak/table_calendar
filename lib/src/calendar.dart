@@ -258,6 +258,7 @@ class _TableCalendarState extends State<TableCalendar> {
           final normalizedDate = widget.calendarController._normalizeDate(widget.selectedDay);
           widget.calendarController._focusedDay.value = normalizedDate;
           widget.calendarController._selectedDay = normalizedDate;
+          widget.calendarController._visibleDays = widget.calendarController._getVisibleDays(normalizedDate);
 
           _selectedDayCallback(normalizedDate);
         }

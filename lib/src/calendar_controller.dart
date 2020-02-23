@@ -118,7 +118,7 @@ class CalendarController {
     _calendarFormat = ValueNotifier(initialFormat);
     _previousPageIndex = _initialPage;
 
-    _visibleDays = _getVisibleDays(_getFocusedDay(pageIndex: _initialPage));
+    _visibleDays = _getVisibleDays(day);
     _calendarHeight = ValueNotifier(_getCalendarHeight());
 
     _previousFirstDay = _visibleDays.first;
