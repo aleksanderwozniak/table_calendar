@@ -141,6 +141,11 @@ class CalendarController {
           );
         }
       });
+      onVisibleDaysChanged(
+        _getFirstDay(includeInvisible: _includeInvisibleDays),
+        _getLastDay(includeInvisible: _includeInvisibleDays),
+        _calendarFormat.value,
+      );
     }
   }
 
