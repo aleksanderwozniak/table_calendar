@@ -4,7 +4,7 @@
 part of table_calendar;
 
 /// Callback exposing currently selected day.
-typedef void OnDaySelected(DateTime day, List events);
+typedef void OnDaySelected<T>(DateTime day, List<T> events);
 
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
@@ -42,10 +42,10 @@ int _getWeekdayNumber(StartingDayOfWeek weekday) {
 enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
 /// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
-class TableCalendar extends StatefulWidget {
+class TableCalendar<T> extends StatefulWidget {
   /// Controller required for `TableCalendar`.
   /// Use it to update `events`, `holidays`, etc.
-  final CalendarController calendarController;
+  final CalendarController<T> calendarController;
 
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
@@ -54,17 +54,17 @@ class TableCalendar extends StatefulWidget {
 
   /// `Map` of events.
   /// Each `DateTime` inside this `Map` should get its own `List` of objects (i.e. events).
-  final Map<DateTime, List> events;
+  final Map<DateTime, List<T>> events;
 
   /// `Map` of holidays.
   /// This property allows you to provide custom holiday rules.
-  final Map<DateTime, List> holidays;
+  final Map<DateTime, List<T>> holidays;
 
   /// Called whenever any day gets tapped.
-  final OnDaySelected onDaySelected;
+  final OnDaySelected<T> onDaySelected;
 
   /// Called whenever any day gets long pressed.
-  final OnDaySelected onDayLongPressed;
+  final OnDaySelected<T> onDayLongPressed;
 
   /// Called whenever any unavailable day gets tapped.
   /// Replaces `onDaySelected` for those days.
@@ -156,7 +156,7 @@ class TableCalendar extends StatefulWidget {
   final HeaderStyle headerStyle;
 
   /// Set of Builders for `TableCalendar` to work with.
-  final CalendarBuilders builders;
+  final CalendarBuilders<T> builders;
 
   TableCalendar({
     Key key,
@@ -209,10 +209,10 @@ class TableCalendar extends StatefulWidget {
         super(key: key);
 
   @override
-  _TableCalendarState createState() => _TableCalendarState();
+  _TableCalendarState<T> createState() => _TableCalendarState<T>();
 }
 
-class _TableCalendarState extends State<TableCalendar> {
+class _TableCalendarState<T> extends State<TableCalendar<T>> {
   @override
   void initState() {
     super.initState();
@@ -232,7 +232,7 @@ class _TableCalendarState extends State<TableCalendar> {
   }
 
   @override
-  void didUpdateWidget(TableCalendar oldWidget) {
+  void didUpdateWidget(TableCalendar<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.events != widget.events) {
@@ -329,7 +329,7 @@ class _TableCalendarState extends State<TableCalendar> {
                 (context, i) {
                   final focusedDay = widget.calendarController._getFocusedDay(pageIndex: i);
 
-                  final child = _CalendarPage(
+                  final child = _CalendarPage<T>(
                     focusedDay: focusedDay,
                     locale: widget.locale,
                     rowHeight: widget.rowHeight,

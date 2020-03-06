@@ -3,22 +3,22 @@
 
 part of table_calendar;
 
-class _CalendarPage extends StatefulWidget {
+class _CalendarPage<T> extends StatefulWidget {
   final DateTime focusedDay;
   final dynamic locale;
   final double rowHeight;
-  final CalendarController calendarController;
+  final CalendarController<T> calendarController;
   final CalendarStyle calendarStyle;
-  final CalendarBuilders builders;
+  final CalendarBuilders<T> builders;
   final DaysOfWeekStyle daysOfWeekStyle;
   final HitTestBehavior dayHitTestBehavior;
-  final Map<DateTime, List> events;
-  final Map<DateTime, List> holidays;
+  final Map<DateTime, List<T>> events;
+  final Map<DateTime, List<T>> holidays;
   final DateTime startDay;
   final DateTime endDay;
   final List<int> weekendDays;
-  final OnDaySelected onDaySelected;
-  final OnDaySelected onDayLongPressed;
+  final OnDaySelected<T> onDaySelected;
+  final OnDaySelected<T> onDayLongPressed;
   final VoidCallback onUnavailableDaySelected;
   final VoidCallback onUnavailableDayLongPressed;
   final EnabledDayPredicate enabledDayPredicate;
@@ -46,10 +46,10 @@ class _CalendarPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  _CalendarPageState<T> createState() => _CalendarPageState<T>();
 }
 
-class _CalendarPageState extends State<_CalendarPage> {
+class _CalendarPageState<T> extends State<_CalendarPage<T>> {
   DateTime focusedDay;
   bool shouldFetchNewDays;
 
@@ -62,7 +62,7 @@ class _CalendarPageState extends State<_CalendarPage> {
   }
 
   @override
-  void didUpdateWidget(_CalendarPage oldWidget) {
+  void didUpdateWidget(_CalendarPage<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     focusedDay = widget.focusedDay;
@@ -330,7 +330,7 @@ class _CalendarPageState extends State<_CalendarPage> {
     }
   }
 
-  Widget _buildMarker(DateTime date, dynamic event) {
+  Widget _buildMarker(DateTime date, T event) {
     if (widget.builders.singleMarkerBuilder != null) {
       return widget.builders.singleMarkerBuilder(context, date, event);
     } else {
