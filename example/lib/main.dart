@@ -98,6 +98,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     print('CALLBACK: _onVisibleDaysChanged');
   }
 
+  void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format) {
+    print('CALLBACK: _onCalendarCreated');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       onDaySelected: _onDaySelected,
       onVisibleDaysChanged: _onVisibleDaysChanged,
+      onCalendarCreated: _onCalendarCreated,
     );
   }
 

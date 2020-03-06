@@ -103,6 +103,7 @@ class CalendarController {
     @required StartingDayOfWeek startingDayOfWeek,
     @required _SelectedDayCallback selectedDayCallback,
     @required OnVisibleDaysChanged onVisibleDaysChanged,
+    @required OnCalendarCreated onCalendarCreated,
     @required bool includeInvisibleDays,
   }) {
     _events = events;
@@ -141,6 +142,14 @@ class CalendarController {
           );
         }
       });
+    }
+
+    if (onCalendarCreated != null) {
+      onCalendarCreated(
+        _getFirstDay(includeInvisible: _includeInvisibleDays),
+        _getLastDay(includeInvisible: _includeInvisibleDays),
+        _calendarFormat.value,
+      );
     }
   }
 
