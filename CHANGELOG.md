@@ -1,3 +1,7 @@
+## [2.2.3]
+
+* Added onCalendarCreated callback
+
 ## [2.2.2]
 
 * Added highlightSelected property to CalendarStyle
