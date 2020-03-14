@@ -238,6 +238,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         _animationController.forward(from: 0.0);
       },
       onVisibleDaysChanged: _onVisibleDaysChanged,
+      onCalendarCreated: _onCalendarCreated,
     );
   }
 
