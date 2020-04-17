@@ -524,6 +524,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   TableRow _buildDaysOfWeek() {
     return TableRow(
+      decoration: widget.calendarStyle.labelRowBoxDecoration,
       children: widget.calendarController._visibleDays.value.take(7).map((date) {
         final weekdayString = widget.daysOfWeekStyle.dowTextBuilder != null
             ? widget.daysOfWeekStyle.dowTextBuilder(date, widget.locale)
@@ -547,7 +548,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   TableRow _buildTableRow(List<DateTime> days) {
-    return TableRow(children: days.map((date) => _buildTableCell(date)).toList());
+    return TableRow(
+      decoration: widget.calendarStyle.dayRowBoxDecoration,
+      children: days.map((date) => _buildTableCell(date)).toList(),
+    );
   }
 
   // TableCell will have equal width and height
