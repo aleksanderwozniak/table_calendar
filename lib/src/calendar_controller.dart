@@ -92,6 +92,7 @@ class CalendarController {
   bool _useNextCalendarFormat;
   bool _includeInvisibleDays;
   _SelectedDayCallback _selectedDayCallback;
+  bool _fixedLinesCount;
 
   void _init({
     @required Map<DateTime, List> events,
@@ -105,6 +106,7 @@ class CalendarController {
     @required OnVisibleDaysChanged onVisibleDaysChanged,
     @required OnCalendarCreated onCalendarCreated,
     @required bool includeInvisibleDays,
+    @required bool fixedLinesCount,
   }) {
     _events = events;
     _holidays = holidays;
@@ -113,6 +115,7 @@ class CalendarController {
     _useNextCalendarFormat = useNextCalendarFormat;
     _selectedDayCallback = selectedDayCallback;
     _includeInvisibleDays = includeInvisibleDays;
+    _fixedLinesCount = fixedLinesCount;
 
     _pageId = 0;
     _dx = 0;
@@ -348,8 +351,15 @@ class CalendarController {
 
     final last = _lastDayOfMonth(month);
     final daysAfter = _getDaysAfter(last);
+    var lastToDisplay = last.add(Duration(days: daysAfter));
 
-    final lastToDisplay = last.add(Duration(days: daysAfter));
+    if (_fixedLinesCount) {
+      final difference = lastToDisplay.difference(firstToDisplay).inDays;
+      if (difference == 35) {
+        lastToDisplay = lastToDisplay.add(Duration(days: 7));
+      }
+    }
+
     return _daysInRange(firstToDisplay, lastToDisplay).toList();
   }
 

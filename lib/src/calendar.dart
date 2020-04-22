@@ -161,6 +161,9 @@ class TableCalendar extends StatefulWidget {
   /// Set of Builders for `TableCalendar` to work with.
   final CalendarBuilders builders;
 
+  /// Used to show 6 visible weeks in every month.
+  final bool fixedLinesCount;
+
   TableCalendar({
     Key key,
     @required this.calendarController,
@@ -200,6 +203,7 @@ class TableCalendar extends StatefulWidget {
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
     this.builders = const CalendarBuilders(),
+    this.fixedLinesCount = false,
   })  : assert(calendarController != null),
         assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
@@ -230,6 +234,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
       onCalendarCreated: widget.onCalendarCreated,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
+      fixedLinesCount: widget.fixedLinesCount,
     );
   }
 
