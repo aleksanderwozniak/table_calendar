@@ -64,6 +64,11 @@ class HeaderStyle {
   /// Defaults to black `Icons.chevron_right`.
   final Icon rightChevronIcon;
 
+  /// Show or hide chevrons.
+  /// Defaults to `true`.
+  final bool showLeftChevron;
+  final bool showRightChevron;
+
   /// Header decoration, used to draw border or shadow or change color of the header
   /// Defaults to empty BoxDecoration.
   final BoxDecoration decoration;
@@ -88,6 +93,8 @@ class HeaderStyle {
     this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.leftChevronIcon = const Icon(Icons.chevron_left, color: Colors.black),
     this.rightChevronIcon = const Icon(Icons.chevron_right, color: Colors.black),
+    this.showLeftChevron = true,
+    this.showRightChevron = true,
     this.decoration = const BoxDecoration(),
   });
 }
