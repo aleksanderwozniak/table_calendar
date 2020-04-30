@@ -92,6 +92,9 @@ class TableCalendar extends StatefulWidget {
   /// Initially selected DateTime. Usually it will be `DateTime.now()`.
   final DateTime initialSelectedDay;
 
+  /// Removes all gestures from the calendar.
+  final bool disableGestures;
+
   /// The first day of `TableCalendar`.
   /// Days before it will use `unavailableStyle` and run `onUnavailableDaySelected` callback.
   final DateTime startDay;
@@ -176,6 +179,7 @@ class TableCalendar extends StatefulWidget {
     this.onVisibleDaysChanged,
     this.onCalendarCreated,
     this.initialSelectedDay,
+    this.disableGestures = false,
     this.startDay,
     this.endDay,
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
@@ -411,31 +415,45 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildCalendarContent() {
-    if (widget.formatAnimation == FormatAnimation.slide) {
-      return AnimatedSize(
-        duration: Duration(milliseconds: widget.calendarController.calendarFormat == CalendarFormat.month ? 330 : 220),
-        curve: Curves.fastOutSlowIn,
-        alignment: Alignment(0, -1),
-        vsync: this,
-        child: _buildWrapper(),
-      );
+    if (!widget.disableGestures) {
+      if (widget.formatAnimation == FormatAnimation.slide) {
+        return AnimatedSize(
+          duration:
+              Duration(milliseconds: widget.calendarController.calendarFormat == CalendarFormat.month ? 330 : 220),
+          curve: Curves.fastOutSlowIn,
+          alignment: Alignment(0, -1),
+          vsync: this,
+          child: _buildWrapper(),
+        );
+      } else {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 350),
+          transitionBuilder: (child, animation) {
+            return SizeTransition(
+              sizeFactor: animation,
+              child: ScaleTransition(
+                scale: animation,
+                child: child,
+              ),
+            );
+          },
+          child: _buildWrapper(
+            key: ValueKey(widget.calendarController.calendarFormat),
+          ),
+        );
+      }
     } else {
-      return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 350),
-        transitionBuilder: (child, animation) {
-          return SizeTransition(
-            sizeFactor: animation,
-            child: ScaleTransition(
-              scale: animation,
-              child: child,
-            ),
-          );
-        },
-        child: _buildWrapper(
-          key: ValueKey(widget.calendarController.calendarFormat),
-        ),
-      );
+      return _buildGesturelessCalendar();
     }
+  }
+
+  Widget _buildGesturelessCalendar() {
+    Widget wrappedChild = _buildTable();
+
+    return Container(
+      key: ValueKey(widget.calendarController.calendarFormat),
+      child: wrappedChild,
+    );
   }
 
   Widget _buildWrapper({Key key}) {
