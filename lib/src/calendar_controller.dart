@@ -135,21 +135,15 @@ class CalendarController {
             !_isSameDay(_visibleDays.value.last, _previousLastDay)) {
           _previousFirstDay = _visibleDays.value.first;
           _previousLastDay = _visibleDays.value.last;
-          onVisibleDaysChanged(
-            _getFirstDay(includeInvisible: _includeInvisibleDays),
-            _getLastDay(includeInvisible: _includeInvisibleDays),
-            _calendarFormat.value,
-          );
+          onVisibleDaysChanged(_getFirstDay(includeInvisible: _includeInvisibleDays),
+              _getLastDay(includeInvisible: _includeInvisibleDays), _calendarFormat.value, this);
         }
       });
     }
 
     if (onCalendarCreated != null) {
-      onCalendarCreated(
-        _getFirstDay(includeInvisible: _includeInvisibleDays),
-        _getLastDay(includeInvisible: _includeInvisibleDays),
-        _calendarFormat.value,
-      );
+      onCalendarCreated(_getFirstDay(includeInvisible: _includeInvisibleDays),
+          _getLastDay(includeInvisible: _includeInvisibleDays), _calendarFormat.value, this);
     }
   }
 
@@ -240,10 +234,11 @@ class CalendarController {
     return formats[id];
   }
 
-  String _getFormatButtonText() =>
-      _useNextCalendarFormat ? _availableCalendarFormats[_nextFormat()] : _availableCalendarFormats[_calendarFormat.value];
+  String _getFormatButtonText() => _useNextCalendarFormat
+      ? _availableCalendarFormats[_nextFormat()]
+      : _availableCalendarFormats[_calendarFormat.value];
 
-  void _selectPrevious() {
+  void selectPrevious() {
     if (calendarFormat == CalendarFormat.month) {
       _selectPreviousMonth();
     } else if (calendarFormat == CalendarFormat.twoWeeks) {
@@ -256,7 +251,7 @@ class CalendarController {
     _decrementPage();
   }
 
-  void _selectNext() {
+  void selectNext() {
     if (calendarFormat == CalendarFormat.month) {
       _selectNextMonth();
     } else if (calendarFormat == CalendarFormat.twoWeeks) {
@@ -394,7 +389,8 @@ class CalendarController {
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
-    final date = month.month < 12 ? DateTime.utc(month.year, month.month + 1, 1, 12) : DateTime.utc(month.year + 1, 1, 1, 12);
+    final date =
+        month.month < 12 ? DateTime.utc(month.year, month.month + 1, 1, 12) : DateTime.utc(month.year + 1, 1, 1, 12);
     return date.subtract(const Duration(days: 1));
   }
 

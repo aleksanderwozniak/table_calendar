@@ -4,13 +4,15 @@
 part of table_calendar;
 
 /// Callback exposing currently selected day.
-typedef void OnDaySelected(DateTime day, List events);
+typedef void OnDaySelected(DateTime day, List events, CalendarController calenderController);
 
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
-typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
+typedef void OnVisibleDaysChanged(
+    DateTime first, DateTime last, CalendarFormat format, CalendarController calenderController);
 
 /// Callback exposing initially visible days (first and last of them), as well as initial `CalendarFormat`.
-typedef void OnCalendarCreated(DateTime first, DateTime last, CalendarFormat format);
+typedef void OnCalendarCreated(
+    DateTime first, DateTime last, CalendarFormat format, CalendarController calenderController);
 
 /// Signature for reacting to header gestures. Exposes current month and year as a `DateTime` object.
 typedef void HeaderGestureCallback(DateTime focusedDay);
@@ -46,10 +48,6 @@ enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
 /// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
 class TableCalendar extends StatefulWidget {
-  /// Controller required for `TableCalendar`.
-  /// Use it to update `events`, `holidays`, etc.
-  CalendarController calendarController;
-
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
   /// If nothing is provided, a default locale will be used.
@@ -231,7 +229,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       onCalendarCreated: widget.onCalendarCreated,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
     );
-    widget.calendarController = calendarController;
   }
 
   @override
@@ -249,19 +246,19 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   void _selectedDayCallback(DateTime day) {
     if (widget.onDaySelected != null) {
-      widget.onDaySelected(day, calendarController.visibleEvents[_getEventKey(day)] ?? []);
+      widget.onDaySelected(day, calendarController.visibleEvents[_getEventKey(day)] ?? [], calendarController);
     }
   }
 
   void _selectPrevious() {
     setState(() {
-      calendarController._selectPrevious();
+      calendarController.selectPrevious();
     });
   }
 
   void _selectNext() {
     setState(() {
-      calendarController._selectNext();
+      calendarController.selectNext();
     });
   }
 
@@ -274,7 +271,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   void _onDayLongPressed(DateTime day) {
     if (widget.onDayLongPressed != null) {
-      widget.onDayLongPressed(day, calendarController.visibleEvents[_getEventKey(day)] ?? []);
+      widget.onDayLongPressed(day, calendarController.visibleEvents[_getEventKey(day)] ?? [], calendarController);
     }
   }
 
