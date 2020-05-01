@@ -1,3 +1,8 @@
+## [3.0.0]
+
+* Breaking: CalendarController no longer needs to be instantiated manually. Instead it's provided as a parameter in callbacks and can also be saved inside a variable by the user. Example project updated. See the example for details.
+* Make CalendarController selectNext and selectPrevious methods public.
+
 ## [2.2.3]
 
 * Added onCalendarCreated callback
@@ -108,7 +113,7 @@
 
 * Added programmatic selectedDay
 * Removed onFormatChanged callback - it is now integrated into onVisibleDaysChanged callback
-* Improved onVisibleDaysChanged behavior 
+* Improved onVisibleDaysChanged behavior
 * Fixed issue with empty Calendar row
 * Changed default FormatButton texts
 * Updated example project
