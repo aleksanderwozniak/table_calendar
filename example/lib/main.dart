@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     final _selectedDay = DateTime.now();
 
     _events = {
+      DateTime(2019, 1, 1): ['Event on New Year\s'],
       _selectedDay.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
       _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
       _selectedDay.subtract(Duration(days: 20)): ['Event A2', 'Event B2', 'Event C2', 'Event D2'],
