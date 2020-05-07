@@ -101,6 +101,7 @@ class CalendarController {
     @required bool useNextCalendarFormat,
     @required StartingDayOfWeek startingDayOfWeek,
     @required OnVisibleDaysChanged onVisibleDaysChanged,
+    @required OnCalendarCreated onCalendarCreated,
     @required bool includeInvisibleDays,
     @required double rowHeight,
   }) {
@@ -127,6 +128,14 @@ class CalendarController {
 
     _previousPageIndex = _initialPage;
     _pageController = PageController(initialPage: _previousPageIndex);
+
+    if (onCalendarCreated != null) {
+      onCalendarCreated(
+        _getFirstDay(includeInvisible: _includeInvisibleDays),
+        _getLastDay(includeInvisible: _includeInvisibleDays),
+        _calendarFormat.value,
+      );
+    }
   }
 
   /// Disposes the controller.
