@@ -357,13 +357,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   Widget _buildHeader() {
     final children = [
-      if (widget.headerStyle.showLeftChevron)
+      widget.headerStyle.showLeftChevron ?
         _CustomIconButton(
           icon: widget.headerStyle.leftChevronIcon,
           onTap: _selectNext,
           margin: widget.headerStyle.leftChevronMargin,
           padding: widget.headerStyle.leftChevronPadding,
-        ),
+        ) : Container(),
       Expanded(
         child: GestureDetector(
           onTap: _onHeaderTapped,
@@ -377,13 +377,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           ),
         ),
       ),
-      if (widget.headerStyle.showRightChevron)
+      widget.headerStyle.showRightChevron ?
         _CustomIconButton(
           icon: widget.headerStyle.rightChevronIcon,
           onTap: _selectNext,
           margin: widget.headerStyle.rightChevronMargin,
           padding: widget.headerStyle.rightChevronPadding,
-        ),
+        ) : Container()
     ];
 
     if (widget.headerStyle.formatButtonVisible && widget.availableCalendarFormats.length > 1) {
