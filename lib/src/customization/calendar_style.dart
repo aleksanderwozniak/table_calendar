@@ -5,11 +5,8 @@ part of table_calendar;
 
 /// Class containing styling for `TableCalendar`'s content.
 class CalendarStyle {
-  /// BoxDecoration for the top row of the table
-  final BoxDecoration labelRowBoxDecoration;
-
   /// BoxDecoration for each interior row of the table
-  final BoxDecoration dayRowBoxDecoration;
+  final BoxDecoration contentDecoration;
 
   /// Style of foreground Text for regular weekdays.
   final TextStyle weekdayStyle;
@@ -96,8 +93,7 @@ class CalendarStyle {
   final bool highlightToday;
 
   const CalendarStyle({
-    this.labelRowBoxDecoration = const BoxDecoration(),
-    this.dayRowBoxDecoration = const BoxDecoration(),
+    this.contentDecoration = const BoxDecoration(),
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
     this.holidayStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
