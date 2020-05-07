@@ -388,7 +388,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     if (widget.headerStyle.todayButtonVisible) {
       children.insert(2, const SizedBox(width: 8.0));
       children.insert(3, _buildTodayButton());
-      children.insert(4, const SizedBox(width: 8.0));
     }
 
     return Container(
