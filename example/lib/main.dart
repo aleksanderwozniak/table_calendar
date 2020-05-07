@@ -74,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
     _selectedEvents = _events[_selectedDay] ?? [];
     _calendarFormat = CalendarFormat.week;
-    _calendarController = CalendarController();
 
     _animationController = AnimationController(
       vsync: this,
@@ -87,7 +86,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void dispose() {
     _animationController.dispose();
-    _calendarController.dispose();
     super.dispose();
   }
 
@@ -112,8 +110,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     }
   }
 
-  void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format) {
+  void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format, CalendarController controller) {
     print('CALLBACK: _onCalendarCreated');
+    _calendarController = controller;
   }
 
   @override
@@ -141,7 +140,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // Simple TableCalendar configuration (using Styles)
   Widget _buildTableCalendar() {
     return TableCalendar(
-      calendarController: _calendarController,
       events: _events,
       holidays: _holidays,
       selectedDay: _selectedDay,
@@ -170,7 +168,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget _buildTableCalendarWithBuilders() {
     return TableCalendar(
       locale: 'pl_PL',
-      calendarController: _calendarController,
       events: _events,
       holidays: _holidays,
       calendarFormat: CalendarFormat.month,

@@ -9,8 +9,8 @@ typedef void OnDaySelected(DateTime day, List events);
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
 
-/// Callback exposing initially visible days (first and last of them), as well as initial `CalendarFormat`.
-typedef void OnCalendarCreated(DateTime first, DateTime last, CalendarFormat format);
+/// Callback exposing initially visible days (first and last of them), as well as initial `CalendarFormat` and `CalendarController`.
+typedef void OnCalendarCreated(DateTime first, DateTime last, CalendarFormat format, CalendarController controller);
 
 /// Signature for reacting to header gestures. Exposes current month and year as a `DateTime` object.
 typedef void HeaderGestureCallback(DateTime focusedDay);
@@ -46,10 +46,6 @@ enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
 /// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
 class TableCalendar extends StatefulWidget {
-  /// Controller required for `TableCalendar`.
-  /// Use it to update `events`, `holidays`, etc.
-  final CalendarController calendarController;
-
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
   /// If nothing is provided, a default locale will be used.
@@ -166,7 +162,6 @@ class TableCalendar extends StatefulWidget {
 
   TableCalendar({
     Key key,
-    @required this.calendarController,
     this.locale,
     this.events = const {},
     this.holidays = const {},
@@ -204,8 +199,7 @@ class TableCalendar extends StatefulWidget {
     this.headerStyle = const HeaderStyle(),
     this.builders = const CalendarBuilders(),
     this.focusedDay,
-  })  : assert(calendarController != null),
-        assert(availableCalendarFormats.keys.contains(calendarFormat)),
+  })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(rowHeight != null),
         assert(rowHeight > 0.0),
@@ -220,11 +214,14 @@ class TableCalendar extends StatefulWidget {
 }
 
 class _TableCalendarState extends State<TableCalendar> {
+  CalendarController _calendarController;
+
   @override
   void initState() {
     super.initState();
 
-    widget.calendarController._init(
+    _calendarController = CalendarController._();
+    _calendarController._init(
       events: widget.events,
       holidays: widget.holidays,
       initialDay: widget.selectedDay,
@@ -244,16 +241,16 @@ class _TableCalendarState extends State<TableCalendar> {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.events != widget.events) {
-      widget.calendarController._events = widget.events;
+      _calendarController._events = widget.events;
     }
 
     if (oldWidget.holidays != widget.holidays) {
-      widget.calendarController._holidays = widget.holidays;
+      _calendarController._holidays = widget.holidays;
     }
 
     if (oldWidget.calendarFormat != widget.calendarFormat) {
-      if (widget.calendarController._calendarFormat.value != widget.calendarFormat) {
-        widget.calendarController._setCalendarFormat(
+      if (_calendarController._calendarFormat.value != widget.calendarFormat) {
+        _calendarController._setCalendarFormat(
           widget.calendarFormat,
           triggerCallback: false,
         );
@@ -261,15 +258,15 @@ class _TableCalendarState extends State<TableCalendar> {
     }
 
     if (widget.selectedDay != null) {
-      if (!widget.calendarController.isSameDay(oldWidget.selectedDay, widget.selectedDay)) {
-        if (!widget.calendarController.isSameDay(widget.calendarController._selectedDay, widget.selectedDay)) {
-          final normalizedDate = widget.calendarController._normalizeDate(widget.selectedDay);
+      if (!_calendarController.isSameDay(oldWidget.selectedDay, widget.selectedDay)) {
+        if (!_calendarController.isSameDay(_calendarController._selectedDay, widget.selectedDay)) {
+          final normalizedDate = _calendarController._normalizeDate(widget.selectedDay);
 
-          widget.calendarController._focusedDay.value = normalizedDate;
-          widget.calendarController._selectedDay = normalizedDate;
-          widget.calendarController._baseDay = normalizedDate;
-          widget.calendarController._visibleDays = widget.calendarController._getVisibleDays(normalizedDate);
-          widget.calendarController._updateCalendarHeight();
+          _calendarController._focusedDay.value = normalizedDate;
+          _calendarController._selectedDay = normalizedDate;
+          _calendarController._baseDay = normalizedDate;
+          _calendarController._visibleDays = _calendarController._getVisibleDays(normalizedDate);
+          _calendarController._updateCalendarHeight();
 
           _selectedDayCallback(normalizedDate);
         }
@@ -277,12 +274,18 @@ class _TableCalendarState extends State<TableCalendar> {
     }
 
     if (widget.focusedDay != null) {
-      if (!widget.calendarController.isSameDay(oldWidget.focusedDay, widget.focusedDay)) {
-        if (!widget.calendarController.isSameDay(widget.calendarController._focusedDay.value, widget.focusedDay)) {
-          widget.calendarController._focusedDay.value = widget.calendarController._normalizeDate(widget.focusedDay);
+      if (!_calendarController.isSameDay(oldWidget.focusedDay, widget.focusedDay)) {
+        if (!_calendarController.isSameDay(_calendarController._focusedDay.value, widget.focusedDay)) {
+          _calendarController._focusedDay.value = _calendarController._normalizeDate(widget.focusedDay);
         }
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _calendarController._dispose();
+    super.dispose();
   }
 
   void _selectedDayCallback(DateTime day) {
@@ -292,24 +295,24 @@ class _TableCalendarState extends State<TableCalendar> {
   }
 
   DateTime _getEventKey(DateTime day) {
-    return widget.events.keys.firstWhere((it) => widget.calendarController.isSameDay(it, day), orElse: () => null);
+    return widget.events.keys.firstWhere((it) => _calendarController.isSameDay(it, day), orElse: () => null);
   }
 
   void _toggleCalendarFormat() {
     setState(() {
-      widget.calendarController.toggleCalendarFormat();
+      _calendarController.toggleCalendarFormat();
     });
   }
 
   void _onHeaderTapped() {
     if (widget.onHeaderTapped != null) {
-      widget.onHeaderTapped(widget.calendarController.focusedDay);
+      widget.onHeaderTapped(_calendarController.focusedDay);
     }
   }
 
   void _onHeaderLongPressed() {
     if (widget.onHeaderLongPressed != null) {
-      widget.onHeaderLongPressed(widget.calendarController.focusedDay);
+      widget.onHeaderLongPressed(_calendarController.focusedDay);
     }
   }
 
@@ -322,7 +325,7 @@ class _TableCalendarState extends State<TableCalendar> {
         Padding(
           padding: widget.calendarStyle.contentPadding,
           child: ValueListenableBuilder<double>(
-            valueListenable: widget.calendarController._calendarHeight,
+            valueListenable: _calendarController._calendarHeight,
             builder: (context, value, child) {
               return AnimatedContainer(
                 height: value,
@@ -331,22 +334,22 @@ class _TableCalendarState extends State<TableCalendar> {
               );
             },
             child: PageView.custom(
-              controller: widget.calendarController._pageController,
+              controller: _calendarController._pageController,
               physics: widget.availableGestures == AvailableGestures.none ||
                       widget.availableGestures == AvailableGestures.verticalSwipe
                   ? NeverScrollableScrollPhysics()
                   : PageScrollPhysics(),
               childrenDelegate: SliverChildBuilderDelegate(
                 (context, i) {
-                  final focusedDay = widget.calendarController._getFocusedDay(pageIndex: i);
-                  final baseDay = widget.calendarController._getBaseDay(pageIndex: i);
+                  final focusedDay = _calendarController._getFocusedDay(pageIndex: i);
+                  final baseDay = _calendarController._getBaseDay(pageIndex: i);
 
                   final child = _CalendarPage(
                     baseDay: baseDay,
                     focusedDay: focusedDay,
                     locale: widget.locale,
                     rowHeight: widget.rowHeight,
-                    calendarController: widget.calendarController,
+                    calendarController: _calendarController,
                     calendarStyle: widget.calendarStyle,
                     builders: widget.builders,
                     daysOfWeekStyle: widget.daysOfWeekStyle,
@@ -368,8 +371,8 @@ class _TableCalendarState extends State<TableCalendar> {
                     return SimpleGestureDetector(
                       swipeConfig: widget.simpleSwipeConfig,
                       onVerticalSwipe: (direction) {
-                        widget.calendarController.swipeCalendarFormat(isSwipeUp: direction == SwipeDirection.up);
-                        widget.calendarController._updateVisibleDays(pageIndex: i);
+                        _calendarController.swipeCalendarFormat(isSwipeUp: direction == SwipeDirection.up);
+                        _calendarController._updateVisibleDays(pageIndex: i);
                         setState(() {});
                       },
                       child: child,
@@ -382,7 +385,7 @@ class _TableCalendarState extends State<TableCalendar> {
                 addRepaintBoundaries: false,
               ),
               onPageChanged: (i) {
-                widget.calendarController._updateVisibleDays(pageIndex: i);
+                _calendarController._updateVisibleDays(pageIndex: i);
               },
             ),
           ),
@@ -395,7 +398,7 @@ class _TableCalendarState extends State<TableCalendar> {
     final children = <Widget>[
       _CustomIconButton(
         icon: widget.headerStyle.leftChevronIcon,
-        onTap: widget.calendarController._selectPrevious,
+        onTap: _calendarController._selectPrevious,
         margin: widget.headerStyle.leftChevronMargin,
         padding: widget.headerStyle.leftChevronPadding,
       ),
@@ -404,7 +407,7 @@ class _TableCalendarState extends State<TableCalendar> {
           onTap: _onHeaderTapped,
           onLongPress: _onHeaderLongPressed,
           child: ValueListenableBuilder<DateTime>(
-            valueListenable: widget.calendarController._focusedDay,
+            valueListenable: _calendarController._focusedDay,
             builder: (context, value, _) {
               return Text(
                 widget.headerStyle.titleTextBuilder != null
@@ -419,7 +422,7 @@ class _TableCalendarState extends State<TableCalendar> {
       ),
       _CustomIconButton(
         icon: widget.headerStyle.rightChevronIcon,
-        onTap: widget.calendarController._selectNext,
+        onTap: _calendarController._selectNext,
         margin: widget.headerStyle.rightChevronMargin,
         padding: widget.headerStyle.rightChevronPadding,
       ),
@@ -448,7 +451,7 @@ class _TableCalendarState extends State<TableCalendar> {
         decoration: widget.headerStyle.formatButtonDecoration,
         padding: widget.headerStyle.formatButtonPadding,
         child: Text(
-          widget.calendarController._getFormatButtonText(),
+          _calendarController._getFormatButtonText(),
           style: widget.headerStyle.formatButtonTextStyle,
         ),
       ),

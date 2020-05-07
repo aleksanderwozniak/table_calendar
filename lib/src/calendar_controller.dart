@@ -5,22 +5,7 @@ part of table_calendar;
 
 const _initialPage = 10000;
 
-/// Controller required for `TableCalendar`.
-///
-/// Should be created in `initState()`, and then disposed in `dispose()`:
-/// ```dart
-/// @override
-/// void initState() {
-///   super.initState();
-///   _calendarController = CalendarController();
-/// }
-///
-/// @override
-/// void dispose() {
-///   _calendarController.dispose();
-///   super.dispose();
-/// }
-/// ```
+/// Controller used in `TableCalendar`.
 class CalendarController {
   /// Currently focused day (used to determine which year/month should be visible).
   DateTime get focusedDay => _focusedDay.value;
@@ -92,6 +77,8 @@ class CalendarController {
   OnVisibleDaysChanged _onVisibleDaysChanged;
   PageController _pageController;
 
+  CalendarController._();
+
   void _init({
     @required Map<DateTime, List> events,
     @required Map<DateTime, List> holidays,
@@ -134,19 +121,12 @@ class CalendarController {
         _getFirstDay(includeInvisible: _includeInvisibleDays),
         _getLastDay(includeInvisible: _includeInvisibleDays),
         _calendarFormat.value,
+        this,
       );
     }
   }
 
-  /// Disposes the controller.
-  /// ```dart
-  /// @override
-  /// void dispose() {
-  ///   _calendarController.dispose();
-  ///   super.dispose();
-  /// }
-  /// ```
-  void dispose() {
+  void _dispose() {
     _calendarFormat?.dispose();
     _focusedDay?.dispose();
     _calendarHeight?.dispose();
