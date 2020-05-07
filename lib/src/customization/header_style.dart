@@ -38,6 +38,9 @@ class HeaderStyle {
   /// Background `Decoration` for FormatButton.
   final Decoration formatButtonDecoration;
 
+  /// Background `Decoration` for TodayButton.
+  final Decoration todayButtonDecoration;
+
   /// Inside padding of the whole header.
   final EdgeInsets headerPadding;
 
@@ -46,6 +49,9 @@ class HeaderStyle {
 
   /// Inside padding for FormatButton.
   final EdgeInsets formatButtonPadding;
+
+  /// Inside padding for TodayButton.
+  final EdgeInsets todayButtonPadding;
 
   /// Inside padding for left chevron.
   final EdgeInsets leftChevronPadding;
@@ -83,9 +89,14 @@ class HeaderStyle {
       border: const Border(top: BorderSide(), bottom: BorderSide(), left: BorderSide(), right: BorderSide()),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     ),
+    this.todayButtonDecoration = const BoxDecoration(
+      border: const Border(top: BorderSide(), bottom: BorderSide(), left: BorderSide(), right: BorderSide()),
+      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+    ),
     this.headerMargin,
     this.headerPadding = const EdgeInsets.symmetric(vertical: 8.0),
     this.formatButtonPadding = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+    this.todayButtonPadding = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
     this.leftChevronPadding = const EdgeInsets.all(12.0),
     this.rightChevronPadding = const EdgeInsets.all(12.0),
     this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),

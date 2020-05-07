@@ -425,8 +425,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         );
       },
       child: Container(
-        decoration: widget.headerStyle.formatButtonDecoration,
-        padding: widget.headerStyle.formatButtonPadding,
+        decoration: widget.headerStyle.todayButtonDecoration,
+        padding: widget.headerStyle.todayButtonPadding,
         child: Icon(Icons.calendar_today),
       ),
     );
