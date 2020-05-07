@@ -11,6 +11,9 @@ class HeaderStyle {
   /// Responsible for FormatButton visibility.
   final bool formatButtonVisible;
 
+  /// Responsible for TodayButton visibility.
+  final bool todayButtonVisible;
+
   /// Controls the text inside FormatButton.
   /// * `true` - the button will show next CalendarFormat
   /// * `false` - the button will show current CalendarFormat
@@ -71,6 +74,7 @@ class HeaderStyle {
   const HeaderStyle({
     this.centerHeaderTitle = false,
     this.formatButtonVisible = true,
+    this.todayButtonVisible = false,
     this.formatButtonShowsNext = true,
     this.titleTextBuilder,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),

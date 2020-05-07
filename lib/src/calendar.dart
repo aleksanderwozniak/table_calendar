@@ -385,6 +385,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       children.insert(3, _buildFormatButton());
     }
 
+    if (widget.headerStyle.todayButtonVisible) {
+      children.insert(2, const SizedBox(width: 8.0));
+      children.insert(3, _buildTodayButton());
+      children.insert(4, const SizedBox(width: 8.0));
+    }
+
     return Container(
       decoration: widget.headerStyle.decoration,
       margin: widget.headerStyle.headerMargin,
@@ -406,6 +412,22 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           widget.calendarController._getFormatButtonText(),
           style: widget.headerStyle.formatButtonTextStyle,
         ),
+      ),
+    );
+  }
+
+  Widget _buildTodayButton() {
+    return GestureDetector(
+      onTap: () {
+        widget.calendarController.setSelectedDay(
+          DateTime.now(),
+          runCallback: true,
+        );
+      },
+      child: Container(
+        decoration: widget.headerStyle.formatButtonDecoration,
+        padding: widget.headerStyle.formatButtonPadding,
+        child: Icon(Icons.calendar_today),
       ),
     );
   }
