@@ -244,6 +244,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     if (oldWidget.holidays != widget.holidays) {
       widget.calendarController._holidays = widget.holidays;
     }
+
+    if (oldWidget.availableCalendarFormats != widget.availableCalendarFormats) {
+      widget.calendarController._availableCalendarFormats = widget.availableCalendarFormats;
+    }
   }
 
   void _selectedDayCallback(DateTime day) {
