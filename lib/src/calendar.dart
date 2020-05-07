@@ -233,6 +233,7 @@ class _TableCalendarState extends State<TableCalendar> {
       onCalendarCreated: widget.onCalendarCreated,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
       rowHeight: widget.rowHeight,
+      dowVisible: widget.calendarStyle.renderDaysOfWeek,
     );
   }
 
@@ -279,6 +280,11 @@ class _TableCalendarState extends State<TableCalendar> {
           _calendarController._focusedDay.value = _calendarController._normalizeDate(widget.focusedDay);
         }
       }
+    }
+
+    if (oldWidget.calendarStyle.renderDaysOfWeek != widget.calendarStyle.renderDaysOfWeek) {
+      _calendarController._dowVisible = widget.calendarStyle.renderDaysOfWeek;
+      _calendarController._updateCalendarHeight();
     }
   }
 

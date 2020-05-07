@@ -72,6 +72,7 @@ class CalendarController {
   DateTime _previousLastDay;
   bool _useNextCalendarFormat;
   bool _includeInvisibleDays;
+  bool _dowVisible;
   double _rowHeight;
   int _previousPageIndex;
   OnVisibleDaysChanged _onVisibleDaysChanged;
@@ -91,6 +92,7 @@ class CalendarController {
     @required OnCalendarCreated onCalendarCreated,
     @required bool includeInvisibleDays,
     @required double rowHeight,
+    @required bool dowVisible,
   }) {
     _events = events;
     _holidays = holidays;
@@ -99,6 +101,7 @@ class CalendarController {
     _useNextCalendarFormat = useNextCalendarFormat;
     _includeInvisibleDays = includeInvisibleDays;
     _rowHeight = rowHeight;
+    _dowVisible = dowVisible;
     _onVisibleDaysChanged = onVisibleDaysChanged;
 
     final day = initialDay != null ? _normalizeDate(initialDay) : _normalizeDate(DateTime.now());
@@ -189,8 +192,7 @@ class CalendarController {
   }
 
   double _getCalendarHeight() {
-    //! TODO: add boolean check
-    final dowHeight = 16.0;
+    final dowHeight = _dowVisible ? 16.0 : 0.0;
     final contentHeight = _visibleDays.length ~/ 7 * _rowHeight;
 
     return dowHeight + contentHeight;
