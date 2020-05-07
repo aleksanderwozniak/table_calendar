@@ -4,6 +4,7 @@
 part of table_calendar;
 
 class _CalendarPage extends StatefulWidget {
+  final DateTime baseDay;
   final DateTime focusedDay;
   final dynamic locale;
   final double rowHeight;
@@ -25,6 +26,7 @@ class _CalendarPage extends StatefulWidget {
 
   const _CalendarPage({
     Key key,
+    @required this.baseDay,
     @required this.focusedDay,
     @required this.locale,
     @required this.rowHeight,
@@ -51,47 +53,30 @@ class _CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<_CalendarPage> {
   DateTime focusedDay;
-  bool shouldFetchNewDays;
 
   @override
   void initState() {
     super.initState();
-
     focusedDay = widget.focusedDay;
-    shouldFetchNewDays = true;
   }
 
   @override
   void didUpdateWidget(_CalendarPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-
     focusedDay = widget.focusedDay;
-
-    if (widget.calendarController.calendarFormat == CalendarFormat.twoWeeks) {
-      if (widget.calendarController.visibleDays.firstWhere(
-            (day) => widget.calendarController.isSameDay(day, widget.focusedDay),
-            orElse: () => null,
-          ) !=
-          null) {
-        shouldFetchNewDays = false;
-      } else {
-        shouldFetchNewDays = true;
-        widget.calendarController._visibleDays = widget.calendarController._getVisibleDays(widget.focusedDay);
-      }
-    } else {
-      shouldFetchNewDays = true;
-    }
   }
 
   void _selectDay(DateTime day) {
-    shouldFetchNewDays = true;
     widget.calendarController._selectedDay = day;
+    _selectedDayCallback(day);
 
     if (widget.calendarController.calendarFormat == CalendarFormat.month) {
-      if (day.month < widget.calendarController._focusedDay.value.month) {
+      final int previousMonth = widget.calendarController._focusedDay.value.month;
+
+      if (day.month < previousMonth) {
         widget.calendarController._selectPrevious();
         return;
-      } else if (day.month > widget.calendarController._focusedDay.value.month) {
+      } else if (day.month > previousMonth) {
         widget.calendarController._selectNext();
         return;
       }
@@ -100,13 +85,7 @@ class _CalendarPageState extends State<_CalendarPage> {
     widget.calendarController._focusedDay.value = day;
     focusedDay = day;
 
-    _selectedDayCallback(day);
-
-    setState(() {
-      if (widget.calendarController.calendarFormat == CalendarFormat.twoWeeks) {
-        shouldFetchNewDays = false;
-      }
-    });
+    setState(() {});
   }
 
   void _selectedDayCallback(DateTime day) {
@@ -154,13 +133,10 @@ class _CalendarPageState extends State<_CalendarPage> {
   @override
   Widget build(BuildContext context) {
     final daysInWeek = 7;
-
-    final days = shouldFetchNewDays
-        ? widget.calendarController._getVisibleDays(focusedDay)
-        : widget.calendarController.visibleDays;
+    final days = widget.calendarController._getVisibleDays(widget.baseDay);
 
     final children = <TableRow>[
-      if (widget.calendarStyle.renderDaysOfWeek) _buildDaysOfWeek(days.take(7).toList()),
+      if (widget.calendarStyle.renderDaysOfWeek) _buildDaysOfWeek(days.take(daysInWeek).toList()),
     ];
 
     int x = 0;
@@ -177,7 +153,7 @@ class _CalendarPageState extends State<_CalendarPage> {
 
   TableRow _buildDaysOfWeek(List<DateTime> days) {
     return TableRow(
-      children: days.take(7).map((date) {
+      children: days.map((date) {
         final weekdayString = widget.daysOfWeekStyle.dowTextBuilder != null
             ? widget.daysOfWeekStyle.dowTextBuilder(date, widget.locale)
             : DateFormat.E(widget.locale).format(date);

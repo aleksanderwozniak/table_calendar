@@ -77,6 +77,7 @@ class CalendarController {
   Map<DateTime, List> _holidays;
   List<DateTime> _visibleDays;
   DateTime _selectedDay;
+  DateTime _baseDay;
   StartingDayOfWeek _startingDayOfWeek;
   ValueNotifier<double> _calendarHeight;
   ValueNotifier<DateTime> _focusedDay;
@@ -116,15 +117,16 @@ class CalendarController {
     _focusedDay = ValueNotifier(day);
     _selectedDay = _focusedDay.value;
     _calendarFormat = ValueNotifier(initialFormat);
-    _previousPageIndex = _initialPage;
 
     _visibleDays = _getVisibleDays(day);
     _calendarHeight = ValueNotifier(_getCalendarHeight());
 
+    _baseDay = day;
     _previousFirstDay = _visibleDays.first;
     _previousLastDay = _visibleDays.last;
 
-    _pageController = PageController(initialPage: _initialPage, keepPage: false);
+    _previousPageIndex = _initialPage;
+    _pageController = PageController(initialPage: _previousPageIndex);
   }
 
   /// Disposes the controller.
@@ -173,8 +175,10 @@ class CalendarController {
   }
 
   void _updateVisibleDays({@required int pageIndex, bool triggerCallback = true}) {
-    _updateFocusedDay(pageIndex: pageIndex);
-    _visibleDays = _getVisibleDays(_focusedDay.value);
+    _focusedDay.value = _getFocusedDay(pageIndex: pageIndex);
+    _baseDay = _getBaseDay(pageIndex: pageIndex);
+    _previousPageIndex = pageIndex;
+    _visibleDays = _getVisibleDays(_baseDay);
     _updateCalendarHeight();
 
     if (!isSameDay(_visibleDays.first, _previousFirstDay) || !isSameDay(_visibleDays.last, _previousLastDay)) {
@@ -196,22 +200,23 @@ class CalendarController {
   }
 
   double _getCalendarHeight() {
+    //! TODO: add boolean check
     final dowHeight = 16.0;
     final contentHeight = _visibleDays.length ~/ 7 * _rowHeight;
 
     return dowHeight + contentHeight;
   }
 
-  List<DateTime> _getVisibleDays(DateTime focusedDay) {
+  List<DateTime> _getVisibleDays(DateTime baseDay) {
     if (calendarFormat == CalendarFormat.month) {
-      return _daysInMonth(focusedDay);
+      return _daysInMonth(baseDay);
     } else if (calendarFormat == CalendarFormat.twoWeeks) {
-      return _daysInWeek(focusedDay)
+      return _daysInWeek(baseDay)
         ..addAll(_daysInWeek(
-          focusedDay.add(const Duration(days: 7)),
+          baseDay.add(const Duration(days: 7)),
         ));
     } else {
-      return _daysInWeek(focusedDay);
+      return _daysInWeek(baseDay);
     }
   }
 
@@ -223,8 +228,8 @@ class CalendarController {
         return DateTime.utc(
             _focusedDay.value.year, _focusedDay.value.month + delta, delta == 0 ? _focusedDay.value.day : 1);
       case CalendarFormat.twoWeeks:
-        final firstDay = visibleDays.firstWhere((day) => !_isExtraDay(day), orElse: () => _previousFirstDay);
-        return DateTime.utc(firstDay.year, firstDay.month, firstDay.day + delta * 7);
+        // return DateTime.utc(_focusedDay.value.year, _focusedDay.value.month, _focusedDay.value.day + delta * 14); //! TODO: add 14day increment
+        return DateTime.utc(_focusedDay.value.year, _focusedDay.value.month, _focusedDay.value.day + delta * 7);
       case CalendarFormat.week:
         return DateTime.utc(_focusedDay.value.year, _focusedDay.value.month, _focusedDay.value.day + delta * 7);
       default:
@@ -233,9 +238,21 @@ class CalendarController {
     }
   }
 
-  void _updateFocusedDay({@required int pageIndex}) {
-    _focusedDay.value = _getFocusedDay(pageIndex: pageIndex);
-    _previousPageIndex = pageIndex;
+  DateTime _getBaseDay({@required int pageIndex}) {
+    final delta = pageIndex - _previousPageIndex;
+
+    switch (calendarFormat) {
+      case CalendarFormat.month:
+        return DateTime.utc(_baseDay.year, _baseDay.month + delta, 1);
+      case CalendarFormat.twoWeeks:
+        // return DateTime.utc(_baseDay.year, _baseDay.month, _baseDay.day + delta * 14); //! TODO: add 14day increment
+        return DateTime.utc(_baseDay.year, _baseDay.month, _baseDay.day + delta * 7);
+      case CalendarFormat.week:
+        return DateTime.utc(_baseDay.year, _baseDay.month, _baseDay.day + delta * 7);
+      default:
+        assert(false);
+        return null;
+    }
   }
 
   void _selectPrevious() {

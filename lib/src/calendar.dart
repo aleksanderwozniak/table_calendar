@@ -256,9 +256,12 @@ class _TableCalendarState extends State<TableCalendar> {
       if (!widget.calendarController.isSameDay(oldWidget.selectedDay, widget.selectedDay)) {
         if (!widget.calendarController.isSameDay(widget.calendarController._selectedDay, widget.selectedDay)) {
           final normalizedDate = widget.calendarController._normalizeDate(widget.selectedDay);
+
           widget.calendarController._focusedDay.value = normalizedDate;
           widget.calendarController._selectedDay = normalizedDate;
+          widget.calendarController._baseDay = normalizedDate;
           widget.calendarController._visibleDays = widget.calendarController._getVisibleDays(normalizedDate);
+          widget.calendarController._updateCalendarHeight();
 
           _selectedDayCallback(normalizedDate);
         }
@@ -328,8 +331,10 @@ class _TableCalendarState extends State<TableCalendar> {
               childrenDelegate: SliverChildBuilderDelegate(
                 (context, i) {
                   final focusedDay = widget.calendarController._getFocusedDay(pageIndex: i);
+                  final baseDay = widget.calendarController._getBaseDay(pageIndex: i);
 
                   final child = _CalendarPage(
+                    baseDay: baseDay,
                     focusedDay: focusedDay,
                     locale: widget.locale,
                     rowHeight: widget.rowHeight,
