@@ -78,6 +78,9 @@ class CalendarStyle {
   /// Padding of `TableCalendar`'s content.
   final EdgeInsets contentPadding;
 
+  /// Margin of Cells' decoration.
+  final EdgeInsets cellMargin;
+
   /// Specifies if event markers rendered for a day cell can overflow cell's boundaries.
   /// * `true` - Event markers will be drawn over the cell boundaries
   /// * `false` - Event markers will not be drawn over the cell boundaries and will be clipped if they are too big
@@ -112,6 +115,7 @@ class CalendarStyle {
     this.renderSelectedFirst = true,
     this.renderDaysOfWeek = true,
     this.contentPadding = const EdgeInsets.only(bottom: 4.0, left: 8.0, right: 8.0),
+    this.cellMargin = const EdgeInsets.all(6.0),
     this.canEventMarkersOverflow = false,
     this.highlightSelected = true,
     this.highlightToday = true,
