@@ -27,6 +27,9 @@ enum CalendarFormat { month, twoWeeks, week }
 /// Available animations to update the `CalendarFormat` with.
 enum FormatAnimation { slide, scale }
 
+/// Available week increments while in `CalendarFormat.twoWeeks` format.
+enum TwoWeekIncrement { oneWeek, twoWeeks }
+
 /// Available day of week formats. `TableCalendar` will start the week with chosen day.
 /// * `StartingDayOfWeek.monday`: Monday - Sunday
 /// * `StartingDayOfWeek.tuesday`: Tuesday - Monday
@@ -103,6 +106,9 @@ class TableCalendar extends StatefulWidget {
   /// Use built-in `DateTime` weekday constants (e.g. `DateTime.monday`) instead of `int` literals (e.q. `1`).
   final List<int> weekendDays;
 
+  /// Current increment used in `CalendarFormat.twoWeeks` format.
+  final TwoWeekIncrement twoWeekIncrement;
+
   /// Currently displayed `CalendarFormat`.
   final CalendarFormat calendarFormat;
 
@@ -177,6 +183,7 @@ class TableCalendar extends StatefulWidget {
     this.startDay,
     this.endDay,
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
+    this.twoWeekIncrement = TwoWeekIncrement.oneWeek,
     this.calendarFormat = CalendarFormat.month,
     this.availableCalendarFormats = const {
       CalendarFormat.month: 'Month',
@@ -234,6 +241,7 @@ class _TableCalendarState extends State<TableCalendar> {
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
       rowHeight: widget.rowHeight,
       dowVisible: widget.calendarStyle.renderDaysOfWeek,
+      twoWeekIncrement: widget.twoWeekIncrement,
     );
   }
 
@@ -291,6 +299,10 @@ class _TableCalendarState extends State<TableCalendar> {
       _calendarController._startingDayOfWeek = widget.startingDayOfWeek;
       _calendarController._visibleDays = _calendarController._getVisibleDays(_calendarController._baseDay);
       _calendarController._updateCalendarHeight();
+    }
+
+    if (oldWidget.twoWeekIncrement != widget.twoWeekIncrement) {
+      _calendarController._twoWeekIncrement = widget.twoWeekIncrement;
     }
   }
 

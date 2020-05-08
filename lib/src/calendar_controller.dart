@@ -77,6 +77,7 @@ class CalendarController {
   double _rowHeight;
   int _previousPageIndex;
   OnVisibleDaysChanged _onVisibleDaysChanged;
+  TwoWeekIncrement _twoWeekIncrement;
   PageController _pageController;
 
   CalendarController._();
@@ -94,6 +95,7 @@ class CalendarController {
     @required bool includeInvisibleDays,
     @required double rowHeight,
     @required bool dowVisible,
+    @required TwoWeekIncrement twoWeekIncrement,
   }) {
     _events = events;
     _holidays = holidays;
@@ -103,6 +105,7 @@ class CalendarController {
     _includeInvisibleDays = includeInvisibleDays;
     _rowHeight = rowHeight;
     _dowVisible = dowVisible;
+    _twoWeekIncrement = twoWeekIncrement;
     _onVisibleDaysChanged = onVisibleDaysChanged;
 
     final day = initialDay != null ? _normalizeDate(initialDay) : _normalizeDate(DateTime.now());
@@ -220,8 +223,8 @@ class CalendarController {
         return DateTime.utc(
             _focusedDay.value.year, _focusedDay.value.month + delta, delta == 0 ? _focusedDay.value.day : 1);
       case CalendarFormat.twoWeeks:
-        // return DateTime.utc(_focusedDay.value.year, _focusedDay.value.month, _focusedDay.value.day + delta * 14); //! TODO: add 14day increment
-        return DateTime.utc(_focusedDay.value.year, _focusedDay.value.month, _focusedDay.value.day + delta * 7);
+        final increment = _twoWeekIncrement == TwoWeekIncrement.oneWeek ? 7 : 14;
+        return DateTime.utc(_focusedDay.value.year, _focusedDay.value.month, _focusedDay.value.day + delta * increment);
       case CalendarFormat.week:
         return DateTime.utc(_focusedDay.value.year, _focusedDay.value.month, _focusedDay.value.day + delta * 7);
       default:
@@ -237,8 +240,8 @@ class CalendarController {
       case CalendarFormat.month:
         return DateTime.utc(_baseDay.year, _baseDay.month + delta, 1);
       case CalendarFormat.twoWeeks:
-        // return DateTime.utc(_baseDay.year, _baseDay.month, _baseDay.day + delta * 14); //! TODO: add 14day increment
-        return DateTime.utc(_baseDay.year, _baseDay.month, _baseDay.day + delta * 7);
+        final increment = _twoWeekIncrement == TwoWeekIncrement.oneWeek ? 7 : 14;
+        return DateTime.utc(_baseDay.year, _baseDay.month, _baseDay.day + delta * increment);
       case CalendarFormat.week:
         return DateTime.utc(_baseDay.year, _baseDay.month, _baseDay.day + delta * 7);
       default:
