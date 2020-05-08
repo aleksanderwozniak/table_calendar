@@ -286,6 +286,12 @@ class _TableCalendarState extends State<TableCalendar> {
       _calendarController._dowVisible = widget.calendarStyle.renderDaysOfWeek;
       _calendarController._updateCalendarHeight();
     }
+
+    if (oldWidget.startingDayOfWeek != widget.startingDayOfWeek) {
+      _calendarController._startingDayOfWeek = widget.startingDayOfWeek;
+      _calendarController._visibleDays = _calendarController._getVisibleDays(_calendarController._baseDay);
+      _calendarController._updateCalendarHeight();
+    }
   }
 
   @override
