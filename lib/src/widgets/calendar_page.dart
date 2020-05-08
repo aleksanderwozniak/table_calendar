@@ -52,18 +52,18 @@ class _CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<_CalendarPage> {
-  DateTime focusedDay;
+  DateTime _focusedDay;
 
   @override
   void initState() {
     super.initState();
-    focusedDay = widget.focusedDay;
+    _focusedDay = widget.focusedDay;
   }
 
   @override
   void didUpdateWidget(_CalendarPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    focusedDay = widget.focusedDay;
+    _focusedDay = widget.focusedDay;
   }
 
   void _selectDay(DateTime day) {
@@ -74,16 +74,16 @@ class _CalendarPageState extends State<_CalendarPage> {
       final int previousMonth = widget.calendarController._focusedDay.value.month;
 
       if (day.month < previousMonth) {
-        widget.calendarController._selectPrevious();
+        widget.calendarController.previousPage();
         return;
       } else if (day.month > previousMonth) {
-        widget.calendarController._selectNext();
+        widget.calendarController.nextPage();
         return;
       }
     }
 
     widget.calendarController._focusedDay.value = day;
-    focusedDay = day;
+    _focusedDay = day;
 
     setState(() {});
   }
@@ -141,7 +141,7 @@ class _CalendarPageState extends State<_CalendarPage> {
 
     int x = 0;
     while (x < days.length) {
-      children.add(_buildTableRow(days.skip(x).take(daysInWeek).toList(), focusedDay));
+      children.add(_buildTableRow(days.skip(x).take(daysInWeek).toList(), _focusedDay));
       x += daysInWeek;
     }
 

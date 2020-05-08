@@ -410,7 +410,7 @@ class _TableCalendarState extends State<TableCalendar> {
     final children = <Widget>[
       _CustomIconButton(
         icon: widget.headerStyle.leftChevronIcon,
-        onTap: _calendarController._selectPrevious,
+        onTap: _calendarController.previousPage,
         margin: widget.headerStyle.leftChevronMargin,
         padding: widget.headerStyle.leftChevronPadding,
       ),
@@ -434,7 +434,7 @@ class _TableCalendarState extends State<TableCalendar> {
       ),
       _CustomIconButton(
         icon: widget.headerStyle.rightChevronIcon,
-        onTap: _calendarController._selectNext,
+        onTap: _calendarController.nextPage,
         margin: widget.headerStyle.rightChevronMargin,
         padding: widget.headerStyle.rightChevronPadding,
       ),

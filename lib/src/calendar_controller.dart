@@ -246,18 +246,18 @@ class CalendarController {
     }
   }
 
-  void _selectPrevious() {
-    _pageController.previousPage(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.decelerate,
-    );
+  void previousPage({
+    Duration duration = const Duration(milliseconds: 350),
+    Curve curve = Curves.decelerate,
+  }) {
+    _pageController.previousPage(duration: duration, curve: curve);
   }
 
-  void _selectNext() {
-    _pageController.nextPage(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.decelerate,
-    );
+  void nextPage({
+    Duration duration = const Duration(milliseconds: 350),
+    Curve curve = Curves.decelerate,
+  }) {
+    _pageController.nextPage(duration: duration, curve: curve);
   }
 
   CalendarFormat _nextFormat() {
