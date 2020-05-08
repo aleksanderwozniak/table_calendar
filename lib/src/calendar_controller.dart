@@ -16,6 +16,7 @@ class CalendarController {
   /// Currently visible calendar format.
   CalendarFormat get calendarFormat => _calendarFormat.value;
 
+  /// Currently visible days. May include days outside of current month.
   List<DateTime> get visibleDays => calendarFormat == CalendarFormat.month && !_includeInvisibleDays
       ? _visibleDays.where((day) => !_isExtraDay(day)).toList()
       : _visibleDays;
@@ -246,6 +247,7 @@ class CalendarController {
     }
   }
 
+  /// Navigates to previous calendar page
   void previousPage({
     Duration duration = const Duration(milliseconds: 350),
     Curve curve = Curves.decelerate,
@@ -253,6 +255,7 @@ class CalendarController {
     _pageController.previousPage(duration: duration, curve: curve);
   }
 
+  /// Navigates to next calendar page
   void nextPage({
     Duration duration = const Duration(milliseconds: 350),
     Curve curve = Curves.decelerate,
