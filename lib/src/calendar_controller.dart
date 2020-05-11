@@ -6,7 +6,7 @@ part of table_calendar;
 const _initialPage = 10000;
 
 /// Controller used in `TableCalendar`.
-class CalendarController {
+class CalendarController<T> {
   /// Currently focused day (used to determine which year/month should be visible).
   DateTime get focusedDay => _focusedDay.value;
 
@@ -22,7 +22,7 @@ class CalendarController {
       : _visibleDays;
 
   /// `Map` of currently visible events.
-  Map<DateTime, List> get visibleEvents {
+  Map<DateTime, List<T>> get visibleEvents {
     if (_events == null) {
       return {};
     }
@@ -41,7 +41,7 @@ class CalendarController {
   }
 
   /// `Map` of currently visible holidays.
-  Map<DateTime, List> get visibleHolidays {
+  Map<DateTime, List<T>> get visibleHolidays {
     if (_holidays == null) {
       return {};
     }
@@ -59,8 +59,8 @@ class CalendarController {
     );
   }
 
-  Map<DateTime, List> _events;
-  Map<DateTime, List> _holidays;
+  Map<DateTime, List<T>> _events;
+  Map<DateTime, List<T>> _holidays;
   List<DateTime> _visibleDays;
   DateTime _selectedDay;
   DateTime _baseDay;
@@ -83,15 +83,15 @@ class CalendarController {
   CalendarController._();
 
   void _init({
-    @required Map<DateTime, List> events,
-    @required Map<DateTime, List> holidays,
+    @required Map<DateTime, List<T>> events,
+    @required Map<DateTime, List<T>> holidays,
     @required DateTime initialDay,
     @required CalendarFormat initialFormat,
     @required Map<CalendarFormat, String> availableCalendarFormats,
     @required bool useNextCalendarFormat,
     @required StartingDayOfWeek startingDayOfWeek,
     @required OnVisibleDaysChanged onVisibleDaysChanged,
-    @required OnCalendarCreated onCalendarCreated,
+    @required OnCalendarCreated<T> onCalendarCreated,
     @required bool includeInvisibleDays,
     @required double rowHeight,
     @required bool dowVisible,

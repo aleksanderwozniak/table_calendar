@@ -4,13 +4,14 @@
 part of table_calendar;
 
 /// Callback exposing currently selected day.
-typedef void OnDaySelected(DateTime day, List events);
+typedef void OnDaySelected<T>(DateTime day, List<T> events);
 
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
 
 /// Callback exposing initially visible days (first and last of them), as well as initial `CalendarFormat` and `CalendarController`.
-typedef void OnCalendarCreated(DateTime first, DateTime last, CalendarFormat format, CalendarController controller);
+typedef void OnCalendarCreated<T>(
+    DateTime first, DateTime last, CalendarFormat format, CalendarController<T> controller);
 
 /// Signature for reacting to header gestures. Exposes current month and year as a `DateTime` object.
 typedef void HeaderGestureCallback(DateTime focusedDay);
@@ -48,7 +49,7 @@ int _getWeekdayNumber(StartingDayOfWeek weekday) {
 enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
 /// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
-class TableCalendar extends StatefulWidget {
+class TableCalendar<T> extends StatefulWidget {
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
   /// If nothing is provided, a default locale will be used.
@@ -56,17 +57,17 @@ class TableCalendar extends StatefulWidget {
 
   /// `Map` of events.
   /// Each `DateTime` inside this `Map` should get its own `List` of objects (i.e. events).
-  final Map<DateTime, List> events;
+  final Map<DateTime, List<T>> events;
 
   /// `Map` of holidays.
   /// This property allows you to provide custom holiday rules.
-  final Map<DateTime, List> holidays;
+  final Map<DateTime, List<T>> holidays;
 
   /// Called whenever any day gets tapped.
-  final OnDaySelected onDaySelected;
+  final OnDaySelected<T> onDaySelected;
 
   /// Called whenever any day gets long pressed.
-  final OnDaySelected onDayLongPressed;
+  final OnDaySelected<T> onDayLongPressed;
 
   /// Called whenever any unavailable day gets tapped.
   /// Replaces `onDaySelected` for those days.
@@ -86,7 +87,7 @@ class TableCalendar extends StatefulWidget {
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
   /// Called once when the CalendarController gets initialized.
-  final OnCalendarCreated onCalendarCreated;
+  final OnCalendarCreated<T> onCalendarCreated;
 
   /// Currently selected day.
   final DateTime selectedDay;
@@ -164,7 +165,7 @@ class TableCalendar extends StatefulWidget {
   final HeaderStyle headerStyle;
 
   /// Set of Builders for `TableCalendar` to work with.
-  final CalendarBuilders builders;
+  final CalendarBuilders<T> builders;
 
   TableCalendar({
     Key key,
@@ -217,11 +218,11 @@ class TableCalendar extends StatefulWidget {
         super(key: key);
 
   @override
-  _TableCalendarState createState() => _TableCalendarState();
+  _TableCalendarState<T> createState() => _TableCalendarState<T>();
 }
 
-class _TableCalendarState extends State<TableCalendar> {
-  CalendarController _calendarController;
+class _TableCalendarState<T> extends State<TableCalendar<T>> {
+  CalendarController<T> _calendarController;
 
   @override
   void initState() {
@@ -246,7 +247,7 @@ class _TableCalendarState extends State<TableCalendar> {
   }
 
   @override
-  void didUpdateWidget(TableCalendar oldWidget) {
+  void didUpdateWidget(TableCalendar<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.events != widget.events) {
@@ -372,7 +373,7 @@ class _TableCalendarState extends State<TableCalendar> {
                   final focusedDay = _calendarController._getFocusedDay(pageIndex: i);
                   final baseDay = _calendarController._getBaseDay(pageIndex: i);
 
-                  final child = _CalendarPage(
+                  final child = _CalendarPage<T>(
                     baseDay: baseDay,
                     focusedDay: focusedDay,
                     locale: widget.locale,
