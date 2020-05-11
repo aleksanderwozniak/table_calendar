@@ -301,6 +301,10 @@ class _TableCalendarState extends State<TableCalendar> {
       _calendarController._updateCalendarHeight();
     }
 
+    if (oldWidget.availableCalendarFormats != widget.availableCalendarFormats) {
+      _calendarController._availableCalendarFormats = widget.availableCalendarFormats;
+    }
+
     if (oldWidget.twoWeekIncrement != widget.twoWeekIncrement) {
       _calendarController._twoWeekIncrement = widget.twoWeekIncrement;
     }
@@ -419,13 +423,15 @@ class _TableCalendarState extends State<TableCalendar> {
   }
 
   Widget _buildHeader() {
-    final children = <Widget>[
-      _CustomIconButton(
-        icon: widget.headerStyle.leftChevronIcon,
-        onTap: _calendarController.previousPage,
-        margin: widget.headerStyle.leftChevronMargin,
-        padding: widget.headerStyle.leftChevronPadding,
-      ),
+    final children = [
+      widget.headerStyle.showLeftChevron
+          ? _CustomIconButton(
+              icon: widget.headerStyle.leftChevronIcon,
+              onTap: _calendarController.previousPage,
+              margin: widget.headerStyle.leftChevronMargin,
+              padding: widget.headerStyle.leftChevronPadding,
+            )
+          : Container(),
       Expanded(
         child: GestureDetector(
           onTap: _onHeaderTapped,
@@ -444,12 +450,14 @@ class _TableCalendarState extends State<TableCalendar> {
           ),
         ),
       ),
-      _CustomIconButton(
-        icon: widget.headerStyle.rightChevronIcon,
-        onTap: _calendarController.nextPage,
-        margin: widget.headerStyle.rightChevronMargin,
-        padding: widget.headerStyle.rightChevronPadding,
-      ),
+      widget.headerStyle.showRightChevron
+          ? _CustomIconButton(
+              icon: widget.headerStyle.rightChevronIcon,
+              onTap: _calendarController.nextPage,
+              margin: widget.headerStyle.rightChevronMargin,
+              padding: widget.headerStyle.rightChevronPadding,
+            )
+          : Container()
     ];
 
     if (widget.headerStyle.formatButtonVisible && widget.availableCalendarFormats.length > 1) {
