@@ -52,7 +52,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     final _selectedDay = DateTime.now();
 
     _events = {
-      DateTime(2019, 1, 1): ['Event on New Year\s'],
       _selectedDay.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
       _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
       _selectedDay.subtract(Duration(days: 20)): ['Event A2', 'Event B2', 'Event C2', 'Event D2'],
@@ -88,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _onDaySelected(DateTime day, List events) {
+  void _onDaySelected(DateTime day, List events, List holidays) {
     print('CALLBACK: _onDaySelected');
     setState(() {
       _selectedEvents = events;
@@ -234,8 +233,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           return children;
         },
       ),
-      onDaySelected: (date, events) {
-        _onDaySelected(date, events);
+      onDaySelected: (date, events, holidays) {
+        _onDaySelected(date, events, holidays);
         _animationController.forward(from: 0.0);
       },
       onVisibleDaysChanged: _onVisibleDaysChanged,
