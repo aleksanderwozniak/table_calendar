@@ -368,7 +368,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       widget.headerStyle.showLeftChevron ?
         _CustomIconButton(
           icon: widget.headerStyle.leftChevronIcon,
-          onTap: _selectNext,
+          onTap: _selectPrevious,
           margin: widget.headerStyle.leftChevronMargin,
           padding: widget.headerStyle.leftChevronPadding,
         ) : Container(),
