@@ -654,6 +654,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final tIsOutside = widget.calendarController._isExtraDay(date);
     final tIsHoliday = widget.calendarController.visibleHolidays.containsKey(_getHolidayKey(date));
     final tIsWeekend = widget.calendarController._isWeekend(date, widget.weekendDays);
+    final tIsEventDay = widget.calendarController.visibleEvents.containsKey(eventKey);
 
     final isUnavailable = widget.builders.unavailableDayBuilder != null && tIsUnavailable;
     final isSelected = widget.builders.selectedDayBuilder != null && tIsSelected;
@@ -694,6 +695,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         isWeekend: tIsWeekend,
         isOutsideMonth: tIsOutside,
         isHoliday: tIsHoliday,
+        isEventDay: tIsEventDay,
         calendarStyle: widget.calendarStyle,
       );
     }
