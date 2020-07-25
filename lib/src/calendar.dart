@@ -161,6 +161,15 @@ class TableCalendar extends StatefulWidget {
   /// Set of Builders for `TableCalendar` to work with.
   final CalendarBuilders builders;
 
+  /// Extend height.
+  final bool expand;
+
+  /// DayOfWeek label height.
+  final double heightOfDayOfWeekLabel;
+
+  /// Calendar content border.
+  final TableBorder calendarContentBorder;
+
   TableCalendar({
     Key key,
     @required this.calendarController,
@@ -173,11 +182,14 @@ class TableCalendar extends StatefulWidget {
     this.onUnavailableDayLongPressed,
     this.onHeaderTapped,
     this.onHeaderLongPressed,
+    this.calendarContentBorder,
     this.onVisibleDaysChanged,
     this.onCalendarCreated,
     this.initialSelectedDay,
     this.startDay,
     this.endDay,
+    this.expand = false,
+    this.heightOfDayOfWeekLabel = 20,
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
     this.initialCalendarFormat = CalendarFormat.month,
     this.availableCalendarFormats = const {
@@ -282,7 +294,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   void _onDayLongPressed(DateTime day) {
     if (widget.onDayLongPressed != null) {
       widget.onDayLongPressed(
-        day, 
+        day,
         widget.calendarController.visibleEvents[_getEventKey(day)] ?? [],
         widget.calendarController.visibleHolidays[_getHolidayKey(day)] ?? [],
       );
@@ -349,28 +361,43 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+    if (widget.expand) {
+      return Column(
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          if (widget.headerVisible) _buildHeader(),
-          Padding(
-            padding: widget.calendarStyle.contentPadding,
-            child: _buildCalendarContent(),
+          if (widget.headerVisible) Flexible(flex: null, child: _buildHeader()),
+          Expanded(
+            child: Padding(
+              padding: widget.calendarStyle.contentPadding,
+              child: _buildCalendarContent(),
+            ),
           ),
         ],
-      ),
-    );
+      );
+    } else {
+      return ClipRect(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            if (widget.headerVisible) _buildHeader(),
+            Padding(
+              padding: widget.calendarStyle.contentPadding,
+              child: _buildCalendarContent(),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildHeader() {
     final children = [
       widget.headerStyle.showLeftChevron ?
         _CustomIconButton(
-          icon: widget.headerStyle.leftChevronIcon,
-          onTap: _selectPrevious,
-          margin: widget.headerStyle.leftChevronMargin,
-          padding: widget.headerStyle.leftChevronPadding,
+              icon: widget.headerStyle.leftChevronIcon,
+              onTap: _selectPrevious,
+              margin: widget.headerStyle.leftChevronMargin,
+              padding: widget.headerStyle.leftChevronPadding,
         ) : Container(),
       Expanded(
         child: GestureDetector(
@@ -387,10 +414,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ),
       widget.headerStyle.showRightChevron ?
         _CustomIconButton(
-          icon: widget.headerStyle.rightChevronIcon,
-          onTap: _selectNext,
-          margin: widget.headerStyle.rightChevronMargin,
-          padding: widget.headerStyle.rightChevronPadding,
+              icon: widget.headerStyle.rightChevronIcon,
+              onTap: _selectNext,
+              margin: widget.headerStyle.rightChevronMargin,
+              padding: widget.headerStyle.rightChevronPadding,
         ) : Container()
     ];
 
@@ -518,21 +545,31 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildTable() {
-    final daysInWeek = 7;
-    final children = <TableRow>[
-      if (widget.calendarStyle.renderDaysOfWeek) _buildDaysOfWeek(),
-    ];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final daysInWeek = 7;
+        final children = <TableRow>[
+          if (widget.calendarStyle.renderDaysOfWeek) _buildDaysOfWeek(),
+        ];
 
-    int x = 0;
-    while (x < widget.calendarController._visibleDays.value.length) {
-      children.add(_buildTableRow(widget.calendarController._visibleDays.value.skip(x).take(daysInWeek).toList()));
-      x += daysInWeek;
-    }
+        int x = 0;
+        while (x < widget.calendarController._visibleDays.value.length) {
+          children.add(_buildTableRow(
+              widget.calendarController._visibleDays.value
+                  .skip(x)
+                  .take(daysInWeek)
+                  .toList(),
+              constraints));
+          x += daysInWeek;
+        }
 
-    return Table(
-      // Makes this Table fill its parent horizontally
-      defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
-      children: children,
+        return Table(
+          // Makes this Table fill its parent horizontally
+          defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
+          children: children,
+          border: widget.calendarContentBorder
+        );
+      },
     );
   }
 
@@ -551,34 +588,53 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         if (widget.builders.dowWeekdayBuilder != null) {
           return widget.builders.dowWeekdayBuilder(context, weekdayString);
         }
-        return Center(
+        return Container(
+          height: widget.heightOfDayOfWeekLabel,
+          alignment: Alignment.center,
           child: Text(
             weekdayString,
-            style: isWeekend ? widget.daysOfWeekStyle.weekendStyle : widget.daysOfWeekStyle.weekdayStyle,
+            style: isWeekend
+                ? widget.daysOfWeekStyle.weekendStyle
+                : widget.daysOfWeekStyle.weekdayStyle,
           ),
         );
       }).toList(),
     );
   }
 
-  TableRow _buildTableRow(List<DateTime> days) {
+  TableRow _buildTableRow(List<DateTime> days, BoxConstraints constraints) {
     return TableRow(
       decoration: widget.calendarStyle.contentDecoration,
-      children: days.map((date) => _buildTableCell(date)).toList(),
+      children: days.map((date) => _buildTableCell(date, constraints)).toList(),
     );
   }
 
   // TableCell will have equal width and height
-  Widget _buildTableCell(DateTime date) {
-    return LayoutBuilder(
-      builder: (context, constraints) => ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: widget.rowHeight ?? constraints.maxWidth,
-          minHeight: widget.rowHeight ?? constraints.maxWidth,
+  Widget _buildTableCell(DateTime date, BoxConstraints constraints) {
+    if (widget.expand) {
+      double height = ((constraints.maxHeight - widget.heightOfDayOfWeekLabel) /
+          (widget.calendarController._visibleDays.value.length / 7.0)
+              .ceilToDouble());
+      return LayoutBuilder(
+        builder: (context, constraints) => ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: widget.rowHeight ?? height,
+            minHeight: widget.rowHeight ?? height,
+          ),
+          child: _buildCell(date),
         ),
-        child: _buildCell(date),
-      ),
-    );
+      );
+    } else {
+      return LayoutBuilder(
+        builder: (context, constraints) => ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: widget.rowHeight ?? constraints.maxWidth,
+            minHeight: widget.rowHeight ?? constraints.maxWidth,
+          ),
+          child: _buildCell(date),
+        ),
+      );
+    }
   }
 
   Widget _buildCell(DateTime date) {
