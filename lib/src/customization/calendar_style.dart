@@ -11,6 +11,9 @@ class CalendarStyle {
   /// Style of foreground Text for regular weekdays.
   final TextStyle weekdayStyle;
 
+  //Default decoration for regular weekdays
+  final Decoration defaultDecoration;
+
   /// Style of foreground Text for regular weekends.
   final TextStyle weekendStyle;
 
@@ -100,6 +103,7 @@ class CalendarStyle {
 
   const CalendarStyle({
     this.contentDecoration = const BoxDecoration(),
+    this.defaultDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
     this.holidayStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]

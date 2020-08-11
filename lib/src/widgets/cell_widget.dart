@@ -37,7 +37,7 @@ class _CellWidget extends StatelessWidget {
       margin: calendarStyle.cellMargin,
       alignment: Alignment.center,
       child: Text(
-        text,
+        "1",
         style: _buildCellTextStyle(),
       ),
     );
@@ -51,7 +51,7 @@ class _CellWidget extends StatelessWidget {
     } else if (isSelected && calendarStyle.highlightSelected) {
       return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.selectedColor);
     } else {
-      return BoxDecoration(shape: BoxShape.circle);
+      return calendarStyle.defaultDecoration;
     }
   }
 
