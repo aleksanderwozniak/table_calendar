@@ -170,6 +170,24 @@ class CalendarController<T> {
     _updateVisibleDays(pageIndex: _previousPageIndex, triggerCallback: triggerCallback);
   }
 
+  /// Sets selected day to a given `value`. call it in setState
+  /// Use `runCallback: true` if this should trigger `OnDaySelected` callback.
+  void setSelectedDay(
+      DateTime value) {
+    final day = _normalizeDate(value);
+    _focusedDay = ValueNotifier(day);
+    _selectedDay = _focusedDay.value;
+
+    _visibleDays = _getVisibleDays(day);
+    _calendarHeight = ValueNotifier(_getCalendarHeight());
+
+    _baseDay = day;
+    _previousFirstDay = _visibleDays.first;
+    _previousLastDay = _visibleDays.last;
+
+    _pageController = PageController(initialPage: _previousPageIndex);
+  }
+
   void _updateVisibleDays({@required int pageIndex, bool triggerCallback = true}) {
     _focusedDay.value = _getFocusedDay(pageIndex: pageIndex);
     _baseDay = _getBaseDay(pageIndex: pageIndex);

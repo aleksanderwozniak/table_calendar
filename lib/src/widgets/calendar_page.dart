@@ -203,8 +203,8 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
 
     if (key != null) {
       final children = <Widget>[content];
-      final events = eventKey != null ? widget.events[eventKey] : [];
-      final holidays = holidayKey != null ? widget.holidays[holidayKey] : [];
+      final List<T> events = eventKey != null ? widget.events[eventKey] : [];
+      final List<T> holidays = holidayKey != null ? widget.holidays[holidayKey] : [];
 
       if (!_isDayUnavailable(date)) {
         if (widget.builders.markersBuilder != null) {

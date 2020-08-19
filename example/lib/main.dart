@@ -22,6 +22,7 @@ final Map<DateTime, List<Event>> _holidays = {
   DateTime(2020, 2, 14): [Event('Valentine\'s Day')],
   DateTime(2020, 4, 21): [Event('Easter Sunday')],
   DateTime(2020, 4, 22): [Event('Easter Monday')],
+  DateTime(2020, 8, 22): [Event('Easter Monday')],
 };
 
 void main() {
@@ -82,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     };
 
     _selectedEvents = _events[_selectedDay] ?? [];
-    _calendarFormat = CalendarFormat.week;
+    _calendarFormat = CalendarFormat.month;
 
     _animationController = AnimationController(
       vsync: this,
@@ -110,8 +111,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    print('CALLBACK: _onVisibleDaysChanged');
-
+    print('CALLBACK: _onVisibleDaysChanged 🍎🍎🍎🍎🍎');
+    setState(() {
+      _selectedDay = _calendarController.focusedDay;
+    });
     if (_calendarFormat != format) {
       setState(() {
         _calendarFormat = format;
@@ -136,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           // Switch out 2 lines below to play with TableCalendar's settings
           //-----------------------
           _buildTableCalendar(),
-          // _buildTableCalendarWithBuilders(),
+//           _buildTableCalendarWithBuilders(),
           const SizedBox(height: 8.0),
           _buildButtons(),
           const SizedBox(height: 8.0),
@@ -158,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         selectedColor: Colors.deepOrange[400],
         todayColor: Colors.deepOrange[200],
         markersColor: Colors.brown[700],
-        outsideDaysVisible: false,
+//        outsideDaysVisible: false,
       ),
       headerStyle: HeaderStyle(
         formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
@@ -176,13 +179,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // More advanced TableCalendar configuration (using Builders & Styles)
   Widget _buildTableCalendarWithBuilders() {
     return TableCalendar<Event>(
-      locale: 'pl_PL',
+      locale: 'zh_CN',
       events: _events,
       holidays: _holidays,
       calendarFormat: CalendarFormat.month,
-      formatAnimation: FormatAnimation.slide,
-      startingDayOfWeek: StartingDayOfWeek.sunday,
-      availableGestures: AvailableGestures.all,
+      formatAnimation: FormatAnimation.scale,
+      startingDayOfWeek: StartingDayOfWeek.monday,
+      availableGestures: AvailableGestures.horizontalSwipe,
       availableCalendarFormats: const {
         CalendarFormat.month: '',
         CalendarFormat.week: '',
@@ -199,14 +202,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         centerHeaderTitle: true,
         formatButtonVisible: false,
       ),
-      builders: CalendarBuilders<Event>(
+      builders: CalendarBuilders(
+        // 选中的日期
         selectedDayBuilder: (context, date, _) {
           return FadeTransition(
             opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
             child: Container(
-              margin: const EdgeInsets.all(4.0),
-              padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-              color: Colors.deepOrange[300],
+              alignment: Alignment.center,
+              color: Colors.red,
               width: 100,
               height: 100,
               child: Text(
@@ -216,29 +219,38 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             ),
           );
         },
+        // 今天
         todayDayBuilder: (context, date, _) {
           return Container(
-            margin: const EdgeInsets.all(4.0),
-            padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-            color: Colors.amber[400],
+//            margin: const EdgeInsets.all(4.0),
+//            padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+            alignment: Alignment.center,
+            color: Colors.green,
             width: 100,
             height: 100,
             child: Text(
-              '${date.day}',
+              '今',
               style: TextStyle().copyWith(fontSize: 16.0),
             ),
           );
         },
-        markersBuilder: (context, date, List<Event> events, List<Event> holidays) {
+        markersBuilder: (context, date, events, holidays) {
           final children = <Widget>[];
 
           if (events.isNotEmpty) {
             children.add(
-              Positioned(
-                right: 1,
-                bottom: 1,
-                child: _buildEventsMarker(date, events),
-              ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(color: Colors.cyan, width: 5, height: 5,),
+                    SizedBox(width: 2,),
+                    Container(color: Colors.cyan, width: 5, height: 5,),
+                  ],)
+//              Positioned(
+//                right: 1,
+//                bottom: 1,
+//                child: _buildEventsMarker(date, events),
+//              ),
             );
           }
 
@@ -335,7 +347,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           child: Text('Set day ${dateTime.day}-${dateTime.month}-${dateTime.year}'),
           onPressed: () {
             setState(() {
-              _selectedDay = dateTime;
+              _calendarController.setSelectedDay(DateTime(2020, 9, 8));
+
+              DateTime first = _calendarController.visibleDays.first;
+              DateTime last = _calendarController.visibleDays.last;
+              print(' ${first.month}.${first.day}  ${last.month}.${last.day}  ');
             });
           },
         ),
