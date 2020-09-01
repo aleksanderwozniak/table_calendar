@@ -16,6 +16,9 @@ class HeaderStyle {
   /// * `false` - the button will show current CalendarFormat
   final bool formatButtonShowsNext;
 
+  /// Use to customize header's title using different widget
+  final Widget Function(DateTime date) titleBuilder;
+
   /// Use to customize header's title text (eg. with different `DateFormat`).
   /// You can use `String` transformations to further customize the text.
   /// Defaults to simple `'yMMMM'` format (eg. January 2019, February 2019, March 2019, etc.).
@@ -74,6 +77,7 @@ class HeaderStyle {
   final BoxDecoration decoration;
 
   const HeaderStyle({
+    this.titleBuilder,
     this.centerHeaderTitle = false,
     this.formatButtonVisible = true,
     this.formatButtonShowsNext = true,

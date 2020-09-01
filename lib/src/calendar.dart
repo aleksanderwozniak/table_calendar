@@ -376,7 +376,10 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         child: GestureDetector(
           onTap: _onHeaderTapped,
           onLongPress: _onHeaderLongPressed,
-          child: Text(
+          child: widget.headerStyle.titleBuilder != null
+              ? widget.headerStyle
+                  .titleBuilder(widget.calendarController.focusedDay)
+              : Text(
             widget.headerStyle.titleTextBuilder != null
                 ? widget.headerStyle.titleTextBuilder(widget.calendarController.focusedDay, widget.locale)
                 : DateFormat.yMMMM(widget.locale).format(widget.calendarController.focusedDay),
