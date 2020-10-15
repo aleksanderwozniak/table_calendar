@@ -7,11 +7,11 @@ import 'package:table_calendar/table_calendar.dart';
 
 // Example holidays
 final Map<DateTime, List> _holidays = {
-  DateTime(2019, 1, 1): ['New Year\'s Day'],
-  DateTime(2019, 1, 6): ['Epiphany'],
-  DateTime(2019, 2, 14): ['Valentine\'s Day'],
-  DateTime(2019, 4, 21): ['Easter Sunday'],
-  DateTime(2019, 4, 22): ['Easter Monday'],
+  DateTime(2020, 1, 1): ['New Year\'s Day'],
+  DateTime(2020, 1, 6): ['Epiphany'],
+  DateTime(2020, 2, 14): ['Valentine\'s Day'],
+  DateTime(2020, 4, 21): ['Easter Sunday'],
+  DateTime(2020, 4, 22): ['Easter Monday'],
 };
 
 void main() {
@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _onDaySelected(DateTime day, List events) {
+  void _onDaySelected(DateTime day, List events, List holidays) {
     print('CALLBACK: _onDaySelected');
     setState(() {
       _selectedEvents = events;
@@ -233,8 +233,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           return children;
         },
       ),
-      onDaySelected: (date, events) {
-        _onDaySelected(date, events);
+      onDaySelected: (date, events, holidays) {
+        _onDaySelected(date, events, holidays);
         _animationController.forward(from: 0.0);
       },
       onVisibleDaysChanged: _onVisibleDaysChanged,
