@@ -6,18 +6,21 @@ part of table_calendar;
 /// Main Builder signature for `TableCalendar`. Contains `date` and list of all `events` associated with that `date`.
 /// Note that most of the time, `events` param will be ommited, however it is there if needed.
 /// `events` param can be null.
-typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List events);
+typedef FullBuilder = Widget Function(
+    BuildContext context, DateTime date, List events);
 
 /// Builder signature for a list of event markers. Contains `date` and list of all `events` associated with that `date`.
 /// Both `events` and `holidays` params can be null.
-typedef FullListBuilder = List<Widget> Function(BuildContext context, DateTime date, List events, List holidays);
+typedef FullListBuilder = List<Widget> Function(
+    BuildContext context, DateTime date, List events, List holidays);
 
 /// Builder signature for weekday names row. Contains `weekday` string, which is formatted by `dowTextBuilder`
 /// or by default function (DateFormat.E(widget.locale).format(date)), if `dowTextBuilder` is null.
 typedef DowBuilder = Widget Function(BuildContext context, String weekday);
 
 /// Builder signature for a single event marker. Contains `date` and a single `event` associated with that `date`.
-typedef SingleMarkerBuilder = Widget Function(BuildContext context, DateTime date, dynamic event);
+typedef SingleMarkerBuilder = Widget Function(
+    BuildContext context, DateTime date, dynamic event);
 
 /// Class containing all custom Builders for `TableCalendar`.
 class CalendarBuilders {
