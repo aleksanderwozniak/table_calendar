@@ -622,7 +622,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         content = Stack(
           alignment: widget.calendarStyle.markersAlignment,
           children: children,
-          overflow: widget.calendarStyle.canEventMarkersOverflow ? Overflow.visible : Overflow.clip,
+          clipBehavior: widget.calendarStyle.canEventMarkersOverflow ? Clip.none : Clip.hardEdge,
         );
       }
     }
