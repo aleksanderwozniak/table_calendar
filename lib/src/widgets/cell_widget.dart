@@ -11,6 +11,7 @@ class _CellWidget extends StatelessWidget {
   final bool isWeekend;
   final bool isOutsideMonth;
   final bool isHoliday;
+  final bool isEventDay;
   final CalendarStyle calendarStyle;
 
   const _CellWidget({
@@ -22,6 +23,7 @@ class _CellWidget extends StatelessWidget {
     this.isWeekend = false,
     this.isOutsideMonth = false,
     this.isHoliday = false,
+    this.isEventDay = false,
     @required this.calendarStyle,
   })  : assert(text != null),
         assert(calendarStyle != null),
@@ -32,7 +34,7 @@ class _CellWidget extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
       decoration: _buildCellDecoration(),
-      margin: const EdgeInsets.all(6.0),
+      margin: calendarStyle.cellMargin,
       alignment: Alignment.center,
       child: Text(
         text,
@@ -72,6 +74,8 @@ class _CellWidget extends StatelessWidget {
       return calendarStyle.outsideStyle;
     } else if (isWeekend) {
       return calendarStyle.weekendStyle;
+    } else if (isEventDay) {
+      return calendarStyle.eventDayStyle;
     } else {
       return calendarStyle.weekdayStyle;
     }
