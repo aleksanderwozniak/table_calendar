@@ -27,7 +27,7 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 
 ## Usage
 
-Make sure to check out [example project](https://github.com/aleksanderwozniak/table_calendar/blob/2.3.0-stable/example/lib/main.dart). 
+Make sure to check out [example project](https://github.com/aleksanderwozniak/table_calendar/tree/2.3.0-stable/example). 
 For additional info please refer to [API docs](https://pub.dartlang.org/documentation/table_calendar/latest/table_calendar/table_calendar-library.html).
 
 ### Installation

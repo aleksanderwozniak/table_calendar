@@ -1,3 +1,9 @@
+## [2.3.0]
+
+* Migrated to AndroidX
+* Added holidays to onDaySelected callback
+* Replaced deprecated overflow property with clipBehavior
+
 ## [2.2.3]
 
 * Added onCalendarCreated callback
