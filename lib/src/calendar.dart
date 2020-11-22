@@ -384,7 +384,7 @@ class _TableCalendarState extends State<TableCalendar>
 
   Widget _buildHeader() {
     final children = [
-      widget.headerStyle.showLeftChevron
+      widget.headerStyle.leftChevronVisible
           ? _CustomIconButton(
               icon: widget.headerStyle.leftChevronIcon,
               onTap: _selectPrevious,
@@ -409,7 +409,7 @@ class _TableCalendarState extends State<TableCalendar>
           ),
         ),
       ),
-      widget.headerStyle.showRightChevron
+      widget.headerStyle.rightChevronVisible
           ? _CustomIconButton(
               icon: widget.headerStyle.rightChevronIcon,
               onTap: _selectNext,

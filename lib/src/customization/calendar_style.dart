@@ -84,7 +84,7 @@ class CalendarStyle {
   /// Padding of `TableCalendar`'s content.
   final EdgeInsets contentPadding;
 
-  /// Margin of Cells' decoration.
+  /// Margin of each individual cell.
   final EdgeInsets cellMargin;
 
   /// Specifies if event markers rendered for a day cell can overflow cell's boundaries.

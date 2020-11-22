@@ -57,17 +57,20 @@ class HeaderStyle {
   final EdgeInsets rightChevronMargin;
 
   /// Icon used for left chevron.
-  /// Defaults to black `Icons.chevron_left`.
+  /// Defaults to `Icons.chevron_left`.
   final Icon leftChevronIcon;
 
   /// Icon used for right chevron.
-  /// Defaults to black `Icons.chevron_right`.
+  /// Defaults to `Icons.chevron_right`.
   final Icon rightChevronIcon;
 
-  /// Show or hide chevrons.
+  /// Determines left chevron's visibility.
   /// Defaults to `true`.
-  final bool showLeftChevron;
-  final bool showRightChevron;
+  final bool leftChevronVisible;
+
+  /// Determines right chevron's visibility.
+  /// Defaults to `true`.
+  final bool rightChevronVisible;
 
   /// Header decoration, used to draw border or shadow or change color of the header
   /// Defaults to empty BoxDecoration.
@@ -82,10 +85,11 @@ class HeaderStyle {
     this.formatButtonTextStyle = const TextStyle(),
     this.formatButtonDecoration = const BoxDecoration(
       border: const Border(
-          top: BorderSide(),
-          bottom: BorderSide(),
-          left: BorderSide(),
-          right: BorderSide()),
+        top: BorderSide(),
+        bottom: BorderSide(),
+        left: BorderSide(),
+        right: BorderSide(),
+      ),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     ),
     this.headerMargin,
@@ -98,8 +102,8 @@ class HeaderStyle {
     this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.leftChevronIcon = const Icon(Icons.chevron_left),
     this.rightChevronIcon = const Icon(Icons.chevron_right),
-    this.showLeftChevron = true,
-    this.showRightChevron = true,
+    this.leftChevronVisible = true,
+    this.rightChevronVisible = true,
     this.decoration = const BoxDecoration(),
   });
 }
