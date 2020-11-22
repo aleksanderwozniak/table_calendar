@@ -27,7 +27,7 @@ Highly customizable, feature-packed Flutter Calendar with gestures, animations a
 
 ## Usage
 
-Make sure to check out [example project](https://github.com/aleksanderwozniak/table_calendar/tree/2.3.0-stable/example). 
+Make sure to check out [example project](https://github.com/aleksanderwozniak/table_calendar/blob/master/example). 
 For additional info please refer to [API docs](https://pub.dartlang.org/documentation/table_calendar/latest/table_calendar/table_calendar-library.html).
 
 ### Installation
@@ -36,7 +36,7 @@ Add to pubspec.yaml:
 
 ```yaml
 dependencies:
-  table_calendar: ^2.3.0
+  table_calendar: ^2.3.1
 ```
 
 Then import it to your project:

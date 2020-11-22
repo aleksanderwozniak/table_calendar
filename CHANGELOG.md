@@ -1,3 +1,12 @@
+## [2.3.1]
+
+* Added chevron visibility properties to HeaderStyle
+* Added cellMargin property to CalendarStyle
+* Added eventDayStyle property to CalendarStyle
+* Added availableCalendarFormats dynamic update
+* Added optional BoxDecoration for each calendar row
+* Added optional BoxDecoration for days of week row
+
 ## [2.3.0]
 
 * Migrated to AndroidX
