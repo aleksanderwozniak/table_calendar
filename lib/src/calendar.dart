@@ -134,6 +134,10 @@ class TableCalendar extends StatefulWidget {
   /// Used to show/hide Header.
   final bool headerVisible;
 
+  final Widget Function(
+          DateTime date, VoidCallback selectPrevious, VoidCallback selectNext)
+      customHeaderBuilder;
+
   /// Function deciding whether given day should be enabled or not.
   /// If `false` is returned, this day will be unavailable.
   final EnabledDayPredicate enabledDayPredicate;
@@ -210,6 +214,7 @@ class TableCalendar extends StatefulWidget {
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
     this.builders = const CalendarBuilders(),
+    this.customHeaderBuilder,
   })  : assert(calendarController != null),
         assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
@@ -383,6 +388,11 @@ class _TableCalendarState extends State<TableCalendar>
   }
 
   Widget _buildHeader() {
+    if (widget.customHeaderBuilder != null) {
+      return widget.customHeaderBuilder(
+          widget.calendarController.focusedDay, _selectPrevious, _selectNext);
+    }
+
     final children = [
       widget.headerStyle.leftChevronVisible
           ? _CustomIconButton(
