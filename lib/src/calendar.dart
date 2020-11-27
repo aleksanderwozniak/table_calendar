@@ -135,8 +135,11 @@ class TableCalendar extends StatefulWidget {
   final bool headerVisible;
 
   final Widget Function(
-          DateTime date, VoidCallback selectPrevious, VoidCallback selectNext)
-      customHeaderBuilder;
+    DateTime date,
+    VoidCallback selectPrevious,
+    VoidCallback selectNext,
+    VoidCallback toggleCalendarFormat,
+  ) customHeaderBuilder;
 
   /// Function deciding whether given day should be enabled or not.
   /// If `false` is returned, this day will be unavailable.
@@ -390,7 +393,11 @@ class _TableCalendarState extends State<TableCalendar>
   Widget _buildHeader() {
     if (widget.customHeaderBuilder != null) {
       return widget.customHeaderBuilder(
-          widget.calendarController.focusedDay, _selectPrevious, _selectNext);
+        widget.calendarController.focusedDay,
+        _selectPrevious,
+        _selectNext,
+        _toggleCalendarFormat,
+      );
     }
 
     final children = [
