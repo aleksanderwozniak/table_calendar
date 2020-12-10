@@ -275,13 +275,13 @@ class _TableCalendarState extends State<TableCalendar>
 
   void _selectPrevious() {
     setState(() {
-      widget.calendarController._selectPrevious();
+      widget.calendarController.previousPage();
     });
   }
 
   void _selectNext() {
     setState(() {
-      widget.calendarController._selectNext();
+      widget.calendarController.nextPage();
     });
   }
 
