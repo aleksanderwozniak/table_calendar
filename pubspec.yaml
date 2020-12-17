@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl:	">=0.15.0 <0.17.0"
+  intl:	">=0.15.0 <0.18.0"
   simple_gesture_detector: ^0.1.4
 
 dev_dependencies:
