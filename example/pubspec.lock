@@ -141,7 +141,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.3.2"
+    version: "2.3.3"
   term_glyph:
     dependency: transitive
     description:

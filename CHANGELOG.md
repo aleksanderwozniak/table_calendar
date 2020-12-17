@@ -1,3 +1,7 @@
+## [2.3.3]
+
+* Updated dependencies
+
 ## [2.3.2]
 
 * Added previousPage and nextPage methods to CalendarController
