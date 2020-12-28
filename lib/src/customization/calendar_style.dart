@@ -47,6 +47,12 @@ class CalendarStyle {
   /// Color of event markers placed on the bottom of every day containing events.
   final Color markersColor;
 
+  /// Background Color of events.
+  final Color eventColor;
+
+  /// Background Color of holidays.
+  final Color holidayColor;
+
   /// General `Alignment` for event markers.
   /// NOTE: `markersPositionBottom` defaults to `5.0`, so you might want to set it to `null` when using `markersAlignment`.
   final Alignment markersAlignment;
@@ -98,6 +104,12 @@ class CalendarStyle {
   /// Specifies whether or not Today should be highlighted.
   final bool highlightToday;
 
+  /// Specifies whether or not Event should be highlighted.
+  final bool highlightEvent;
+
+  /// Specifies whether or not Holiday should be highlighted.
+  final bool highlightHoliday;
+
   const CalendarStyle({
     this.contentDecoration = const BoxDecoration(),
     this.weekdayStyle = const TextStyle(),
@@ -119,6 +131,8 @@ class CalendarStyle {
     this.eventDayStyle = const TextStyle(),
     this.selectedColor = const Color(0xFF5C6BC0), // Material indigo[400]
     this.todayColor = const Color(0xFF9FA8DA), // Material indigo[200]
+    this.eventColor = const Color(0xFF9FA8DA),
+    this.holidayColor = const Color(0xFF9FA8DA),
     this.markersColor = const Color(0xFF263238), // Material blueGrey[900]
     this.markersAlignment = Alignment.bottomCenter,
     this.markersPositionTop,
@@ -135,5 +149,7 @@ class CalendarStyle {
     this.canEventMarkersOverflow = false,
     this.highlightSelected = true,
     this.highlightToday = true,
+    this.highlightEvent = true,
+    this.highlightHoliday = true
   });
 }

@@ -55,6 +55,12 @@ class _CellWidget extends StatelessWidget {
     } else if (isSelected && calendarStyle.highlightSelected) {
       return BoxDecoration(
           shape: BoxShape.circle, color: calendarStyle.selectedColor);
+    } else if (isHoliday && calendarStyle.highlightHoliday) {
+      return BoxDecoration(
+          shape: BoxShape.circle, color: calendarStyle.holidayColor);
+    } else if (isEventDay && calendarStyle.highlightEvent) {
+      return BoxDecoration(
+          shape: BoxShape.circle, color: calendarStyle.eventColor);
     } else {
       return BoxDecoration(shape: BoxShape.circle);
     }

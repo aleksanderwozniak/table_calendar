@@ -108,12 +108,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _selectedEvents = _events[_selectedDay] ?? [];
     _calendarController = CalendarController();
 
-    _animationController = AnimationController(
+    /*_animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
-    );
+    );*/
 
-    _animationController.forward();
+    //_animationController.forward();
   }
 
   @override
@@ -172,6 +172,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       calendarStyle: CalendarStyle(
         selectedColor: Colors.deepOrange[400],
         todayColor: Colors.deepOrange[200],
+        eventColor: Colors.orangeAccent,
         markersColor: Colors.brown[700],
         outsideDaysVisible: false,
       ),
