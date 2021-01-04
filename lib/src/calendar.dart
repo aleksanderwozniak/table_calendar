@@ -633,6 +633,7 @@ class _TableCalendarState extends State<TableCalendar>
     final eventKey = _getEventKey(date);
     final holidayKey = _getHolidayKey(date);
     final key = eventKey ?? holidayKey;
+    final markersColors = widget.calendarStyle.markersColors;
 
     if (key != null) {
       final children = <Widget>[content];
@@ -662,10 +663,24 @@ class _TableCalendarState extends State<TableCalendar>
               right: widget.calendarStyle.markersPositionRight,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: events
-                    .take(widget.calendarStyle.markersMaxAmount)
-                    .map((event) => _buildMarker(eventKey, event))
-                    .toList(),
+                children: [
+                  ...events
+                      .take(widget.calendarStyle.markersMaxAmount)
+                      .toList()
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    final event = entry.value;
+                    final index = entry.key;
+
+                    return _buildMarker(
+                        eventKey,
+                        event,
+                        index < markersColors.length
+                            ? markersColors[index]
+                            : markersColors.first);
+                  })
+                ],
               ),
             ),
           );
@@ -777,7 +792,7 @@ class _TableCalendarState extends State<TableCalendar>
     }
   }
 
-  Widget _buildMarker(DateTime date, dynamic event) {
+  Widget _buildMarker(DateTime date, dynamic event, Color markerColor) {
     if (widget.builders.singleMarkerBuilder != null) {
       return widget.builders.singleMarkerBuilder(context, date, event);
     } else {
@@ -787,7 +802,7 @@ class _TableCalendarState extends State<TableCalendar>
         margin: const EdgeInsets.symmetric(horizontal: 0.3),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: widget.calendarStyle.markersColor,
+          color: markerColor,
         ),
       );
     }
