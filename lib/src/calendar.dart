@@ -82,11 +82,11 @@ class TableCalendar<T> extends StatefulWidget {
 
   /// Called whenever any unavailable day gets tapped.
   /// Replaces `onDaySelected` for those days.
-  final VoidCallback onUnavailableDaySelected;
+  final Function(DateTime) onUnavailableDaySelected;
 
   /// Called whenever any unavailable day gets long pressed.
   /// Replaces `onDaySelected` for those days.
-  final VoidCallback onUnavailableDayLongPressed;
+  final Function(DateTime) onUnavailableDayLongPressed;
 
   /// Called whenever header gets tapped.
   final HeaderGestureCallback onHeaderTapped;
@@ -485,15 +485,15 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
     }
   }
 
-  void _onUnavailableDaySelected() {
+  void _onUnavailableDaySelected(DateTime day) {
     if (widget.onUnavailableDaySelected != null) {
-      widget.onUnavailableDaySelected();
+      widget.onUnavailableDaySelected(day);
     }
   }
 
-  void _onUnavailableDayLongPressed() {
+  void _onUnavailableDayLongPressed(DateTime day) {
     if (widget.onUnavailableDayLongPressed != null) {
-      widget.onUnavailableDayLongPressed();
+      widget.onUnavailableDayLongPressed(day);
     }
   }
 
@@ -773,10 +773,10 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
     return GestureDetector(
       behavior: widget.dayHitTestBehavior,
       onTap: () => _isDayUnavailable(date)
-          ? _onUnavailableDaySelected()
+          ? _onUnavailableDaySelected(date)
           : _onDaySelected(date, events, holidays),
       onLongPress: () => _isDayUnavailable(date)
-          ? _onUnavailableDayLongPressed()
+          ? _onUnavailableDayLongPressed(date)
           : _onDayLongPressed(date, events, holidays),
       child: content,
     );
