@@ -288,24 +288,20 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
   void didUpdateWidget(TableCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.selectedDay == null) {
-      _selectedDay = null;
-    } else {
-      if (_selectedDay != widget.selectedDay) {
-        final day = widget.selectedDay;
-        _selectedDay = day;
+    if (_selectedDay != widget.selectedDay && widget.selectedDay != null) {
+      final day = widget.selectedDay;
+      _selectedDay = day;
 
-        if (widget.onDaySelected != null) {
-          widget.onDaySelected(
-            day,
-            widget.events[day] ?? [],
-            widget.holidays[day] ?? [],
-          );
-        }
+      if (widget.onDaySelected != null) {
+        widget.onDaySelected(
+          day,
+          widget.events[day] ?? [],
+          widget.holidays[day] ?? [],
+        );
       }
     }
 
-    if (widget.focusedDay != null && _focusedDay.value != widget.focusedDay) {
+    if (_focusedDay.value != widget.focusedDay && widget.focusedDay != null) {
       final day = widget.focusedDay;
 
       _focusedDay.value = day;
