@@ -36,10 +36,7 @@ class _CellWidget extends StatelessWidget {
       decoration: _buildCellDecoration(),
       margin: calendarStyle.cellMargin,
       alignment: Alignment.center,
-      child: Text(
-        text,
-        style: _buildCellTextStyle(),
-      ),
+      child: Text(text, style: _buildCellTextStyle()),
     );
   }
 
