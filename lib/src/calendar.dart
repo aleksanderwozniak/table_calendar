@@ -339,6 +339,10 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
         oldWidget.daysOfWeekHeight != widget.daysOfWeekHeight) {
       _calendarHeight.value = _getPageHeight(baseDay: _baseDay);
     }
+
+    if (oldWidget.startingDayOfWeek != widget.startingDayOfWeek) {
+      _calendarHeight.value = _getPageHeight(baseDay: _baseDay);
+    }
   }
 
   @override
