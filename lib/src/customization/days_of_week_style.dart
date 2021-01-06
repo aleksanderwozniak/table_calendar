@@ -5,9 +5,9 @@ part of table_calendar;
 
 /// Class containing styling for `TableCalendar`'s days of week panel.
 class DaysOfWeekStyle {
-  /// Use to customize days of week panel text (eg. with different `DateFormat`).
+  /// Use to customize days of week panel text (e.g. with different `DateFormat`).
   /// You can use `String` transformations to further customize the text.
-  /// Defaults to simple `'E'` format (eg. Mon, Tue, Wed, etc.).
+  /// Defaults to simple `'E'` format (i.e. Mon, Tue, Wed, etc.).
   ///
   /// Example usage:
   /// ```dart

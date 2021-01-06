@@ -425,7 +425,7 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
     int id = formats.indexOf(_calendarFormat);
 
     // Order of CalendarFormats must be from biggest to smallest,
-    // eg.: [month, twoWeeks, week]
+    // e.g.: [month, twoWeeks, week]
     if (isSwipeUp) {
       id = min(formats.length - 1, id + 1);
     } else {

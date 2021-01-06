@@ -16,9 +16,9 @@ class HeaderStyle {
   /// * `false` - the button will show current CalendarFormat
   final bool formatButtonShowsNext;
 
-  /// Use to customize header's title text (eg. with different `DateFormat`).
+  /// Use to customize header's title text (e.g. with different `DateFormat`).
   /// You can use `String` transformations to further customize the text.
-  /// Defaults to simple `'yMMMM'` format (eg. January 2019, February 2019, March 2019, etc.).
+  /// Defaults to simple `'yMMMM'` format (i.e. January 2019, February 2019, March 2019, etc.).
   ///
   /// Example usage:
   /// ```dart

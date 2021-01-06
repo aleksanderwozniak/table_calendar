@@ -70,7 +70,7 @@ class CalendarStyle {
   /// Specifies whether or not days outside of current month should be displayed.
   ///
   /// Sometimes a fragment of previous month's last week (or next month's first week) appears in current month's view.
-  /// This property defines if those should be visible (eg. with custom style) or hidden.
+  /// This property defines if those should be visible (e.g. with custom style) or hidden.
   final bool outsideDaysVisible;
 
   /// Determines rendering priority for SelectedDay and Today.
