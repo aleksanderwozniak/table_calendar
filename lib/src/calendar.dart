@@ -46,7 +46,7 @@ enum StartingDayOfWeek {
   thursday,
   friday,
   saturday,
-  sunday
+  sunday,
 }
 
 int _getWeekdayNumber(StartingDayOfWeek weekday) {
@@ -288,7 +288,9 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
   void didUpdateWidget(TableCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (_selectedDay != widget.selectedDay && widget.selectedDay != null) {
+    if (widget.selectedDay == null) {
+      _selectedDay = null;
+    } else if (_selectedDay != widget.selectedDay) {
       final day = widget.selectedDay;
       _selectedDay = day;
 
