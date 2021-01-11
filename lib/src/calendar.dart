@@ -868,8 +868,9 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
 
   DateTime _getPageBaseDay(int index, CalendarFormat format) {
     if (index == _pageIndex) {
-      if (format == CalendarFormat.month) {
-        return _focusedDay.value;
+      if (format != CalendarFormat.twoWeeks) {
+        _baseDay = _focusedDay.value;
+        return _baseDay;
       }
 
       return _baseDay;
@@ -878,8 +879,7 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
     final pageDifference = index - _pageIndex;
 
     if (format == CalendarFormat.month) {
-      return DateTime.utc(
-          _baseDay.year, _baseDay.month + pageDifference, _baseDay.day);
+      return DateTime.utc(_baseDay.year, _baseDay.month + pageDifference, 1);
     } else if (format == CalendarFormat.twoWeeks) {
       return DateTime.utc(
         _baseDay.year,
@@ -900,8 +900,8 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
     final pageDifference = index - _pageIndex;
 
     if (format == CalendarFormat.month) {
-      return DateTime.utc(_focusedDay.value.year,
-          _focusedDay.value.month + pageDifference, _focusedDay.value.day);
+      return DateTime.utc(
+          _focusedDay.value.year, _focusedDay.value.month + pageDifference, 1);
     } else if (format == CalendarFormat.twoWeeks) {
       return DateTime.utc(
         _focusedDay.value.year,
