@@ -52,16 +52,20 @@ class _ComplexExamplePageState extends State<ComplexExamplePage>
     super.dispose();
   }
 
-  void _onDaySelected(DateTime day, List<Event> events, List<Event> holidays) {
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay,
+      List<Event> events, List<Event> holidays) {
     print('===============================');
     print('Callback: _onDaySelected');
-    print('SelectedDay: $day');
+    print('SelectedDay: $selectedDay');
     print('Events: $events');
     print('Holidays: $holidays');
 
-    if (_selectedDay != day) {
-      _selectedDay = day;
-      _focusedDay = day;
+    if (_selectedDay != selectedDay) {
+      _selectedDay = selectedDay;
+    }
+
+    if (_focusedDay != focusedDay) {
+      _focusedDay = focusedDay;
     }
 
     // This rebuilds just the [eventList], not the whole page

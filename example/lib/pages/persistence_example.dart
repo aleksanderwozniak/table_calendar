@@ -30,13 +30,16 @@ class _PersistenceExamplePageState extends State<PersistenceExamplePage> {
               selectedDay: _selectedDay,
               focusedDay: _focusedDay,
               calendarFormat: _calendarFormat,
-              onDaySelected: (day, _, __) {
-                if (_selectedDay != day) {
-                  // Note that this does not rebuild the widget
-                  // Values are updated only in case widget gets rebuilt in future
-                  // (for example by toggling [_isVisible])
-                  _selectedDay = day;
-                  _focusedDay = day;
+              onDaySelected: (selectedDay, focusedDay, _, __) {
+                // Note that this does not rebuild the widget
+                // Values are updated only in case widget gets rebuilt in future
+                // (for example by toggling [_isVisible])
+                if (_selectedDay != selectedDay) {
+                  _selectedDay = selectedDay;
+                }
+
+                if (_focusedDay != focusedDay) {
+                  _focusedDay = focusedDay;
                 }
               },
               onPageChanged: (focusedDay, _, __) {

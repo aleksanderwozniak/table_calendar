@@ -34,15 +34,16 @@ class _EventsExamplePageState extends State<EventsExamplePage> {
     _calendarFormat = CalendarFormat.month;
   }
 
-  void _onDaySelected(DateTime day, List<Event> events, List<Event> holidays) {
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay,
+      List<Event> events, List<Event> holidays) {
     print('===============================');
     print('Callback: _onDaySelected');
-    print('SelectedDay: $day');
+    print('SelectedDay: $selectedDay');
     print('Events: $events');
     print('Holidays: $holidays');
 
-    if (_selectedDay != day) {
-      _selectedDay = day;
+    if (_selectedDay != selectedDay) {
+      _selectedDay = selectedDay;
     }
 
     // Only [eventList] requires rebuilding, so this can be improved

@@ -39,7 +39,6 @@ class _SimpleExamplePageState extends State<SimpleExamplePage> {
           selectedColor: Colors.deepOrange[400],
           todayColor: Colors.deepOrange[200],
           markersColor: Colors.brown[700],
-          outsideDaysVisible: false,
         ),
         // Use to customize calendar's header style
         headerStyle: HeaderStyle(
@@ -50,9 +49,9 @@ class _SimpleExamplePageState extends State<SimpleExamplePage> {
             borderRadius: BorderRadius.circular(16.0),
           ),
         ),
-        onDaySelected: (day, events, holidays) {
+        onDaySelected: (selectedDay, _, events, __) {
           print('Callback: onDaySelected');
-          print('SelectedDay: $day');
+          print('SelectedDay: $selectedDay');
           print('Events: $events');
         },
       ),
