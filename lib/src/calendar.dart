@@ -4,7 +4,8 @@
 part of table_calendar;
 
 /// Callback exposing currently selected day.
-typedef void OnDaySelected<T>(DateTime day, List<T> events, List<T> holidays);
+typedef void OnDaySelected<T>(DateTime selectedDay, DateTime focusedDay,
+    List<T> events, List<T> holidays);
 
 /// Callback exposing currently focused day along with first and last visible day.
 typedef void OnPageChanged(DateTime focusedDay, DateTime first, DateTime last);
@@ -288,6 +289,14 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
   void didUpdateWidget(TableCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    if (_focusedDay.value != widget.focusedDay && widget.focusedDay != null) {
+      final day = widget.focusedDay;
+
+      _focusedDay.value = day;
+      _baseDay = day;
+      _calendarHeight.value = _getPageHeight(baseDay: _baseDay);
+    }
+
     if (widget.selectedDay == null) {
       _selectedDay = null;
     } else if (_selectedDay != widget.selectedDay) {
@@ -297,18 +306,11 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
       if (widget.onDaySelected != null) {
         widget.onDaySelected(
           day,
+          _focusedDay.value,
           widget.events[day] ?? [],
           widget.holidays[day] ?? [],
         );
       }
-    }
-
-    if (_focusedDay.value != widget.focusedDay && widget.focusedDay != null) {
-      final day = widget.focusedDay;
-
-      _focusedDay.value = day;
-      _baseDay = day;
-      _calendarHeight.value = _getPageHeight(baseDay: _baseDay);
     }
 
     if (_calendarFormat != widget.calendarFormat) {
@@ -467,23 +469,44 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
 
   void _onDaySelected(DateTime day, List<T> events, List<T> holidays) {
     setState(() {
-      _focusedDay.value = day;
       _selectedDay = day;
 
+      // TODO:
+      // * adjust name
+      // * add as a widget's property
+      final preventTapNavigation = true;
+
       if (_calendarFormat == CalendarFormat.month) {
-        _baseDay = day;
-        _calendarHeight.value = _getPageHeight(baseDay: _baseDay);
+        if (preventTapNavigation) {
+          if (_isBeforeMonth(day, _focusedDay.value)) {
+            _baseDay = _firstDayOfMonth(_focusedDay.value);
+            _focusedDay.value = _baseDay;
+          } else if (_isAfterMonth(day, _focusedDay.value)) {
+            _baseDay = _lastDayOfMonth(_focusedDay.value);
+            _focusedDay.value = _baseDay;
+          } else {
+            _baseDay = day;
+            _focusedDay.value = day;
+          }
+        } else {
+          // default implementation with jumping to previous/next month
+          _baseDay = day;
+          _focusedDay.value = day;
+          _calendarHeight.value = _getPageHeight(baseDay: _baseDay);
+        }
+      } else {
+        _focusedDay.value = day;
       }
     });
 
     if (widget.onDaySelected != null) {
-      widget.onDaySelected(day, events, holidays);
+      widget.onDaySelected(day, _focusedDay.value, events, holidays);
     }
   }
 
   void _onDayLongPressed(DateTime day, List<T> events, List<T> holidays) {
     if (widget.onDayLongPressed != null) {
-      widget.onDayLongPressed(day, events, holidays);
+      widget.onDayLongPressed(day, _focusedDay.value, events, holidays);
     }
   }
 
@@ -1013,6 +1036,22 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
     return widget.enabledDayPredicate == null
         ? true
         : widget.enabledDayPredicate(day);
+  }
+
+  bool _isBeforeMonth(DateTime day, DateTime month) {
+    if (day.year == month.year) {
+      return day.month < month.month;
+    } else {
+      return day.isBefore(month);
+    }
+  }
+
+  bool _isAfterMonth(DateTime day, DateTime month) {
+    if (day.year == month.year) {
+      return day.month > month.month;
+    } else {
+      return day.isAfter(month);
+    }
   }
 
   bool _isWeekend(DateTime day, List<int> weekendDays) {
