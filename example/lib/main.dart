@@ -46,6 +46,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   AnimationController _animationController;
   CalendarController _calendarController;
 
+  final Map<DateTime, List> _holidays = {
+    DateTime(2021, 1, 1): ['New Year\'s Day'],
+    DateTime(2021, 1, 6): ['Epiphany'],
+    DateTime(2021, 2, 14): ['Valentine\'s Day'],
+    DateTime(2021, 4, 4): ['Easter Sunday'],
+    DateTime(2021, 4, 5): ['Easter Monday'],
+  };
+
   @override
   void initState() {
     super.initState();
@@ -151,8 +159,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         children: <Widget>[
           // Switch out 2 lines below to play with TableCalendar's settings
           //-----------------------
-          _buildTableCalendar(),
-          // _buildTableCalendarWithBuilders(),
+          // _buildTableCalendar(),
+          _buildTableCalendarWithBuilders(),
           const SizedBox(height: 8.0),
           _buildButtons(),
           const SizedBox(height: 8.0),
@@ -223,7 +231,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             child: Container(
               margin: const EdgeInsets.all(4.0),
               padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-              color: Colors.deepOrange[300],
+              decoration: BoxDecoration(
+                color: Colors.green[100],
+                borderRadius: BorderRadius.circular(
+                  8.0,
+                ),
+              ),
               width: 100,
               height: 100,
               child: Text(
@@ -237,7 +250,30 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           return Container(
             margin: const EdgeInsets.all(4.0),
             padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-            color: Colors.amber[400],
+            decoration: BoxDecoration(
+              color: Colors.amber[400],
+              borderRadius: BorderRadius.circular(
+                8.0,
+              ),
+            ),
+            width: 100,
+            height: 100,
+            child: Text(
+              '${date.day}',
+              style: TextStyle().copyWith(fontSize: 16.0),
+            ),
+          );
+        },
+        holidayDayBuilder: (context, date, _) {
+          return Container(
+            margin: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+            decoration: BoxDecoration(
+              color: Colors.red[100],
+              borderRadius: BorderRadius.circular(
+                8.0,
+              ),
+            ),
             width: 100,
             height: 100,
             child: Text(
@@ -262,9 +298,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           if (holidays.isNotEmpty) {
             children.add(
               Positioned(
-                right: -2,
-                top: -2,
-                child: _buildHolidaysMarker(),
+                right: 1,
+                top: 1,
+                child: _buildHolidaysMarker(date, holidays),
               ),
             );
           }
@@ -286,8 +322,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(4.0),
         color: _calendarController.isSelected(date)
-            ? Colors.brown[500]
+            ? Colors.green[600]
             : _calendarController.isToday(date)
                 ? Colors.brown[300]
                 : Colors.blue[400],
@@ -306,11 +343,29 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildHolidaysMarker() {
-    return Icon(
-      Icons.add_box,
-      size: 20.0,
-      color: Colors.blueGrey[800],
+  Widget _buildHolidaysMarker(DateTime date, List holidays) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(4.0),
+        color: _calendarController.isSelected(date)
+            ? Colors.red[500]
+            : _calendarController.isToday(date)
+                ? Colors.red[300]
+                : Colors.red[400],
+      ),
+      width: 16.0,
+      height: 16.0,
+      child: Center(
+        child: Text(
+          '${holidays.length}',
+          style: TextStyle().copyWith(
+            color: Colors.white,
+            fontSize: 12.0,
+          ),
+        ),
+      ),
     );
   }
 
