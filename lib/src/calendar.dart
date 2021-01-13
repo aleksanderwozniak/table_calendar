@@ -390,15 +390,19 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
       return;
     }
 
+    final base = _calendarFormat == CalendarFormat.twoWeeks
+        ? _focusedDay.value
+        : _baseDay;
+
     setState(() {
       _calendarFormat = _nextFormat();
     });
 
-    final days = _getVisibleDays(_baseDay);
+    final days = _getVisibleDays(base);
 
     if (_calendarFormat == CalendarFormat.month) {
-      _firstActiveDay = _firstDayOfMonth(_baseDay);
-      _lastActiveDay = _lastDayOfMonth(_baseDay);
+      _firstActiveDay = _firstDayOfMonth(base);
+      _lastActiveDay = _lastDayOfMonth(base);
     } else {
       _firstActiveDay = days.first;
       _lastActiveDay = days.last;
@@ -409,8 +413,8 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
     if (widget.onFormatChanged != null) {
       if (!widget.calendarStyle.outsideDaysVisible &&
           _calendarFormat == CalendarFormat.month) {
-        widget.onFormatChanged(_calendarFormat, _firstDayOfMonth(_baseDay),
-            _lastDayOfMonth(_baseDay));
+        widget.onFormatChanged(
+            _calendarFormat, _firstDayOfMonth(base), _lastDayOfMonth(base));
       } else {
         widget.onFormatChanged(_calendarFormat, days.first, days.last);
       }
@@ -440,15 +444,19 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
       return;
     }
 
+    final base = _calendarFormat == CalendarFormat.twoWeeks
+        ? _focusedDay.value
+        : _baseDay;
+
     setState(() {
       _calendarFormat = formats[id];
     });
 
-    final days = _getVisibleDays(_baseDay);
+    final days = _getVisibleDays(base);
 
     if (_calendarFormat == CalendarFormat.month) {
-      _firstActiveDay = _firstDayOfMonth(_baseDay);
-      _lastActiveDay = _lastDayOfMonth(_baseDay);
+      _firstActiveDay = _firstDayOfMonth(base);
+      _lastActiveDay = _lastDayOfMonth(base);
     } else {
       _firstActiveDay = days.first;
       _lastActiveDay = days.last;
@@ -459,8 +467,8 @@ class TableCalendarState<T> extends State<TableCalendar<T>>
     if (widget.onFormatChanged != null) {
       if (!widget.calendarStyle.outsideDaysVisible &&
           _calendarFormat == CalendarFormat.month) {
-        widget.onFormatChanged(_calendarFormat, _firstDayOfMonth(_baseDay),
-            _lastDayOfMonth(_baseDay));
+        widget.onFormatChanged(
+            _calendarFormat, _firstDayOfMonth(base), _lastDayOfMonth(base));
       } else {
         widget.onFormatChanged(_calendarFormat, days.first, days.last);
       }
