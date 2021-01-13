@@ -229,7 +229,14 @@ class CalendarController {
       if (_rangeStartDay == null && _rangeEndDay == null) {
         _rangeStartDay = normalizedDate;
       } else if (_rangeStartDay != null && _rangeEndDay == null) {
-        _rangeEndDay = normalizedDate;
+
+        if(_rangeStartDay.isAfter(normalizedDate)) {
+          _rangeStartDay = normalizedDate;
+          _rangeEndDay = null;
+        }else{
+          _rangeEndDay = normalizedDate;
+        }
+
       } else {
         _rangeEndDay = null;
         _rangeStartDay = normalizedDate;
