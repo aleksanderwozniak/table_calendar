@@ -284,14 +284,11 @@ class _TableCalendarState extends State<TableCalendar>
     }
   }
 
-  void _selectedRangeDaysCallback(List<DateTime> range){
-    if(widget.onRangeSelected != null){
-      widget.onRangeSelected(
-        range,
-        // TODO implement this
-        [],
-        []
-      );
+  void _selectedRangeDaysCallback(List<DateTime> range) {
+    if (widget.onRangeSelected != null) {
+      widget.onRangeSelected(range,
+          // TODO implement this
+          [], []);
     }
   }
 
@@ -308,19 +305,19 @@ class _TableCalendarState extends State<TableCalendar>
   }
 
   void _selectDay(DateTime day) {
-    if(!widget.selectRange){
+    if (!widget.selectRange) {
       setState(() {
         widget.calendarController.setSelectedDay(day, isProgrammatic: false);
         _selectedDayCallback(day);
       });
-    }else{
+    } else {
       setState(() {
         final controller = widget.calendarController;
         controller.setRangeSelect(day, isProgrammatic: false);
-        _selectedRangeDaysCallback([controller.rangeStartDay, controller.rangeEndDay]);
+        _selectedRangeDaysCallback(
+            [controller.rangeStartDay, controller.rangeEndDay]);
       });
     }
-
   }
 
   void _onDayLongPressed(DateTime day) {
@@ -641,14 +638,81 @@ class _TableCalendarState extends State<TableCalendar>
 
   // TableCell will have equal width and height
   Widget _buildTableCell(DateTime date) {
-    return LayoutBuilder(
-      builder: (context, constraints) => ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: widget.rowHeight ?? constraints.maxWidth,
-          minHeight: widget.rowHeight ?? constraints.maxWidth,
+    final controller = widget.calendarController;
+
+    Color highlightColor = Colors.transparent;
+    Color rangeColor = Colors.transparent;
+
+    if (controller.isWithinRangeDays(date)) {
+      rangeColor = widget.calendarStyle.withinRangeDayColor;
+    }
+
+    bool isStartDay = controller.isRangeStartDay(date);
+    bool isEndDay = controller.isRangeEndDay(date);
+
+    if (isStartDay) {
+      highlightColor = widget.calendarStyle.rangeStartDayColor;
+      rangeColor = widget.calendarStyle.withinRangeDayColor;
+    }
+
+    if (isEndDay) {
+      highlightColor = widget.calendarStyle.rangeEndDayColor;
+      rangeColor = widget.calendarStyle.withinRangeDayColor;
+    }
+
+    final radius = Radius.circular(40.0);
+    final noRadius = Radius.zero;
+
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: Padding(
+            padding: isEndDay || isStartDay
+                ? EdgeInsets.only(
+                    top: 4.0,
+                    bottom: 4.0,
+                    right: isEndDay ? 4.0 : 0,
+                    left: isStartDay ? 4.0 : 0,
+                  )
+                : EdgeInsets.symmetric(
+                    vertical: 4.0,
+                  ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: rangeColor,
+                borderRadius: BorderRadius.only(
+                  topRight: isEndDay ? radius : noRadius,
+                  bottomRight: isEndDay ? radius : noRadius,
+                  bottomLeft: isStartDay ? radius : noRadius,
+                  topLeft: isStartDay ? radius : noRadius,
+                ),
+              ),
+            ),
+          ),
         ),
-        child: _buildCell(date),
-      ),
+        Positioned.fill(
+          child: Padding(
+            padding: EdgeInsets.all(4.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: highlightColor,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        ),
+        Container(
+          child: LayoutBuilder(
+            builder: (context, constraints) => ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: widget.rowHeight ?? constraints.maxWidth,
+                minHeight: widget.rowHeight ?? constraints.maxWidth,
+              ),
+              child: _buildCell(date),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -733,7 +797,8 @@ class _TableCalendarState extends State<TableCalendar>
     final tIsSelected = widget.calendarController.isSelected(date);
     final tIsRangeStartDay = widget.calendarController.isRangeStartDay(date);
     final tIsRangeEndDay = widget.calendarController.isRangeEndDay(date);
-    final tIsWithinRangeDays = widget.calendarController.isWithinRangeDays(date);
+    final tIsWithinRangeDays =
+        widget.calendarController.isWithinRangeDays(date);
     final tIsToday = widget.calendarController.isToday(date);
     final tIsOutside = widget.calendarController._isExtraDay(date);
     final tIsHoliday = widget.calendarController.visibleHolidays

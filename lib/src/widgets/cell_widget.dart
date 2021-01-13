@@ -55,25 +55,6 @@ class _CellWidget extends StatelessWidget {
         calendarStyle.highlightSelected) {
       return BoxDecoration(
           shape: BoxShape.circle, color: calendarStyle.selectedColor);
-    } else if (isRangeStartDay &&
-        calendarStyle.renderSelectedFirst &&
-        calendarStyle.highlightSelected) {
-      return BoxDecoration(
-        // shape: BoxShape.circle,
-        color: calendarStyle.rangeStartDayColor,
-      );
-    } else if (isRangeEndDay &&
-        calendarStyle.renderSelectedFirst &&
-        calendarStyle.highlightSelected) {
-      return BoxDecoration(
-        // shape: BoxShape.circle,
-        color: calendarStyle.rangeEndDayColor,
-      );
-    } else if(isWithinRangeDays){
-      return BoxDecoration(
-        shape: BoxShape.circle,
-        color: calendarStyle.rangeEndDayColor,
-      );
     } else if (isToday && calendarStyle.highlightToday) {
       return BoxDecoration(
           shape: BoxShape.circle, color: calendarStyle.todayColor);
