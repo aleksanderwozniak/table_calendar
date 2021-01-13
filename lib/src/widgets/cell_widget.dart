@@ -12,6 +12,9 @@ class _CellWidget extends StatelessWidget {
   final bool isOutsideMonth;
   final bool isHoliday;
   final bool isEventDay;
+  final bool isRangeStartDay;
+  final bool isRangeEndDay;
+  final bool isWithinRangeDays;
   final CalendarStyle calendarStyle;
 
   const _CellWidget({
@@ -24,6 +27,9 @@ class _CellWidget extends StatelessWidget {
     this.isOutsideMonth = false,
     this.isHoliday = false,
     this.isEventDay = false,
+    this.isRangeStartDay = false,
+    this.isRangeEndDay = false,
+    this.isWithinRangeDays = false,
     @required this.calendarStyle,
   })  : assert(text != null),
         assert(calendarStyle != null),
@@ -49,6 +55,25 @@ class _CellWidget extends StatelessWidget {
         calendarStyle.highlightSelected) {
       return BoxDecoration(
           shape: BoxShape.circle, color: calendarStyle.selectedColor);
+    } else if (isRangeStartDay &&
+        calendarStyle.renderSelectedFirst &&
+        calendarStyle.highlightSelected) {
+      return BoxDecoration(
+        // shape: BoxShape.circle,
+        color: calendarStyle.rangeStartDayColor,
+      );
+    } else if (isRangeEndDay &&
+        calendarStyle.renderSelectedFirst &&
+        calendarStyle.highlightSelected) {
+      return BoxDecoration(
+        // shape: BoxShape.circle,
+        color: calendarStyle.rangeEndDayColor,
+      );
+    } else if(isWithinRangeDays){
+      return BoxDecoration(
+        shape: BoxShape.circle,
+        color: calendarStyle.rangeEndDayColor,
+      );
     } else if (isToday && calendarStyle.highlightToday) {
       return BoxDecoration(
           shape: BoxShape.circle, color: calendarStyle.todayColor);
@@ -67,6 +92,14 @@ class _CellWidget extends StatelessWidget {
         calendarStyle.renderSelectedFirst &&
         calendarStyle.highlightSelected) {
       return calendarStyle.selectedStyle;
+    } else if (isRangeStartDay && calendarStyle.renderSelectedFirst &&
+        calendarStyle.highlightSelected) {
+      return calendarStyle.rangeStartDayStyle;
+    } else if (isRangeEndDay && calendarStyle.renderSelectedFirst &&
+        calendarStyle.highlightSelected) {
+      return calendarStyle.rangeEndDayStyle;
+    } else if(isWithinRangeDays){
+      return calendarStyle.withinRangeDayStyle;
     } else if (isToday && calendarStyle.highlightToday) {
       return calendarStyle.todayStyle;
     } else if (isSelected && calendarStyle.highlightSelected) {
@@ -83,7 +116,7 @@ class _CellWidget extends StatelessWidget {
       return calendarStyle.weekendStyle;
     } else if (isEventDay) {
       return calendarStyle.eventDayStyle;
-    } else {
+    }  else {
       return calendarStyle.weekdayStyle;
     }
   }

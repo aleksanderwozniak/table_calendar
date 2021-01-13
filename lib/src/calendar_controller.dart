@@ -8,6 +8,8 @@ const double _dxMin = -1.2;
 
 typedef void _SelectedDayCallback(DateTime day);
 
+typedef void _RangeSelectedDaysCallback(List<DateTime> range);
+
 /// Controller required for `TableCalendar`.
 ///
 /// Should be created in `initState()`, and then disposed in `dispose()`:
@@ -30,6 +32,12 @@ class CalendarController {
 
   /// Currently selected day.
   DateTime get selectedDay => _selectedDay;
+
+  // The first day when range selection is enabled
+  DateTime get rangeStartDay => _rangeStartDay;
+
+  // The last day when range selection is enabled
+  DateTime get rangeEndDay => _rangeEndDay;
 
   /// Currently visible calendar format.
   CalendarFormat get calendarFormat => _calendarFormat.value;
@@ -82,6 +90,9 @@ class CalendarController {
   Map<DateTime, List> _holidays;
   DateTime _focusedDay;
   DateTime _selectedDay;
+  DateTime _rangeStartDay;
+  DateTime _rangeEndDay;
+  bool _selectRange;
   StartingDayOfWeek _startingDayOfWeek;
   ValueNotifier<CalendarFormat> _calendarFormat;
   ValueNotifier<List<DateTime>> _visibleDays;
@@ -93,6 +104,7 @@ class CalendarController {
   bool _useNextCalendarFormat;
   bool _includeInvisibleDays;
   _SelectedDayCallback _selectedDayCallback;
+  _RangeSelectedDaysCallback _rangeSelectedDaysCallback;
 
   void _init({
     @required Map<DateTime, List> events,
@@ -103,9 +115,11 @@ class CalendarController {
     @required bool useNextCalendarFormat,
     @required StartingDayOfWeek startingDayOfWeek,
     @required _SelectedDayCallback selectedDayCallback,
+    @required _RangeSelectedDaysCallback rangeSelectedDaysCallback,
     @required OnVisibleDaysChanged onVisibleDaysChanged,
     @required OnCalendarCreated onCalendarCreated,
     @required bool includeInvisibleDays,
+    @required bool selectRange,
   }) {
     _events = events;
     _holidays = holidays;
@@ -114,6 +128,8 @@ class CalendarController {
     _useNextCalendarFormat = useNextCalendarFormat;
     _selectedDayCallback = selectedDayCallback;
     _includeInvisibleDays = includeInvisibleDays;
+    _selectRange = selectRange;
+    _rangeSelectedDaysCallback = rangeSelectedDaysCallback;
 
     _pageId = 0;
     _dx = 0;
@@ -194,6 +210,42 @@ class CalendarController {
     _calendarFormat.value = value;
   }
 
+  void setRangeSelect(
+    DateTime value, {
+    bool isProgrammatic = true,
+    bool animate = true,
+    bool runCallback = false,
+  }) {
+    final normalizedDate = _normalizeDate(value);
+
+    // Update rangeStartDay or rangeEndDay
+    // if selectRange option is turned on
+    // otherwise update selected day and focused day
+    if (_selectRange) {
+      // Three situations
+      // 1 - select start day if both start and end range day null
+      // 2 - select end day if only end day null
+      // 3 - clear end day and select start day if both not null
+      if (_rangeStartDay == null && _rangeEndDay == null) {
+        _rangeStartDay = normalizedDate;
+      } else if (_rangeStartDay != null && _rangeEndDay == null) {
+        _rangeEndDay = normalizedDate;
+      } else {
+        _rangeEndDay = null;
+        _rangeStartDay = normalizedDate;
+      }
+    } else {
+      _selectedDay = normalizedDate;
+      _focusedDay = normalizedDate;
+    }
+
+    if(isProgrammatic && runCallback && _rangeSelectedDaysCallback != null){
+      _rangeSelectedDaysCallback(
+        [_rangeStartDay, _rangeEndDay],
+      );
+    }
+  }
+
   /// Sets selected day to a given `value`.
   /// Use `runCallback: true` if this should trigger `OnDaySelected` callback.
   void setSelectedDay(
@@ -212,8 +264,6 @@ class CalendarController {
       }
     }
 
-    _selectedDay = normalizedDate;
-    _focusedDay = normalizedDate;
     _updateVisibleDays(isProgrammatic);
 
     if (isProgrammatic && runCallback && _selectedDayCallback != null) {
@@ -454,7 +504,27 @@ class CalendarController {
 
   /// Returns true if `day` is currently selected.
   bool isSelected(DateTime day) {
-    return _isSameDay(day, selectedDay);
+    if (_selectRange) {
+      return false;
+    } else {
+      return _isSameDay(day, selectedDay);
+    }
+  }
+
+  bool isRangeStartDay(DateTime day) {
+    return _isSameDay(day, _rangeStartDay);
+  }
+
+  bool isRangeEndDay(DateTime day) {
+    return _isSameDay(day, _rangeEndDay);
+  }
+
+  bool isWithinRangeDays(DateTime day) {
+    if (_rangeStartDay == null || _rangeEndDay == null) {
+      return false;
+    } else {
+      return day.isAfter(_rangeStartDay) && day.isBefore(_rangeEndDay);
+    }
   }
 
   /// Returns true if `day` is the same day as `DateTime.now()`.
@@ -463,6 +533,10 @@ class CalendarController {
   }
 
   bool _isSameDay(DateTime dayA, DateTime dayB) {
+    if (dayA == null || dayB == null) {
+      return false;
+    }
+
     return dayA.year == dayB.year &&
         dayA.month == dayB.month &&
         dayA.day == dayB.day;

@@ -6,6 +6,8 @@ part of table_calendar;
 /// Callback exposing currently selected day.
 typedef void OnDaySelected(DateTime day, List events, List holidays);
 
+typedef void OnRangeSelected(List<DateTime> range, List events, List holidays);
+
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
 typedef void OnVisibleDaysChanged(
     DateTime first, DateTime last, CalendarFormat format);
@@ -72,6 +74,9 @@ class TableCalendar extends StatefulWidget {
   /// `Map` of holidays.
   /// This property allows you to provide custom holiday rules.
   final Map<DateTime, List> holidays;
+
+  /// called whenever date range selected
+  final OnRangeSelected onRangeSelected;
 
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
@@ -156,7 +161,7 @@ class TableCalendar extends StatefulWidget {
   /// If `AvailableGestures.none` is used, the Calendar will only be interactive via buttons.
   final AvailableGestures availableGestures;
 
-  /// Configuration for vertical Swipe detector.
+  //s/ Configuration for vertical Swipe detector.
   final SimpleSwipeConfig simpleSwipeConfig;
 
   /// Style for `TableCalendar`'s content.
@@ -171,12 +176,16 @@ class TableCalendar extends StatefulWidget {
   /// Set of Builders for `TableCalendar` to work with.
   final CalendarBuilders builders;
 
+  /// decides whether to use range selection
+  final bool selectRange;
+
   TableCalendar({
     Key key,
     @required this.calendarController,
     this.locale,
     this.events = const {},
     this.holidays = const {},
+    this.onRangeSelected,
     this.onDaySelected,
     this.onDayLongPressed,
     this.onUnavailableDaySelected,
@@ -210,6 +219,7 @@ class TableCalendar extends StatefulWidget {
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
     this.builders = const CalendarBuilders(),
+    this.selectRange = false,
   })  : assert(calendarController != null),
         assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
@@ -242,6 +252,7 @@ class _TableCalendarState extends State<TableCalendar>
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
       onCalendarCreated: widget.onCalendarCreated,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
+      selectRange: widget.selectRange,
     );
   }
 
@@ -273,6 +284,17 @@ class _TableCalendarState extends State<TableCalendar>
     }
   }
 
+  void _selectedRangeDaysCallback(List<DateTime> range){
+    if(widget.onRangeSelected != null){
+      widget.onRangeSelected(
+        range,
+        // TODO implement this
+        [],
+        []
+      );
+    }
+  }
+
   void _selectPrevious() {
     setState(() {
       widget.calendarController.previousPage();
@@ -286,10 +308,19 @@ class _TableCalendarState extends State<TableCalendar>
   }
 
   void _selectDay(DateTime day) {
-    setState(() {
-      widget.calendarController.setSelectedDay(day, isProgrammatic: false);
-      _selectedDayCallback(day);
-    });
+    if(!widget.selectRange){
+      setState(() {
+        widget.calendarController.setSelectedDay(day, isProgrammatic: false);
+        _selectedDayCallback(day);
+      });
+    }else{
+      setState(() {
+        final controller = widget.calendarController;
+        controller.setRangeSelect(day, isProgrammatic: false);
+        _selectedRangeDaysCallback([controller.rangeStartDay, controller.rangeEndDay]);
+      });
+    }
+
   }
 
   void _onDayLongPressed(DateTime day) {
@@ -700,6 +731,9 @@ class _TableCalendarState extends State<TableCalendar>
 
     final tIsUnavailable = _isDayUnavailable(date);
     final tIsSelected = widget.calendarController.isSelected(date);
+    final tIsRangeStartDay = widget.calendarController.isRangeStartDay(date);
+    final tIsRangeEndDay = widget.calendarController.isRangeEndDay(date);
+    final tIsWithinRangeDays = widget.calendarController.isWithinRangeDays(date);
     final tIsToday = widget.calendarController.isToday(date);
     final tIsOutside = widget.calendarController._isExtraDay(date);
     final tIsHoliday = widget.calendarController.visibleHolidays
@@ -767,6 +801,9 @@ class _TableCalendarState extends State<TableCalendar>
         text: '${date.day}',
         isUnavailable: tIsUnavailable,
         isSelected: tIsSelected,
+        isRangeStartDay: tIsRangeStartDay,
+        isRangeEndDay: tIsRangeEndDay,
+        isWithinRangeDays: tIsWithinRangeDays,
         isToday: tIsToday,
         isWeekend: tIsWeekend,
         isOutsideMonth: tIsOutside,

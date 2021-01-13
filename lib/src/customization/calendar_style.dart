@@ -20,6 +20,15 @@ class CalendarStyle {
   /// Style of foreground Text for selected day.
   final TextStyle selectedStyle;
 
+  /// Style of foreground Text for range start day
+  final TextStyle rangeStartDayStyle;
+
+  /// style of foreground Text for range end day
+  final TextStyle rangeEndDayStyle;
+
+  /// style of foreground Text for days within the selected range
+  final TextStyle withinRangeDayStyle;
+
   /// Style of foreground Text for today.
   final TextStyle todayStyle;
 
@@ -40,6 +49,15 @@ class CalendarStyle {
 
   /// Background Color of selected day.
   final Color selectedColor;
+
+  /// Background Color of range start day.
+  final Color rangeStartDayColor;
+
+  /// Background Color of range end day
+  final Color rangeEndDayColor;
+
+  // Background Color of days within range
+  final Color withinRangeDayColor;
 
   /// Background Color of today.
   final Color todayColor;
@@ -107,6 +125,12 @@ class CalendarStyle {
         const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
     this.selectedStyle = const TextStyle(
         color: const Color(0xFFFAFAFA), fontSize: 16.0), // Material grey[50]
+    this.withinRangeDayStyle =
+        const TextStyle(color: const Color(0xFF000000), fontSize: 16.0),
+    this.rangeStartDayStyle =
+        const TextStyle(color: const Color(0xFF000000), fontSize: 16.0),
+    this.rangeEndDayStyle =
+        const TextStyle(color: const Color(0xFF000000), fontSize: 16.0),
     this.todayStyle = const TextStyle(
         color: const Color(0xFFFAFAFA), fontSize: 16.0), // Material grey[50]
     this.outsideStyle =
@@ -118,6 +142,9 @@ class CalendarStyle {
     this.unavailableStyle = const TextStyle(color: const Color(0xFFBFBFBF)),
     this.eventDayStyle = const TextStyle(),
     this.selectedColor = const Color(0xFF5C6BC0), // Material indigo[400]
+    this.rangeStartDayColor = const Color(0xFF5C6BC0),
+    this.rangeEndDayColor = const Color(0xFF5C6BC0),
+    this.withinRangeDayColor = const Color(0xFF5C6BC0),
     this.todayColor = const Color(0xFF9FA8DA), // Material indigo[200]
     this.markersColor = const Color(0xFF263238), // Material blueGrey[900]
     this.markersAlignment = Alignment.bottomCenter,
