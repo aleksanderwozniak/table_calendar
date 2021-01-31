@@ -3,10 +3,13 @@
 
 part of table_calendar;
 
+/// Signature for function returning text that can be localized and formatted with `DateFormat`.
+typedef TextFormatter = String Function(DateTime date, dynamic locale);
+
 /// Class containing styling and configuration of `TableCalendar`'s header.
 class HeaderStyle {
   /// Responsible for making title Text centered.
-  final bool centerHeaderTitle;
+  final bool titleCentered;
 
   /// Responsible for FormatButton visibility.
   final bool formatButtonVisible;
@@ -22,9 +25,9 @@ class HeaderStyle {
   ///
   /// Example usage:
   /// ```dart
-  /// titleTextBuilder: (date, locale) => DateFormat.yM(locale).format(date),
+  /// titleTextFormatter: (date, locale) => DateFormat.yM(locale).format(date),
   /// ```
-  final TextBuilder titleTextBuilder;
+  final TextFormatter titleTextFormatter;
 
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
@@ -77,10 +80,10 @@ class HeaderStyle {
   final BoxDecoration decoration;
 
   const HeaderStyle({
-    this.centerHeaderTitle = false,
+    this.titleCentered = false,
     this.formatButtonVisible = true,
     this.formatButtonShowsNext = true,
-    this.titleTextBuilder,
+    this.titleTextFormatter,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
     this.formatButtonTextStyle = const TextStyle(),
     this.formatButtonDecoration = const BoxDecoration(

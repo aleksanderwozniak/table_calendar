@@ -13,8 +13,8 @@ class _CustomIconButton extends StatelessWidget {
     Key key,
     @required this.icon,
     @required this.onTap,
-    this.margin,
-    this.padding,
+    this.margin = const EdgeInsets.all(0.0),
+    this.padding = const EdgeInsets.all(8.0),
   })  : assert(icon != null),
         assert(onTap != null),
         super(key: key);

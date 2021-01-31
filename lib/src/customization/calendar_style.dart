@@ -3,133 +3,107 @@
 
 part of table_calendar;
 
-/// Class containing styling for `TableCalendar`'s content.
+class PositionedOffset {
+  final double top;
+  final double bottom;
+  final double start;
+  final double end;
+
+  const PositionedOffset({this.top, this.bottom, this.start, this.end});
+}
+
 class CalendarStyle {
-  /// BoxDecoration for each interior row of the table
-  final BoxDecoration contentDecoration;
-
-  /// Style of foreground Text for regular weekdays.
-  final TextStyle weekdayStyle;
-
-  /// Style of foreground Text for regular weekends.
-  final TextStyle weekendStyle;
-
-  /// Style of foreground Text for holidays.
-  final TextStyle holidayStyle;
-
-  /// Style of foreground Text for selected day.
-  final TextStyle selectedStyle;
-
-  /// Style of foreground Text for today.
-  final TextStyle todayStyle;
-
-  /// Style of foreground Text for weekdays outside of current month.
-  final TextStyle outsideStyle;
-
-  /// Style of foreground Text for weekends outside of current month.
-  final TextStyle outsideWeekendStyle;
-
-  /// Style of foreground Text for holidays outside of current month.
-  final TextStyle outsideHolidayStyle;
-
-  /// Style of foreground Text for days outside of `startDay` - `endDay` Date range.
-  final TextStyle unavailableStyle;
-
-  /// Style of foreground Text for days that contain events.
-  final TextStyle eventDayStyle;
-
-  /// Background Color of selected day.
-  final Color selectedColor;
-
-  /// Background Color of today.
-  final Color todayColor;
-
-  /// Color of event markers placed on the bottom of every day containing events.
-  final Color markersColor;
-
-  /// General `Alignment` for event markers.
-  /// NOTE: `markersPositionBottom` defaults to `5.0`, so you might want to set it to `null` when using `markersAlignment`.
-  final Alignment markersAlignment;
-
-  /// `top` property of `Positioned` widget used for event markers.
-  final double markersPositionTop;
-
-  /// `bottom` property of `Positioned` widget used for event markers.
-  /// NOTE: This defaults to `5.0`, so you might occasionally want to set it to `null`.
-  final double markersPositionBottom;
-
-  /// `left` property of `Positioned` widget used for event markers.
-  final double markersPositionLeft;
-
-  /// `right` property of `Positioned` widget used for event markers.
-  final double markersPositionRight;
-
   /// Maximum amount of event markers to be displayed.
   final int markersMaxAmount;
-
-  /// Specifies whether or not days outside of current month should be displayed.
-  ///
-  /// Sometimes a fragment of previous month's last week (or next month's first week) appears in current month's view.
-  /// This property defines if those should be visible (e.g. with custom style) or hidden.
+  final bool isTodayHighlighted;
+  final AlignmentGeometry markersAlignment;
+  final bool canMarkersOverflow;
   final bool outsideDaysVisible;
 
-  /// Determines rendering priority for SelectedDay and Today.
-  /// * `true` - SelectedDay will have higher priority than Today
-  /// * `false` - Today will have higher priority than SelectedDay
-  final bool renderSelectedFirst;
-
-  /// Padding of `TableCalendar`'s content.
-  final EdgeInsets contentPadding;
-
-  /// Margin of each individual cell.
   final EdgeInsets cellMargin;
 
-  /// Specifies if event markers rendered for a day cell can overflow cell's boundaries.
-  /// * `true` - Event markers will be drawn over the cell boundaries
-  /// * `false` - Event markers will not be drawn over the cell boundaries and will be clipped if they are too big
-  final bool canEventMarkersOverflow;
+  final PositionedOffset rangeFillOffset;
+  final PositionedOffset markersOffset;
+  final Color rangeFillColor;
+  final Decoration markerDecoration;
 
-  /// Specifies whether or not SelectedDay should be highlighted.
-  final bool highlightSelected;
+  final TextStyle todayTextStyle;
+  final Decoration todayDecoration;
 
-  /// Specifies whether or not Today should be highlighted.
-  final bool highlightToday;
+  final TextStyle selectedTextStyle;
+  final Decoration selectedDecoration;
+
+  final TextStyle rangeStartTextStyle;
+  final Decoration rangeStartDecoration;
+
+  final TextStyle rangeEndTextStyle;
+  final Decoration rangeEndDecoration;
+
+  final TextStyle withinRangeTextStyle;
+  final Decoration withinRangeDecoration;
+
+  final TextStyle outsideTextStyle;
+  final Decoration outsideDecoration;
+
+  final TextStyle disabledTextStyle;
+  final Decoration disabledDecoration;
+
+  final TextStyle holidayTextStyle;
+  final Decoration holidayDecoration;
+
+  final TextStyle weekendTextStyle;
+  final Decoration weekendDecoration;
+
+  final TextStyle defaultTextStyle;
+  final Decoration defaultDecoration;
+
+  final Decoration rowDecoration;
 
   const CalendarStyle({
-    this.contentDecoration = const BoxDecoration(),
-    this.weekdayStyle = const TextStyle(),
-    this.weekendStyle =
-        const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
-    this.holidayStyle =
-        const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
-    this.selectedStyle = const TextStyle(
-        color: const Color(0xFFFAFAFA), fontSize: 16.0), // Material grey[50]
-    this.todayStyle = const TextStyle(
-        color: const Color(0xFFFAFAFA), fontSize: 16.0), // Material grey[50]
-    this.outsideStyle =
-        const TextStyle(color: const Color(0xFF9E9E9E)), // Material grey[500]
-    this.outsideWeekendStyle =
-        const TextStyle(color: const Color(0xFFEF9A9A)), // Material red[200]
-    this.outsideHolidayStyle =
-        const TextStyle(color: const Color(0xFFEF9A9A)), // Material red[200]
-    this.unavailableStyle = const TextStyle(color: const Color(0xFFBFBFBF)),
-    this.eventDayStyle = const TextStyle(),
-    this.selectedColor = const Color(0xFF5C6BC0), // Material indigo[400]
-    this.todayColor = const Color(0xFF9FA8DA), // Material indigo[200]
-    this.markersColor = const Color(0xFF263238), // Material blueGrey[900]
-    this.markersAlignment = Alignment.bottomCenter,
-    this.markersPositionTop,
-    this.markersPositionBottom = 5.0,
-    this.markersPositionLeft,
-    this.markersPositionRight,
-    this.markersMaxAmount = 4,
+    this.isTodayHighlighted = true,
+    this.canMarkersOverflow = true,
     this.outsideDaysVisible = true,
-    this.renderSelectedFirst = true,
-    this.contentPadding =
-        const EdgeInsets.only(bottom: 4.0, left: 8.0, right: 8.0),
+    this.markersAlignment = Alignment.bottomCenter,
+    this.markersMaxAmount = 4,
     this.cellMargin = const EdgeInsets.all(6.0),
-    this.canEventMarkersOverflow = false,
-    this.highlightSelected = true,
-    this.highlightToday = true,
+    this.rangeFillOffset = const PositionedOffset(top: 6.0, bottom: 6.0),
+    this.markersOffset = const PositionedOffset(bottom: 5.0),
+    this.rangeFillColor = const Color(0xFFBBDDFF),
+    this.markerDecoration = const BoxDecoration(
+        color: const Color(0xFF263238), shape: BoxShape.circle),
+    this.todayTextStyle =
+        const TextStyle(color: const Color(0xFFFAFAFA), fontSize: 16.0), //
+    this.todayDecoration = const BoxDecoration(
+        color: const Color(0xFF9FA8DA), shape: BoxShape.circle),
+    this.selectedTextStyle =
+        const TextStyle(color: const Color(0xFFFAFAFA), fontSize: 16.0),
+    this.selectedDecoration = const BoxDecoration(
+        color: const Color(0xFF5C6BC0), shape: BoxShape.circle),
+    this.rangeStartTextStyle =
+        const TextStyle(color: const Color(0xFFFAFAFA), fontSize: 16.0),
+    this.rangeStartDecoration = const BoxDecoration(
+        color: const Color(0xFF6699FF), shape: BoxShape.circle),
+    this.rangeEndTextStyle =
+        const TextStyle(color: const Color(0xFFFAFAFA), fontSize: 16.0),
+    this.rangeEndDecoration = const BoxDecoration(
+        color: const Color(0xFF6699FF), shape: BoxShape.circle),
+    this.withinRangeTextStyle = const TextStyle(),
+    this.withinRangeDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.outsideTextStyle = const TextStyle(color: const Color(0xFFAEAEAE)),
+    this.outsideDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.disabledTextStyle = const TextStyle(color: const Color(0xFFBFBFBF)),
+    this.disabledDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.holidayTextStyle = const TextStyle(color: const Color(0xFF5C6BC0)),
+    this.holidayDecoration = const BoxDecoration(
+      border: const Border.fromBorderSide(
+        const BorderSide(color: const Color(0xFF9FA8DA), width: 1.4),
+      ),
+      shape: BoxShape.circle,
+    ),
+    this.weekendTextStyle = const TextStyle(color: const Color(0xFF5A5A5A)),
+    this.weekendDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.defaultTextStyle = const TextStyle(),
+    this.defaultDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.rowDecoration = const BoxDecoration(),
   });
 }

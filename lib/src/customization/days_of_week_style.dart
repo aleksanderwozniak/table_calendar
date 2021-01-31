@@ -11,25 +11,23 @@ class DaysOfWeekStyle {
   ///
   /// Example usage:
   /// ```dart
-  /// dowTextBuilder: (date, locale) => DateFormat.E(locale).format(date)[0],
+  /// dowTextFormatter: (date, locale) => DateFormat.E(locale).format(date)[0],
   /// ```
-  final TextBuilder dowTextBuilder;
+  final TextFormatter dowTextFormatter;
 
   /// BoxDecoration for the top row of the table
   final BoxDecoration decoration;
 
-  /// Style for weekdays on the top of Calendar.
+  /// Style for weekdays on the top of calendar.
   final TextStyle weekdayStyle;
 
-  /// Style for weekend days on the top of Calendar.
+  /// Style for weekend days on the top of calendar.
   final TextStyle weekendStyle;
 
   const DaysOfWeekStyle({
-    this.dowTextBuilder,
+    this.dowTextFormatter,
     this.decoration = const BoxDecoration(),
-    this.weekdayStyle =
-        const TextStyle(color: const Color(0xFF616161)), // Material grey[700]
-    this.weekendStyle =
-        const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
+    this.weekdayStyle = const TextStyle(color: const Color(0xFF4F4F4F)),
+    this.weekendStyle = const TextStyle(color: const Color(0xFF6A6A6A)),
   });
 }
