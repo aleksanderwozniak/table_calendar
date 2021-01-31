@@ -3,10 +3,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:table_calendar_example/pages/complex_example.dart';
-import 'package:table_calendar_example/pages/events_example.dart';
-import 'package:table_calendar_example/pages/persistence_example.dart';
-import 'package:table_calendar_example/pages/simple_example.dart';
+
+import 'pages/lite_example.dart';
+import 'pages/table_basics_example.dart';
+import 'pages/table_events_example.dart';
+import 'pages/table_range_example.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
@@ -41,37 +42,39 @@ class _StartPageState extends State<StartPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 20.0),
             RaisedButton(
-              child: Text('Simple'),
+              child: Text('TableCalendar - Basics'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => SimpleExamplePage()),
+                MaterialPageRoute(builder: (_) => TableBasicsExample()),
               ),
             ),
             const SizedBox(height: 12.0),
             RaisedButton(
-              child: Text('Persistence'),
+              child: Text('TableCalendar - Range'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => PersistenceExamplePage()),
+                MaterialPageRoute(builder: (_) => TableRangeExample()),
               ),
             ),
             const SizedBox(height: 12.0),
             RaisedButton(
-              child: Text('Events'),
+              child: Text('TableCalendar - Events'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => EventsExamplePage()),
+                MaterialPageRoute(builder: (_) => TableEventsExample()),
               ),
             ),
-            const SizedBox(height: 12.0),
+            const SizedBox(height: 48.0),
             RaisedButton(
-              child: Text('Complex'),
+              child: Text('TableCalendarLite'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => ComplexExamplePage()),
+                MaterialPageRoute(builder: (_) => LiteExample()),
               ),
             ),
+            const SizedBox(height: 20.0),
           ],
         ),
       ),
