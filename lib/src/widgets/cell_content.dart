@@ -48,117 +48,102 @@ class _CellContent extends StatelessWidget {
 
     final text = '${day.day}';
     final margin = calendarStyle.cellMargin;
+    final duration = const Duration(milliseconds: 250);
 
     if (isDisabled) {
       cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
-          _DefaultCellWidget(
-            text: text,
-            textStyle: calendarStyle.disabledTextStyle,
-            decoration: calendarStyle.disabledDecoration,
+          AnimatedContainer(
+            duration: duration,
             margin: margin,
+            decoration: calendarStyle.disabledDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.disabledTextStyle),
           );
     } else if (isSelected) {
       cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
-          _DefaultCellWidget(
-            text: text,
-            textStyle: calendarStyle.selectedTextStyle,
-            decoration: calendarStyle.selectedDecoration,
+          AnimatedContainer(
+            duration: duration,
             margin: margin,
+            decoration: calendarStyle.selectedDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.selectedTextStyle),
           );
     } else if (isRangeStart) {
       cell =
           calendarBuilders.rangeStartBuilder?.call(context, day, focusedDay) ??
-              _DefaultCellWidget(
-                text: text,
-                textStyle: calendarStyle.rangeStartTextStyle,
-                decoration: calendarStyle.rangeStartDecoration,
+              AnimatedContainer(
+                duration: duration,
                 margin: margin,
+                decoration: calendarStyle.rangeStartDecoration,
+                alignment: Alignment.center,
+                child: Text(text, style: calendarStyle.rangeStartTextStyle),
               );
     } else if (isRangeEnd) {
       cell = calendarBuilders.rangeEndBuilder?.call(context, day, focusedDay) ??
-          _DefaultCellWidget(
-            text: text,
-            textStyle: calendarStyle.rangeEndTextStyle,
-            decoration: calendarStyle.rangeEndDecoration,
+          AnimatedContainer(
+            duration: duration,
             margin: margin,
+            decoration: calendarStyle.rangeEndDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.rangeEndTextStyle),
           );
     } else if (isToday && isTodayHighlighted) {
       cell = calendarBuilders.todayBuilder?.call(context, day, focusedDay) ??
-          _DefaultCellWidget(
-            text: text,
-            textStyle: calendarStyle.todayTextStyle,
-            decoration: calendarStyle.todayDecoration,
+          AnimatedContainer(
+            duration: duration,
             margin: margin,
+            decoration: calendarStyle.todayDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.todayTextStyle),
           );
     } else if (isHoliday) {
       cell = calendarBuilders.holidayBuilder?.call(context, day, focusedDay) ??
-          _DefaultCellWidget(
-            text: text,
-            textStyle: calendarStyle.holidayTextStyle,
-            decoration: calendarStyle.holidayDecoration,
+          AnimatedContainer(
+            duration: duration,
             margin: margin,
+            decoration: calendarStyle.holidayDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.holidayTextStyle),
           );
     } else if (isWithinRange) {
       cell =
           calendarBuilders.withinRangeBuilder?.call(context, day, focusedDay) ??
-              _DefaultCellWidget(
-                text: text,
-                textStyle: calendarStyle.withinRangeTextStyle,
-                decoration: calendarStyle.withinRangeDecoration,
+              AnimatedContainer(
+                duration: duration,
                 margin: margin,
+                decoration: calendarStyle.withinRangeDecoration,
+                alignment: Alignment.center,
+                child: Text(text, style: calendarStyle.withinRangeTextStyle),
               );
     } else if (isOutside) {
       cell = calendarBuilders.outsideBuilder?.call(context, day, focusedDay) ??
-          _DefaultCellWidget(
-            text: text,
-            textStyle: calendarStyle.outsideTextStyle,
-            decoration: calendarStyle.outsideDecoration,
+          AnimatedContainer(
+            duration: duration,
             margin: margin,
+            decoration: calendarStyle.outsideDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.outsideTextStyle),
           );
     } else if (isWeekend) {
       cell = calendarBuilders.weekendBuilder?.call(context, day, focusedDay) ??
-          _DefaultCellWidget(
-            text: text,
-            textStyle: calendarStyle.weekendTextStyle,
-            decoration: calendarStyle.weekendDecoration,
+          AnimatedContainer(
+            duration: duration,
             margin: margin,
+            decoration: calendarStyle.weekendDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.weekendTextStyle),
           );
     } else {
       cell = calendarBuilders.defaultBuilder?.call(context, day, focusedDay) ??
-          _DefaultCellWidget(
-            text: text,
-            textStyle: calendarStyle.defaultTextStyle,
-            decoration: calendarStyle.defaultDecoration,
+          AnimatedContainer(
+            duration: duration,
             margin: margin,
+            decoration: calendarStyle.defaultDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.defaultTextStyle),
           );
     }
 
     return cell;
-  }
-}
-
-class _DefaultCellWidget extends StatelessWidget {
-  final String text;
-  final TextStyle textStyle;
-  final Decoration decoration;
-  final EdgeInsetsGeometry margin;
-
-  const _DefaultCellWidget({
-    Key key,
-    @required this.text,
-    @required this.textStyle,
-    @required this.decoration,
-    @required this.margin,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      margin: margin,
-      decoration: decoration,
-      alignment: Alignment.center,
-      child: Text(text, style: textStyle),
-    );
   }
 }
