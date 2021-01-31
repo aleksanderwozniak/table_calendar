@@ -27,6 +27,8 @@ int _getWeekdayNumber(StartingDayOfWeek weekday) {
   return StartingDayOfWeek.values.indexOf(weekday) + 1;
 }
 
+/// Checks if two DateTime objects are the same day.
+/// Returns `false` if either of them is null.
 bool isSameDay(DateTime a, DateTime b) {
   if (a == null || b == null) {
     return false;
