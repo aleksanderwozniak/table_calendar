@@ -10,9 +10,6 @@ class TableCalendar<T> extends StatefulWidget {
   /// If nothing is provided, a default locale will be used.
   final dynamic locale;
 
-  /// DateTime to highlight as currently selected.
-  final DateTime selectedDay;
-
   /// The start of the selected day range.
   final DateTime rangeStartDay;
 
@@ -112,6 +109,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// If `false` is returned, this day will be disabled.
   final bool Function(DateTime day) enabledDayPredicate;
 
+  /// Function deciding whether given day should be marked as selected.
+  final bool Function(DateTime day) selectedDayPredicate;
+
   /// Function deciding whether given day is treated as a holiday.
   final bool Function(DateTime day) holidayPredicate;
 
@@ -142,7 +142,6 @@ class TableCalendar<T> extends StatefulWidget {
   TableCalendar({
     Key key,
     this.locale,
-    this.selectedDay,
     this.rangeStartDay,
     this.rangeEndDay,
     @required this.focusedDay,
@@ -175,6 +174,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.onRangeSelected,
     this.eventLoader,
     this.enabledDayPredicate,
+    this.selectedDayPredicate,
     this.holidayPredicate,
     this.onDaySelected,
     this.onDisabledDayTapped,
@@ -373,10 +373,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     );
 
     final isToday = isSameDay(date, DateTime.now());
-    final isSelected = isSameDay(date, widget.selectedDay);
     final isDisabled = _isDayDisabled(date);
     final isWeekend = _isWeekend(date, weekendDays: widget.weekendDays);
-    final isHoliday = _isHoliday(date);
 
     Widget content = _CellContent(
       day: date,
@@ -385,14 +383,14 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
       calendarBuilders: widget.calendarBuilders,
       isTodayHighlighted: widget.calendarStyle.isTodayHighlighted,
       isToday: isToday,
-      isSelected: isSelected,
+      isSelected: widget.selectedDayPredicate?.call(date) ?? false,
       isRangeStart: isRangeStart,
       isRangeEnd: isRangeEnd,
       isWithinRange: isWithinRange,
       isOutside: isOutside,
       isDisabled: isDisabled,
       isWeekend: isWeekend,
-      isHoliday: isHoliday,
+      isHoliday: widget.holidayPredicate?.call(date) ?? false,
     );
 
     children.add(content);
@@ -468,12 +466,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     return widget.enabledDayPredicate == null
         ? true
         : widget.enabledDayPredicate(day);
-  }
-
-  bool _isHoliday(DateTime day) {
-    return widget.holidayPredicate == null
-        ? false
-        : widget.holidayPredicate(day);
   }
 
   bool _isWeekend(
