@@ -10,7 +10,7 @@ typedef OnRangeSelected = void Function(
     DateTime start, DateTime end, DateTime focusedDay);
 
 enum RangeSelectionMode {
-  disable, // always off
+  disabled, // always off
   toggledOff, // currently off, can be toggled
   toggledOn, // currently on, can be toggled
   enforced, // always on
