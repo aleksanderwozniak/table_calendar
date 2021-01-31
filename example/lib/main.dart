@@ -7,6 +7,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'pages/lite_example.dart';
 import 'pages/table_basics_example.dart';
 import 'pages/table_events_example.dart';
+import 'pages/table_multi_example.dart';
 import 'pages/table_range_example.dart';
 
 void main() {
@@ -64,6 +65,14 @@ class _StartPageState extends State<StartPage> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => TableEventsExample()),
+              ),
+            ),
+            const SizedBox(height: 12.0),
+            RaisedButton(
+              child: Text('TableCalendar - Multi'),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => TableMultiExample()),
               ),
             ),
             const SizedBox(height: 48.0),
