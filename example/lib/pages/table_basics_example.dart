@@ -24,7 +24,11 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         firstDay: DateTime.utc(2020, 10, 16),
         lastDay: DateTime.utc(2021, 3, 14),
         focusedDay: _focusedDay,
-        selectedDay: _selectedDay,
+        selectedDayPredicate: (day) {
+          // Use `selectedDayPredicate` to determine which day is currently selected.
+          // If this returns true, then `day` will be marked as selected.
+          return _selectedDay == day;
+        },
         calendarFormat: _calendarFormat,
         onDaySelected: (selectedDay, focusedDay) {
           if (_selectedDay != selectedDay) {

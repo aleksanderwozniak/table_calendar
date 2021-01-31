@@ -97,7 +97,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
             firstDay: DateTime.utc(2020, 10, 16),
             lastDay: DateTime.utc(2021, 3, 14),
             focusedDay: _focusedDay,
-            selectedDay: _selectedDay,
+            selectedDayPredicate: (day) => _selectedDay == day,
             rangeStartDay: _rangeStart,
             rangeEndDay: _rangeEnd,
             calendarFormat: _calendarFormat,
