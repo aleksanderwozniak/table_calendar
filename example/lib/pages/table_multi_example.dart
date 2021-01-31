@@ -72,7 +72,10 @@ class _TableMultiExampleState extends State<TableMultiExample> {
             calendarFormat: _calendarFormat,
             eventLoader: _getEventsForDay,
             startingDayOfWeek: StartingDayOfWeek.monday,
-            selectedDayPredicate: (day) => _selectedDays.contains(day),
+            selectedDayPredicate: (day) {
+              // Use values from Set to mark multiple days as selected
+              return _selectedDays.contains(day);
+            },
             onDaySelected: _onDaySelected,
             onFormatChanged: (format) {
               if (_calendarFormat != format) {
