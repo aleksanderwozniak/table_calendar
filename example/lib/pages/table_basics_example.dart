@@ -27,11 +27,14 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         selectedDayPredicate: (day) {
           // Use `selectedDayPredicate` to determine which day is currently selected.
           // If this returns true, then `day` will be marked as selected.
-          return _selectedDay == day;
+
+          // Using `isSameDay` is recommended to disregard
+          // the time-part of compared DateTime objects.
+          return isSameDay(_selectedDay, day);
         },
         calendarFormat: _calendarFormat,
         onDaySelected: (selectedDay, focusedDay) {
-          if (_selectedDay != selectedDay) {
+          if (!isSameDay(_selectedDay, selectedDay)) {
             // Call `setState()` to update the selected day
             setState(() {
               _selectedDay = selectedDay;

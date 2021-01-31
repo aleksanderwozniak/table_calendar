@@ -50,8 +50,8 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     ];
   }
 
-  void _onDaySelected(selectedDay, focusedDay) {
-    if (_selectedDay != selectedDay) {
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
         _selectedDay = selectedDay;
         _rangeStart = null; // Important to clean those
@@ -65,7 +65,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     _focusedDay = focusedDay;
   }
 
-  void _onRangeSelected(start, end, focusedDay) {
+  void _onRangeSelected(DateTime start, DateTime end, DateTime focusedDay) {
     setState(() {
       _selectedDay = null;
       _rangeStart = start;
@@ -97,7 +97,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
             firstDay: DateTime.utc(2020, 10, 16),
             lastDay: DateTime.utc(2021, 3, 14),
             focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => _selectedDay == day,
+            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             rangeStartDay: _rangeStart,
             rangeEndDay: _rangeEnd,
             calendarFormat: _calendarFormat,

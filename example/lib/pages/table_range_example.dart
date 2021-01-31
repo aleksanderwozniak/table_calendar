@@ -28,13 +28,13 @@ class _TableRangeExampleState extends State<TableRangeExample> {
         firstDay: DateTime.utc(2020, 10, 16),
         lastDay: DateTime.utc(2021, 3, 14),
         focusedDay: _focusedDay,
-        selectedDayPredicate: (day) => _selectedDay == day,
+        selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
         rangeStartDay: _rangeStart,
         rangeEndDay: _rangeEnd,
         calendarFormat: _calendarFormat,
         rangeSelectionMode: _rangeSelectionMode,
         onDaySelected: (selectedDay, focusedDay) {
-          if (_selectedDay != selectedDay) {
+          if (!isSameDay(_selectedDay, selectedDay)) {
             setState(() {
               _selectedDay = selectedDay;
               _rangeStart = null; // Important to clean those
