@@ -20,7 +20,7 @@ class Event {
 /// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
 final kEvents = LinkedHashMap(
   equals: isSameDay,
-  hashCode: _getHashCode,
+  hashCode: getHashCode,
 )..addAll(_kEventSource);
 
 final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
@@ -34,7 +34,7 @@ final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
     ],
   });
 
-int _getHashCode(DateTime key) {
+int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
 }
 

@@ -1,6 +1,8 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -14,7 +16,7 @@ class TableMultiExample extends StatefulWidget {
 class _TableMultiExampleState extends State<TableMultiExample> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  Set<DateTime> _selectedDays = {};
+  Set<DateTime> _selectedDays;
 
   ValueNotifier<List<Event>> _selectedEvents;
 
@@ -22,6 +24,12 @@ class _TableMultiExampleState extends State<TableMultiExample> {
   void initState() {
     super.initState();
     _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay));
+
+    // Using a `LinkedHashSet` is recommended due to equality comparison override
+    _selectedDays = LinkedHashSet<DateTime>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    );
   }
 
   @override
@@ -43,7 +51,7 @@ class _TableMultiExampleState extends State<TableMultiExample> {
     ];
   }
 
-  void _onDaySelected(selectedDay, focusedDay) {
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     // Update values in a Set
     setState(() {
       if (_selectedDays.contains(selectedDay)) {
