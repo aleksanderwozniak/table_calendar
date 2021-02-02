@@ -17,6 +17,9 @@ class _CalendarCore extends StatelessWidget {
   final bool dowVisible;
   final Decoration dowDecoration;
   final Decoration rowDecoration;
+  final double dowHeight;
+  final double rowHeight;
+  final BoxConstraints constraints;
   final int previousIndex;
   final StartingDayOfWeek startingDayOfWeek;
   final PageController pageController;
@@ -30,6 +33,9 @@ class _CalendarCore extends StatelessWidget {
     @required this.onPageChanged,
     @required this.firstDay,
     @required this.lastDay,
+    @required this.constraints,
+    this.dowHeight,
+    this.rowHeight,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.calendarFormat = CalendarFormat.month,
     this.pageController,
@@ -56,12 +62,23 @@ class _CalendarCore extends StatelessWidget {
         final visibleRange = _getVisibleRange(calendarFormat, baseDay);
         final visibleDays = _daysInRange(visibleRange.start, visibleRange.end);
 
+        final actualDowHeight = dowVisible ? dowHeight : 0.0;
+        final constrainedRowHeight = constraints.hasBoundedHeight
+            ? (constraints.maxHeight - actualDowHeight) /
+                _getRowCount(calendarFormat, baseDay)
+            : null;
+
         return _CalendarPage(
           visibleDays: visibleDays,
           dowVisible: dowVisible,
           dowDecoration: dowDecoration,
           rowDecoration: rowDecoration,
-          dowBuilder: dowBuilder,
+          dowBuilder: (context, day) {
+            return SizedBox(
+              height: dowHeight,
+              child: dowBuilder(context, day),
+            );
+          },
           dayBuilder: (context, day) {
             DateTime baseDay;
             if (focusedDay == null || previousIndex == null) {
@@ -70,7 +87,10 @@ class _CalendarCore extends StatelessWidget {
               baseDay = _getFocusedDay(calendarFormat, index);
             }
 
-            return dayBuilder(context, day, baseDay);
+            return SizedBox(
+              height: constrainedRowHeight ?? rowHeight,
+              child: dayBuilder(context, day, baseDay),
+            );
           },
         );
       },
@@ -239,6 +259,26 @@ class _CalendarCore extends StatelessWidget {
         ? DateTime.utc(month.year, month.month + 1, 1)
         : DateTime.utc(month.year + 1, 1, 1);
     return date.subtract(const Duration(days: 1));
+  }
+
+  int _getRowCount(CalendarFormat format, DateTime focusedDay) {
+    if (format == CalendarFormat.twoWeeks) {
+      return 2;
+    } else if (format == CalendarFormat.week) {
+      return 1;
+    } else if (sixWeekMonthsEnforced) {
+      return 6;
+    }
+
+    final first = _firstDayOfMonth(focusedDay);
+    final daysBefore = _getDaysBefore(first);
+    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+
+    final last = _lastDayOfMonth(focusedDay);
+    final daysAfter = _getDaysAfter(last);
+    final lastToDisplay = last.add(Duration(days: daysAfter));
+
+    return (lastToDisplay.difference(firstToDisplay).inDays + 1) ~/ 7;
   }
 
   int _getDaysBefore(DateTime firstDay) {
