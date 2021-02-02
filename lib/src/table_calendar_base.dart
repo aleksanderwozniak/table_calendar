@@ -46,6 +46,7 @@ class TableCalendarBase extends StatefulWidget {
   final FocusedDayBuilder dayBuilder;
   final double dowHeight;
   final double rowHeight;
+  final bool sixWeekMonthsEnforced;
   final bool dowVisible;
   final Decoration dowDecoration;
   final Decoration rowDecoration;
@@ -67,6 +68,7 @@ class TableCalendarBase extends StatefulWidget {
     @required this.dayBuilder,
     this.dowHeight,
     @required this.rowHeight,
+    this.sixWeekMonthsEnforced = false,
     this.dowVisible = true,
     this.dowDecoration,
     this.rowDecoration,
@@ -147,6 +149,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
       final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
       _pageHeight.value = _getPageHeight(rowCount);
     }
+
+    if (widget.sixWeekMonthsEnforced != oldWidget.sixWeekMonthsEnforced) {
+      final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
+      _pageHeight.value = _getPageHeight(rowCount);
+    }
   }
 
   @override
@@ -214,18 +221,26 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
           calendarFormat: widget.calendarFormat,
           previousIndex: _previousIndex,
           focusedDay: _focusedDay,
+          sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
           dowVisible: widget.dowVisible,
           dowDecoration: widget.dowDecoration,
           rowDecoration: widget.rowDecoration,
-          onPageChanged: (index, focusedMonth, rowCount) {
+          onPageChanged: (index, focusedMonth) {
             if (!isSameDay(_focusedDay, focusedMonth)) {
               _focusedDay = focusedMonth;
             }
 
             if (!_pageCallbackDisabled) {
-              _previousIndex = index;
-              _pageHeight.value = _getPageHeight(rowCount);
+              if (widget.calendarFormat == CalendarFormat.month &&
+                  !widget.sixWeekMonthsEnforced) {
+                final rowCount = _getRowCount(
+                  widget.calendarFormat,
+                  focusedMonth,
+                );
+                _pageHeight.value = _getPageHeight(rowCount);
+              }
 
+              _previousIndex = index;
               widget.onPageChanged?.call(focusedMonth);
             }
 
@@ -287,6 +302,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
       return 2;
     } else if (format == CalendarFormat.week) {
       return 1;
+    } else if (widget.sixWeekMonthsEnforced) {
+      return 6;
     }
 
     final first = _firstDayOfMonth(focusedDay);
@@ -297,7 +314,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
     final daysAfter = _getDaysAfter(last);
     final lastToDisplay = last.add(Duration(days: daysAfter));
 
-    return lastToDisplay.difference(firstToDisplay).inDays ~/ 7;
+    return (lastToDisplay.difference(firstToDisplay).inDays + 1) ~/ 7;
   }
 
   int _getDaysBefore(DateTime firstDay) {
@@ -311,9 +328,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
     int invertedStartingWeekday =
         8 - _getWeekdayNumber(widget.startingDayOfWeek);
 
-    int daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7) + 1;
-    if (daysAfter == 8) {
-      daysAfter = 1;
+    int daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7);
+    if (daysAfter == 7) {
+      daysAfter = 0;
     }
 
     return daysAfter;

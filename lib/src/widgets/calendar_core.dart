@@ -4,7 +4,7 @@
 part of table_calendar;
 
 typedef _OnCalendarPageChanged = void Function(
-    int pageIndex, DateTime focusedDay, int rowCount);
+    int pageIndex, DateTime focusedDay);
 
 class _CalendarCore extends StatelessWidget {
   final DateTime focusedDay;
@@ -13,6 +13,7 @@ class _CalendarCore extends StatelessWidget {
   final CalendarFormat calendarFormat;
   final DayBuilder dowBuilder;
   final FocusedDayBuilder dayBuilder;
+  final bool sixWeekMonthsEnforced;
   final bool dowVisible;
   final Decoration dowDecoration;
   final Decoration rowDecoration;
@@ -34,6 +35,7 @@ class _CalendarCore extends StatelessWidget {
     this.pageController,
     this.focusedDay,
     this.previousIndex,
+    this.sixWeekMonthsEnforced = false,
     this.dowVisible = true,
     this.dowDecoration,
     this.rowDecoration,
@@ -80,8 +82,7 @@ class _CalendarCore extends StatelessWidget {
           baseDay = _getFocusedDay(calendarFormat, index);
         }
 
-        final rowCount = _getRowCount(calendarFormat, baseDay);
-        return onPageChanged(index, baseDay, rowCount);
+        return onPageChanged(index, baseDay);
       },
     );
   }
@@ -204,6 +205,11 @@ class _CalendarCore extends StatelessWidget {
     final daysBefore = _getDaysBefore(first);
     final firstToDisplay = first.subtract(Duration(days: daysBefore));
 
+    if (sixWeekMonthsEnforced) {
+      final end = firstToDisplay.add(const Duration(days: 42));
+      return DateTimeRange(start: firstToDisplay, end: end);
+    }
+
     final last = _lastDayOfMonth(focusedDay);
     final daysAfter = _getDaysAfter(last);
     final lastToDisplay = last.add(Duration(days: daysAfter));
@@ -233,24 +239,6 @@ class _CalendarCore extends StatelessWidget {
         ? DateTime.utc(month.year, month.month + 1, 1)
         : DateTime.utc(month.year + 1, 1, 1);
     return date.subtract(const Duration(days: 1));
-  }
-
-  int _getRowCount(CalendarFormat format, DateTime focusedDay) {
-    if (format == CalendarFormat.twoWeeks) {
-      return 2;
-    } else if (format == CalendarFormat.week) {
-      return 1;
-    }
-
-    final first = _firstDayOfMonth(focusedDay);
-    final daysBefore = _getDaysBefore(first);
-    final firstToDisplay = first.subtract(Duration(days: daysBefore));
-
-    final last = _lastDayOfMonth(focusedDay);
-    final daysAfter = _getDaysAfter(last);
-    final lastToDisplay = last.add(Duration(days: daysAfter));
-
-    return (lastToDisplay.difference(firstToDisplay).inDays + 1) ~/ 7;
   }
 
   int _getDaysBefore(DateTime firstDay) {

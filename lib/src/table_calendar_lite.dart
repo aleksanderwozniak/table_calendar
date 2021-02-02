@@ -27,6 +27,7 @@ class TableCalendarLite extends StatefulWidget {
   final double rowHeight;
   final bool dowVisible;
   final bool pageJumpingEnabled;
+  final bool sixWeekMonthsEnforced;
   final Decoration dowDecoration;
   final Decoration rowDecoration;
   final StartingDayOfWeek startingDayOfWeek;
@@ -56,6 +57,7 @@ class TableCalendarLite extends StatefulWidget {
     @required this.rowHeight,
     this.dowVisible = true,
     this.pageJumpingEnabled = false,
+    this.sixWeekMonthsEnforced = false,
     this.dowDecoration,
     this.rowDecoration,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -235,6 +237,7 @@ class _TableCalendarLiteState extends State<TableCalendarLite> {
         _focusedDay = focusedMonth;
         widget.onPageChanged?.call(focusedMonth);
       },
+      sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
       dowVisible: widget.dowVisible,
       dowDecoration: widget.dowDecoration,
       rowDecoration: widget.rowDecoration,

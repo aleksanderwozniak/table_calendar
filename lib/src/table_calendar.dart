@@ -62,6 +62,10 @@ class TableCalendar<T> extends StatefulWidget {
   /// will jump to a page related to the tapped month.
   final bool pageJumpingEnabled;
 
+  /// When set to true, `CalendarFormat.month` will always display six weeks,
+  /// even if the content would fit in less.
+  final bool sixWeekMonthsEnforced;
+
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
@@ -157,6 +161,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.headerVisible = true,
     this.daysOfWeekVisible = true,
     this.pageJumpingEnabled = false,
+    this.sixWeekMonthsEnforced = false,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -282,6 +287,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           dayHitTestBehavior: widget.dayHitTestBehavior,
           enabledDayPredicate: widget.enabledDayPredicate,
           rangeSelectionMode: widget.rangeSelectionMode,
+          sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
           pageJumpingEnabled: widget.pageJumpingEnabled,
           onDisabledDayTapped: widget.onDisabledDayTapped,
           onDisabledDayLongPressed: widget.onDisabledDayLongPressed,
