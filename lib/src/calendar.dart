@@ -6,6 +6,9 @@ part of table_calendar;
 /// Callback exposing currently selected day.
 typedef void OnDaySelected(DateTime day, List events, List holidays);
 
+/// Callback exposing currently leftButtom
+typedef void OnDaySelectedLeft();
+
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
 typedef void OnVisibleDaysChanged(
     DateTime first, DateTime last, CalendarFormat format);
@@ -78,6 +81,9 @@ class TableCalendar extends StatefulWidget {
 
   /// Called whenever any day gets long pressed.
   final OnDaySelected onDayLongPressed;
+
+  /// Called leftButtom
+  final OnDaySelectedLeft onDaySelectedLeft;
 
   /// Called whenever any unavailable day gets tapped.
   /// Replaces `onDaySelected` for those days.
@@ -175,6 +181,7 @@ class TableCalendar extends StatefulWidget {
     Key key,
     @required this.calendarController,
     this.locale,
+    this.onDaySelectedLeft,
     this.events = const {},
     this.holidays = const {},
     this.onDaySelected,
@@ -274,14 +281,17 @@ class _TableCalendarState extends State<TableCalendar>
   }
 
   void _selectPrevious() {
+    if (widget.onDaySelectedLeft != null) {
+      widget.onDaySelectedLeft();
+    }
     setState(() {
-      widget.calendarController.previousPage();
+      widget.calendarController._selectPrevious();
     });
   }
 
   void _selectNext() {
     setState(() {
-      widget.calendarController.nextPage();
+      widget.calendarController._selectNext();
     });
   }
 
