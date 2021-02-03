@@ -356,103 +356,130 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
       return Container();
     }
 
-    final children = <Widget>[];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final shorterSide = constraints.maxHeight > constraints.maxWidth
+            ? constraints.maxWidth
+            : constraints.maxHeight;
 
-    final isWithinRange = widget.rangeStartDay != null &&
-        widget.rangeEndDay != null &&
-        _isWithinRange(date, widget.rangeStartDay, widget.rangeEndDay);
+        final children = <Widget>[];
 
-    final isRangeStart = isSameDay(date, widget.rangeStartDay);
-    final isRangeEnd = isSameDay(date, widget.rangeEndDay);
+        final isWithinRange = widget.rangeStartDay != null &&
+            widget.rangeEndDay != null &&
+            _isWithinRange(date, widget.rangeStartDay, widget.rangeEndDay);
 
-    final startOffset =
-        widget.calendarStyle.rangeFillOffset.start ?? widget.rowHeight / 2;
+        final isRangeStart = isSameDay(date, widget.rangeStartDay);
+        final isRangeEnd = isSameDay(date, widget.rangeEndDay);
 
-    final endOffset =
-        widget.calendarStyle.rangeFillOffset.end ?? widget.rowHeight / 2;
+        Widget rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder
+            ?.call(context, date, isWithinRange);
 
-    final rangeColor = isWithinRange
-        ? widget.calendarStyle.rangeFillColor
-        : Colors.transparent;
+        if (rangeHighlight == null) {
+          if (isWithinRange) {
+            rangeHighlight = Center(
+              child: Container(
+                margin: EdgeInsetsDirectional.only(
+                  start: isRangeStart ? constraints.maxWidth * 0.5 : 0.0,
+                  end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
+                ),
+                height:
+                    (shorterSide - widget.calendarStyle.cellMargin.vertical) *
+                        widget.calendarStyle.rangeFillScale,
+                color: widget.calendarStyle.rangeFillColor,
+              ),
+            );
+          }
+        }
 
-    children.add(
-      PositionedDirectional(
-        top: widget.calendarStyle.rangeFillOffset.top,
-        bottom: widget.calendarStyle.rangeFillOffset.bottom,
-        start: isRangeStart ? startOffset : 0.0,
-        end: isRangeEnd ? endOffset : 0.0,
-        child: Container(color: rangeColor),
-      ),
-    );
+        if (rangeHighlight != null) {
+          children.add(rangeHighlight);
+        }
 
-    final isToday = isSameDay(date, DateTime.now());
-    final isDisabled = _isDayDisabled(date);
-    final isWeekend = _isWeekend(date, weekendDays: widget.weekendDays);
+        final isToday = isSameDay(date, DateTime.now());
+        final isDisabled = _isDayDisabled(date);
+        final isWeekend = _isWeekend(date, weekendDays: widget.weekendDays);
 
-    Widget content = _CellContent(
-      day: date,
-      focusedDay: focusedDay,
-      calendarStyle: widget.calendarStyle,
-      calendarBuilders: widget.calendarBuilders,
-      isTodayHighlighted: widget.calendarStyle.isTodayHighlighted,
-      isToday: isToday,
-      isSelected: widget.selectedDayPredicate?.call(date) ?? false,
-      isRangeStart: isRangeStart,
-      isRangeEnd: isRangeEnd,
-      isWithinRange: isWithinRange,
-      isOutside: isOutside,
-      isDisabled: isDisabled,
-      isWeekend: isWeekend,
-      isHoliday: widget.holidayPredicate?.call(date) ?? false,
-    );
-
-    children.add(content);
-
-    if (!isDisabled) {
-      final events = widget.eventLoader?.call(date) ?? [];
-      Widget markerWidget =
-          widget.calendarBuilders.markerBuilder?.call(context, date, events);
-
-      if (events.isNotEmpty && markerWidget == null) {
-        markerWidget = PositionedDirectional(
-          top: widget.calendarStyle.markersOffset.top,
-          bottom: widget.calendarStyle.markersOffset.bottom,
-          start: widget.calendarStyle.markersOffset.start,
-          end: widget.calendarStyle.markersOffset.end,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: events
-                .take(widget.calendarStyle.markersMaxAmount)
-                .map((event) => _buildSingleMarker(date, event))
-                .toList(),
-          ),
+        Widget content = _CellContent(
+          day: date,
+          focusedDay: focusedDay,
+          calendarStyle: widget.calendarStyle,
+          calendarBuilders: widget.calendarBuilders,
+          isTodayHighlighted: widget.calendarStyle.isTodayHighlighted,
+          isToday: isToday,
+          isSelected: widget.selectedDayPredicate?.call(date) ?? false,
+          isRangeStart: isRangeStart,
+          isRangeEnd: isRangeEnd,
+          isWithinRange: isWithinRange,
+          isOutside: isOutside,
+          isDisabled: isDisabled,
+          isWeekend: isWeekend,
+          isHoliday: widget.holidayPredicate?.call(date) ?? false,
         );
-      }
 
-      if (markerWidget != null) {
-        children.add(markerWidget);
-      }
-    }
+        children.add(content);
 
-    if (children.length > 1) {
-      content = Stack(
-        alignment: widget.calendarStyle.markersAlignment,
-        children: children,
-        clipBehavior:
-            widget.calendarStyle.canMarkersOverflow ? Clip.none : Clip.hardEdge,
-      );
-    }
+        if (!isDisabled) {
+          final events = widget.eventLoader?.call(date) ?? [];
+          Widget markerWidget = widget.calendarBuilders.markerBuilder
+              ?.call(context, date, events);
 
-    return content;
+          if (events.isNotEmpty && markerWidget == null) {
+            final center = constraints.maxHeight / 2;
+
+            final markerSize = widget.calendarStyle.markerSize ??
+                (shorterSide - widget.calendarStyle.cellMargin.vertical) *
+                    widget.calendarStyle.markerSizeScale;
+
+            final markerAutoAlignmentTop = center +
+                (shorterSide - widget.calendarStyle.cellMargin.vertical) / 2 -
+                (markerSize * widget.calendarStyle.markerPosition);
+
+            markerWidget = PositionedDirectional(
+              top: widget.calendarStyle.markersAutoAligned
+                  ? markerAutoAlignmentTop
+                  : widget.calendarStyle.markersOffset.top,
+              bottom: widget.calendarStyle.markersAutoAligned
+                  ? null
+                  : widget.calendarStyle.markersOffset.bottom,
+              start: widget.calendarStyle.markersAutoAligned
+                  ? null
+                  : widget.calendarStyle.markersOffset.start,
+              end: widget.calendarStyle.markersAutoAligned
+                  ? null
+                  : widget.calendarStyle.markersOffset.end,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: events
+                    .take(widget.calendarStyle.markersMaxAmount)
+                    .map((event) => _buildSingleMarker(date, event, markerSize))
+                    .toList(),
+              ),
+            );
+          }
+
+          if (markerWidget != null) {
+            children.add(markerWidget);
+          }
+        }
+
+        return Stack(
+          alignment: widget.calendarStyle.markersAlignment,
+          children: children,
+          clipBehavior: widget.calendarStyle.canMarkersOverflow
+              ? Clip.none
+              : Clip.hardEdge,
+        );
+      },
+    );
   }
 
-  Widget _buildSingleMarker(DateTime date, T event) {
+  Widget _buildSingleMarker(DateTime date, T event, double markerSize) {
     return widget.calendarBuilders.singleMarkerBuilder
             ?.call(context, date, event) ??
         Container(
-          width: 8.0,
-          height: 8.0,
-          margin: const EdgeInsets.symmetric(horizontal: 0.3),
+          width: markerSize,
+          height: markerSize,
+          margin: widget.calendarStyle.markerMargin,
           decoration: widget.calendarStyle.markerDecoration,
         );
   }

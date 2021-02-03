@@ -3,29 +3,26 @@
 
 part of table_calendar;
 
-class PositionedOffset {
-  final double top;
-  final double bottom;
-  final double start;
-  final double end;
-
-  const PositionedOffset({this.top, this.bottom, this.start, this.end});
-}
-
 class CalendarStyle {
   /// Maximum amount of event markers to be displayed.
   final int markersMaxAmount;
-  final bool isTodayHighlighted;
   final AlignmentGeometry markersAlignment;
+  final bool markersAutoAligned;
   final bool canMarkersOverflow;
-  final bool outsideDaysVisible;
+  final double markerSize;
+  final double markerSizeScale;
+  final double markerPosition;
+  final PositionedOffset markersOffset;
+  final Decoration markerDecoration;
 
+  final EdgeInsets markerMargin;
   final EdgeInsets cellMargin;
 
-  final PositionedOffset rangeFillOffset;
-  final PositionedOffset markersOffset;
+  final double rangeFillScale;
   final Color rangeFillColor;
-  final Decoration markerDecoration;
+
+  final bool outsideDaysVisible;
+  final bool isTodayHighlighted;
 
   final TextStyle todayTextStyle;
   final Decoration todayDecoration;
@@ -63,11 +60,16 @@ class CalendarStyle {
     this.isTodayHighlighted = true,
     this.canMarkersOverflow = true,
     this.outsideDaysVisible = true,
+    this.markersAutoAligned = true,
+    this.markerSize,
+    this.markerSizeScale = 0.2,
+    this.markerPosition = 0.7,
+    this.rangeFillScale = 1.0,
+    this.markerMargin = const EdgeInsets.symmetric(horizontal: 0.3),
     this.markersAlignment = Alignment.bottomCenter,
     this.markersMaxAmount = 4,
     this.cellMargin = const EdgeInsets.all(6.0),
-    this.rangeFillOffset = const PositionedOffset(top: 6.0, bottom: 6.0),
-    this.markersOffset = const PositionedOffset(bottom: 5.0),
+    this.markersOffset = const PositionedOffset(),
     this.rangeFillColor = const Color(0xFFBBDDFF),
     this.markerDecoration = const BoxDecoration(
         color: const Color(0xFF263238), shape: BoxShape.circle),
@@ -106,4 +108,13 @@ class CalendarStyle {
     this.defaultDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.rowDecoration = const BoxDecoration(),
   });
+}
+
+class PositionedOffset {
+  final double top;
+  final double bottom;
+  final double start;
+  final double end;
+
+  const PositionedOffset({this.top, this.bottom, this.start, this.end});
 }
