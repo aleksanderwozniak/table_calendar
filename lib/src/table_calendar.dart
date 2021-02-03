@@ -384,8 +384,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 ),
                 height:
                     (shorterSide - widget.calendarStyle.cellMargin.vertical) *
-                        widget.calendarStyle.rangeFillScale,
-                color: widget.calendarStyle.rangeFillColor,
+                        widget.calendarStyle.rangeHighlightScale,
+                color: widget.calendarStyle.rangeHighlightColor,
               ),
             );
           }

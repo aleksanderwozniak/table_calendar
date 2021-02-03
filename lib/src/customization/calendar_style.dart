@@ -18,8 +18,8 @@ class CalendarStyle {
   final EdgeInsets markerMargin;
   final EdgeInsets cellMargin;
 
-  final double rangeFillScale;
-  final Color rangeFillColor;
+  final double rangeHighlightScale;
+  final Color rangeHighlightColor;
 
   final bool outsideDaysVisible;
   final bool isTodayHighlighted;
@@ -64,13 +64,13 @@ class CalendarStyle {
     this.markerSize,
     this.markerSizeScale = 0.2,
     this.markerPosition = 0.7,
-    this.rangeFillScale = 1.0,
+    this.rangeHighlightScale = 1.0,
     this.markerMargin = const EdgeInsets.symmetric(horizontal: 0.3),
     this.markersAlignment = Alignment.bottomCenter,
     this.markersMaxAmount = 4,
     this.cellMargin = const EdgeInsets.all(6.0),
     this.markersOffset = const PositionedOffset(),
-    this.rangeFillColor = const Color(0xFFBBDDFF),
+    this.rangeHighlightColor = const Color(0xFFBBDDFF),
     this.markerDecoration = const BoxDecoration(
         color: const Color(0xFF263238), shape: BoxShape.circle),
     this.todayTextStyle =
