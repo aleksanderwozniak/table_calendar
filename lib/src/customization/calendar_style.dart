@@ -11,7 +11,7 @@ class CalendarStyle {
   final bool canMarkersOverflow;
   final double markerSize;
   final double markerSizeScale;
-  final double markerPosition;
+  final double markersAnchor;
   final PositionedOffset markersOffset;
   final Decoration markerDecoration;
 
@@ -63,7 +63,7 @@ class CalendarStyle {
     this.markersAutoAligned = true,
     this.markerSize,
     this.markerSizeScale = 0.2,
-    this.markerPosition = 0.7,
+    this.markersAnchor = 0.7,
     this.rangeHighlightScale = 1.0,
     this.markerMargin = const EdgeInsets.symmetric(horizontal: 0.3),
     this.markersAlignment = Alignment.bottomCenter,

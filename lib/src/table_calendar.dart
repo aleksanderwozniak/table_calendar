@@ -432,7 +432,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
             final markerAutoAlignmentTop = center +
                 (shorterSide - widget.calendarStyle.cellMargin.vertical) / 2 -
-                (markerSize * widget.calendarStyle.markerPosition);
+                (markerSize * widget.calendarStyle.markersAnchor);
 
             markerWidget = PositionedDirectional(
               top: widget.calendarStyle.markersAutoAligned
