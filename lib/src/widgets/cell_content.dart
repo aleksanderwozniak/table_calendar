@@ -124,23 +124,21 @@ class _CellContent extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(text, style: calendarStyle.outsideTextStyle),
           );
-    } else if (isWeekend) {
-      cell = calendarBuilders.weekendBuilder?.call(context, day, focusedDay) ??
-          AnimatedContainer(
-            duration: duration,
-            margin: margin,
-            decoration: calendarStyle.weekendDecoration,
-            alignment: Alignment.center,
-            child: Text(text, style: calendarStyle.weekendTextStyle),
-          );
     } else {
       cell = calendarBuilders.defaultBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
             margin: margin,
-            decoration: calendarStyle.defaultDecoration,
+            decoration: isWeekend
+                ? calendarStyle.weekendDecoration
+                : calendarStyle.defaultDecoration,
             alignment: Alignment.center,
-            child: Text(text, style: calendarStyle.defaultTextStyle),
+            child: Text(
+              text,
+              style: isWeekend
+                  ? calendarStyle.weekendTextStyle
+                  : calendarStyle.defaultTextStyle,
+            ),
           );
     }
 
