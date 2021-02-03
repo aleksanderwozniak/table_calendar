@@ -10,6 +10,9 @@ typedef SingleMarkerBuilder<T> = Widget Function(
 typedef MarkerBuilder<T> = Widget Function(
     BuildContext context, DateTime date, List<T> events);
 
+typedef HighlightBuilder = Widget Function(
+    BuildContext context, DateTime date, bool isWithinRange);
+
 class CalendarBuilders<T> {
   final FocusedDayBuilder prioritizedBuilder;
   final FocusedDayBuilder todayBuilder;
@@ -20,8 +23,9 @@ class CalendarBuilders<T> {
   final FocusedDayBuilder outsideBuilder;
   final FocusedDayBuilder disabledBuilder;
   final FocusedDayBuilder holidayBuilder;
-  final FocusedDayBuilder weekendBuilder;
   final FocusedDayBuilder defaultBuilder;
+
+  final HighlightBuilder rangeHighlightBuilder;
 
   final SingleMarkerBuilder<T> singleMarkerBuilder;
   final MarkerBuilder<T> markerBuilder;
@@ -38,8 +42,8 @@ class CalendarBuilders<T> {
     this.outsideBuilder,
     this.disabledBuilder,
     this.holidayBuilder,
-    this.weekendBuilder,
     this.defaultBuilder,
+    this.rangeHighlightBuilder,
     this.singleMarkerBuilder,
     this.markerBuilder,
     this.dowBuilder,
