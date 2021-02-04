@@ -76,8 +76,7 @@ class HeaderStyle {
   final bool rightChevronVisible;
 
   /// Header decoration, used to draw border or shadow or change color of the header
-  /// Defaults to empty BoxDecoration.
-  final BoxDecoration decoration;
+  final Decoration decoration;
 
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
