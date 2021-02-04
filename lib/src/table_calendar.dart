@@ -146,7 +146,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController) onCalendarCreated;
 
-  /// Creates a horizontal calendar widget.
+  /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key key,
     this.locale,
@@ -451,7 +451,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: events
-                    .take(widget.calendarStyle.markersMaxAmount)
+                    .take(widget.calendarStyle.markersMaxCount)
                     .map((event) => _buildSingleMarker(date, event, markerSize))
                     .toList(),
               ),
