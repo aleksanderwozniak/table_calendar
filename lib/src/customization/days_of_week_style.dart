@@ -24,6 +24,7 @@ class DaysOfWeekStyle {
   /// Style for weekend days on the top of calendar.
   final TextStyle weekendStyle;
 
+  /// Creates `DaysOfWeekStyle` used by `TableCalendar` widget.
   const DaysOfWeekStyle({
     this.dowTextFormatter,
     this.decoration = const BoxDecoration(),

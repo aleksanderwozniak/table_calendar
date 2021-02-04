@@ -3,7 +3,7 @@
 
 part of table_calendar;
 
-/// Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
+/// Highly customizable, feature-packed Flutter calendar with gestures, animations and multiple formats.
 class TableCalendar<T> extends StatefulWidget {
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
@@ -146,6 +146,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController) onCalendarCreated;
 
+  /// Creates a horizontal calendar widget.
   TableCalendar({
     Key key,
     this.locale,

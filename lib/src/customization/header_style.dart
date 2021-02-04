@@ -60,11 +60,11 @@ class HeaderStyle {
   final EdgeInsets rightChevronMargin;
 
   /// Icon used for left chevron.
-  /// Defaults to `Icons.chevron_left`.
+  /// Defaults to `Icon(Icons.chevron_left)`.
   final Icon leftChevronIcon;
 
   /// Icon used for right chevron.
-  /// Defaults to `Icons.chevron_right`.
+  /// Defaults to `Icon(Icons.chevron_right)`.
   final Icon rightChevronIcon;
 
   /// Determines left chevron's visibility.
@@ -79,6 +79,7 @@ class HeaderStyle {
   /// Defaults to empty BoxDecoration.
   final BoxDecoration decoration;
 
+  /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
     this.titleCentered = false,
     this.formatButtonVisible = true,
