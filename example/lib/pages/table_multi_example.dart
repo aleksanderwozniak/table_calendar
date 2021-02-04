@@ -23,7 +23,7 @@ class _TableMultiExampleState extends State<TableMultiExample> {
   @override
   void initState() {
     super.initState();
-    _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay));
+    _selectedEvents = ValueNotifier([]);
 
     // Using a `LinkedHashSet` is recommended due to equality comparison override
     _selectedDays = LinkedHashSet<DateTime>(

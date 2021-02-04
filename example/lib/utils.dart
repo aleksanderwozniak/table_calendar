@@ -28,7 +28,7 @@ final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
     value: (item) => List.generate(
         item % 4 + 1, (index) => Event('Event $item | ${index + 1}')))
   ..addAll({
-    DateTime.now().toUtc(): [
+    DateTime.now(): [
       Event('Today\'s Event 1'),
       Event('Today\'s Event 2'),
     ],
