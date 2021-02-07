@@ -266,7 +266,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 calendarFormat: widget.calendarFormat,
                 locale: widget.locale,
                 onFormatButtonTap: (format) {
-                  widget.onFormatChanged(format);
+                  assert(
+                    widget.onFormatChanged != null,
+                    'Using `FormatButton` without providing `onFormatChanged` will have no effect.',
+                  );
+
+                  widget.onFormatChanged?.call(format);
                 },
               );
             },
