@@ -24,6 +24,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         firstDay: DateTime.utc(2020, 10, 16),
         lastDay: DateTime.utc(2021, 3, 14),
         focusedDay: _focusedDay,
+        calendarFormat: _calendarFormat,
         selectedDayPredicate: (day) {
           // Use `selectedDayPredicate` to determine which day is currently selected.
           // If this returns true, then `day` will be marked as selected.
@@ -32,28 +33,27 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
           // the time-part of compared DateTime objects.
           return isSameDay(_selectedDay, day);
         },
-        calendarFormat: _calendarFormat,
         onDaySelected: (selectedDay, focusedDay) {
           if (!isSameDay(_selectedDay, selectedDay)) {
-            // Call `setState()` to update the selected day
+            // Call `setState()` when updating the selected day
             setState(() {
               _selectedDay = selectedDay;
             });
           }
 
-          // Don't call `setState()` just to update the focused day
+          // Don't call `setState()` when updating just the focused day
           _focusedDay = focusedDay;
         },
         onFormatChanged: (format) {
           if (_calendarFormat != format) {
-            // Call `setState()` to update calendar format
+            // Call `setState()` when updating calendar format
             setState(() {
               _calendarFormat = format;
             });
           }
         },
         onPageChanged: (focusedDay) {
-          // Don't call `setState()` just to update the focused day
+          // Don't call `setState()` when updating just the focused day
           _focusedDay = focusedDay;
         },
       ),
