@@ -130,32 +130,17 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
   void didUpdateWidget(TableCalendarBase oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.calendarFormat != oldWidget.calendarFormat) {
-      _updatePage();
-    }
-
-    if (_focusedDay != widget.focusedDay) {
+    if (_focusedDay != widget.focusedDay ||
+        widget.calendarFormat != oldWidget.calendarFormat ||
+        widget.startingDayOfWeek != oldWidget.startingDayOfWeek) {
       _focusedDay = widget.focusedDay;
       _updatePage();
     }
 
     if (widget.rowHeight != oldWidget.rowHeight ||
-        widget.dowHeight != oldWidget.dowHeight) {
-      final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-      _pageHeight.value = _getPageHeight(rowCount);
-    }
-
-    if (widget.dowVisible != oldWidget.dowVisible) {
-      final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-      _pageHeight.value = _getPageHeight(rowCount);
-    }
-
-    if (widget.startingDayOfWeek != oldWidget.startingDayOfWeek) {
-      final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-      _pageHeight.value = _getPageHeight(rowCount);
-    }
-
-    if (widget.sixWeekMonthsEnforced != oldWidget.sixWeekMonthsEnforced) {
+        widget.dowHeight != oldWidget.dowHeight ||
+        widget.dowVisible != oldWidget.dowVisible ||
+        widget.sixWeekMonthsEnforced != oldWidget.sixWeekMonthsEnforced) {
       final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
       _pageHeight.value = _getPageHeight(rowCount);
     }
@@ -239,11 +224,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
               dowDecoration: widget.dowDecoration,
               rowDecoration: widget.rowDecoration,
               onPageChanged: (index, focusedMonth) {
-                if (!isSameDay(_focusedDay, focusedMonth)) {
-                  _focusedDay = focusedMonth;
-                }
-
                 if (!_pageCallbackDisabled) {
+                  if (!isSameDay(_focusedDay, focusedMonth)) {
+                    _focusedDay = focusedMonth;
+                  }
+
                   if (widget.calendarFormat == CalendarFormat.month &&
                       !widget.sixWeekMonthsEnforced &&
                       !constraints.hasBoundedHeight) {
