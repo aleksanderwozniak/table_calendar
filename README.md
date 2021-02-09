@@ -112,7 +112,23 @@ TableCalendar(
 Note, that if you want to change the language of `FormatButton`'s text, you have to do this yourself. Use `availableCalendarFormats` property and pass the translated Strings there. 
 Use i18n method of your choice.
 
-You can also hide the button altogether by setting `formatButtonVisible` to false.
+`availableCalendarFormats`: Select which Calendar Formats will be available to the user and which text will be visible. 
+Usage: Add the following code, changing the text for the one you want.
+```dart 
+const {CalendarFormat.week: 'TextOfWeekButton', CalendarFormat.month: 'NameOfMonthButton', CalendarFormat.twoWeeks:  'NameOfTwoWeeksButton'},
+```
+
+`availableCalendarFormats`: Select the initial Calendar Format. Usage: Select a `CalendarFormat`
+
+
+Example:
+
+```dart
+              availableCalendarFormats: const {CalendarFormat.week: 'Week'},
+              initialCalendarFormat: CalendarFormat.week,
+```
+
+In this example, the button will be hide, since there will be only one format (Week Format).
 
 ### Holidays
 
