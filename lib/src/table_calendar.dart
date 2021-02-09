@@ -149,12 +149,12 @@ class TableCalendar<T> extends StatefulWidget {
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key key,
+    @required DateTime focusedDay,
+    @required DateTime firstDay,
+    @required DateTime lastDay,
     this.locale,
     this.rangeStartDay,
     this.rangeEndDay,
-    @required this.focusedDay,
-    @required this.firstDay,
-    @required this.lastDay,
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
     this.calendarFormat = CalendarFormat.month,
     this.availableCalendarFormats = const {
@@ -206,6 +206,9 @@ class TableCalendar<T> extends StatefulWidget {
             ? weekendDays.every(
                 (day) => day >= DateTime.monday && day <= DateTime.sunday)
             : true),
+        focusedDay = _normalizeDate(focusedDay),
+        firstDay = _normalizeDate(firstDay),
+        lastDay = _normalizeDate(lastDay),
         super(key: key);
 
   @override
@@ -520,4 +523,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }) {
     return weekendDays.contains(day.weekday);
   }
+}
+
+DateTime _normalizeDate(DateTime date) {
+  return DateTime.utc(date.year, date.month, date.day);
 }
