@@ -81,6 +81,12 @@ class TableCalendar<T> extends StatefulWidget {
   /// Specifies the curve of size animation that takes place when `calendarFormat` is changed.
   final Curve formatAnimationCurve;
 
+  /// Specifies the duration of page change animation that takes place when left or right chevron is tapped.
+  final Duration pageAnimationDuration;
+
+  /// Specifies the curve of page change animation that takes place when left or right chevron is tapped.
+  final Curve pageAnimationCurve;
+
   /// `TableCalendar` will start weeks with provided day.
   /// Use `StartingDayOfWeek.monday` for Monday - Sunday week format.
   /// Use `StartingDayOfWeek.sunday` for Sunday - Saturday week format.
@@ -177,6 +183,8 @@ class TableCalendar<T> extends StatefulWidget {
     this.daysOfWeekHeight = 16.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
+    this.pageAnimationDuration = const Duration(milliseconds: 300),
+    this.pageAnimationCurve = Curves.easeOut,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.dayHitTestBehavior = HitTestBehavior.deferToChild,
     this.availableGestures = AvailableGestures.all,
@@ -260,14 +268,14 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 focusedMonth: value,
                 onLeftChevronTap: () {
                   _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
+                    duration: widget.pageAnimationDuration,
+                    curve: widget.pageAnimationCurve,
                   );
                 },
                 onRightChevronTap: () {
                   _pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
+                    duration: widget.pageAnimationDuration,
+                    curve: widget.pageAnimationCurve,
                   );
                 },
                 onHeaderTap: () => widget.onHeaderTapped(value),
