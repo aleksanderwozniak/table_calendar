@@ -3,6 +3,19 @@
 
 part of table_calendar;
 
+typedef OnDaySelected = void Function(
+    DateTime selectedDay, DateTime focusedDay);
+
+typedef OnRangeSelected = void Function(
+    DateTime start, DateTime end, DateTime focusedDay);
+
+enum RangeSelectionMode {
+  disabled, // always off
+  toggledOff, // currently off, can be toggled
+  toggledOn, // currently on, can be toggled
+  enforced, // always on
+}
+
 /// Highly customizable, feature-packed Flutter calendar with gestures, animations and multiple formats.
 class TableCalendar<T> extends StatefulWidget {
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
@@ -232,13 +245,17 @@ class TableCalendar<T> extends StatefulWidget {
 }
 
 class _TableCalendarState<T> extends State<TableCalendar<T>> {
-  ValueNotifier<DateTime> _focusedDay;
   PageController _pageController;
+  ValueNotifier<DateTime> _focusedDay;
+  DateTime _firstSelectedDay;
+  RangeSelectionMode _rangeSelectionMode;
 
   @override
   void initState() {
     super.initState();
     _focusedDay = ValueNotifier(widget.focusedDay);
+    _rangeSelectionMode =
+        widget.rangeSelectionMode ?? RangeSelectionMode.toggledOff;
   }
 
   @override
@@ -248,12 +265,131 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     if (_focusedDay.value != widget.focusedDay) {
       _focusedDay.value = widget.focusedDay;
     }
+
+    if (widget.rangeSelectionMode != null &&
+        _rangeSelectionMode != widget.rangeSelectionMode) {
+      _rangeSelectionMode = widget.rangeSelectionMode;
+    }
   }
 
   @override
   void dispose() {
     _focusedDay.dispose();
     super.dispose();
+  }
+
+  bool get _isRangeSelectionToggleable =>
+      _rangeSelectionMode == RangeSelectionMode.toggledOn ||
+      _rangeSelectionMode == RangeSelectionMode.toggledOff;
+
+  bool get _isRangeSelectionOn =>
+      _rangeSelectionMode == RangeSelectionMode.toggledOn ||
+      _rangeSelectionMode == RangeSelectionMode.enforced;
+
+  void _swipeCalendarFormat(SwipeDirection direction) {
+    if (widget.onFormatChanged != null) {
+      final formats = widget.availableCalendarFormats.keys.toList();
+
+      final isSwipeUp = direction == SwipeDirection.up;
+      int id = formats.indexOf(widget.calendarFormat);
+
+      // Order of CalendarFormats must be from biggest to smallest,
+      // e.g.: [month, twoWeeks, week]
+      if (isSwipeUp) {
+        id = min(formats.length - 1, id + 1);
+      } else {
+        id = max(0, id - 1);
+      }
+
+      widget.onFormatChanged(formats[id]);
+    }
+  }
+
+  void _onDayTapped(DateTime day) {
+    if (_isDayDisabled(day)) {
+      return widget.onDisabledDayTapped?.call(day);
+    }
+
+    _updateFocusOnTap(day);
+
+    if (_isRangeSelectionOn && widget.onRangeSelected != null) {
+      if (_firstSelectedDay == null) {
+        _firstSelectedDay = day;
+        widget.onRangeSelected(_firstSelectedDay, null, _focusedDay.value);
+      } else {
+        if (day.isAfter(_firstSelectedDay)) {
+          widget.onRangeSelected(_firstSelectedDay, day, _focusedDay.value);
+          _firstSelectedDay = null;
+        } else if (day.isBefore(_firstSelectedDay)) {
+          widget.onRangeSelected(day, _firstSelectedDay, _focusedDay.value);
+          _firstSelectedDay = null;
+        }
+      }
+    } else {
+      widget.onDaySelected?.call(day, _focusedDay.value);
+    }
+  }
+
+  void _onDayLongPressed(DateTime day) {
+    if (_isDayDisabled(day)) {
+      return widget.onDisabledDayLongPressed?.call(day);
+    }
+
+    if (widget.onRangeSelected != null) {
+      if (_isRangeSelectionToggleable) {
+        _updateFocusOnTap(day);
+        _toggleRangeSelection();
+
+        if (_isRangeSelectionOn) {
+          _firstSelectedDay = day;
+          widget.onRangeSelected(_firstSelectedDay, null, _focusedDay.value);
+        } else {
+          _firstSelectedDay = null;
+          widget.onDaySelected?.call(day, _focusedDay.value);
+        }
+      }
+    }
+  }
+
+  void _updateFocusOnTap(DateTime day) {
+    if (widget.pageJumpingEnabled) {
+      _focusedDay.value = day;
+      return;
+    }
+
+    if (widget.calendarFormat == CalendarFormat.month) {
+      if (_isBeforeMonth(day, _focusedDay.value)) {
+        _focusedDay.value = _firstDayOfMonth(_focusedDay.value);
+      } else if (_isAfterMonth(day, _focusedDay.value)) {
+        _focusedDay.value = _lastDayOfMonth(_focusedDay.value);
+      } else {
+        _focusedDay.value = day;
+      }
+    } else {
+      _focusedDay.value = day;
+    }
+  }
+
+  void _toggleRangeSelection() {
+    if (_rangeSelectionMode == RangeSelectionMode.toggledOn) {
+      _rangeSelectionMode = RangeSelectionMode.toggledOff;
+    } else {
+      _rangeSelectionMode = RangeSelectionMode.toggledOn;
+    }
+  }
+
+  void _onLeftChevronTap() {
+    _pageController.previousPage(
+      duration: widget.pageAnimationDuration,
+      curve: widget.pageAnimationCurve,
+    );
+  }
+
+  void _onRightChevronTap() {
+    _pageController.nextPage(
+      duration: widget.pageAnimationDuration,
+      curve: widget.pageAnimationCurve,
+    );
   }
 
   @override
@@ -266,18 +402,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             builder: (context, value, _) {
               return _CalendarHeader(
                 focusedMonth: value,
-                onLeftChevronTap: () {
-                  _pageController.previousPage(
-                    duration: widget.pageAnimationDuration,
-                    curve: widget.pageAnimationCurve,
-                  );
-                },
-                onRightChevronTap: () {
-                  _pageController.nextPage(
-                    duration: widget.pageAnimationDuration,
-                    curve: widget.pageAnimationCurve,
-                  );
-                },
+                onLeftChevronTap: _onLeftChevronTap,
+                onRightChevronTap: _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped(value),
                 onHeaderLongPress: () => widget.onHeaderLongPressed(value),
                 headerStyle: widget.headerStyle,
@@ -297,7 +423,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           ),
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
-          child: TableCalendarLite(
+          child: TableCalendarBase(
             onCalendarCreated: (pageController) {
               _pageController = pageController;
               widget.onCalendarCreated?.call(pageController);
@@ -317,26 +443,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             formatAnimationCurve: widget.formatAnimationCurve,
             availableCalendarFormats: widget.availableCalendarFormats,
             simpleSwipeConfig: widget.simpleSwipeConfig,
-            dayHitTestBehavior: widget.dayHitTestBehavior,
-            enabledDayPredicate: widget.enabledDayPredicate,
-            rangeSelectionMode: widget.rangeSelectionMode,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
-            pageJumpingEnabled: widget.pageJumpingEnabled,
-            onDisabledDayTapped: widget.onDisabledDayTapped,
-            onDisabledDayLongPressed: widget.onDisabledDayLongPressed,
-            onDaySelected: (selectedDay, focusedDay) {
-              _focusedDay.value = focusedDay;
-              widget.onDaySelected?.call(selectedDay, focusedDay);
-            },
-            onRangeSelected: widget.onRangeSelected != null
-                ? (start, end, focusedDay) {
-                    _focusedDay.value = focusedDay;
-                    widget.onRangeSelected(start, end, focusedDay);
-                  }
-                : null,
-            onFormatChanged: (format) {
-              widget.onFormatChanged?.call(format);
-            },
+            onVerticalSwipe: _swipeCalendarFormat,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
@@ -366,7 +474,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
-              return _buildCell(day, focusedMonth);
+              return GestureDetector(
+                behavior: widget.dayHitTestBehavior,
+                onTap: () => _onDayTapped(day),
+                onLongPress: () => _onDayLongPressed(day),
+                child: _buildCell(day, focusedMonth),
+              );
             },
           ),
         ),
@@ -533,6 +646,33 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     return widget.enabledDayPredicate == null
         ? true
         : widget.enabledDayPredicate(day);
+  }
+
+  DateTime _firstDayOfMonth(DateTime month) {
+    return DateTime.utc(month.year, month.month, 1);
+  }
+
+  DateTime _lastDayOfMonth(DateTime month) {
+    final date = month.month < 12
+        ? DateTime.utc(month.year, month.month + 1, 1)
+        : DateTime.utc(month.year + 1, 1, 1);
+    return date.subtract(const Duration(days: 1));
+  }
+
+  bool _isBeforeMonth(DateTime day, DateTime month) {
+    if (day.year == month.year) {
+      return day.month < month.month;
+    } else {
+      return day.isBefore(month);
+    }
+  }
+
+  bool _isAfterMonth(DateTime day, DateTime month) {
+    if (day.year == month.year) {
+      return day.month > month.month;
+    } else {
+      return day.isAfter(month);
+    }
   }
 
   bool _isWeekend(

@@ -15,7 +15,6 @@ part 'src/customization/days_of_week_style.dart';
 part 'src/customization/header_style.dart';
 part 'src/table_calendar.dart';
 part 'src/table_calendar_base.dart';
-part 'src/table_calendar_lite.dart';
 part 'src/widgets/calendar_core.dart';
 part 'src/widgets/calendar_header.dart';
 part 'src/widgets/calendar_page.dart';
