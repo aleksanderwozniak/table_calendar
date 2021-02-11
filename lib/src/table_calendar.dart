@@ -199,7 +199,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.pageAnimationDuration = const Duration(milliseconds: 300),
     this.pageAnimationCurve = Curves.easeOut,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
-    this.dayHitTestBehavior = HitTestBehavior.deferToChild,
+    this.dayHitTestBehavior = HitTestBehavior.opaque,
     this.availableGestures = AvailableGestures.all,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
       verticalThreshold: 25.0,
@@ -286,6 +286,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
       _rangeSelectionMode == RangeSelectionMode.toggledOn ||
       _rangeSelectionMode == RangeSelectionMode.enforced;
 
+  bool get _shouldBlockOutsideDays =>
+      !widget.calendarStyle.outsideDaysVisible &&
+      widget.calendarFormat == CalendarFormat.month;
+
   void _swipeCalendarFormat(SwipeDirection direction) {
     if (widget.onFormatChanged != null) {
       final formats = widget.availableCalendarFormats.keys.toList();
@@ -306,6 +310,11 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   void _onDayTapped(DateTime day) {
+    final isOutside = day.month != _focusedDay.value.month;
+    if (isOutside && _shouldBlockOutsideDays) {
+      return;
+    }
+
     if (_isDayDisabled(day)) {
       return widget.onDisabledDayTapped?.call(day);
     }
@@ -331,6 +340,11 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   void _onDayLongPressed(DateTime day) {
+    final isOutside = day.month != _focusedDay.value.month;
+    if (isOutside && _shouldBlockOutsideDays) {
+      return;
+    }
+
     if (_isDayDisabled(day)) {
       return widget.onDisabledDayLongPressed?.call(day);
     }
@@ -490,9 +504,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   Widget _buildCell(DateTime date, DateTime focusedDay) {
     final isOutside = date.month != focusedDay.month;
 
-    if (isOutside &&
-        !widget.calendarStyle.outsideDaysVisible &&
-        widget.calendarFormat == CalendarFormat.month) {
+    if (isOutside && _shouldBlockOutsideDays) {
       return Container();
     }
 
