@@ -75,7 +75,10 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for setting the height of `TableCalendar`'s days of week row.
   final double daysOfWeekHeight;
 
+  /// Specifies the duration of size animation that takes place when `calendarFormat` is changed.
   final Duration formatAnimationDuration;
+
+  /// Specifies the curve of size animation that takes place when `calendarFormat` is changed.
   final Curve formatAnimationCurve;
 
   /// `TableCalendar` will start weeks with provided day.
