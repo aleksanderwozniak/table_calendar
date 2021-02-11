@@ -75,6 +75,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for setting the height of `TableCalendar`'s days of week row.
   final double daysOfWeekHeight;
 
+  final Duration formatAnimationDuration;
+  final Curve formatAnimationCurve;
+
   /// `TableCalendar` will start weeks with provided day.
   /// Use `StartingDayOfWeek.monday` for Monday - Sunday week format.
   /// Use `StartingDayOfWeek.sunday` for Sunday - Saturday week format.
@@ -169,6 +172,8 @@ class TableCalendar<T> extends StatefulWidget {
     this.shouldFillViewport = false,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
+    this.formatAnimationDuration = const Duration(milliseconds: 200),
+    this.formatAnimationCurve = Curves.linear,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.dayHitTestBehavior = HitTestBehavior.deferToChild,
     this.availableGestures = AvailableGestures.all,
@@ -297,6 +302,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             dowVisible: widget.daysOfWeekVisible,
             dowHeight: widget.daysOfWeekHeight,
             rowHeight: widget.rowHeight,
+            formatAnimationDuration: widget.formatAnimationDuration,
+            formatAnimationCurve: widget.formatAnimationCurve,
             availableCalendarFormats: widget.availableCalendarFormats,
             simpleSwipeConfig: widget.simpleSwipeConfig,
             dayHitTestBehavior: widget.dayHitTestBehavior,

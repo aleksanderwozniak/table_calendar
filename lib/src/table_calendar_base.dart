@@ -50,6 +50,8 @@ class TableCalendarBase extends StatefulWidget {
   final bool dowVisible;
   final Decoration dowDecoration;
   final Decoration rowDecoration;
+  final Duration formatAnimationDuration;
+  final Curve formatAnimationCurve;
   final StartingDayOfWeek startingDayOfWeek;
   final AvailableGestures availableGestures;
   final SimpleSwipeConfig simpleSwipeConfig;
@@ -72,6 +74,8 @@ class TableCalendarBase extends StatefulWidget {
     this.dowVisible = true,
     this.dowDecoration,
     this.rowDecoration,
+    this.formatAnimationDuration = const Duration(milliseconds: 200),
+    this.formatAnimationCurve = Curves.linear,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.availableGestures = AvailableGestures.all,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
@@ -196,8 +200,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
                   constraints.hasBoundedHeight ? constraints.maxHeight : value;
 
               return AnimatedSize(
-                duration: const Duration(milliseconds: 200),
                 vsync: this,
+                duration: widget.formatAnimationDuration,
+                curve: widget.formatAnimationCurve,
                 alignment: Alignment.topCenter,
                 child: SizedBox(
                   height: height,

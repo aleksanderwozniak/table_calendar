@@ -30,6 +30,8 @@ class TableCalendarLite extends StatefulWidget {
   final bool sixWeekMonthsEnforced;
   final Decoration dowDecoration;
   final Decoration rowDecoration;
+  final Duration formatAnimationDuration;
+  final Curve formatAnimationCurve;
   final StartingDayOfWeek startingDayOfWeek;
   final AvailableGestures availableGestures;
   final SimpleSwipeConfig simpleSwipeConfig;
@@ -60,6 +62,8 @@ class TableCalendarLite extends StatefulWidget {
     this.sixWeekMonthsEnforced = false,
     this.dowDecoration,
     this.rowDecoration,
+    this.formatAnimationDuration = const Duration(milliseconds: 200),
+    this.formatAnimationCurve = Curves.linear,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.availableGestures = AvailableGestures.all,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
@@ -232,6 +236,8 @@ class _TableCalendarLiteState extends State<TableCalendarLite> {
       startingDayOfWeek: widget.startingDayOfWeek,
       availableGestures: widget.availableGestures,
       calendarFormat: widget.calendarFormat,
+      formatAnimationDuration: widget.formatAnimationDuration,
+      formatAnimationCurve: widget.formatAnimationCurve,
       onVerticalSwipe: _swipeCalendarFormat,
       onPageChanged: (focusedMonth) {
         _focusedDay = focusedMonth;
