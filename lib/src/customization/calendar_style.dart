@@ -95,11 +95,11 @@ class CalendarStyle {
   /// Decoration for day cells that fall within the currently selected range.
   final Decoration withinRangeDecoration;
 
-  /// TextStyle for day cells, of which the `date.month` is different than `focusedDay.month`.
+  /// TextStyle for day cells, of which the `day.month` is different than `focusedDay.month`.
   /// This will affect day cells that do not match the currently focused month.
   final TextStyle outsideTextStyle;
 
-  /// Decoration for day cells, of which the `date.month` is different than `focusedDay.month`.
+  /// Decoration for day cells, of which the `day.month` is different than `focusedDay.month`.
   /// This will affect day cells that do not match the currently focused month.
   final Decoration outsideDecoration;
 

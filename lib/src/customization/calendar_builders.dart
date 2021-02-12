@@ -40,7 +40,7 @@ class CalendarBuilders<T> {
   /// Custom builder for day cells that fall within the currently selected range.
   final FocusedDayBuilder withinRangeBuilder;
 
-  /// Custom builder for day cells, of which the `date.month` is different than `focusedDay.month`.
+  /// Custom builder for day cells, of which the `day.month` is different than `focusedDay.month`.
   /// This will affect day cells that do not match the currently focused month.
   final FocusedDayBuilder outsideBuilder;
 
@@ -57,7 +57,7 @@ class CalendarBuilders<T> {
   final FocusedDayBuilder defaultBuilder;
 
   /// Custom builder for background highlight of range selection.
-  /// If `isWithinRange` is true, then `date` is within the selected range.
+  /// If `isWithinRange` is true, then `day` is within the selected range.
   final HighlightBuilder rangeHighlightBuilder;
 
   /// Custom builder for a single event marker. Each of those will be displayed in a `Row` above of the day cell.

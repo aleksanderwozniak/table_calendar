@@ -506,8 +506,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     );
   }
 
-  Widget _buildCell(DateTime date, DateTime focusedDay) {
-    final isOutside = date.month != focusedDay.month;
+  Widget _buildCell(DateTime day, DateTime focusedDay) {
+    final isOutside = day.month != focusedDay.month;
 
     if (isOutside && _shouldBlockOutsideDays) {
       return Container();
@@ -523,13 +523,13 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final isWithinRange = widget.rangeStartDay != null &&
             widget.rangeEndDay != null &&
-            _isWithinRange(date, widget.rangeStartDay, widget.rangeEndDay);
+            _isWithinRange(day, widget.rangeStartDay, widget.rangeEndDay);
 
-        final isRangeStart = isSameDay(date, widget.rangeStartDay);
-        final isRangeEnd = isSameDay(date, widget.rangeEndDay);
+        final isRangeStart = isSameDay(day, widget.rangeStartDay);
+        final isRangeEnd = isSameDay(day, widget.rangeEndDay);
 
         Widget rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder
-            ?.call(context, date, isWithinRange);
+            ?.call(context, day, isWithinRange);
 
         if (rangeHighlight == null) {
           if (isWithinRange) {
@@ -552,33 +552,33 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           children.add(rangeHighlight);
         }
 
-        final isToday = isSameDay(date, DateTime.now());
-        final isDisabled = _isDayDisabled(date);
-        final isWeekend = _isWeekend(date, weekendDays: widget.weekendDays);
+        final isToday = isSameDay(day, DateTime.now());
+        final isDisabled = _isDayDisabled(day);
+        final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
         Widget content = _CellContent(
-          day: date,
+          day: day,
           focusedDay: focusedDay,
           calendarStyle: widget.calendarStyle,
           calendarBuilders: widget.calendarBuilders,
           isTodayHighlighted: widget.calendarStyle.isTodayHighlighted,
           isToday: isToday,
-          isSelected: widget.selectedDayPredicate?.call(date) ?? false,
+          isSelected: widget.selectedDayPredicate?.call(day) ?? false,
           isRangeStart: isRangeStart,
           isRangeEnd: isRangeEnd,
           isWithinRange: isWithinRange,
           isOutside: isOutside,
           isDisabled: isDisabled,
           isWeekend: isWeekend,
-          isHoliday: widget.holidayPredicate?.call(date) ?? false,
+          isHoliday: widget.holidayPredicate?.call(day) ?? false,
         );
 
         children.add(content);
 
         if (!isDisabled) {
-          final events = widget.eventLoader?.call(date) ?? [];
-          Widget markerWidget = widget.calendarBuilders.markerBuilder
-              ?.call(context, date, events);
+          final events = widget.eventLoader?.call(day) ?? [];
+          Widget markerWidget =
+              widget.calendarBuilders.markerBuilder?.call(context, day, events);
 
           if (events.isNotEmpty && markerWidget == null) {
             final center = constraints.maxHeight / 2;
@@ -608,7 +608,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 mainAxisSize: MainAxisSize.min,
                 children: events
                     .take(widget.calendarStyle.markersMaxCount)
-                    .map((event) => _buildSingleMarker(date, event, markerSize))
+                    .map((event) => _buildSingleMarker(day, event, markerSize))
                     .toList(),
               ),
             );
@@ -630,9 +630,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     );
   }
 
-  Widget _buildSingleMarker(DateTime date, T event, double markerSize) {
+  Widget _buildSingleMarker(DateTime day, T event, double markerSize) {
     return widget.calendarBuilders.singleMarkerBuilder
-            ?.call(context, date, event) ??
+            ?.call(context, day, event) ??
         Container(
           width: markerSize,
           height: markerSize,
@@ -641,12 +641,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         );
   }
 
-  bool _isWithinRange(DateTime date, DateTime start, DateTime end) {
-    if (isSameDay(date, start) || isSameDay(date, end)) {
+  bool _isWithinRange(DateTime day, DateTime start, DateTime end) {
+    if (isSameDay(day, start) || isSameDay(day, end)) {
       return true;
     }
 
-    if (date.isAfter(start) && date.isBefore(end)) {
+    if (day.isAfter(start) && day.isBefore(end)) {
       return true;
     }
 
