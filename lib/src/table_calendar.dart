@@ -3,18 +3,17 @@
 
 part of table_calendar;
 
+/// Signature for `onDaySelected` callback. Contains currently selected day and focused day.
 typedef OnDaySelected = void Function(
     DateTime selectedDay, DateTime focusedDay);
 
+/// Signature for `onRangeSelected` callback.
+/// Contains start and end of the selected range, as well as currently focused day.
 typedef OnRangeSelected = void Function(
     DateTime start, DateTime end, DateTime focusedDay);
 
-enum RangeSelectionMode {
-  disabled, // always off
-  toggledOff, // currently off, can be toggled
-  toggledOn, // currently on, can be toggled
-  enforced, // always on
-}
+/// Modes that range selection can operate in.
+enum RangeSelectionMode { disabled, toggledOff, toggledOn, enforced }
 
 /// Highly customizable, feature-packed Flutter calendar with gestures, animations and multiple formats.
 class TableCalendar<T> extends StatefulWidget {
@@ -101,6 +100,7 @@ class TableCalendar<T> extends StatefulWidget {
   final Curve pageAnimationCurve;
 
   /// `TableCalendar` will start weeks with provided day.
+  ///
   /// Use `StartingDayOfWeek.monday` for Monday - Sunday week format.
   /// Use `StartingDayOfWeek.sunday` for Sunday - Saturday week format.
   final StartingDayOfWeek startingDayOfWeek;
@@ -129,6 +129,11 @@ class TableCalendar<T> extends StatefulWidget {
   final CalendarBuilders<T> calendarBuilders;
 
   /// Current mode of range selection.
+  ///
+  /// * `RangeSelectionMode.disabled` - range selection is always off.
+  /// * `RangeSelectionMode.toggledOff` - range selection is currently off, can be toggled by longpressing a day cell.
+  /// * `RangeSelectionMode.toggledOn` - range selection is currently on, can be toggled by longpressing a day cell.
+  /// * `RangeSelectionMode.enforced` - range selection is always on.
   final RangeSelectionMode rangeSelectionMode;
 
   /// Called whenever a day range gets selected.

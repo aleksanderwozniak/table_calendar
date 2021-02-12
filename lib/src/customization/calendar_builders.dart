@@ -3,18 +3,22 @@
 
 part of table_calendar;
 
-/// Builder signature for a single event marker. Contains a `date` and a single `event` associated with that `date`.
+/// Signature for a function that creates a single event marker for a given `day`.
+/// Contains a single `event` associated with that `day`.
 typedef SingleMarkerBuilder<T> = Widget Function(
-    BuildContext context, DateTime date, T event);
+    BuildContext context, DateTime day, T event);
 
-/// Builder signature for event markers. Contains a `date` and a list of `events` associated with that `date`.
+/// Signature for a function that creates an event marker for a given `day`.
+/// Contains a list of `events` associated with that `day`.
 typedef MarkerBuilder<T> = Widget Function(
-    BuildContext context, DateTime date, List<T> events);
+    BuildContext context, DateTime day, List<T> events);
 
-/// Builder signature for background highlight of range selection.
-/// Contains a `date` and a value determining if that `date` falls within the selected range.
+/// Signature for a function that creates a background highlight for a given `day`.
+///
+/// Used for highlighting current range selection.
+/// Contains a value determining if the given `day` falls within the selected range.
 typedef HighlightBuilder = Widget Function(
-    BuildContext context, DateTime date, bool isWithinRange);
+    BuildContext context, DateTime day, bool isWithinRange);
 
 /// Class containing all custom builders for `TableCalendar`.
 class CalendarBuilders<T> {

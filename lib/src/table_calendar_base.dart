@@ -3,16 +3,21 @@
 
 part of table_calendar;
 
+/// Signature for a function that creates a widget for a given `day`.
 typedef DayBuilder = Widget Function(BuildContext context, DateTime day);
 
+/// Signature for a function that creates a widget for a given `day`.
+/// Additionally, contains the currently focused day.
 typedef FocusedDayBuilder = Widget Function(
-    BuildContext context, DateTime day, DateTime focusedMonth);
+    BuildContext context, DateTime day, DateTime focusedDay);
 
-/// Gestures available to `TableCalendar`.
+/// Gestures available for the calendar.
 enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 
+/// Formats that the calendar can display.
 enum CalendarFormat { month, twoWeeks, week }
 
+/// Days of the week that the calendar can start with.
 enum StartingDayOfWeek {
   monday,
   tuesday,

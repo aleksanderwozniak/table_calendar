@@ -3,7 +3,7 @@
 
 part of table_calendar;
 
-/// Signature for function returning text that can be localized and formatted with `DateFormat`.
+/// Signature for a function returning text that can be localized and formatted with `DateFormat`.
 typedef TextFormatter = String Function(DateTime date, dynamic locale);
 
 /// Class containing styling and configuration of `TableCalendar`'s header.
