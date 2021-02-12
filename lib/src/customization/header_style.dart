@@ -1,10 +1,9 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/material.dart';
 
-/// Signature for a function returning text that can be localized and formatted with `DateFormat`.
-typedef TextFormatter = String Function(DateTime date, dynamic locale);
+import '../shared/utils.dart' show TextFormatter;
 
 /// Class containing styling and configuration of `TableCalendar`'s header.
 class HeaderStyle {

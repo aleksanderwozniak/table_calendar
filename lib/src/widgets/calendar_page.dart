@@ -1,9 +1,11 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/widgets.dart';
 
-class _CalendarPage extends StatelessWidget {
+import '../shared/utils.dart' show DayBuilder;
+
+class CalendarPage extends StatelessWidget {
   final List<DateTime> visibleDays;
   final DayBuilder dowBuilder;
   final DayBuilder dayBuilder;
@@ -11,7 +13,7 @@ class _CalendarPage extends StatelessWidget {
   final Decoration rowDecoration;
   final bool dowVisible;
 
-  const _CalendarPage({
+  const CalendarPage({
     Key key,
     @required this.visibleDays,
     this.dowBuilder,

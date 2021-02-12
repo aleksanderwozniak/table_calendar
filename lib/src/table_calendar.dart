@@ -1,7 +1,20 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'dart:math';
+
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+
+import 'customization/calendar_builders.dart';
+import 'customization/calendar_style.dart';
+import 'customization/days_of_week_style.dart';
+import 'customization/header_style.dart';
+import 'shared/utils.dart';
+import 'table_calendar_base.dart';
+import 'widgets/calendar_header.dart';
+import 'widgets/cell_content.dart';
 
 /// Signature for `onDaySelected` callback. Contains currently selected day and focused day.
 typedef OnDaySelected = void Function(
@@ -240,9 +253,9 @@ class TableCalendar<T> extends StatefulWidget {
             ? weekendDays.every(
                 (day) => day >= DateTime.monday && day <= DateTime.sunday)
             : true),
-        focusedDay = _normalizeDate(focusedDay),
-        firstDay = _normalizeDate(firstDay),
-        lastDay = _normalizeDate(lastDay),
+        focusedDay = normalizeDate(focusedDay),
+        firstDay = normalizeDate(firstDay),
+        lastDay = normalizeDate(lastDay),
         super(key: key);
 
   @override
@@ -419,7 +432,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           ValueListenableBuilder<DateTime>(
             valueListenable: _focusedDay,
             builder: (context, value, _) {
-              return _CalendarHeader(
+              return CalendarHeader(
                 focusedMonth: value,
                 onLeftChevronTap: _onLeftChevronTap,
                 onRightChevronTap: _onRightChevronTap,
@@ -556,7 +569,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
-        Widget content = _CellContent(
+        Widget content = CellContent(
           day: day,
           focusedDay: focusedDay,
           calendarStyle: widget.calendarStyle,
@@ -698,8 +711,4 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }) {
     return weekendDays.contains(day.weekday);
   }
-}
-
-DateTime _normalizeDate(DateTime date) {
-  return DateTime.utc(date.year, date.month, date.day);
 }

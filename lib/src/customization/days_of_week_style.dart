@@ -1,7 +1,9 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/widgets.dart';
+
+import '../shared/utils.dart' show TextFormatter;
 
 /// Class containing styling for `TableCalendar`'s days of week panel.
 class DaysOfWeekStyle {

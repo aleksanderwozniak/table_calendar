@@ -1,9 +1,11 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/material.dart';
 
-class _FormatButton extends StatelessWidget {
+import '../shared/utils.dart' show CalendarFormat;
+
+class FormatButton extends StatelessWidget {
   final CalendarFormat calendarFormat;
   final ValueChanged<CalendarFormat> onTap;
   final TextStyle textStyle;
@@ -12,7 +14,7 @@ class _FormatButton extends StatelessWidget {
   final bool showsNextFormat;
   final Map<CalendarFormat, String> availableCalendarFormats;
 
-  const _FormatButton({
+  const FormatButton({
     Key key,
     @required this.calendarFormat,
     @required this.onTap,

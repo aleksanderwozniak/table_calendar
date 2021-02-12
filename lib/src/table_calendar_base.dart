@@ -1,46 +1,11 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/material.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
-/// Signature for a function that creates a widget for a given `day`.
-typedef DayBuilder = Widget Function(BuildContext context, DateTime day);
-
-/// Signature for a function that creates a widget for a given `day`.
-/// Additionally, contains the currently focused day.
-typedef FocusedDayBuilder = Widget Function(
-    BuildContext context, DateTime day, DateTime focusedDay);
-
-/// Gestures available for the calendar.
-enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
-
-/// Formats that the calendar can display.
-enum CalendarFormat { month, twoWeeks, week }
-
-/// Days of the week that the calendar can start with.
-enum StartingDayOfWeek {
-  monday,
-  tuesday,
-  wednesday,
-  thursday,
-  friday,
-  saturday,
-  sunday,
-}
-
-int _getWeekdayNumber(StartingDayOfWeek weekday) {
-  return StartingDayOfWeek.values.indexOf(weekday) + 1;
-}
-
-/// Checks if two DateTime objects are the same day.
-/// Returns `false` if either of them is null.
-bool isSameDay(DateTime a, DateTime b) {
-  if (a == null || b == null) {
-    return false;
-  }
-
-  return a.year == b.year && a.month == b.month && a.day == b.day;
-}
+import 'shared/utils.dart';
+import 'widgets/calendar_core.dart';
 
 class TableCalendarBase extends StatefulWidget {
   final DateTime firstDay;
@@ -215,7 +180,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
                 ),
               );
             },
-            child: _CalendarCore(
+            child: CalendarCore(
               constraints: constraints,
               pageController: _pageController,
               scrollPhysics: _canScrollHorizontally
@@ -319,15 +284,13 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
   }
 
   int _getDaysBefore(DateTime firstDay) {
-    return (firstDay.weekday +
-            7 -
-            _getWeekdayNumber(widget.startingDayOfWeek)) %
+    return (firstDay.weekday + 7 - getWeekdayNumber(widget.startingDayOfWeek)) %
         7;
   }
 
   int _getDaysAfter(DateTime lastDay) {
     int invertedStartingWeekday =
-        8 - _getWeekdayNumber(widget.startingDayOfWeek);
+        8 - getWeekdayNumber(widget.startingDayOfWeek);
 
     int daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7);
     if (daysAfter == 7) {

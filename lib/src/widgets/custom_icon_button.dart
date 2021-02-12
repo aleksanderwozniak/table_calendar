@@ -1,15 +1,15 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/material.dart';
 
-class _CustomIconButton extends StatelessWidget {
+class CustomIconButton extends StatelessWidget {
   final Icon icon;
   final VoidCallback onTap;
   final EdgeInsets margin;
   final EdgeInsets padding;
 
-  const _CustomIconButton({
+  const CustomIconButton({
     Key key,
     @required this.icon,
     @required this.onTap,

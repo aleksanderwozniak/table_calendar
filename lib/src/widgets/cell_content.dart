@@ -1,9 +1,12 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/widgets.dart';
 
-class _CellContent extends StatelessWidget {
+import '../customization/calendar_builders.dart';
+import '../customization/calendar_style.dart';
+
+class CellContent extends StatelessWidget {
   final DateTime day;
   final DateTime focusedDay;
   final bool isTodayHighlighted;
@@ -19,7 +22,7 @@ class _CellContent extends StatelessWidget {
   final CalendarStyle calendarStyle;
   final CalendarBuilders calendarBuilders;
 
-  const _CellContent({
+  const CellContent({
     Key key,
     @required this.day,
     @required this.focusedDay,

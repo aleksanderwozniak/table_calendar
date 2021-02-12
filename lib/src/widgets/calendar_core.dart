@@ -1,12 +1,15 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/material.dart';
+
+import '../shared/utils.dart';
+import 'calendar_page.dart';
 
 typedef _OnCalendarPageChanged = void Function(
     int pageIndex, DateTime focusedDay);
 
-class _CalendarCore extends StatelessWidget {
+class CalendarCore extends StatelessWidget {
   final DateTime focusedDay;
   final DateTime firstDay;
   final DateTime lastDay;
@@ -26,7 +29,7 @@ class _CalendarCore extends StatelessWidget {
   final ScrollPhysics scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
 
-  const _CalendarCore({
+  const CalendarCore({
     Key key,
     this.dowBuilder,
     @required this.dayBuilder,
@@ -68,7 +71,7 @@ class _CalendarCore extends StatelessWidget {
                 _getRowCount(calendarFormat, baseDay)
             : null;
 
-        return _CalendarPage(
+        return CalendarPage(
           visibleDays: visibleDays,
           dowVisible: dowVisible,
           dowDecoration: dowDecoration,
@@ -282,11 +285,11 @@ class _CalendarCore extends StatelessWidget {
   }
 
   int _getDaysBefore(DateTime firstDay) {
-    return (firstDay.weekday + 7 - _getWeekdayNumber(startingDayOfWeek)) % 7;
+    return (firstDay.weekday + 7 - getWeekdayNumber(startingDayOfWeek)) % 7;
   }
 
   int _getDaysAfter(DateTime lastDay) {
-    int invertedStartingWeekday = 8 - _getWeekdayNumber(startingDayOfWeek);
+    int invertedStartingWeekday = 8 - getWeekdayNumber(startingDayOfWeek);
 
     int daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7);
     if (daysAfter == 7) {

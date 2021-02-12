@@ -1,9 +1,15 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
-class _CalendarHeader extends StatelessWidget {
+import '../customization/header_style.dart';
+import '../shared/utils.dart' show CalendarFormat;
+import 'custom_icon_button.dart';
+import 'format_button.dart';
+
+class CalendarHeader extends StatelessWidget {
   final dynamic locale;
   final DateTime focusedMonth;
   final CalendarFormat calendarFormat;
@@ -15,7 +21,7 @@ class _CalendarHeader extends StatelessWidget {
   final ValueChanged<CalendarFormat> onFormatButtonTap;
   final Map<CalendarFormat, String> availableCalendarFormats;
 
-  const _CalendarHeader({
+  const CalendarHeader({
     Key key,
     this.locale,
     @required this.focusedMonth,
@@ -43,7 +49,7 @@ class _CalendarHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           if (headerStyle.leftChevronVisible)
-            _CustomIconButton(
+            CustomIconButton(
               icon: headerStyle.leftChevronIcon,
               onTap: onLeftChevronTap,
               margin: headerStyle.leftChevronMargin,
@@ -66,7 +72,7 @@ class _CalendarHeader extends StatelessWidget {
               availableCalendarFormats.length > 1)
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: _FormatButton(
+              child: FormatButton(
                 onTap: onFormatButtonTap,
                 availableCalendarFormats: availableCalendarFormats,
                 calendarFormat: calendarFormat,
@@ -77,7 +83,7 @@ class _CalendarHeader extends StatelessWidget {
               ),
             ),
           if (headerStyle.rightChevronVisible)
-            _CustomIconButton(
+            CustomIconButton(
               icon: headerStyle.rightChevronIcon,
               onTap: onRightChevronTap,
               margin: headerStyle.rightChevronMargin,
