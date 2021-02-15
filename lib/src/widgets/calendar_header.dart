@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../customization/header_style.dart';
-import '../shared/utils.dart' show CalendarFormat;
+import '../shared/utils.dart' show CalendarFormat, DayBuilder;
 import 'custom_icon_button.dart';
 import 'format_button.dart';
 
@@ -20,10 +20,12 @@ class CalendarHeader extends StatelessWidget {
   final VoidCallback onHeaderLongPress;
   final ValueChanged<CalendarFormat> onFormatButtonTap;
   final Map<CalendarFormat, String> availableCalendarFormats;
+  final DayBuilder headerTitleBuilder;
 
   const CalendarHeader({
     Key key,
     this.locale,
+    this.headerTitleBuilder,
     @required this.focusedMonth,
     @required this.calendarFormat,
     @required this.headerStyle,
@@ -56,7 +58,7 @@ class CalendarHeader extends StatelessWidget {
               padding: headerStyle.leftChevronPadding,
             ),
           Expanded(
-            child: GestureDetector(
+            child: headerTitleBuilder != null ? headerTitleBuilder : GestureDetector(
               onTap: onHeaderTap,
               onLongPress: onHeaderLongPress,
               child: Text(
