@@ -75,6 +75,9 @@ class CalendarBuilders<T> {
   /// Custom builder for days of the week labels (Mon, Tue, Wed, etc.).
   final DayBuilder dowBuilder;
 
+  /// Use to customize header's title using different widget
+  final DayBuilder headerTitleBuilder;
+
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({
     this.prioritizedBuilder,
@@ -91,5 +94,6 @@ class CalendarBuilders<T> {
     this.singleMarkerBuilder,
     this.markerBuilder,
     this.dowBuilder,
+    this.headerTitleBuilder,
   });
 }
