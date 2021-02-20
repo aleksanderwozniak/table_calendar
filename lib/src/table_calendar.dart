@@ -16,7 +16,7 @@ import 'table_calendar_base.dart';
 import 'widgets/calendar_header.dart';
 import 'widgets/cell_content.dart';
 
-/// Signature for `onDaySelected` callback. Contains currently selected day and focused day.
+/// Signature for `onDaySelected` callback. Contains the selected day and focused day.
 typedef OnDaySelected = void Function(
     DateTime selectedDay, DateTime focusedDay);
 
@@ -149,9 +149,6 @@ class TableCalendar<T> extends StatefulWidget {
   /// * `RangeSelectionMode.enforced` - range selection is always on.
   final RangeSelectionMode rangeSelectionMode;
 
-  /// Called whenever a day range gets selected.
-  final OnRangeSelected onRangeSelected;
-
   /// Function that assigns a list of events to a specified day.
   final List<T> Function(DateTime day) eventLoader;
 
@@ -165,8 +162,14 @@ class TableCalendar<T> extends StatefulWidget {
   /// Function deciding whether given day is treated as a holiday.
   final bool Function(DateTime day) holidayPredicate;
 
+  /// Called whenever a day range gets selected.
+  final OnRangeSelected onRangeSelected;
+
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
+
+  /// Called whenever any day gets long pressed.
+  final OnDaySelected onDayLongPressed;
 
   /// Called whenever any disabled day gets tapped.
   final void Function(DateTime day) onDisabledDayTapped;
@@ -228,12 +231,13 @@ class TableCalendar<T> extends StatefulWidget {
     this.calendarStyle = const CalendarStyle(),
     this.calendarBuilders = const CalendarBuilders(),
     this.rangeSelectionMode,
-    this.onRangeSelected,
     this.eventLoader,
     this.enabledDayPredicate,
     this.selectedDayPredicate,
     this.holidayPredicate,
+    this.onRangeSelected,
     this.onDaySelected,
+    this.onDayLongPressed,
     this.onDisabledDayTapped,
     this.onDisabledDayLongPressed,
     this.onHeaderTapped,
@@ -365,6 +369,11 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
     if (_isDayDisabled(day)) {
       return widget.onDisabledDayLongPressed?.call(day);
+    }
+
+    if (widget.onDayLongPressed != null) {
+      _updateFocusOnTap(day);
+      return widget.onDayLongPressed(day, _focusedDay.value);
     }
 
     if (widget.onRangeSelected != null) {
