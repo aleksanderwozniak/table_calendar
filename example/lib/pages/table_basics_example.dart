@@ -38,11 +38,9 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
             // Call `setState()` when updating the selected day
             setState(() {
               _selectedDay = selectedDay;
+              _focusedDay = focusedDay;
             });
           }
-
-          // Don't call `setState()` when updating just the focused day
-          _focusedDay = focusedDay;
         },
         onFormatChanged: (format) {
           if (_calendarFormat != format) {
@@ -53,7 +51,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
           }
         },
         onPageChanged: (focusedDay) {
-          // Don't call `setState()` when updating just the focused day
+          // No need to call `setState()` here
           _focusedDay = focusedDay;
         },
       ),
