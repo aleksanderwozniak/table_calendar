@@ -52,8 +52,9 @@ class _TableMultiExampleState extends State<TableMultiExample> {
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    // Update values in a Set
     setState(() {
+      _focusedDay = focusedDay;
+      // Update values in a Set
       if (_selectedDays.contains(selectedDay)) {
         _selectedDays.remove(selectedDay);
       } else {
@@ -62,7 +63,6 @@ class _TableMultiExampleState extends State<TableMultiExample> {
     });
 
     _selectedEvents.value = _getEventsForDays(_selectedDays);
-    _focusedDay = focusedDay;
   }
 
   @override
@@ -74,8 +74,8 @@ class _TableMultiExampleState extends State<TableMultiExample> {
       body: Column(
         children: [
           TableCalendar<Event>(
-            firstDay: DateTime.utc(2020, 10, 16),
-            lastDay: DateTime.utc(2021, 3, 14),
+            firstDay: kFirstDay,
+            lastDay: kLastDay,
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
             eventLoader: _getEventsForDay,
@@ -99,9 +99,10 @@ class _TableMultiExampleState extends State<TableMultiExample> {
           RaisedButton(
             child: Text('Clear selection'),
             onPressed: () {
-              setState(() {});
-              _selectedDays.clear();
-              _selectedEvents.value.clear();
+              setState(() {
+                _selectedDays.clear();
+                _selectedEvents.value = [];
+              });
             },
           ),
           Expanded(

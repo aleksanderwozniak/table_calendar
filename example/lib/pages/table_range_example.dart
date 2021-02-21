@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../utils.dart';
+
 class TableRangeExample extends StatefulWidget {
   @override
   _TableRangeExampleState createState() => _TableRangeExampleState();
@@ -25,8 +27,8 @@ class _TableRangeExampleState extends State<TableRangeExample> {
         title: Text('TableCalendar - Range'),
       ),
       body: TableCalendar(
-        firstDay: DateTime.utc(2020, 10, 16),
-        lastDay: DateTime.utc(2021, 3, 14),
+        firstDay: kFirstDay,
+        lastDay: kLastDay,
         focusedDay: _focusedDay,
         selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
         rangeStartDay: _rangeStart,
@@ -37,23 +39,21 @@ class _TableRangeExampleState extends State<TableRangeExample> {
           if (!isSameDay(_selectedDay, selectedDay)) {
             setState(() {
               _selectedDay = selectedDay;
+              _focusedDay = focusedDay;
               _rangeStart = null; // Important to clean those
               _rangeEnd = null;
               _rangeSelectionMode = RangeSelectionMode.toggledOff;
             });
           }
-
-          _focusedDay = focusedDay;
         },
         onRangeSelected: (start, end, focusedDay) {
           setState(() {
             _selectedDay = null;
+            _focusedDay = focusedDay;
             _rangeStart = start;
             _rangeEnd = end;
             _rangeSelectionMode = RangeSelectionMode.toggledOn;
           });
-
-          _focusedDay = focusedDay;
         },
         onFormatChanged: (format) {
           if (_calendarFormat != format) {

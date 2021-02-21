@@ -46,3 +46,7 @@ List<DateTime> daysInRange(DateTime first, DateTime last) {
     (index) => DateTime.utc(first.year, first.month, first.day + index),
   );
 }
+
+final kNow = DateTime.now();
+final kFirstDay = DateTime(kNow.year, kNow.month - 3, kNow.day);
+final kLastDay = DateTime(kNow.year, kNow.month + 3, kNow.day);

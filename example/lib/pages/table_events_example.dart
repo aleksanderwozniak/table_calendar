@@ -54,6 +54,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
         _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -61,19 +62,16 @@ class _TableEventsExampleState extends State<TableEventsExample> {
 
       _selectedEvents.value = _getEventsForDay(selectedDay);
     }
-
-    _focusedDay = focusedDay;
   }
 
   void _onRangeSelected(DateTime start, DateTime end, DateTime focusedDay) {
     setState(() {
       _selectedDay = null;
+      _focusedDay = focusedDay;
       _rangeStart = start;
       _rangeEnd = end;
       _rangeSelectionMode = RangeSelectionMode.toggledOn;
     });
-
-    _focusedDay = focusedDay;
 
     // `start` or `end` could be null
     if (start != null && end != null) {
@@ -94,8 +92,8 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       body: Column(
         children: [
           TableCalendar<Event>(
-            firstDay: DateTime.utc(2020, 10, 16),
-            lastDay: DateTime.utc(2021, 3, 14),
+            firstDay: kFirstDay,
+            lastDay: kLastDay,
             focusedDay: _focusedDay,
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             rangeStartDay: _rangeStart,

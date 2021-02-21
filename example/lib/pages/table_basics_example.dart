@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../utils.dart';
+
 class TableBasicsExample extends StatefulWidget {
   @override
   _TableBasicsExampleState createState() => _TableBasicsExampleState();
@@ -21,8 +23,8 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         title: Text('TableCalendar - Basics'),
       ),
       body: TableCalendar(
-        firstDay: DateTime.utc(2020, 10, 16),
-        lastDay: DateTime.utc(2021, 3, 14),
+        firstDay: kFirstDay,
+        lastDay: kLastDay,
         focusedDay: _focusedDay,
         calendarFormat: _calendarFormat,
         selectedDayPredicate: (day) {
