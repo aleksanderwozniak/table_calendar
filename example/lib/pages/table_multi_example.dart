@@ -105,6 +105,7 @@ class _TableMultiExampleState extends State<TableMultiExample> {
               });
             },
           ),
+          const SizedBox(height: 8.0),
           Expanded(
             child: ValueListenableBuilder<List<Event>>(
               valueListenable: _selectedEvents,
