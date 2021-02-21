@@ -292,6 +292,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         _rangeSelectionMode != widget.rangeSelectionMode) {
       _rangeSelectionMode = widget.rangeSelectionMode;
     }
+
+    if (widget.rangeStartDay == null && widget.rangeEndDay == null) {
+      _firstSelectedDay = null;
+    }
   }
 
   @override
