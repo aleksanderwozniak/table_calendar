@@ -12,22 +12,21 @@ class TableEventsExample extends StatefulWidget {
 }
 
 class _TableEventsExampleState extends State<TableEventsExample> {
+  late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
   DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay;
-  DateTime _rangeStart;
-  DateTime _rangeEnd;
-
-  ValueNotifier<List<Event>> _selectedEvents;
+  DateTime? _selectedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
   @override
   void initState() {
     super.initState();
 
     _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay));
+    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
 
   @override
@@ -64,7 +63,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     }
   }
 
-  void _onRangeSelected(DateTime start, DateTime end, DateTime focusedDay) {
+  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
     setState(() {
       _selectedDay = null;
       _focusedDay = focusedDay;
@@ -78,7 +77,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       _selectedEvents.value = _getEventsForRange(start, end);
     } else if (start != null) {
       _selectedEvents.value = _getEventsForDay(start);
-    } else {
+    } else if (end != null) {
       _selectedEvents.value = _getEventsForDay(end);
     }
   }

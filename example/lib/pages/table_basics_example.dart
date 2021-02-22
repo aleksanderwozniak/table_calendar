@@ -14,7 +14,7 @@ class TableBasicsExample extends StatefulWidget {
 class _TableBasicsExampleState extends State<TableBasicsExample> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay;
+  DateTime? _selectedDay;
 
   @override
   Widget build(BuildContext context) {

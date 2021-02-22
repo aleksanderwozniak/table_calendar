@@ -15,25 +15,22 @@ class TableComplexExample extends StatefulWidget {
 }
 
 class _TableComplexExampleState extends State<TableComplexExample> {
+  late final PageController _pageController;
+  late final ValueNotifier<List<Event>> _selectedEvents;
+  final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
+  final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
+    equals: isSameDay,
+    hashCode: getHashCode,
+  );
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
-  DateTime _rangeStart;
-  DateTime _rangeEnd;
-  Set<DateTime> _selectedDays;
-  ValueNotifier<DateTime> _focusedDay;
-  ValueNotifier<List<Event>> _selectedEvents;
-  PageController _pageController;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
   @override
   void initState() {
     super.initState();
 
-    _selectedDays = LinkedHashSet<DateTime>(
-      equals: isSameDay,
-      hashCode: getHashCode,
-    );
-
-    _focusedDay = ValueNotifier(DateTime.now());
     _selectedDays.add(_focusedDay.value);
     _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay.value));
   }
@@ -80,7 +77,7 @@ class _TableComplexExampleState extends State<TableComplexExample> {
     _selectedEvents.value = _getEventsForDays(_selectedDays);
   }
 
-  void _onRangeSelected(DateTime start, DateTime end, DateTime focusedDay) {
+  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
     setState(() {
       _focusedDay.value = focusedDay;
       _rangeStart = start;
@@ -93,7 +90,7 @@ class _TableComplexExampleState extends State<TableComplexExample> {
       _selectedEvents.value = _getEventsForRange(start, end);
     } else if (start != null) {
       _selectedEvents.value = _getEventsForDay(start);
-    } else {
+    } else if (end != null) {
       _selectedEvents.value = _getEventsForDay(end);
     }
   }
@@ -201,13 +198,13 @@ class _CalendarHeader extends StatelessWidget {
   final bool clearButtonVisible;
 
   const _CalendarHeader({
-    Key key,
-    @required this.focusedDay,
-    @required this.onLeftArrowTap,
-    @required this.onRightArrowTap,
-    @required this.onTodayButtonTap,
-    @required this.onClearButtonTap,
-    @required this.clearButtonVisible,
+    Key? key,
+    required this.focusedDay,
+    required this.onLeftArrowTap,
+    required this.onRightArrowTap,
+    required this.onTodayButtonTap,
+    required this.onClearButtonTap,
+    required this.clearButtonVisible,
   }) : super(key: key);
 
   @override

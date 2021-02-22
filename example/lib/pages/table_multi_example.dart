@@ -14,23 +14,15 @@ class TableMultiExample extends StatefulWidget {
 }
 
 class _TableMultiExampleState extends State<TableMultiExample> {
+  final ValueNotifier<List<Event>> _selectedEvents = ValueNotifier([]);
+  // Using a `LinkedHashSet` is recommended due to equality comparison override
+  final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
+    equals: isSameDay,
+    hashCode: getHashCode,
+  );
+
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  Set<DateTime> _selectedDays;
-
-  ValueNotifier<List<Event>> _selectedEvents;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedEvents = ValueNotifier([]);
-
-    // Using a `LinkedHashSet` is recommended due to equality comparison override
-    _selectedDays = LinkedHashSet<DateTime>(
-      equals: isSameDay,
-      hashCode: getHashCode,
-    );
-  }
 
   @override
   void dispose() {
