@@ -15,6 +15,7 @@ class TableMultiExample extends StatefulWidget {
 
 class _TableMultiExampleState extends State<TableMultiExample> {
   final ValueNotifier<List<Event>> _selectedEvents = ValueNotifier([]);
+
   // Using a `LinkedHashSet` is recommended due to equality comparison override
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
@@ -88,7 +89,7 @@ class _TableMultiExampleState extends State<TableMultiExample> {
               _focusedDay = focusedDay;
             },
           ),
-          RaisedButton(
+          ElevatedButton(
             child: Text('Clear selection'),
             onPressed: () {
               setState(() {

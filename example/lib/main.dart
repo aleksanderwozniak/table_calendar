@@ -44,7 +44,7 @@ class _StartPageState extends State<StartPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 20.0),
-            RaisedButton(
+            ElevatedButton(
               child: Text('TableCalendar - Basics'),
               onPressed: () => Navigator.push(
                 context,
@@ -52,7 +52,7 @@ class _StartPageState extends State<StartPage> {
               ),
             ),
             const SizedBox(height: 12.0),
-            RaisedButton(
+            ElevatedButton(
               child: Text('TableCalendar - Range'),
               onPressed: () => Navigator.push(
                 context,
@@ -60,7 +60,7 @@ class _StartPageState extends State<StartPage> {
               ),
             ),
             const SizedBox(height: 12.0),
-            RaisedButton(
+            ElevatedButton(
               child: Text('TableCalendar - Events'),
               onPressed: () => Navigator.push(
                 context,
@@ -68,7 +68,7 @@ class _StartPageState extends State<StartPage> {
               ),
             ),
             const SizedBox(height: 12.0),
-            RaisedButton(
+            ElevatedButton(
               child: Text('TableCalendar - Multi'),
               onPressed: () => Navigator.push(
                 context,
@@ -76,7 +76,7 @@ class _StartPageState extends State<StartPage> {
               ),
             ),
             const SizedBox(height: 12.0),
-            RaisedButton(
+            ElevatedButton(
               child: Text('TableCalendar - Complex'),
               onPressed: () => Navigator.push(
                 context,
