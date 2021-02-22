@@ -20,26 +20,24 @@ Highly customizable, feature-packed calendar widget for Flutter.
 * Dynamic events and holidays
 * Vertical autosizing - fit the content, or fill the viewport
 * Multiple calendar formats (month, two weeks, week)
-* Horizontal swipe boundaries (firstDay, lastDay)
+* Horizontal swipe boundaries (first day, last day)
 
 ## Usage
 
-Make sure to check out [examples](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-beta/example/lib/pages) for more details.
+Make sure to check out [examples](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages) and [API docs](https://pub.dev/documentation/table_calendar/3.0.0-nullsafety.0/) for more details.
 
 ### Installation
 
-To use `3.0.0-beta` branch, add this to `pubspec.yaml`:
+Add the following line to `pubspec.yaml`:
 
 ```yaml
-  table_calendar:
-    git:
-      url: git://github.com/aleksanderwozniak/table_calendar.git
-      ref: 3.0.0-beta
+dependencies:
+  table_calendar: ^3.0.0-nullsafety.0
 ```
 
 ### Basic setup
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-beta/example/lib/pages/table_basics_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/table_basics_example.dart).*
 
 **TableCalendar** requires you to provide `firstDay`, `lastDay` and `focusedDay`:
 * `firstDay` is the first available day for the calendar. Users will not be able to access days before it.
@@ -48,8 +46,8 @@ To use `3.0.0-beta` branch, add this to `pubspec.yaml`:
 
 ```dart
 TableCalendar(
-  firstDay: DateTime.utc(2020, 10, 16),
-  lastDay: DateTime.utc(2021, 3, 14),
+  firstDay: DateTime.utc(2010, 10, 16),
+  lastDay: DateTime.utc(2030, 3, 14),
   focusedDay: DateTime.now(),
 );
 ```
@@ -67,9 +65,8 @@ selectedDayPredicate: (day) {
 onDaySelected: (selectedDay, focusedDay) {
   setState(() {
     _selectedDay = selectedDay;
+    _focusedDay = focusedDay; // update `_focusedDay` here as well
   });
-  
-  _focusedDay = focusedDay; // update `_focusedDay` here as well
 },
 ```
 
@@ -98,13 +95,13 @@ onPageChanged: (focusedDay) {
 },
 ```
 
-It is worth noting that you don't need to rebuild **TableCalendar** widget whenever `focusedDay` changes. You should just update the stored value, so that if the widget gets rebuilt, it will use the proper `focusedDay`. Don't call `setState()` just to trigger a rebuild with updated `focusedDay`. 
+It is worth noting that you don't need to call `setState()` inside `onPageChanged()` callback. You should just update the stored value, so that if the widget gets rebuilt later on, it will use the proper `focusedDay`.
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-beta/example/lib/pages/table_basics_example.dart). You can find other examples [here](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-beta/example/lib/pages).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/table_basics_example.dart). You can find other examples [here](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages).*
 
 ### Events
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-beta/example/lib/pages/table_events_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/table_events_example.dart).*
 
 You can supply custom events to **TableCalendar** widget. To do so, use `eventLoader` property - you will be given a `DateTime` object, to which you need to assign a list of events.
 
@@ -155,16 +152,15 @@ Often times having a sublist of events that are selected by tapping on a day is 
 void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
   if (!isSameDay(_selectedDay, selectedDay)) {
     setState(() {
+      _focusedDay = focusedDay;
       _selectedDay = selectedDay;
       _selectedEvents = _getEventsForDay(selectedDay);
     });
   }
-
-  _focusedDay = focusedDay;
 }
 ```
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-beta/example/lib/pages/table_events_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/table_events_example.dart).*
 
 ### Locale
 
