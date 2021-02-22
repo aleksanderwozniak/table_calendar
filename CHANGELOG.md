@@ -1,3 +1,17 @@
+## [3.0.0-nullsafety.0]
+
+* Migrated to null safety
+* Removed CalendarController
+* Improved horizontal scrolling
+* Improved widget performance
+* Added date range selection
+* Added multiple date selection
+* Added selective CalendarBuilders
+* Added firstDay and lastDay scroll boundaries
+* Added shouldFillViewport property
+* Added sixWeekMonthsEnforced property
+* Added more options to customize calendar's behavior
+
 ## [2.3.3]
 
 * Updated dependencies
