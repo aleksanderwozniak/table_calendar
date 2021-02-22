@@ -9,20 +9,20 @@ class FormatButton extends StatelessWidget {
   final CalendarFormat calendarFormat;
   final ValueChanged<CalendarFormat> onTap;
   final TextStyle textStyle;
-  final BoxDecoration decoration;
+  final Decoration decoration;
   final EdgeInsets padding;
   final bool showsNextFormat;
   final Map<CalendarFormat, String> availableCalendarFormats;
 
   const FormatButton({
-    Key key,
-    @required this.calendarFormat,
-    @required this.onTap,
-    @required this.textStyle,
-    @required this.decoration,
-    @required this.padding,
-    @required this.showsNextFormat,
-    @required this.availableCalendarFormats,
+    Key? key,
+    required this.calendarFormat,
+    required this.onTap,
+    required this.textStyle,
+    required this.decoration,
+    required this.padding,
+    required this.showsNextFormat,
+    required this.availableCalendarFormats,
   }) : super(key: key);
 
   @override
@@ -41,8 +41,8 @@ class FormatButton extends StatelessWidget {
   }
 
   String get _formatButtonText => showsNextFormat
-      ? availableCalendarFormats[_nextFormat()]
-      : availableCalendarFormats[calendarFormat];
+      ? availableCalendarFormats[_nextFormat()]!
+      : availableCalendarFormats[calendarFormat]!;
 
   CalendarFormat _nextFormat() {
     final formats = availableCalendarFormats.keys.toList();

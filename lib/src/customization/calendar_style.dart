@@ -26,7 +26,7 @@ class CalendarStyle {
   /// The size of single event marker dot.
   ///
   /// By default `markerSizeScale` is used. To use `markerSize` instead, simply provide a non-null value.
-  final double markerSize;
+  final double? markerSize;
 
   /// Proportion of single event marker dot size in relation to day cell size.
   ///
@@ -212,16 +212,16 @@ class CalendarStyle {
 /// Helper class containing data for internal `Positioned` widget.
 class PositionedOffset {
   /// Distance from the top edge.
-  final double top;
+  final double? top;
 
   /// Distance from the bottom edge.
-  final double bottom;
+  final double? bottom;
 
   /// Distance from the leading edge.
-  final double start;
+  final double? start;
 
   /// Distance from the trailing edge.
-  final double end;
+  final double? end;
 
   /// Creates a `PositionedOffset`. Values are set to `null` by default.
   const PositionedOffset({this.top, this.bottom, this.start, this.end});

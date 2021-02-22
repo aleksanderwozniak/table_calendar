@@ -15,7 +15,7 @@ class DaysOfWeekStyle {
   /// ```dart
   /// dowTextFormatter: (date, locale) => DateFormat.E(locale).format(date)[0],
   /// ```
-  final TextFormatter dowTextFormatter;
+  final TextFormatter? dowTextFormatter;
 
   /// Decoration for the top row of the table
   final Decoration decoration;

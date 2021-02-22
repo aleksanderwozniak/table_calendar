@@ -10,14 +10,12 @@ class CustomIconButton extends StatelessWidget {
   final EdgeInsets padding;
 
   const CustomIconButton({
-    Key key,
-    @required this.icon,
-    @required this.onTap,
+    Key? key,
+    required this.icon,
+    required this.onTap,
     this.margin = const EdgeInsets.all(0.0),
     this.padding = const EdgeInsets.all(8.0),
-  })  : assert(icon != null),
-        assert(onTap != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

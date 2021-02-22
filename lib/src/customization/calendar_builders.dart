@@ -25,58 +25,58 @@ typedef HighlightBuilder = Widget Function(
 /// Class containing all custom builders for `TableCalendar`.
 class CalendarBuilders<T> {
   /// Custom builder for day cells, with a priority over any other builder.
-  final FocusedDayBuilder prioritizedBuilder;
+  final FocusedDayBuilder? prioritizedBuilder;
 
   /// Custom builder for a day cell that matches `DateTime.now()`.
-  final FocusedDayBuilder todayBuilder;
+  final FocusedDayBuilder? todayBuilder;
 
   /// Custom builder for day cells that are currently marked as selected by `selectedDayPredicate`.
-  final FocusedDayBuilder selectedBuilder;
+  final FocusedDayBuilder? selectedBuilder;
 
   /// Custom builder for a day cell that is the start of current range selection.
-  final FocusedDayBuilder rangeStartBuilder;
+  final FocusedDayBuilder? rangeStartBuilder;
 
   /// Custom builder for a day cell that is the end of current range selection.
-  final FocusedDayBuilder rangeEndBuilder;
+  final FocusedDayBuilder? rangeEndBuilder;
 
   /// Custom builder for day cells that fall within the currently selected range.
-  final FocusedDayBuilder withinRangeBuilder;
+  final FocusedDayBuilder? withinRangeBuilder;
 
   /// Custom builder for day cells, of which the `day.month` is different than `focusedDay.month`.
   /// This will affect day cells that do not match the currently focused month.
-  final FocusedDayBuilder outsideBuilder;
+  final FocusedDayBuilder? outsideBuilder;
 
   /// Custom builder for day cells that have been disabled.
   ///
   /// This refers to dates disabled by returning false in `enabledDayPredicate`,
   /// as well as dates that are outside of the bounds set up by `firstDay` and `lastDay`.
-  final FocusedDayBuilder disabledBuilder;
+  final FocusedDayBuilder? disabledBuilder;
 
   /// Custom builder for day cells that are marked as holidays by `holidayPredicate`.
-  final FocusedDayBuilder holidayBuilder;
+  final FocusedDayBuilder? holidayBuilder;
 
   /// Custom builder for day cells that do not match any other builder.
-  final FocusedDayBuilder defaultBuilder;
+  final FocusedDayBuilder? defaultBuilder;
 
   /// Custom builder for background highlight of range selection.
   /// If `isWithinRange` is true, then `day` is within the selected range.
-  final HighlightBuilder rangeHighlightBuilder;
+  final HighlightBuilder? rangeHighlightBuilder;
 
   /// Custom builder for a single event marker. Each of those will be displayed in a `Row` above of the day cell.
   /// You can adjust markers' position with `CalendarStyle` properties.
   ///
   /// If `singleMarkerBuilder` is not specified, a default event marker will be displayed (customizable with `CalendarStyle`).
-  final SingleMarkerBuilder<T> singleMarkerBuilder;
+  final SingleMarkerBuilder<T>? singleMarkerBuilder;
 
   /// Custom builder for event markers. Use to provide your own marker UI for each day cell.
   /// Using `markerBuilder` will override `singleMarkerBuilder` and default event markers.
-  final MarkerBuilder<T> markerBuilder;
+  final MarkerBuilder<T>? markerBuilder;
 
   /// Custom builder for days of the week labels (Mon, Tue, Wed, etc.).
-  final DayBuilder dowBuilder;
+  final DayBuilder? dowBuilder;
 
   /// Use to customize header's title using different widget
-  final DayBuilder headerTitleBuilder;
+  final DayBuilder? headerTitleBuilder;
 
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({

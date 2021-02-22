@@ -26,7 +26,7 @@ class HeaderStyle {
   /// ```dart
   /// titleTextFormatter: (date, locale) => DateFormat.yM(locale).format(date),
   /// ```
-  final TextFormatter titleTextFormatter;
+  final TextFormatter? titleTextFormatter;
 
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
@@ -89,7 +89,7 @@ class HeaderStyle {
       border: const Border.fromBorderSide(BorderSide()),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     ),
-    this.headerMargin,
+    this.headerMargin = const EdgeInsets.all(0.0),
     this.headerPadding = const EdgeInsets.symmetric(vertical: 8.0),
     this.formatButtonPadding =
         const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),

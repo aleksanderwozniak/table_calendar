@@ -20,28 +20,27 @@ class CalendarHeader extends StatelessWidget {
   final VoidCallback onHeaderLongPress;
   final ValueChanged<CalendarFormat> onFormatButtonTap;
   final Map<CalendarFormat, String> availableCalendarFormats;
-  final DayBuilder headerTitleBuilder;
+  final DayBuilder? headerTitleBuilder;
 
   const CalendarHeader({
-    Key key,
+    Key? key,
     this.locale,
+    required this.focusedMonth,
+    required this.calendarFormat,
+    required this.headerStyle,
+    required this.onLeftChevronTap,
+    required this.onRightChevronTap,
+    required this.onHeaderTap,
+    required this.onHeaderLongPress,
+    required this.onFormatButtonTap,
+    required this.availableCalendarFormats,
     this.headerTitleBuilder,
-    @required this.focusedMonth,
-    @required this.calendarFormat,
-    @required this.headerStyle,
-    @required this.onLeftChevronTap,
-    @required this.onRightChevronTap,
-    @required this.onHeaderTap,
-    @required this.onHeaderLongPress,
-    @required this.onFormatButtonTap,
-    @required this.availableCalendarFormats,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final text = headerStyle.titleTextFormatter != null
-        ? headerStyle.titleTextFormatter(focusedMonth, locale)
-        : DateFormat.yMMMM(locale).format(focusedMonth);
+    final text = headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
+        DateFormat.yMMMM(locale).format(focusedMonth);
 
     return Container(
       decoration: headerStyle.decoration,
@@ -58,17 +57,18 @@ class CalendarHeader extends StatelessWidget {
               padding: headerStyle.leftChevronPadding,
             ),
           Expanded(
-            child: headerTitleBuilder?.call(context, focusedMonth) ?? GestureDetector(
-              onTap: onHeaderTap,
-              onLongPress: onHeaderLongPress,
-              child: Text(
-                text,
-                style: headerStyle.titleTextStyle,
-                textAlign: headerStyle.titleCentered
-                    ? TextAlign.center
-                    : TextAlign.start,
-              ),
-            ),
+            child: headerTitleBuilder?.call(context, focusedMonth) ??
+                GestureDetector(
+                  onTap: onHeaderTap,
+                  onLongPress: onHeaderLongPress,
+                  child: Text(
+                    text,
+                    style: headerStyle.titleTextStyle,
+                    textAlign: headerStyle.titleCentered
+                        ? TextAlign.center
+                        : TextAlign.start,
+                  ),
+                ),
           ),
           if (headerStyle.formatButtonVisible &&
               availableCalendarFormats.length > 1)

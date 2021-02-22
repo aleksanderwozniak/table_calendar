@@ -23,26 +23,26 @@ class CellContent extends StatelessWidget {
   final CalendarBuilders calendarBuilders;
 
   const CellContent({
-    Key key,
-    @required this.day,
-    @required this.focusedDay,
-    @required this.calendarStyle,
-    @required this.calendarBuilders,
-    @required this.isTodayHighlighted,
-    @required this.isToday,
-    @required this.isSelected,
-    @required this.isRangeStart,
-    @required this.isRangeEnd,
-    @required this.isWithinRange,
-    @required this.isOutside,
-    @required this.isDisabled,
-    @required this.isHoliday,
-    @required this.isWeekend,
+    Key? key,
+    required this.day,
+    required this.focusedDay,
+    required this.calendarStyle,
+    required this.calendarBuilders,
+    required this.isTodayHighlighted,
+    required this.isToday,
+    required this.isSelected,
+    required this.isRangeStart,
+    required this.isRangeEnd,
+    required this.isWithinRange,
+    required this.isOutside,
+    required this.isDisabled,
+    required this.isHoliday,
+    required this.isWeekend,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget cell =
+    Widget? cell =
         calendarBuilders.prioritizedBuilder?.call(context, day, focusedDay);
 
     if (cell != null) {

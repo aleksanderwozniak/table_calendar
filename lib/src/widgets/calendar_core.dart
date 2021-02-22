@@ -10,33 +10,33 @@ typedef _OnCalendarPageChanged = void Function(
     int pageIndex, DateTime focusedDay);
 
 class CalendarCore extends StatelessWidget {
-  final DateTime focusedDay;
+  final DateTime? focusedDay;
   final DateTime firstDay;
   final DateTime lastDay;
   final CalendarFormat calendarFormat;
-  final DayBuilder dowBuilder;
+  final DayBuilder? dowBuilder;
   final FocusedDayBuilder dayBuilder;
   final bool sixWeekMonthsEnforced;
   final bool dowVisible;
-  final Decoration dowDecoration;
-  final Decoration rowDecoration;
-  final double dowHeight;
-  final double rowHeight;
+  final Decoration? dowDecoration;
+  final Decoration? rowDecoration;
+  final double? dowHeight;
+  final double? rowHeight;
   final BoxConstraints constraints;
-  final int previousIndex;
+  final int? previousIndex;
   final StartingDayOfWeek startingDayOfWeek;
-  final PageController pageController;
-  final ScrollPhysics scrollPhysics;
+  final PageController? pageController;
+  final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
 
   const CalendarCore({
-    Key key,
+    Key? key,
     this.dowBuilder,
-    @required this.dayBuilder,
-    @required this.onPageChanged,
-    @required this.firstDay,
-    @required this.lastDay,
-    @required this.constraints,
+    required this.dayBuilder,
+    required this.onPageChanged,
+    required this.firstDay,
+    required this.lastDay,
+    required this.constraints,
     this.dowHeight,
     this.rowHeight,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -49,9 +49,7 @@ class CalendarCore extends StatelessWidget {
     this.dowDecoration,
     this.rowDecoration,
     this.scrollPhysics,
-  })  : assert(firstDay != null),
-        assert(lastDay != null),
-        assert(onPageChanged != null),
+  })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
   @override
@@ -65,7 +63,7 @@ class CalendarCore extends StatelessWidget {
         final visibleRange = _getVisibleRange(calendarFormat, baseDay);
         final visibleDays = _daysInRange(visibleRange.start, visibleRange.end);
 
-        final actualDowHeight = dowVisible ? dowHeight : 0.0;
+        final actualDowHeight = dowVisible ? dowHeight! : 0.0;
         final constrainedRowHeight = constraints.hasBoundedHeight
             ? (constraints.maxHeight - actualDowHeight) /
                 _getRowCount(calendarFormat, baseDay)
@@ -79,15 +77,17 @@ class CalendarCore extends StatelessWidget {
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
-              child: dowBuilder(context, day),
+              child: dowBuilder?.call(context, day),
             );
           },
           dayBuilder: (context, day) {
             DateTime baseDay;
-            if (focusedDay == null || previousIndex == null) {
+            final previousFocusedDay = focusedDay;
+            if (previousFocusedDay == null || previousIndex == null) {
               baseDay = _getBaseDay(calendarFormat, index);
             } else {
-              baseDay = _getFocusedDay(calendarFormat, index);
+              baseDay =
+                  _getFocusedDay(calendarFormat, previousFocusedDay, index);
             }
 
             return SizedBox(
@@ -99,10 +99,11 @@ class CalendarCore extends StatelessWidget {
       },
       onPageChanged: (index) {
         DateTime baseDay;
-        if (focusedDay == null || previousIndex == null) {
+        final previousFocusedDay = focusedDay;
+        if (previousFocusedDay == null || previousIndex == null) {
           baseDay = _getBaseDay(calendarFormat, index);
         } else {
-          baseDay = _getFocusedDay(calendarFormat, index);
+          baseDay = _getFocusedDay(calendarFormat, previousFocusedDay, index);
         }
 
         return onPageChanged(index, baseDay);
@@ -138,25 +139,26 @@ class CalendarCore extends StatelessWidget {
     return last.difference(_firstDayOfWeek(first)).inDays ~/ 14;
   }
 
-  DateTime _getFocusedDay(CalendarFormat format, int pageIndex) {
+  DateTime _getFocusedDay(
+      CalendarFormat format, DateTime prevFocusedDay, int pageIndex) {
     if (pageIndex == previousIndex) {
-      return focusedDay;
+      return prevFocusedDay;
     }
 
-    final pageDif = pageIndex - previousIndex;
+    final pageDif = pageIndex - previousIndex!;
     DateTime day;
 
     switch (format) {
       case CalendarFormat.month:
-        day = DateTime.utc(focusedDay.year, focusedDay.month + pageDif);
+        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif);
         break;
       case CalendarFormat.twoWeeks:
-        day = DateTime.utc(
-            focusedDay.year, focusedDay.month, focusedDay.day + pageDif * 14);
+        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
+            prevFocusedDay.day + pageDif * 14);
         break;
       case CalendarFormat.week:
-        day = DateTime.utc(
-            focusedDay.year, focusedDay.month, focusedDay.day + pageDif * 7);
+        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
+            prevFocusedDay.day + pageDif * 7);
         break;
     }
 

@@ -7,23 +7,21 @@ import '../shared/utils.dart' show DayBuilder;
 
 class CalendarPage extends StatelessWidget {
   final List<DateTime> visibleDays;
-  final DayBuilder dowBuilder;
+  final DayBuilder? dowBuilder;
   final DayBuilder dayBuilder;
-  final Decoration dowDecoration;
-  final Decoration rowDecoration;
+  final Decoration? dowDecoration;
+  final Decoration? rowDecoration;
   final bool dowVisible;
 
   const CalendarPage({
-    Key key,
-    @required this.visibleDays,
+    Key? key,
+    required this.visibleDays,
     this.dowBuilder,
-    @required this.dayBuilder,
+    required this.dayBuilder,
     this.dowDecoration,
     this.rowDecoration,
     this.dowVisible = true,
   })  : assert(!dowVisible || dowBuilder != null),
-        assert(dayBuilder != null),
-        assert(visibleDays != null),
         super(key: key);
 
   @override
@@ -41,7 +39,7 @@ class CalendarPage extends StatelessWidget {
       decoration: dowDecoration,
       children: List.generate(
         7,
-        (index) => dowBuilder(context, visibleDays[index]),
+        (index) => dowBuilder!(context, visibleDays[index]),
       ).toList(),
     );
   }
