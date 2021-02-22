@@ -3,12 +3,10 @@
 
 import 'package:flutter/widgets.dart';
 
-import '../shared/utils.dart' show DayBuilder;
-
 class CalendarPage extends StatelessWidget {
+  final Widget Function(BuildContext context, DateTime day)? dowBuilder;
+  final Widget Function(BuildContext context, DateTime day) dayBuilder;
   final List<DateTime> visibleDays;
-  final DayBuilder? dowBuilder;
-  final DayBuilder dayBuilder;
   final Decoration? dowDecoration;
   final Decoration? rowDecoration;
   final bool dowVisible;
