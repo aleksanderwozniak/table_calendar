@@ -73,6 +73,11 @@ class CalendarStyle {
   /// This property defines if those should be visible (eg. with custom style) or hidden.
   final bool outsideDaysVisible;
 
+  /// Determines rendering order for cell content
+  /// * `true` - Render the the select day content on top.
+  /// * `false` - Use the default rendering logic (default)
+  final bool alwaysRenderSelectedDayOnTop;
+
   /// Determines rendering priority for SelectedDay and Today.
   /// * `true` - SelectedDay will have higher priority than Today
   /// * `false` - Today will have higher priority than SelectedDay
@@ -101,20 +106,13 @@ class CalendarStyle {
   const CalendarStyle({
     this.contentDecoration = const BoxDecoration(),
     this.weekdayStyle = const TextStyle(),
-    this.weekendStyle =
-        const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
-    this.holidayStyle =
-        const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
-    this.selectedStyle = const TextStyle(
-        color: const Color(0xFFFAFAFA), fontSize: 16.0), // Material grey[50]
-    this.todayStyle = const TextStyle(
-        color: const Color(0xFFFAFAFA), fontSize: 16.0), // Material grey[50]
-    this.outsideStyle =
-        const TextStyle(color: const Color(0xFF9E9E9E)), // Material grey[500]
-    this.outsideWeekendStyle =
-        const TextStyle(color: const Color(0xFFEF9A9A)), // Material red[200]
-    this.outsideHolidayStyle =
-        const TextStyle(color: const Color(0xFFEF9A9A)), // Material red[200]
+    this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
+    this.holidayStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
+    this.selectedStyle = const TextStyle(color: const Color(0xFFFAFAFA), fontSize: 16.0), // Material grey[50]
+    this.todayStyle = const TextStyle(color: const Color(0xFFFAFAFA), fontSize: 16.0), // Material grey[50]
+    this.outsideStyle = const TextStyle(color: const Color(0xFF9E9E9E)), // Material grey[500]
+    this.outsideWeekendStyle = const TextStyle(color: const Color(0xFFEF9A9A)), // Material red[200]
+    this.outsideHolidayStyle = const TextStyle(color: const Color(0xFFEF9A9A)), // Material red[200]
     this.unavailableStyle = const TextStyle(color: const Color(0xFFBFBFBF)),
     this.eventDayStyle = const TextStyle(),
     this.selectedColor = const Color(0xFF5C6BC0), // Material indigo[400]
@@ -127,10 +125,10 @@ class CalendarStyle {
     this.markersPositionRight,
     this.markersMaxAmount = 4,
     this.outsideDaysVisible = true,
+    this.alwaysRenderSelectedDayOnTop = false,
     this.renderSelectedFirst = true,
     this.renderDaysOfWeek = true,
-    this.contentPadding =
-        const EdgeInsets.only(bottom: 4.0, left: 8.0, right: 8.0),
+    this.contentPadding = const EdgeInsets.only(bottom: 4.0, left: 8.0, right: 8.0),
     this.cellMargin = const EdgeInsets.all(6.0),
     this.canEventMarkersOverflow = false,
     this.highlightSelected = true,
