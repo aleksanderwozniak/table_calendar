@@ -1,3 +1,7 @@
+## [3.0.0-nullsafety.1]
+
+* Header chevrons can now be any widget
+
 ## [3.0.0-nullsafety.0]
 
 * Migrated to null safety
