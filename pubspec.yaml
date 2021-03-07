@@ -5,7 +5,7 @@ author: Aleksander Woźniak <aleksanderwozniak96@gmail.com>
 homepage: https://github.com/aleksanderwozniak/table_calendar
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
 
   intl: ^0.17.0
-  simple_gesture_detector: ^0.2.0-nullsafety.1
+  simple_gesture_detector: ^0.2.0
 
 dev_dependencies:
   flutter_test:
