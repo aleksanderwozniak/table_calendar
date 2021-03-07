@@ -37,44 +37,46 @@ class HeaderStyle {
   /// Background `Decoration` for FormatButton.
   final Decoration formatButtonDecoration;
 
-  /// Inside padding of the whole header.
+  /// Internal padding of the whole header.
   final EdgeInsets headerPadding;
 
-  /// Outside margin of the whole header.
+  /// External margin of the whole header.
   final EdgeInsets headerMargin;
 
-  /// Inside padding for FormatButton.
+  /// Internal padding of FormatButton.
   final EdgeInsets formatButtonPadding;
 
-  /// Inside padding for left chevron.
+  /// Internal padding of left chevron.
+  /// Determines how much of ripple animation is visible during taps.
   final EdgeInsets leftChevronPadding;
 
-  /// Inside padding for right chevron.
+  /// Internal padding of right chevron.
+  /// Determines how much of ripple animation is visible during taps.
   final EdgeInsets rightChevronPadding;
 
-  /// Outside margin for left chevron.
+  /// External margin of left chevron.
   final EdgeInsets leftChevronMargin;
 
-  /// Outside margin for right chevron.
+  /// External margin of right chevron.
   final EdgeInsets rightChevronMargin;
 
-  /// Icon used for left chevron.
-  /// Defaults to `Icon(Icons.chevron_left)`.
-  final Icon leftChevronIcon;
+  /// Widget used for left chevron.
+  ///
+  /// Tapping on it will navigate to previous calendar page.
+  final Widget leftChevronIcon;
 
-  /// Icon used for right chevron.
-  /// Defaults to `Icon(Icons.chevron_right)`.
-  final Icon rightChevronIcon;
+  /// Widget used for right chevron.
+  ///
+  /// Tapping on it will navigate to next calendar page.
+  final Widget rightChevronIcon;
 
   /// Determines left chevron's visibility.
-  /// Defaults to `true`.
   final bool leftChevronVisible;
 
   /// Determines right chevron's visibility.
-  /// Defaults to `true`.
   final bool rightChevronVisible;
 
-  /// Header decoration, used to draw border or shadow or change color of the header
+  /// Decoration of the header.
   final Decoration decoration;
 
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
