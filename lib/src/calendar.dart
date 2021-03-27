@@ -183,6 +183,7 @@ class TableCalendar extends StatefulWidget {
     this.onDayLongPressed,
     this.onUnavailableDaySelected,
     this.onUnavailableDayLongPressed,
+    this.onSwipeHorizontal,
     this.onHeaderTapped,
     this.onHeaderLongPressed,
     this.onVisibleDaysChanged,

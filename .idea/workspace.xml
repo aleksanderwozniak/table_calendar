@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5acf151f-d014-4f66-bc8e-b31ab92c0cf1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/lib/src/calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/calendar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/table_calendar.iml" beforeDir="false" afterPath="$PROJECT_DIR$/table_calendar.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
