@@ -87,7 +87,9 @@ class TableCalendar extends StatefulWidget {
   /// Replaces `onDaySelected` for those days.
   final VoidCallback onUnavailableDayLongPressed;
 
-  final VoidCallback onSwipeHorizontal;
+  final VoidCallback onSwipeHorizontalRight;
+
+  final VoidCallback onSwipeHorizontalLeft;
 
   /// Called whenever header gets tapped.
   final HeaderGestureCallback onHeaderTapped;
@@ -183,7 +185,8 @@ class TableCalendar extends StatefulWidget {
     this.onDayLongPressed,
     this.onUnavailableDaySelected,
     this.onUnavailableDayLongPressed,
-    this.onSwipeHorizontal,
+    this.onSwipeHorizontalRight,
+    this.onSwipeHorizontalLeft,
     this.onHeaderTapped,
     this.onHeaderLongPressed,
     this.onVisibleDaysChanged,
@@ -315,11 +318,11 @@ class _TableCalendarState extends State<TableCalendar>
     if (direction == DismissDirection.startToEnd) {
       // Swipe right
       _selectPrevious();
-      widget.onSwipeHorizontal();
+      widget.onSwipeHorizontalRight();
     } else {
       // Swipe left
       _selectNext();
-      widget.onSwipeHorizontal();
+      widget.onSwipeHorizontalLeft();
     }
   }
 
