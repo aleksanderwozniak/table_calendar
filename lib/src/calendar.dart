@@ -315,11 +315,11 @@ class _TableCalendarState extends State<TableCalendar>
     if (direction == DismissDirection.startToEnd) {
       // Swipe right
       _selectPrevious();
-      onSwipeHorizontal();
+      widget.onSwipeHorizontal();
     } else {
       // Swipe left
       _selectNext();
-      onSwipeHorizontal();
+      widget.onSwipeHorizontal();
     }
   }
 
