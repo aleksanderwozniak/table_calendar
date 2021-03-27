@@ -282,12 +282,14 @@ class _TableCalendarState extends State<TableCalendar>
   void _selectPrevious() {
     setState(() {
       widget.calendarController.previousPage();
+      widget.onSwipeHorizontalRight();
     });
   }
 
   void _selectNext() {
     setState(() {
       widget.calendarController.nextPage();
+      widget.onSwipeHorizontalLeft();
     });
   }
 
@@ -318,11 +320,9 @@ class _TableCalendarState extends State<TableCalendar>
     if (direction == DismissDirection.startToEnd) {
       // Swipe right
       _selectPrevious();
-      widget.onSwipeHorizontalRight();
     } else {
       // Swipe left
       _selectNext();
-      widget.onSwipeHorizontalLeft();
     }
   }
 
