@@ -45,7 +45,7 @@ class _StartPageState extends State<StartPage> {
           children: [
             const SizedBox(height: 20.0),
             ElevatedButton(
-              child: Text('TableCalendar - Basics'),
+              child: Text('Basics'),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => TableBasicsExample()),
@@ -53,7 +53,7 @@ class _StartPageState extends State<StartPage> {
             ),
             const SizedBox(height: 12.0),
             ElevatedButton(
-              child: Text('TableCalendar - Range'),
+              child: Text('Range Selection'),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => TableRangeExample()),
@@ -61,7 +61,7 @@ class _StartPageState extends State<StartPage> {
             ),
             const SizedBox(height: 12.0),
             ElevatedButton(
-              child: Text('TableCalendar - Events'),
+              child: Text('Events'),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => TableEventsExample()),
@@ -69,7 +69,7 @@ class _StartPageState extends State<StartPage> {
             ),
             const SizedBox(height: 12.0),
             ElevatedButton(
-              child: Text('TableCalendar - Multi'),
+              child: Text('Multiple Selection'),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => TableMultiExample()),
@@ -77,7 +77,7 @@ class _StartPageState extends State<StartPage> {
             ),
             const SizedBox(height: 12.0),
             ElevatedButton(
-              child: Text('TableCalendar - Complex'),
+              child: Text('Complex'),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => TableComplexExample()),
