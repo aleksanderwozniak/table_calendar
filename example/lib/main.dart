@@ -4,11 +4,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'pages/table_basics_example.dart';
-import 'pages/table_complex_example.dart';
-import 'pages/table_events_example.dart';
-import 'pages/table_multi_example.dart';
-import 'pages/table_range_example.dart';
+import 'pages/basics_example.dart';
+import 'pages/complex_example.dart';
+import 'pages/events_example.dart';
+import 'pages/multi_example.dart';
+import 'pages/range_example.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
