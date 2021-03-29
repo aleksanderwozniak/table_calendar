@@ -24,7 +24,7 @@ Highly customizable, feature-packed calendar widget for Flutter.
 
 ## Usage
 
-Make sure to check out [examples](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages) and [API docs](https://pub.dev/documentation/table_calendar/3.0.0-nullsafety.0/) for more details.
+Make sure to check out [examples](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages) and [API docs](https://pub.dev/documentation/table_calendar/3.0.0-nullsafety.1/) for more details.
 
 ### Installation
 
@@ -37,7 +37,7 @@ dependencies:
 
 ### Basic setup
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/table_basics_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/basics_example.dart).*
 
 **TableCalendar** requires you to provide `firstDay`, `lastDay` and `focusedDay`:
 * `firstDay` is the first available day for the calendar. Users will not be able to access days before it.
@@ -60,7 +60,7 @@ Adding the following code to the calendar widget will allow it to respond to use
 
 ```dart
 selectedDayPredicate: (day) {
-  return _selectedDay == day;
+  return isSameDay(_selectedDay, day);
 },
 onDaySelected: (selectedDay, focusedDay) {
   setState(() {
@@ -97,11 +97,11 @@ onPageChanged: (focusedDay) {
 
 It is worth noting that you don't need to call `setState()` inside `onPageChanged()` callback. You should just update the stored value, so that if the widget gets rebuilt later on, it will use the proper `focusedDay`.
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/table_basics_example.dart). You can find other examples [here](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/basics_example.dart). You can find other examples [here](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages).*
 
 ### Events
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/table_events_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/events_example.dart).*
 
 You can supply custom events to **TableCalendar** widget. To do so, use `eventLoader` property - you will be given a `DateTime` object, to which you need to assign a list of events.
 
@@ -160,7 +160,7 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
 }
 ```
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/table_events_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/events_example.dart).*
 
 ### Locale
 
