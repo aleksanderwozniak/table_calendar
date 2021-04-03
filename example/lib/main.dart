@@ -206,11 +206,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       },
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
-        weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
+        saturdayStyle: TextStyle().copyWith(color: Colors.blue[800]),
+        sundayStyle: TextStyle().copyWith(color: Colors.blue[800]),
         holidayStyle: TextStyle().copyWith(color: Colors.blue[800]),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
+        saturdayStyle: TextStyle().copyWith(color: Colors.blue[600]),
+        sundayStyle: TextStyle().copyWith(color: Colors.blue[600]),
       ),
       headerStyle: HeaderStyle(
         centerHeaderTitle: true,

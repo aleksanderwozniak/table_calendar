@@ -8,7 +8,7 @@ class _CellWidget extends StatelessWidget {
   final bool isUnavailable;
   final bool isSelected;
   final bool isToday;
-  final bool isWeekend;
+  final int weekday;
   final bool isOutsideMonth;
   final bool isHoliday;
   final bool isEventDay;
@@ -20,7 +20,7 @@ class _CellWidget extends StatelessWidget {
     this.isUnavailable = false,
     this.isSelected = false,
     this.isToday = false,
-    this.isWeekend = false,
+    this.weekday = DateTime.monday,
     this.isOutsideMonth = false,
     this.isHoliday = false,
     this.isEventDay = false,
@@ -75,12 +75,15 @@ class _CellWidget extends StatelessWidget {
       return calendarStyle.outsideHolidayStyle;
     } else if (isHoliday) {
       return calendarStyle.holidayStyle;
-    } else if (isOutsideMonth && isWeekend) {
+    } else if (isOutsideMonth &&
+        ((weekday == DateTime.saturday) || (weekday == DateTime.sunday))) {
       return calendarStyle.outsideWeekendStyle;
     } else if (isOutsideMonth) {
       return calendarStyle.outsideStyle;
-    } else if (isWeekend) {
-      return calendarStyle.weekendStyle;
+    } else if (weekday == DateTime.saturday) {
+      return calendarStyle.saturdayStyle;
+    } else if (weekday == DateTime.sunday) {
+      return calendarStyle.sundayStyle;
     } else if (isEventDay) {
       return calendarStyle.eventDayStyle;
     } else {

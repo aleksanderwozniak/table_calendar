@@ -21,15 +21,20 @@ class DaysOfWeekStyle {
   /// Style for weekdays on the top of Calendar.
   final TextStyle weekdayStyle;
 
-  /// Style for weekend days on the top of Calendar.
-  final TextStyle weekendStyle;
+  /// Style for saturday on the top of Calendar.
+  final TextStyle saturdayStyle;
+
+  /// Style for sunday on the top of Calendar.
+  final TextStyle sundayStyle;
 
   const DaysOfWeekStyle({
     this.dowTextBuilder,
     this.decoration = const BoxDecoration(),
     this.weekdayStyle =
         const TextStyle(color: const Color(0xFF616161)), // Material grey[700]
-    this.weekendStyle =
+    this.saturdayStyle =
+        const TextStyle(color: const Color(0xFF2196F3)), // Material blue[500]
+    this.sundayStyle =
         const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
   });
 }

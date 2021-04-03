@@ -11,8 +11,11 @@ class CalendarStyle {
   /// Style of foreground Text for regular weekdays.
   final TextStyle weekdayStyle;
 
-  /// Style of foreground Text for regular weekends.
-  final TextStyle weekendStyle;
+  /// Style of foreground Text for regular saturdays.
+  final TextStyle saturdayStyle;
+
+  /// Style of foreground Text for regular sundays.
+  final TextStyle sundayStyle;
 
   /// Style of foreground Text for holidays.
   final TextStyle holidayStyle;
@@ -101,7 +104,9 @@ class CalendarStyle {
   const CalendarStyle({
     this.contentDecoration = const BoxDecoration(),
     this.weekdayStyle = const TextStyle(),
-    this.weekendStyle =
+    this.saturdayStyle =
+        const TextStyle(color: const Color(0xFF2196F3)), // Material blue[500]
+    this.sundayStyle =
         const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
     this.holidayStyle =
         const TextStyle(color: const Color(0xFFF44336)), // Material red[500]

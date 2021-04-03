@@ -583,6 +583,16 @@ class _TableCalendarState extends State<TableCalendar>
         final isWeekend =
             widget.calendarController._isWeekend(date, widget.weekendDays);
 
+        TextStyle textStyle;
+
+        if (date.weekday == DateTime.saturday) {
+          textStyle = widget.daysOfWeekStyle.saturdayStyle;
+        } else if (date.weekday == DateTime.sunday) {
+          textStyle = widget.daysOfWeekStyle.sundayStyle;
+        } else {
+          textStyle = widget.daysOfWeekStyle.weekdayStyle;
+        }
+
         if (isWeekend && widget.builders.dowWeekendBuilder != null) {
           return widget.builders.dowWeekendBuilder(context, weekdayString);
         }
@@ -592,9 +602,7 @@ class _TableCalendarState extends State<TableCalendar>
         return Center(
           child: Text(
             weekdayString,
-            style: isWeekend
-                ? widget.daysOfWeekStyle.weekendStyle
-                : widget.daysOfWeekStyle.weekdayStyle,
+            style: textStyle,
           ),
         );
       }).toList(),
@@ -768,7 +776,7 @@ class _TableCalendarState extends State<TableCalendar>
         isUnavailable: tIsUnavailable,
         isSelected: tIsSelected,
         isToday: tIsToday,
-        isWeekend: tIsWeekend,
+        weekday: date.weekday,
         isOutsideMonth: tIsOutside,
         isHoliday: tIsHoliday,
         isEventDay: tIsEventDay,
