@@ -162,14 +162,40 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
 
 *The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/events_example.dart).*
 
+### Custom UI with CalendarBuilders
+
+To customize the UI with your own widgets, use [CalendarBuilders](https://pub.dev/documentation/table_calendar/3.0.0-nullsafety.1/table_calendar/CalendarBuilders-class.html). Each builder can be used to selectively override the UI, allowing you to implement highly specific designs with minimal hassle.
+
+You can return `null` from any builder to use the default style. For example, the following snippet will override only the Sunday's day of the week label (Sun), leaving other dow labels unchanged:
+
+```dart
+calendarBuilders: CalendarBuilders(
+  dowBuilder: (context, day) {
+    if (day.weekday == DateTime.sunday) {
+      final text = DateFormat.E().format(day);
+
+      return Center(
+        child: Text(
+          text,
+          style: TextStyle(color: Colors.red),
+        ),
+      );
+    }
+  },
+),
+```
+
+
+
+
 ### Locale
 
-**TableCalendar** supports locales. To display the calendar in desired language, use `locale` property. 
+To display the calendar in desired language, use `locale` property. 
 If you don't specify it, a default locale will be used.
 
 #### Initialization
 
-Before you can use a locale, you need to initialize the i18n formatting.
+Before you can use a locale, you might need to initialize date formatting.
 
 A simple way of doing it is as follows:
 * First of all, add [intl](https://pub.dartlang.org/packages/intl) package to your pubspec.yaml file
@@ -201,7 +227,6 @@ TableCalendar(
 | :------------: | :------------: | :------------: | :------------: |
 | `'en_US'` | `'pl_PL'` | `'fr_FR'` | `'zh_CN'` |
 
-Note, that if you want to change the language of `FormatButton`'s text, you have to do this yourself. Use `availableCalendarFormats` property and pass the translated Strings there. 
-Use i18n method of your choice.
+Note, that if you want to change the language of `FormatButton`'s text, you have to do this yourself. Use `availableCalendarFormats` property and pass the translated Strings there. Use i18n method of your choice.
 
 You can also hide the button altogether by setting `formatButtonVisible` to false.
