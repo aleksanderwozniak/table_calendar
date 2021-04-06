@@ -1,12 +1,14 @@
-//  Copyright (c) 2019 Aleksander Woźniak
-//  Licensed under Apache License v2.0
+// Copyright 2019 Aleksander Woźniak
+// SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/material.dart';
+
+import '../shared/utils.dart' show TextFormatter;
 
 /// Class containing styling and configuration of `TableCalendar`'s header.
 class HeaderStyle {
   /// Responsible for making title Text centered.
-  final bool centerHeaderTitle;
+  final bool titleCentered;
 
   /// Responsible for FormatButton visibility.
   final bool formatButtonVisible;
@@ -16,15 +18,15 @@ class HeaderStyle {
   /// * `false` - the button will show current CalendarFormat
   final bool formatButtonShowsNext;
 
-  /// Use to customize header's title text (eg. with different `DateFormat`).
+  /// Use to customize header's title text (e.g. with different `DateFormat`).
   /// You can use `String` transformations to further customize the text.
-  /// Defaults to simple `'yMMMM'` format (eg. January 2019, February 2019, March 2019, etc.).
+  /// Defaults to simple `'yMMMM'` format (i.e. January 2019, February 2019, March 2019, etc.).
   ///
   /// Example usage:
   /// ```dart
-  /// titleTextBuilder: (date, locale) => DateFormat.yM(locale).format(date),
+  /// titleTextFormatter: (date, locale) => DateFormat.yM(locale).format(date),
   /// ```
-  final TextBuilder titleTextBuilder;
+  final TextFormatter? titleTextFormatter;
 
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
@@ -35,64 +37,61 @@ class HeaderStyle {
   /// Background `Decoration` for FormatButton.
   final Decoration formatButtonDecoration;
 
-  /// Inside padding of the whole header.
+  /// Internal padding of the whole header.
   final EdgeInsets headerPadding;
 
-  /// Outside margin of the whole header.
+  /// External margin of the whole header.
   final EdgeInsets headerMargin;
 
-  /// Inside padding for FormatButton.
+  /// Internal padding of FormatButton.
   final EdgeInsets formatButtonPadding;
 
-  /// Inside padding for left chevron.
+  /// Internal padding of left chevron.
+  /// Determines how much of ripple animation is visible during taps.
   final EdgeInsets leftChevronPadding;
 
-  /// Inside padding for right chevron.
+  /// Internal padding of right chevron.
+  /// Determines how much of ripple animation is visible during taps.
   final EdgeInsets rightChevronPadding;
 
-  /// Outside margin for left chevron.
+  /// External margin of left chevron.
   final EdgeInsets leftChevronMargin;
 
-  /// Outside margin for right chevron.
+  /// External margin of right chevron.
   final EdgeInsets rightChevronMargin;
 
-  /// Icon used for left chevron.
-  /// Defaults to `Icons.chevron_left`.
-  final Icon leftChevronIcon;
+  /// Widget used for left chevron.
+  ///
+  /// Tapping on it will navigate to previous calendar page.
+  final Widget leftChevronIcon;
 
-  /// Icon used for right chevron.
-  /// Defaults to `Icons.chevron_right`.
-  final Icon rightChevronIcon;
+  /// Widget used for right chevron.
+  ///
+  /// Tapping on it will navigate to next calendar page.
+  final Widget rightChevronIcon;
 
   /// Determines left chevron's visibility.
-  /// Defaults to `true`.
   final bool leftChevronVisible;
 
   /// Determines right chevron's visibility.
-  /// Defaults to `true`.
   final bool rightChevronVisible;
 
-  /// Header decoration, used to draw border or shadow or change color of the header
-  /// Defaults to empty BoxDecoration.
-  final BoxDecoration decoration;
+  /// Decoration of the header.
+  final Decoration decoration;
 
+  /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
-    this.centerHeaderTitle = false,
+    this.titleCentered = false,
     this.formatButtonVisible = true,
     this.formatButtonShowsNext = true,
-    this.titleTextBuilder,
+    this.titleTextFormatter,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
     this.formatButtonTextStyle = const TextStyle(),
     this.formatButtonDecoration = const BoxDecoration(
-      border: const Border(
-        top: BorderSide(),
-        bottom: BorderSide(),
-        left: BorderSide(),
-        right: BorderSide(),
-      ),
+      border: const Border.fromBorderSide(BorderSide()),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     ),
-    this.headerMargin,
+    this.headerMargin = const EdgeInsets.all(0.0),
     this.headerPadding = const EdgeInsets.symmetric(vertical: 8.0),
     this.formatButtonPadding =
         const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),

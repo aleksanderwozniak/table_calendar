@@ -1,83 +1,201 @@
-# Table Calendar
+# TableCalendar
 
 [![Pub Package](https://img.shields.io/pub/v/table_calendar.svg?style=flat-square)](https://pub.dartlang.org/packages/table_calendar)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-52bdeb.svg?longCache=true&style=flat-square)](https://github.com/Solido/awesome-flutter)
 
-Highly customizable, feature-packed Flutter Calendar with gestures, animations and multiple formats.
+Highly customizable, feature-packed calendar widget for Flutter.
 
 | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_styles.gif) | ![Image](https://raw.githubusercontent.com/aleksanderwozniak/table_calendar/assets/table_calendar_builders.gif) |
 | :------------: | :------------: |
-| **Table Calendar** with custom styles | **Table Calendar** with Builders |
+| **TableCalendar** with custom styles | **TableCalendar** with custom builders |
 
 ## Features
 
 * Extensive, yet easy to use API
-* Custom Builders for truly flexible UI
-* Complete programmatic control with CalendarController
-* Dynamic events
-* Interface for holidays
+* Preconfigured UI with customizable styling
+* Custom selective builders for unlimited UI design
 * Locale support
-* Vertical autosizing
-* Beautiful animations
-* Gesture handling
-* Multiple Calendar formats
-* Multiple days of the week formats
-* Specifying available date range
-* Nice, configurable UI out of the box
+* Range selection support
+* Multiple selection support
+* Dynamic events and holidays
+* Vertical autosizing - fit the content, or fill the viewport
+* Multiple calendar formats (month, two weeks, week)
+* Horizontal swipe boundaries (first day, last day)
 
 ## Usage
 
-Make sure to check out [example project](https://github.com/aleksanderwozniak/table_calendar/blob/master/example). 
-For additional info please refer to [API docs](https://pub.dartlang.org/documentation/table_calendar/latest/table_calendar/table_calendar-library.html).
+Make sure to check out [examples](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages) and [API docs](https://pub.dev/documentation/table_calendar/3.0.0-nullsafety.1/) for more details.
 
 ### Installation
 
-Add to pubspec.yaml:
+Add the following line to `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  table_calendar: ^2.3.3
+  table_calendar: ^3.0.0-nullsafety.1
 ```
 
-Then import it to your project:
+### Basic setup
+
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/basics_example.dart).*
+
+**TableCalendar** requires you to provide `firstDay`, `lastDay` and `focusedDay`:
+* `firstDay` is the first available day for the calendar. Users will not be able to access days before it.
+* `lastDay` is the last available day for the calendar. Users will not be able to access days after it.
+* `focusedDay` is the currently targeted day. Use this property to determine which month should be currently visible.
 
 ```dart
-import 'package:table_calendar/table_calendar.dart';
+TableCalendar(
+  firstDay: DateTime.utc(2010, 10, 16),
+  lastDay: DateTime.utc(2030, 3, 14),
+  focusedDay: DateTime.now(),
+);
 ```
 
-And finally create the **TableCalendar** with a `CalendarController`:
+#### Adding interactivity
+
+You will surely notice that previously set up calendar widget isn't quite interactive - you can only swipe it horizontally, to change the currently visible month. While it may be sufficient in certain situations, you can easily bring it to life by specifying a couple of callbacks.
+
+Adding the following code to the calendar widget will allow it to respond to user's taps, marking the tapped day as selected:
 
 ```dart
-@override
-void initState() {
-  super.initState();
-  _calendarController = CalendarController();
-}
+selectedDayPredicate: (day) {
+  return isSameDay(_selectedDay, day);
+},
+onDaySelected: (selectedDay, focusedDay) {
+  setState(() {
+    _selectedDay = selectedDay;
+    _focusedDay = focusedDay; // update `_focusedDay` here as well
+  });
+},
+```
 
-@override
-void dispose() {
-  _calendarController.dispose();
-  super.dispose();
-}
+In order to dynamically update visible calendar format, add those lines to the widget:
 
-@override
-Widget build(BuildContext context) {
-  return TableCalendar(
-    calendarController: _calendarController,
-  );
+```dart
+calendarFormat: _calendarFormat,
+onFormatChanged: (format) {
+  setState(() {
+    _calendarFormat = format;
+  });
+},
+```
+
+Those two changes will make the calendar interactive and responsive to user's input.
+
+#### Updating focusedDay
+
+Setting `focusedDay` to a static value means that whenever **TableCalendar** widget rebuilds, it will use that specific `focusedDay`. You can quickly test it by using hot reload: set `focusedDay` to `DateTime.now()`, swipe to next month and trigger a hot reload - the calendar will "reset" to its initial state. To prevent this from happening, you should store and update `focusedDay` whenever any callback exposes it.
+
+Add this one callback to complete the basic setup:
+
+```dart
+onPageChanged: (focusedDay) {
+  _focusedDay = focusedDay;
+},
+```
+
+It is worth noting that you don't need to call `setState()` inside `onPageChanged()` callback. You should just update the stored value, so that if the widget gets rebuilt later on, it will use the proper `focusedDay`.
+
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/basics_example.dart). You can find other examples [here](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages).*
+
+### Events
+
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/events_example.dart).*
+
+You can supply custom events to **TableCalendar** widget. To do so, use `eventLoader` property - you will be given a `DateTime` object, to which you need to assign a list of events.
+
+```dart
+eventLoader: (day) {
+  return _getEventsForDay(day);
+},
+```
+
+`_getEventsForDay()` can be of any implementation. For example, a `Map<DateTime, List<T>>` can be used:
+
+```dart
+List<Event> _getEventsForDay(DateTime day) {
+  return events[day] ?? [];
 }
 ```
+
+One thing worth remembering is that `DateTime` objects consist of both date and time parts. In many cases this time part is redundant for calendar related aspects. 
+
+If you decide to use a `Map`, I suggest making it a `LinkedHashMap` - this will allow you to override equality comparison for two `DateTime` objects, comparing them just by their date parts:
+
+```dart
+final events = LinkedHashMap(
+  equals: isSameDay,
+  hashCode: getHashCode,
+)..addAll(eventSource);
+```
+
+#### Cyclic events
+
+`eventLoader` allows you to easily add events that repeat in a pattern. For example, this will add an event to every Monday:
+
+```dart
+eventLoader: (day) {
+  if (day.weekday == DateTime.monday) {
+    return [Event('Cyclic event')];
+  }
+
+  return [];
+},
+```
+
+#### Events selected on tap
+
+Often times having a sublist of events that are selected by tapping on a day is desired. You can achieve that by using the same method you provided to `eventLoader` inside of `onDaySelected` callback:
+
+```dart
+void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+  if (!isSameDay(_selectedDay, selectedDay)) {
+    setState(() {
+      _focusedDay = focusedDay;
+      _selectedDay = selectedDay;
+      _selectedEvents = _getEventsForDay(selectedDay);
+    });
+  }
+}
+```
+
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/events_example.dart).*
+
+### Custom UI with CalendarBuilders
+
+To customize the UI with your own widgets, use [CalendarBuilders](https://pub.dev/documentation/table_calendar/3.0.0-nullsafety.1/table_calendar/CalendarBuilders-class.html). Each builder can be used to selectively override the UI, allowing you to implement highly specific designs with minimal hassle.
+
+You can return `null` from any builder to use the default style. For example, the following snippet will override only the Sunday's day of the week label (Sun), leaving other dow labels unchanged:
+
+```dart
+calendarBuilders: CalendarBuilders(
+  dowBuilder: (context, day) {
+    if (day.weekday == DateTime.sunday) {
+      final text = DateFormat.E().format(day);
+
+      return Center(
+        child: Text(
+          text,
+          style: TextStyle(color: Colors.red),
+        ),
+      );
+    }
+  },
+),
+```
+
+
+
 
 ### Locale
 
-**Table Calendar** supports locales. To display the Calendar in desired language, use `locale` property. 
+To display the calendar in desired language, use `locale` property. 
 If you don't specify it, a default locale will be used.
 
 #### Initialization
 
-Before you can use a locale, you need to initialize the i18n formatting.
-
-*This is independent of **Table Calendar** package, so I encourage you to do your own research.*
+Before you can use a locale, you might need to initialize date formatting.
 
 A simple way of doing it is as follows:
 * First of all, add [intl](https://pub.dartlang.org/packages/intl) package to your pubspec.yaml file
@@ -91,13 +209,13 @@ void main() {
 }
 ```
 
-After those two steps your app should be ready to use **Table Calendar** with different languages.
+After those two steps your app should be ready to use **TableCalendar** with different languages.
 
 #### Specifying a language
 
 To specify a language, simply pass it as a String code to `locale` property.
 
-For example, this will make **Table Calendar** use Polish language:
+For example, this will make **TableCalendar** use Polish language:
 
 ```dart
 TableCalendar(
@@ -109,57 +227,6 @@ TableCalendar(
 | :------------: | :------------: | :------------: | :------------: |
 | `'en_US'` | `'pl_PL'` | `'fr_FR'` | `'zh_CN'` |
 
-Note, that if you want to change the language of `FormatButton`'s text, you have to do this yourself. Use `availableCalendarFormats` property and pass the translated Strings there. 
-Use i18n method of your choice.
+Note, that if you want to change the language of `FormatButton`'s text, you have to do this yourself. Use `availableCalendarFormats` property and pass the translated Strings there. Use i18n method of your choice.
 
 You can also hide the button altogether by setting `formatButtonVisible` to false.
-
-### Holidays
-
-**Table Calendar** provides a simple interface for displaying holidays. Here are a few steps to follow:
-
-* Fetch a map of holidays tied to dates. You can search for it manually, or perhaps use some online API
-* Convert it to a proper format - note that these are lists of holidays, since one date could have a couple of holidays: 
-```dart
-{
-  `DateTime A`: [`Holiday A1`, `Holiday A2`, ...],
-  `DateTime B`: [`Holiday B1`, `Holiday B2`, ...],
-  ...
-}
-```
-* Link it to **Table Calendar**. Use `holidays` property
-
-And that's your basic setup! Now you can add some styling:
-
-* By using `CalendarStyle` properties: `holidayStyle` and `outsideHolidayStyle`
-* By using `CalendarBuilders` for complete UI control over calendar cell
-
-You can also add custom holiday markers thanks to improved marker API. Check out [example project](https://github.com/aleksanderwozniak/table_calendar/tree/master/example) for more details.
-
-```dart
-markersBuilder: (context, date, events, holidays) {
-  final children = <Widget>[];
-
-  if (events.isNotEmpty) {
-    children.add(
-      Positioned(
-        right: 1,
-        bottom: 1,
-        child: _buildEventsMarker(date, events),
-      ),
-    );
-  }
-
-  if (holidays.isNotEmpty) {
-    children.add(
-      Positioned(
-        right: -2,
-        top: -2,
-        child: _buildHolidaysMarker(),
-      ),
-    );
-  }
-
-  return children;
-},
-```
