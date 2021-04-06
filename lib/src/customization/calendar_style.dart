@@ -5,6 +5,9 @@ part of table_calendar;
 
 /// Class containing styling for `TableCalendar`'s content.
 class CalendarStyle {
+  /// Style of foreground Text for days before today
+  final TextStyle beforeTodayStyle;
+
   /// Style of foreground Text for regular weekdays.
   final TextStyle weekdayStyle;
 
@@ -83,8 +86,8 @@ class CalendarStyle {
   /// Inner padding for the calendar body
   final EdgeInsets calendarPadding;
 
-
   const CalendarStyle({
+    this.beforeTodayStyle = const TextStyle(color: const Color(0xFF9E9E9E)),
     this.weekdayStyle = const TextStyle(),
     this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]
     this.holidayStyle = const TextStyle(color: const Color(0xFFF44336)), // Material red[500]

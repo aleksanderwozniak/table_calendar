@@ -11,6 +11,7 @@ class _CellWidget extends StatelessWidget {
   final bool isWeekend;
   final bool isOutsideMonth;
   final bool isHoliday;
+  final bool isBeforeToday;
   final CalendarStyle calendarStyle;
 
   const _CellWidget({
@@ -22,6 +23,7 @@ class _CellWidget extends StatelessWidget {
     this.isWeekend = false,
     this.isOutsideMonth = false,
     this.isHoliday = false,
+    this.isBeforeToday = false,
     @required this.calendarStyle,
   })  : assert(text != null),
         assert(calendarStyle != null),
@@ -54,7 +56,9 @@ class _CellWidget extends StatelessWidget {
   }
 
   TextStyle _buildCellTextStyle() {
-    if (isUnavailable) {
+    if (isBeforeToday) {
+      return calendarStyle.beforeTodayStyle;
+    } else if (isUnavailable) {
       return calendarStyle.unavailableStyle;
     } else if (isSelected && calendarStyle.renderSelectedFirst) {
       return calendarStyle.selectedStyle;
