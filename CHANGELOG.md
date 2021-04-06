@@ -1,13 +1,10 @@
-## [3.0.0-nullsafety.1]
-
-* Header chevrons can now be any widget
-
-## [3.0.0-nullsafety.0]
+## [3.0.0]
 
 * Migrated to null safety
 * Removed CalendarController
 * Improved horizontal scrolling
 * Improved widget performance
+* Improved documentation
 * Added date range selection
 * Added multiple date selection
 * Added selective CalendarBuilders

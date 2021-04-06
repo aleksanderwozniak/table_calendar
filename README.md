@@ -24,7 +24,7 @@ Highly customizable, feature-packed calendar widget for Flutter.
 
 ## Usage
 
-Make sure to check out [examples](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages) and [API docs](https://pub.dev/documentation/table_calendar/3.0.0-nullsafety.1/) for more details.
+Make sure to check out [examples](https://github.com/aleksanderwozniak/table_calendar/tree/master/example/lib/pages) and [API docs](https://pub.dev/documentation/table_calendar/latest/) for more details.
 
 ### Installation
 
@@ -32,12 +32,12 @@ Add the following line to `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  table_calendar: ^3.0.0-nullsafety.1
+  table_calendar: ^3.0.0
 ```
 
 ### Basic setup
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/basics_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/master/example/lib/pages/basics_example.dart).*
 
 **TableCalendar** requires you to provide `firstDay`, `lastDay` and `focusedDay`:
 * `firstDay` is the first available day for the calendar. Users will not be able to access days before it.
@@ -97,11 +97,11 @@ onPageChanged: (focusedDay) {
 
 It is worth noting that you don't need to call `setState()` inside `onPageChanged()` callback. You should just update the stored value, so that if the widget gets rebuilt later on, it will use the proper `focusedDay`.
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/basics_example.dart). You can find other examples [here](https://github.com/aleksanderwozniak/table_calendar/tree/3.0.0-nullsafety/example/lib/pages).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/master/example/lib/pages/basics_example.dart). You can find other examples [here](https://github.com/aleksanderwozniak/table_calendar/tree/master/example/lib/pages).*
 
 ### Events
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/events_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/master/example/lib/pages/events_example.dart).*
 
 You can supply custom events to **TableCalendar** widget. To do so, use `eventLoader` property - you will be given a `DateTime` object, to which you need to assign a list of events.
 
@@ -160,11 +160,11 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
 }
 ```
 
-*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/3.0.0-nullsafety/example/lib/pages/events_example.dart).*
+*The complete example is available [here](https://github.com/aleksanderwozniak/table_calendar/blob/master/example/lib/pages/events_example.dart).*
 
 ### Custom UI with CalendarBuilders
 
-To customize the UI with your own widgets, use [CalendarBuilders](https://pub.dev/documentation/table_calendar/3.0.0-nullsafety.1/table_calendar/CalendarBuilders-class.html). Each builder can be used to selectively override the UI, allowing you to implement highly specific designs with minimal hassle.
+To customize the UI with your own widgets, use [CalendarBuilders](https://pub.dev/documentation/table_calendar/latest/table_calendar/CalendarBuilders-class.html). Each builder can be used to selectively override the UI, allowing you to implement highly specific designs with minimal hassle.
 
 You can return `null` from any builder to use the default style. For example, the following snippet will override only the Sunday's day of the week label (Sun), leaving other dow labels unchanged:
 
@@ -198,7 +198,7 @@ If you don't specify it, a default locale will be used.
 Before you can use a locale, you might need to initialize date formatting.
 
 A simple way of doing it is as follows:
-* First of all, add [intl](https://pub.dartlang.org/packages/intl) package to your pubspec.yaml file
+* First of all, add [intl](https://pub.dev/packages/intl) package to your pubspec.yaml file
 * Then make modifications to your `main()`:
 
 ```dart
