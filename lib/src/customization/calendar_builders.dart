@@ -7,19 +7,19 @@ import '../shared/utils.dart' show DayBuilder, FocusedDayBuilder;
 
 /// Signature for a function that creates a single event marker for a given `day`.
 /// Contains a single `event` associated with that `day`.
-typedef SingleMarkerBuilder<T> = Widget Function(
+typedef SingleMarkerBuilder<T> = Widget? Function(
     BuildContext context, DateTime day, T event);
 
 /// Signature for a function that creates an event marker for a given `day`.
 /// Contains a list of `events` associated with that `day`.
-typedef MarkerBuilder<T> = Widget Function(
+typedef MarkerBuilder<T> = Widget? Function(
     BuildContext context, DateTime day, List<T> events);
 
 /// Signature for a function that creates a background highlight for a given `day`.
 ///
 /// Used for highlighting current range selection.
 /// Contains a value determining if the given `day` falls within the selected range.
-typedef HighlightBuilder = Widget Function(
+typedef HighlightBuilder = Widget? Function(
     BuildContext context, DateTime day, bool isWithinRange);
 
 /// Class containing all custom builders for `TableCalendar`.
