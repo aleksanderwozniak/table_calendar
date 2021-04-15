@@ -27,7 +27,6 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         lastDay: kLastDay,
         focusedDay: _focusedDay,
         calendarFormat: _calendarFormat,
-        pageJumpingEnabled: true,
         selectedDayPredicate: (day) {
           // Use `selectedDayPredicate` to determine which day is currently selected.
           // If this returns true, then `day` will be marked as selected.

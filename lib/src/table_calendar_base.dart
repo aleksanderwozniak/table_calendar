@@ -22,6 +22,7 @@ class TableCalendarBase extends StatefulWidget {
   final Decoration? rowDecoration;
   final Duration formatAnimationDuration;
   final Curve formatAnimationCurve;
+  final bool animatedPageScrolling;
   final Duration pageChangeAnimationDuration;
   final Curve pageChangeAnimationCurve;
   final StartingDayOfWeek startingDayOfWeek;
@@ -48,6 +49,7 @@ class TableCalendarBase extends StatefulWidget {
     this.rowDecoration,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
+    this.animatedPageScrolling = false,
     this.pageChangeAnimationDuration = const Duration(milliseconds: 200),
     this.pageChangeAnimationCurve = Curves.linear,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -151,9 +153,13 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
     final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
     _pageHeight.value = _getPageHeight(rowCount);
 
-    _pageController.animateToPage(currentIndex,
-        duration: widget.pageChangeAnimationDuration,
-        curve: widget.pageChangeAnimationCurve);
+    if (widget.animatedPageScrolling) {
+      _pageController.animateToPage(currentIndex,
+          duration: widget.pageChangeAnimationDuration,
+          curve: widget.pageChangeAnimationCurve);
+    } else {
+      _pageController.jumpToPage(currentIndex);
+    }
     _pageCallbackDisabled = false;
   }
 

@@ -94,6 +94,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// When set to true, `TableCalendar` will fill available height.
   final bool shouldFillViewport;
 
+  /// When set to true, an animation is displayed when changing the visible month.
+  final bool animatedPageScrolling;
+
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
@@ -107,12 +110,12 @@ class TableCalendar<T> extends StatefulWidget {
   final Curve formatAnimationCurve;
 
   /// Specifies the duration of page change animation that takes place when the visible month changes,
-  /// either by tapping the left or right chevron or when `pageJumpingEnabled` is set to true and
+  /// either by tapping the left or right chevron or when `pageJumpingEnabled` and `animatedPageScrolling` are set to true and
   /// the user clicks outside of a month.
   final Duration pageAnimationDuration;
 
   /// Specifies the curve of page change animation that takes place when the visible month changes,
-  /// either by tapping the left or right chevron or when `pageJumpingEnabled` is set to true and
+  /// either by tapping the left or right chevron or when `pageJumpingEnabled` and `animatedPageScrolling` are set to true and
   /// the user clicks outside of a month.
   final Curve pageAnimationCurve;
 
@@ -217,6 +220,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.pageJumpingEnabled = false,
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
+    this.animatedPageScrolling = false,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
@@ -484,6 +488,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             rowHeight: widget.rowHeight,
             formatAnimationDuration: widget.formatAnimationDuration,
             formatAnimationCurve: widget.formatAnimationCurve,
+            animatedPageScrolling: widget.animatedPageScrolling,
             pageChangeAnimationDuration: widget.pageAnimationDuration,
             pageChangeAnimationCurve: widget.pageAnimationCurve,
             availableCalendarFormats: widget.availableCalendarFormats,
