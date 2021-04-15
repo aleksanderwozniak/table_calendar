@@ -106,10 +106,14 @@ class TableCalendar<T> extends StatefulWidget {
   /// Specifies the curve of size animation that takes place when `calendarFormat` is changed.
   final Curve formatAnimationCurve;
 
-  /// Specifies the duration of page change animation that takes place when left or right chevron is tapped.
+  /// Specifies the duration of page change animation that takes place when the visible month changes,
+  /// either by tapping the left or right chevron or when `pageJumpingEnabled` is set to true and
+  /// the user clicks outside of a month.
   final Duration pageAnimationDuration;
 
-  /// Specifies the curve of page change animation that takes place when left or right chevron is tapped.
+  /// Specifies the curve of page change animation that takes place when the visible month changes,
+  /// either by tapping the left or right chevron or when `pageJumpingEnabled` is set to true and
+  /// the user clicks outside of a month.
   final Curve pageAnimationCurve;
 
   /// `TableCalendar` will start weeks with provided day.
@@ -480,6 +484,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             rowHeight: widget.rowHeight,
             formatAnimationDuration: widget.formatAnimationDuration,
             formatAnimationCurve: widget.formatAnimationCurve,
+            pageChangeAnimationDuration: widget.pageAnimationDuration,
+            pageChangeAnimationCurve: widget.pageAnimationCurve,
             availableCalendarFormats: widget.availableCalendarFormats,
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
