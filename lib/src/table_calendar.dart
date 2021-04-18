@@ -84,8 +84,12 @@ class TableCalendar<T> extends StatefulWidget {
   final bool daysOfWeekVisible;
 
   /// When set to true, tapping on an outside day in `CalendarFormat.month` format
-  /// will jump to a page related to the tapped month.
+  /// will jump to the calendar page of the tapped month.
   final bool pageJumpingEnabled;
+
+  /// When set to true, updating the `focusedDay` will display a scrolling animation
+  /// if the currently visible calendar page is changed.
+  final bool pageAnimationEnabled;
 
   /// When set to true, `CalendarFormat.month` will always display six weeks,
   /// even if the content would fit in less.
@@ -100,16 +104,16 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for setting the height of `TableCalendar`'s days of week row.
   final double daysOfWeekHeight;
 
-  /// Specifies the duration of size animation that takes place when `calendarFormat` is changed.
+  /// Specifies the duration of size animation that takes place whenever `calendarFormat` is changed.
   final Duration formatAnimationDuration;
 
-  /// Specifies the curve of size animation that takes place when `calendarFormat` is changed.
+  /// Specifies the curve of size animation that takes place whenever `calendarFormat` is changed.
   final Curve formatAnimationCurve;
 
-  /// Specifies the duration of page change animation that takes place when left or right chevron is tapped.
+  /// Specifies the duration of scrolling animation that takes place whenever the visible calendar page is changed.
   final Duration pageAnimationDuration;
 
-  /// Specifies the curve of page change animation that takes place when left or right chevron is tapped.
+  /// Specifies the curve of scrolling animation that takes place whenever the visible calendar page is changed.
   final Curve pageAnimationCurve;
 
   /// `TableCalendar` will start weeks with provided day.
@@ -211,6 +215,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.headerVisible = true,
     this.daysOfWeekVisible = true,
     this.pageJumpingEnabled = false,
+    this.pageAnimationEnabled = true,
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
     this.rowHeight = 52.0,
@@ -480,6 +485,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             rowHeight: widget.rowHeight,
             formatAnimationDuration: widget.formatAnimationDuration,
             formatAnimationCurve: widget.formatAnimationCurve,
+            pageAnimationEnabled: widget.pageAnimationEnabled,
+            pageAnimationDuration: widget.pageAnimationDuration,
+            pageAnimationCurve: widget.pageAnimationCurve,
             availableCalendarFormats: widget.availableCalendarFormats,
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,

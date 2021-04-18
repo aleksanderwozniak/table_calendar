@@ -22,6 +22,9 @@ class TableCalendarBase extends StatefulWidget {
   final Decoration? rowDecoration;
   final Duration formatAnimationDuration;
   final Curve formatAnimationCurve;
+  final bool pageAnimationEnabled;
+  final Duration pageAnimationDuration;
+  final Curve pageAnimationCurve;
   final StartingDayOfWeek startingDayOfWeek;
   final AvailableGestures availableGestures;
   final SimpleSwipeConfig simpleSwipeConfig;
@@ -46,6 +49,9 @@ class TableCalendarBase extends StatefulWidget {
     this.rowDecoration,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
+    this.pageAnimationEnabled = true,
+    this.pageAnimationDuration = const Duration(milliseconds: 300),
+    this.pageAnimationCurve = Curves.easeOut,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.availableGestures = AvailableGestures.all,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
@@ -102,8 +108,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
     if (_focusedDay != widget.focusedDay ||
         widget.calendarFormat != oldWidget.calendarFormat ||
         widget.startingDayOfWeek != oldWidget.startingDayOfWeek) {
+      final shouldAnimate = _focusedDay != widget.focusedDay;
+
       _focusedDay = widget.focusedDay;
-      _updatePage();
+      _updatePage(shouldAnimate: shouldAnimate);
     }
 
     if (widget.rowHeight != oldWidget.rowHeight ||
@@ -130,7 +138,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
       widget.availableGestures == AvailableGestures.all ||
       widget.availableGestures == AvailableGestures.verticalSwipe;
 
-  void _updatePage() {
+  void _updatePage({bool shouldAnimate = false}) {
     final currentIndex = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, _focusedDay);
 
@@ -143,11 +151,27 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
       _pageCallbackDisabled = true;
     }
 
+    if (shouldAnimate && widget.pageAnimationEnabled) {
+      if ((currentIndex - _previousIndex).abs() > 1) {
+        final jumpIndex =
+            currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
+
+        _pageController.jumpToPage(jumpIndex);
+      }
+
+      _pageController.animateToPage(
+        currentIndex,
+        duration: widget.pageAnimationDuration,
+        curve: widget.pageAnimationCurve,
+      );
+    } else {
+      _pageController.jumpToPage(currentIndex);
+    }
+
     _previousIndex = currentIndex;
     final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
     _pageHeight.value = _getPageHeight(rowCount);
 
-    _pageController.jumpToPage(currentIndex);
     _pageCallbackDisabled = false;
   }
 
