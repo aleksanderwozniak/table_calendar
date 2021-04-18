@@ -485,7 +485,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             rowHeight: widget.rowHeight,
             formatAnimationDuration: widget.formatAnimationDuration,
             formatAnimationCurve: widget.formatAnimationCurve,
-            animatedPageScrolling: widget.pageAnimationEnabled,
+            pageAnimationEnabled: widget.pageAnimationEnabled,
             pageAnimationDuration: widget.pageAnimationDuration,
             pageAnimationCurve: widget.pageAnimationCurve,
             availableCalendarFormats: widget.availableCalendarFormats,

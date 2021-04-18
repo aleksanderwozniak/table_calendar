@@ -22,7 +22,7 @@ class TableCalendarBase extends StatefulWidget {
   final Decoration? rowDecoration;
   final Duration formatAnimationDuration;
   final Curve formatAnimationCurve;
-  final bool animatedPageScrolling;
+  final bool pageAnimationEnabled;
   final Duration pageAnimationDuration;
   final Curve pageAnimationCurve;
   final StartingDayOfWeek startingDayOfWeek;
@@ -49,7 +49,7 @@ class TableCalendarBase extends StatefulWidget {
     this.rowDecoration,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
-    this.animatedPageScrolling = false,
+    this.pageAnimationEnabled = true,
     this.pageAnimationDuration = const Duration(milliseconds: 300),
     this.pageAnimationCurve = Curves.easeOut,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -151,7 +151,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
       _pageCallbackDisabled = true;
     }
 
-    if (shouldAnimate && widget.animatedPageScrolling) {
+    if (shouldAnimate && widget.pageAnimationEnabled) {
       if ((currentIndex - _previousIndex).abs() > 1) {
         final jumpIndex =
             currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
