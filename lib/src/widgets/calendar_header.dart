@@ -10,7 +10,7 @@ import 'custom_icon_button.dart';
 import 'format_button.dart';
 
 class CalendarHeader extends StatelessWidget {
-  final dynamic locale;
+  final String? locale;
   final DateTime focusedMonth;
   final CalendarFormat calendarFormat;
   final HeaderStyle headerStyle;
@@ -39,7 +39,8 @@ class CalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
+    final text = headerStyle.titleTextFormatter
+            ?.call(focusedMonth, locale ?? Intl.getCurrentLocale()) ??
         DateFormat.yMMMM(locale).format(focusedMonth);
 
     return Container(

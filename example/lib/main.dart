@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 import 'pages/basics_example.dart';
 import 'pages/complex_example.dart';
@@ -10,8 +11,11 @@ import 'pages/events_example.dart';
 import 'pages/multi_example.dart';
 import 'pages/range_example.dart';
 
-void main() {
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+Future<void> main() async {
+  const locale = 'pt_BR';
+  Intl.defaultLocale = locale;
+  await initializeDateFormatting(locale);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

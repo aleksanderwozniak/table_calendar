@@ -33,7 +33,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
   /// If nothing is provided, a default locale will be used.
-  final dynamic locale;
+  final String? locale;
 
   /// The start of the selected day range.
   final DateTime? rangeStartDay;
@@ -502,7 +502,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
               if (dowCell == null) {
                 final weekdayString = widget.daysOfWeekStyle.dowTextFormatter
-                        ?.call(day, widget.locale) ??
+                        ?.call(day, widget.locale ?? Intl.getCurrentLocale()) ??
                     DateFormat.E(widget.locale).format(day);
 
                 final isWeekend =
