@@ -1,3 +1,78 @@
+## [3.0.0]
+
+* Migrated to null safety
+* Removed CalendarController
+* Improved horizontal scrolling
+* Improved widget performance
+* Improved documentation
+* Added date range selection
+* Added multiple date selection
+* Added selective CalendarBuilders
+* Added firstDay and lastDay scroll boundaries
+* Added shouldFillViewport property
+* Added sixWeekMonthsEnforced property
+* Added more options to customize calendar's behavior
+
+## [2.3.3]
+
+* Updated dependencies
+
+## [2.3.2]
+
+* Added previousPage and nextPage methods to CalendarController
+
+## [2.3.1]
+
+* Added chevron visibility properties to HeaderStyle
+* Added cellMargin property to CalendarStyle
+* Added eventDayStyle property to CalendarStyle
+* Added availableCalendarFormats dynamic update
+* Added optional BoxDecoration for each calendar row
+* Added optional BoxDecoration for days of week row
+
+## [2.3.0]
+
+* Migrated to AndroidX
+* Added holidays to onDaySelected callback
+* Replaced deprecated overflow property with clipBehavior
+
+## [2.2.3]
+
+* Added onCalendarCreated callback
+
+## [2.2.2]
+
+* Added highlightSelected property to CalendarStyle
+* Added highlightToday property to CalendarStyle
+
+## [2.2.1]
+
+* Added onHeaderTapped callback
+* Added onHeaderLongPressed callback
+* Fixed endDay issue
+
+## [2.2.0]
+
+* Added LongPress Gesture support
+* Added option to disable days based on a predicate
+* Added option to hide DaysOfWeek row
+* Added header Decoration
+* Added headerMargin property
+* Added headerPadding property
+* Added contentPadding property
+
+## [2.1.0]
+
+* Added dynamic events and holidays
+* Added StartingDayOfWeek for every weekday
+* Added support for custom weekend days
+* Added dowWeekdayBuilder and dowWeekendBuilder
+* Broadened intl dependency bounds
+* markersMaxAmount no longer affects markersBuilder
+* Fixed twoWeeks format programmatic issue
+* Fixed visibleDays issue
+* Fixed null dispose issue
+
 ## [2.0.2]
 
 * Updated dependencies

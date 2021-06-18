@@ -1,33 +1,40 @@
-//  Copyright (c) 2019 Aleksander Woźniak
-//  Licensed under Apache License v2.0
+// Copyright 2019 Aleksander Woźniak
+// SPDX-License-Identifier: Apache-2.0
 
-part of table_calendar;
+import 'package:flutter/widgets.dart';
+
+import '../shared/utils.dart' show TextFormatter;
 
 /// Class containing styling for `TableCalendar`'s days of week panel.
 class DaysOfWeekStyle {
-  /// Use to customize days of week panel text (eg. with different `DateFormat`).
+  /// Use to customize days of week panel text (e.g. with different `DateFormat`).
   /// You can use `String` transformations to further customize the text.
-  /// Defaults to simple `'E'` format (eg. Mon, Tue, Wed, etc.).
+  /// Defaults to simple `'E'` format (i.e. Mon, Tue, Wed, etc.).
   ///
   /// Example usage:
   /// ```dart
-  /// dowTextBuilder: (date, locale) => DateFormat.E(locale).format(date)[0],
+  /// dowTextFormatter: (date, locale) => DateFormat.E(locale).format(date)[0],
   /// ```
-  final TextBuilder dowTextBuilder;
+  final TextFormatter? dowTextFormatter;
 
-  /// Style for weekdays on the top of Calendar.
+  /// Decoration for the top row of the table
+  final Decoration decoration;
+
+  /// Style for weekdays on the top of calendar.
   final TextStyle weekdayStyle;
 
-  /// Style for weekend days on the top of Calendar.
+  /// Style for weekend days on the top of calendar.
   final TextStyle weekendStyle;
 
-  /// Style for the selected day
+  /// Style fore the selected day
   final TextStyle selectedStyle;
 
+  /// Creates a `DaysOfWeekStyle` used by `TableCalendar` widget.
   const DaysOfWeekStyle({
-    this.dowTextBuilder,
-    this.weekdayStyle = const TextStyle(color: const Color(0xFF616161)), // Material grey[700]
-    this.weekendStyle = const TextStyle(color: const Color(0xFFF44336)),
-    this.selectedStyle = const TextStyle(color: const Color(0xFFFFBD0D)), // Material red[500]
+    this.dowTextFormatter,
+    this.decoration = const BoxDecoration(),
+    this.weekdayStyle = const TextStyle(color: const Color(0xFF4F4F4F)),
+    this.weekendStyle = const TextStyle(color: const Color(0xFF6A6A6A)),
+    this.selectedStyle = const TextStyle(color: const Color(0xFFFFBD0D))
   });
 }
