@@ -19,6 +19,7 @@ class CellContent extends StatelessWidget {
   final bool isDisabled;
   final bool isHoliday;
   final bool isWeekend;
+  final bool isBeforeToday;
   final CalendarStyle calendarStyle;
   final CalendarBuilders calendarBuilders;
 
@@ -38,6 +39,7 @@ class CellContent extends StatelessWidget {
     required this.isDisabled,
     required this.isHoliday,
     required this.isWeekend,
+    required this.isBeforeToday
   }) : super(key: key);
 
   @override
@@ -53,7 +55,16 @@ class CellContent extends StatelessWidget {
     final margin = calendarStyle.cellMargin;
     final duration = const Duration(milliseconds: 250);
 
-    if (isDisabled) {
+    if (isBeforeToday) {
+      cell = calendarBuilders.beforeTodayBuilder?.call(context, day, focusedDay) ??
+          AnimatedContainer(
+            duration: duration,
+            margin: margin,
+            decoration: calendarStyle.beforeTodayDecoration,
+            alignment: Alignment.center,
+            child: Text(text, style: calendarStyle.beforeTodayTextStyle),
+          );
+    } else if (isDisabled) {
       cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,

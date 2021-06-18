@@ -24,6 +24,10 @@ typedef HighlightBuilder = Widget? Function(
 
 /// Class containing all custom builders for `TableCalendar`.
 class CalendarBuilders<T> {
+
+  /// Custom builder for day cells, with a priority over any other builder.
+  final FocusedDayBuilder? beforeTodayBuilder;
+  
   /// Custom builder for day cells, with a priority over any other builder.
   final FocusedDayBuilder? prioritizedBuilder;
 
@@ -80,6 +84,7 @@ class CalendarBuilders<T> {
 
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({
+    this.beforeTodayBuilder,
     this.prioritizedBuilder,
     this.todayBuilder,
     this.selectedBuilder,

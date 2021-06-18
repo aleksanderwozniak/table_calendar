@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:table_calendar/src/widgets/custom_icon_button.dart';
 
 import 'customization/calendar_builders.dart';
 import 'customization/calendar_style.dart';
@@ -439,32 +440,33 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     return Column(
       children: [
         if (widget.headerVisible)
-          ValueListenableBuilder<DateTime>(
-            valueListenable: _focusedDay,
-            builder: (context, value, _) {
-              return CalendarHeader(
-                headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
-                focusedMonth: value,
-                onLeftChevronTap: _onLeftChevronTap,
-                onRightChevronTap: _onRightChevronTap,
-                onHeaderTap: () => widget.onHeaderTapped?.call(value),
-                onHeaderLongPress: () =>
-                    widget.onHeaderLongPressed?.call(value),
-                headerStyle: widget.headerStyle,
-                availableCalendarFormats: widget.availableCalendarFormats,
-                calendarFormat: widget.calendarFormat,
-                locale: widget.locale,
-                onFormatButtonTap: (format) {
-                  assert(
-                    widget.onFormatChanged != null,
-                    'Using `FormatButton` without providing `onFormatChanged` will have no effect.',
-                  );
+          _buildHeader(),
+          // ValueListenableBuilder<DateTime>(
+          //   valueListenable: _focusedDay,
+          //   builder: (context, value, _) {
+          //     return CalendarHeader(
+          //       headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
+          //       focusedMonth: value,
+          //       onLeftChevronTap: _onLeftChevronTap,
+          //       onRightChevronTap: _onRightChevronTap,
+          //       onHeaderTap: () => widget.onHeaderTapped?.call(value),
+          //       onHeaderLongPress: () =>
+          //           widget.onHeaderLongPressed?.call(value),
+          //       headerStyle: widget.headerStyle,
+          //       availableCalendarFormats: widget.availableCalendarFormats,
+          //       calendarFormat: widget.calendarFormat,
+          //       locale: widget.locale,
+          //       onFormatButtonTap: (format) {
+          //         assert(
+          //           widget.onFormatChanged != null,
+          //           'Using `FormatButton` without providing `onFormatChanged` will have no effect.',
+          //         );
 
-                  widget.onFormatChanged?.call(format);
-                },
-              );
-            },
-          ),
+          //         widget.onFormatChanged?.call(format);
+          //       },
+          //     );
+          //   },
+          // ),
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
           child: TableCalendarBase(
@@ -492,6 +494,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
             onVerticalSwipe: _swipeCalendarFormat,
+            calendarMargin: widget.calendarStyle.calendarMargin,
+            calendarPadding: widget.calendarStyle.calendarPadding,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
@@ -511,7 +515,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 dowCell = Center(
                   child: Text(
                     weekdayString,
-                    style: isWeekend
+                    style: widget.focusedDay == day &&
+                    widget.focusedDay.weekday == day.weekday
+                ? widget.daysOfWeekStyle.selectedStyle : isWeekend
                         ? widget.daysOfWeekStyle.weekendStyle
                         : widget.daysOfWeekStyle.weekdayStyle,
                   ),
@@ -533,6 +539,71 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
       ],
     );
   }
+
+  Widget _buildHeader() {
+    final children = [
+      CustomIconButton(
+        icon: widget.headerStyle.leftChevronIcon,
+        onTap: _onLeftChevronTap,
+        margin: widget.headerStyle.leftChevronMargin,
+        padding: widget.headerStyle.leftChevronPadding,
+        decoration: widget.headerStyle.leftIconDecoration,
+        height: widget.headerStyle.headerHeight,
+      ),
+      Expanded(
+        child: Container(
+          decoration: widget.headerStyle.titleDecoration,
+          padding: widget.headerStyle.titlePadding,
+          margin: widget.headerStyle.titleMargin,
+          height: widget.headerStyle.headerHeight,
+          alignment: widget.headerStyle.titleCentered ? Alignment.center : Alignment.centerLeft,
+          child: Text(
+            widget.headerStyle.titleTextFormatter != null
+                ? widget.headerStyle.titleTextFormatter!(widget.focusedDay, widget.locale)
+                : DateFormat.yMMMM(widget.locale).format(widget.focusedDay),
+            style: widget.headerStyle.titleTextStyle,
+            textAlign: widget.headerStyle.titleCentered ? TextAlign.center : TextAlign.start,
+          ),
+        ),
+      ),
+      CustomIconButton(
+        icon: widget.headerStyle.rightChevronIcon,
+        onTap: _onRightChevronTap,
+        margin: widget.headerStyle.rightChevronMargin,
+        padding: widget.headerStyle.rightChevronPadding,
+        decoration: widget.headerStyle.rightIconDecoration,
+        height: widget.headerStyle.headerHeight,
+      ),
+    ];
+
+    // if (widget.headerStyle.formatButtonVisible && widget.availableCalendarFormats.length > 1) {
+    //   children.insert(2, const SizedBox(width: 8.0));
+    //   children.insert(3, _buildFormatButton());
+    // }
+
+    return Container(
+      margin: widget.headerStyle.headerMargin,
+      padding: widget.headerStyle.headerPadding,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: children,
+      ),
+    );
+  }
+
+  // Widget _buildFormatButton() {
+  //   return GestureDetector(
+  //     onTap: _swipeCalendarFormat,
+  //     child: Container(
+  //       decoration: widget.headerStyle.formatButtonDecoration,
+  //       padding: widget.headerStyle.formatButtonPadding,
+  //       child: Text(
+  //         widget.calendarController._getFormatButtonText(),
+  //         style: widget.headerStyle.formatButtonTextStyle,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildCell(DateTime day, DateTime focusedDay) {
     final isOutside = day.month != focusedDay.month;
@@ -583,6 +654,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isToday = isSameDay(day, DateTime.now());
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
+        final isBeforeToday = day.isBefore(DateTime.now().startOfDay);
 
         Widget content = CellContent(
           day: day,
@@ -590,6 +662,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           calendarStyle: widget.calendarStyle,
           calendarBuilders: widget.calendarBuilders,
           isTodayHighlighted: widget.calendarStyle.isTodayHighlighted,
+          isBeforeToday: isBeforeToday,
           isToday: isToday,
           isSelected: widget.selectedDayPredicate?.call(day) ?? false,
           isRangeStart: isRangeStart,

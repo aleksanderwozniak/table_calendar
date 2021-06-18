@@ -32,6 +32,8 @@ class TableCalendarBase extends StatefulWidget {
   final SwipeCallback? onVerticalSwipe;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
+  final EdgeInsets calendarMargin;
+  final EdgeInsets calendarPadding;
 
   TableCalendarBase({
     Key? key,
@@ -66,6 +68,8 @@ class TableCalendarBase extends StatefulWidget {
     this.onVerticalSwipe,
     this.onPageChanged,
     this.onCalendarCreated,
+    this.calendarMargin = const EdgeInsets.all(0),
+    this.calendarPadding = const EdgeInsets.all(0),
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
         assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay)),
@@ -217,6 +221,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
               rowHeight: widget.rowHeight,
               dowDecoration: widget.dowDecoration,
               rowDecoration: widget.rowDecoration,
+              calendarMargin: widget.calendarMargin,
+              calendarPadding: widget.calendarPadding,
               onPageChanged: (index, focusedMonth) {
                 if (!_pageCallbackDisabled) {
                   if (!isSameDay(_focusedDay, focusedMonth)) {

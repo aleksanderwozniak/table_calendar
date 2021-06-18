@@ -31,6 +31,15 @@ class HeaderStyle {
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
 
+  /// Container decoration for title
+  final BoxDecoration titleDecoration;
+
+  /// Outside Margin for title
+  final EdgeInsets titleMargin;
+
+  /// Inside Padding for title
+  final EdgeInsets titlePadding;
+
   /// Style for FormatButton `Text`.
   final TextStyle formatButtonTextStyle;
 
@@ -79,6 +88,15 @@ class HeaderStyle {
   /// Decoration of the header.
   final Decoration decoration;
 
+  /// Height constraint
+  final double headerHeight;
+
+  /// Container decoration for left icon
+  final BoxDecoration leftIconDecoration;
+
+  /// Container decoration for right icon
+  final BoxDecoration rightIconDecoration;
+
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
     this.titleCentered = false,
@@ -86,6 +104,8 @@ class HeaderStyle {
     this.formatButtonShowsNext = true,
     this.titleTextFormatter,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
+    this.titleMargin = const EdgeInsets.all(0),
+    this.titlePadding = const EdgeInsets.all(0),
     this.formatButtonTextStyle = const TextStyle(),
     this.formatButtonDecoration = const BoxDecoration(
       border: const Border.fromBorderSide(BorderSide()),
@@ -97,12 +117,16 @@ class HeaderStyle {
         const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
     this.leftChevronPadding = const EdgeInsets.all(12.0),
     this.rightChevronPadding = const EdgeInsets.all(12.0),
-    this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.leftChevronMargin = const EdgeInsets.all(0),
+    this.rightChevronMargin = const EdgeInsets.all(0),
     this.leftChevronIcon = const Icon(Icons.chevron_left),
     this.rightChevronIcon = const Icon(Icons.chevron_right),
     this.leftChevronVisible = true,
     this.rightChevronVisible = true,
     this.decoration = const BoxDecoration(),
+    this.headerHeight = 40,
+    this.titleDecoration = const BoxDecoration(),
+    this.leftIconDecoration = const BoxDecoration(),
+    this.rightIconDecoration = const BoxDecoration(),
   });
 }

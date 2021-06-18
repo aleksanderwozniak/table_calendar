@@ -5,6 +5,12 @@ import 'package:flutter/widgets.dart';
 
 /// Class containing styling and configuration for `TableCalendar`'s content.
 class CalendarStyle {
+  /// Style of foreground Text for days before today
+  final TextStyle beforeTodayTextStyle;
+
+  /// Decoration for the cells before today
+  final BoxDecoration beforeTodayDecoration;
+
   /// Maximum amount of single event marker dots to be displayed.
   final int markersMaxCount;
 
@@ -99,6 +105,9 @@ class CalendarStyle {
   /// This will affect day cells that do not match the currently focused month.
   final TextStyle outsideTextStyle;
 
+  /// Style of foreground Text for weekends outside of current month.
+  final TextStyle outsideWeekendStyle;
+
   /// Decoration for day cells, of which the `day.month` is different than `focusedDay.month`.
   /// This will affect day cells that do not match the currently focused month.
   final Decoration outsideDecoration;
@@ -136,6 +145,12 @@ class CalendarStyle {
   /// Decoration for each interior row of day cells.
   final Decoration rowDecoration;
 
+  /// Outer margin for the calendar body
+  final EdgeInsets calendarMargin;
+
+  /// Inner padding for the calendar body
+  final EdgeInsets calendarPadding;
+
   /// Creates a `CalendarStyle` used by `TableCalendar` widget.
   const CalendarStyle({
     this.isTodayHighlighted = true,
@@ -156,10 +171,14 @@ class CalendarStyle {
       color: const Color(0xFF263238),
       shape: BoxShape.circle,
     ),
+    this.beforeTodayDecoration = const BoxDecoration(
+      color: const Color(0xFF9FA8DA),
+      shape: BoxShape.circle,
+    ),
     this.todayTextStyle = const TextStyle(
       color: const Color(0xFFFAFAFA),
       fontSize: 16.0,
-    ), //
+    ),
     this.todayDecoration = const BoxDecoration(
       color: const Color(0xFF9FA8DA),
       shape: BoxShape.circle,
@@ -191,7 +210,9 @@ class CalendarStyle {
     this.withinRangeTextStyle = const TextStyle(),
     this.withinRangeDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.outsideTextStyle = const TextStyle(color: const Color(0xFFAEAEAE)),
+    this.outsideWeekendStyle = const TextStyle(color: const Color(0xFFEF9A9A)),
     this.outsideDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.beforeTodayTextStyle = const TextStyle(color: const Color(0xFF9E9E9E)),
     this.disabledTextStyle = const TextStyle(color: const Color(0xFFBFBFBF)),
     this.disabledDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.holidayTextStyle = const TextStyle(color: const Color(0xFF5C6BC0)),
@@ -206,6 +227,8 @@ class CalendarStyle {
     this.defaultTextStyle = const TextStyle(),
     this.defaultDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.rowDecoration = const BoxDecoration(),
+    this.calendarMargin = const EdgeInsets.all(0),
+    this.calendarPadding = const EdgeInsets.all(0),
   });
 }
 

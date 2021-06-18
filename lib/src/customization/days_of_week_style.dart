@@ -26,11 +26,15 @@ class DaysOfWeekStyle {
   /// Style for weekend days on the top of calendar.
   final TextStyle weekendStyle;
 
+  /// Style fore the selected day
+  final TextStyle selectedStyle;
+
   /// Creates a `DaysOfWeekStyle` used by `TableCalendar` widget.
   const DaysOfWeekStyle({
     this.dowTextFormatter,
     this.decoration = const BoxDecoration(),
     this.weekdayStyle = const TextStyle(color: const Color(0xFF4F4F4F)),
     this.weekendStyle = const TextStyle(color: const Color(0xFF6A6A6A)),
+    this.selectedStyle = const TextStyle(color: const Color(0xFFFFBD0D))
   });
 }
