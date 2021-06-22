@@ -4,7 +4,7 @@
 import 'package:flutter/widgets.dart';
 
 /// Signature for a function that creates a widget for a given `day`.
-typedef DayBuilder = Widget? Function(BuildContext context, DateTime day);
+typedef DayBuilder = Widget? Function(BuildContext context, DateTime day, bool isSelected);
 
 /// Signature for a function that creates a widget for a given `day`.
 /// Additionally, contains the currently focused day.

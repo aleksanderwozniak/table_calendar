@@ -57,7 +57,7 @@ class CalendarHeader extends StatelessWidget {
               padding: headerStyle.leftChevronPadding,
             ),
           Expanded(
-            child: headerTitleBuilder?.call(context, focusedMonth) ??
+            child: headerTitleBuilder?.call(context, focusedMonth, false) ??
                 GestureDetector(
                   onTap: onHeaderTap,
                   onLongPress: onHeaderLongPress,

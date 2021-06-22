@@ -74,8 +74,6 @@ class CalendarCore extends StatelessWidget {
             : null;
 
         return CalendarPage(
-          margin: calendarMargin,
-          padding: calendarPadding,
           visibleDays: visibleDays,
           dowVisible: dowVisible,
           dowDecoration: dowDecoration,
@@ -83,7 +81,7 @@ class CalendarCore extends StatelessWidget {
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
-              child: dowBuilder?.call(context, day),
+              child: dowBuilder?.call(context, day, visibleDays.contains(focusedDay) && focusedDay!.weekday == day.weekday),
             );
           },
           dayBuilder: (context, day) {

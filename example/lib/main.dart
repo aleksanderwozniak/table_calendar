@@ -32,6 +32,9 @@ class _StartPageState extends State<StartPage> {
   final Color textColor = Color(0xFFFFFFFF);
   final Color lineColor = Color(0xFFFFFFFF);
 
+  DateTime selectedDay = DateTime.now();
+  bool get isToday => selectedDay.startOfDay == DateTime.now().startOfDay;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,23 +55,29 @@ class _StartPageState extends State<StartPage> {
               ),
             ),
             child: TableCalendar(
-              focusedDay: DateTime.now(), // initialSelectedDay: date perhaps
+              focusedDay: selectedDay, // initialSelectedDay: date perhaps
               firstDay: DateTime.now().subtract(Duration(days: 10000)),
               lastDay: DateTime.now().add(Duration(days: 10000)),
               startingDayOfWeek: StartingDayOfWeek.monday,
               headerVisible: true, // isOpen
               rowHeight: 40,
               locale: "en_EN",
+              selectedDayPredicate: (date) {
+                return date.startOfDay == selectedDay.startOfDay;
+              },
               onDaySelected: (DateTime date, _) {
-                // pickedDate = date;
+                setState(() {
+                  selectedDay = date;
+                });
               },
               calendarFormat: CalendarFormat.month,
               availableGestures: AvailableGestures.horizontalSwipe,
               calendarStyle: CalendarStyle(
                 calendarMargin: EdgeInsets.only(bottom: 5, top: true ? 10 : 0), // isOpen
-                isTodayHighlighted: true,
+                isTodayHighlighted: isToday,
                 todayTextStyle: TextStyle(color: textColor, fontSize: 16),
                 todayDecoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFFFFBD0D)),
+                selectedDecoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFFFFBD0D)),
                 beforeTodayDecoration: BoxDecoration(),
                 defaultDecoration: BoxDecoration(),
                 // todayColor: Color(0xFFFFFF),
