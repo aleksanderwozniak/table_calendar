@@ -56,6 +56,11 @@ class TableCalendar<T> extends StatefulWidget {
   /// Days after it will use `disabledStyle` and trigger `onDisabledDayTapped` callback.
   final DateTime lastDay;
 
+  /// DateTime that will be treated as today. Defaults to `DateTime.now()`.
+  ///
+  /// Overriding this property might be useful for testing.
+  final DateTime? currentDay;
+
   /// List of days treated as weekend days.
   /// Use built-in `DateTime` weekday constants (e.g. `DateTime.monday`) instead of `int` literals (e.g. `1`).
   final List<int> weekendDays;
@@ -202,6 +207,7 @@ class TableCalendar<T> extends StatefulWidget {
     required DateTime focusedDay,
     required DateTime firstDay,
     required DateTime lastDay,
+    DateTime? currentDay,
     this.locale,
     this.rangeStartDay,
     this.rangeEndDay,
@@ -259,6 +265,7 @@ class TableCalendar<T> extends StatefulWidget {
         focusedDay = normalizeDate(focusedDay),
         firstDay = normalizeDate(firstDay),
         lastDay = normalizeDate(lastDay),
+        currentDay = currentDay ?? DateTime.now(),
         super(key: key);
 
   @override
@@ -580,7 +587,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           children.add(rangeHighlight);
         }
 
-        final isToday = isSameDay(day, DateTime.now());
+        final isToday = isSameDay(day, widget.currentDay);
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
