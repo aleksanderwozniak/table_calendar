@@ -27,7 +27,7 @@ class CalendarBuilders<T> {
   /// Custom builder for day cells, with a priority over any other builder.
   final FocusedDayBuilder? prioritizedBuilder;
 
-  /// Custom builder for a day cell that matches `DateTime.now()`.
+  /// Custom builder for a day cell that matches the current day.
   final FocusedDayBuilder? todayBuilder;
 
   /// Custom builder for day cells that are currently marked as selected by `selectedDayPredicate`.
