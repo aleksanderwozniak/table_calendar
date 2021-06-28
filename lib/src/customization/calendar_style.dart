@@ -62,13 +62,13 @@ class CalendarStyle {
   /// Affects only `CalendarFormat.month`.
   final bool outsideDaysVisible;
 
-  /// Determines if a day cell that matches `DateTime.now()` should be highlighted.
+  /// Determines if a day cell that matches the current day should be highlighted.
   final bool isTodayHighlighted;
 
-  /// TextStyle for a day cell that matches `DateTime.now()`.
+  /// TextStyle for a day cell that matches the current day.
   final TextStyle todayTextStyle;
 
-  /// Decoration for a day cell that matches `DateTime.now()`.
+  /// Decoration for a day cell that matches the current day.
   final Decoration todayDecoration;
 
   /// TextStyle for day cells that are currently marked as selected by `selectedDayPredicate`.
