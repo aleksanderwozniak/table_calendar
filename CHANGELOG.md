@@ -1,3 +1,8 @@
+## [3.0.1]
+
+* Added pageAnimationEnabled property
+* Added currentDay property to improve widget testability
+
 ## [3.0.0]
 
 * Migrated to null safety
