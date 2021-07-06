@@ -201,6 +201,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController)? onCalendarCreated;
 
+  /// Distance to edge for each row.
+  final EdgeInsets rowEdgePadding;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key? key,
@@ -224,6 +227,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.pageAnimationEnabled = true,
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
+    this.rowEdgePadding = EdgeInsets.zero,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
@@ -475,6 +479,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
           child: TableCalendarBase(
+            rowEdgePadding: widget.rowEdgePadding,
             onCalendarCreated: (pageController) {
               _pageController = pageController;
               widget.onCalendarCreated?.call(pageController);
