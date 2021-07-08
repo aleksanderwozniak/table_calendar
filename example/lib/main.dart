@@ -144,7 +144,137 @@ class _StartPageState extends State<StartPage> {
                 ),
               ),
             ),
-          )
+          ),
+          Visibility(
+            visible: true,
+            child: Container(
+                padding: EdgeInsets.symmetric(vertical: 30),
+                color: Color(0xff1D275B),
+                child: Container(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "morning",
+                            style: TextStyle(color: lineColor),
+                          ),
+                          Container(
+                            height: 43,
+                            width: 100,
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(top: 5),
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Color(0xFF23252E),
+                              border: Border.all(
+                                color: lineColor.withOpacity(0.3),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(100),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Container(),
+                                Text(
+                                  '/',
+                                  style: TextStyle(fontSize: 18, color: textColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "noon",
+                            style: TextStyle(color: lineColor),
+                          ),
+                          Container(
+                            height: 43,
+                            width: 100,
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            margin: EdgeInsets.only(top: 5),
+                            decoration: BoxDecoration(
+                              color: Color(0xFF23252E),
+                              border: Border.all(
+                                color: lineColor.withOpacity(0.3),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(100),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Container(),
+                                Text(
+                                  '/',
+                                  style: TextStyle(fontSize: 18, color: textColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "evening",
+                            style: TextStyle(color: lineColor),
+                          ),
+                          Container(
+                            height: 43,
+                            width: 100,
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(top: 5),
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Color(0xFF23252E),
+                              border: Border.all(
+                                color: lineColor.withOpacity(0.3),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(100),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Container(),
+                                Text(
+                                  '/',
+                                  style: TextStyle(fontSize: 18, color: textColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ))),
+          ),
         ],
       ),
     );
