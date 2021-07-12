@@ -79,6 +79,9 @@ class HeaderStyle {
   /// Decoration of the header.
   final Decoration decoration;
 
+  /// Should navigation arrows be grouped on the right hand 
+  final bool navigationRight;
+
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
     this.titleCentered = false,
@@ -104,5 +107,6 @@ class HeaderStyle {
     this.leftChevronVisible = true,
     this.rightChevronVisible = true,
     this.decoration = const BoxDecoration(),
+    this.navigationRight = false
   });
 }
