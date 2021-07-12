@@ -201,6 +201,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController)? onCalendarCreated;
 
+  //// when set to True, the calendar will have an additional column indicating the week number.
+  final bool withWeekNum;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key? key,
@@ -256,6 +259,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.onPageChanged,
     this.onFormatChanged,
     this.onCalendarCreated,
+    this.withWeekNum = false,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -310,15 +314,15 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
   bool get _isRangeSelectionToggleable =>
       _rangeSelectionMode == RangeSelectionMode.toggledOn ||
-      _rangeSelectionMode == RangeSelectionMode.toggledOff;
+          _rangeSelectionMode == RangeSelectionMode.toggledOff;
 
   bool get _isRangeSelectionOn =>
       _rangeSelectionMode == RangeSelectionMode.toggledOn ||
-      _rangeSelectionMode == RangeSelectionMode.enforced;
+          _rangeSelectionMode == RangeSelectionMode.enforced;
 
   bool get _shouldBlockOutsideDays =>
       !widget.calendarStyle.outsideDaysVisible &&
-      widget.calendarFormat == CalendarFormat.month;
+          widget.calendarFormat == CalendarFormat.month;
 
   void _swipeCalendarFormat(SwipeDirection direction) {
     if (widget.onFormatChanged != null) {
@@ -463,8 +467,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 locale: widget.locale,
                 onFormatButtonTap: (format) {
                   assert(
-                    widget.onFormatChanged != null,
-                    'Using `FormatButton` without providing `onFormatChanged` will have no effect.',
+                  widget.onFormatChanged != null,
+                  'Using `FormatButton` without providing `onFormatChanged` will have no effect.',
                   );
 
                   widget.onFormatChanged?.call(format);
@@ -499,21 +503,22 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
             onVerticalSwipe: _swipeCalendarFormat,
+            withWeekNum: widget.withWeekNum,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
             },
             dowBuilder: (BuildContext context, DateTime day) {
               Widget? dowCell =
-                  widget.calendarBuilders.dowBuilder?.call(context, day);
+              widget.calendarBuilders.dowBuilder?.call(context, day);
 
               if (dowCell == null) {
-                final weekdayString = widget.daysOfWeekStyle.dowTextFormatter
-                        ?.call(day, widget.locale) ??
+                final weekdayString = (day.year == 1940) ? "week" : widget.daysOfWeekStyle.dowTextFormatter
+                    ?.call(day, widget.locale) ??
                     DateFormat.E(widget.locale).format(day);
-
+                // the 1940 part is for adding week number column
                 final isWeekend =
-                    _isWeekend(day, weekendDays: widget.weekendDays);
+                _isWeekend(day, weekendDays: widget.weekendDays);
 
                 dowCell = Center(
                   child: Text(
@@ -575,8 +580,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                   end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
                 ),
                 height:
-                    (shorterSide - widget.calendarStyle.cellMargin.vertical) *
-                        widget.calendarStyle.rangeHighlightScale,
+                (shorterSide - widget.calendarStyle.cellMargin.vertical) *
+                    widget.calendarStyle.rangeHighlightScale,
                 color: widget.calendarStyle.rangeHighlightColor,
               ),
             );
@@ -613,7 +618,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         if (!isDisabled) {
           final events = widget.eventLoader?.call(day) ?? [];
           Widget? markerWidget =
-              widget.calendarBuilders.markerBuilder?.call(context, day, events);
+          widget.calendarBuilders.markerBuilder?.call(context, day, events);
 
           if (events.isNotEmpty && markerWidget == null) {
             final center = constraints.maxHeight / 2;
@@ -667,7 +672,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
   Widget _buildSingleMarker(DateTime day, T event, double markerSize) {
     return widget.calendarBuilders.singleMarkerBuilder
-            ?.call(context, day, event) ??
+        ?.call(context, day, event) ??
         Container(
           width: markerSize,
           height: markerSize,
@@ -728,9 +733,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   bool _isWeekend(
-    DateTime day, {
-    List<int> weekendDays = const [DateTime.saturday, DateTime.sunday],
-  }) {
+      DateTime day, {
+        List<int> weekendDays = const [DateTime.saturday, DateTime.sunday],
+      }) {
     return weekendDays.contains(day.weekday);
   }
 }

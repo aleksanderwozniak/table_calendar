@@ -30,6 +30,7 @@ class TableCalendarBase extends StatefulWidget {
   final SimpleSwipeConfig simpleSwipeConfig;
   final Map<CalendarFormat, String> availableCalendarFormats;
   final SwipeCallback? onVerticalSwipe;
+  final bool withWeekNum;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
 
@@ -54,6 +55,7 @@ class TableCalendarBase extends StatefulWidget {
     this.pageAnimationCurve = Curves.easeOut,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.availableGestures = AvailableGestures.all,
+    this.withWeekNum = false,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
       verticalThreshold: 25.0,
       swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
@@ -132,11 +134,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
 
   bool get _canScrollHorizontally =>
       widget.availableGestures == AvailableGestures.all ||
-      widget.availableGestures == AvailableGestures.horizontalSwipe;
+          widget.availableGestures == AvailableGestures.horizontalSwipe;
 
   bool get _canScrollVertically =>
       widget.availableGestures == AvailableGestures.all ||
-      widget.availableGestures == AvailableGestures.verticalSwipe;
+          widget.availableGestures == AvailableGestures.verticalSwipe;
 
   void _updatePage({bool shouldAnimate = false}) {
     final currentIndex = _calculateFocusedPage(
@@ -154,7 +156,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
     if (shouldAnimate && widget.pageAnimationEnabled) {
       if ((currentIndex - _previousIndex).abs() > 1) {
         final jumpIndex =
-            currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
+        currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
 
         _pageController.jumpToPage(jumpIndex);
       }
@@ -186,7 +188,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
             valueListenable: _pageHeight,
             builder: (context, value, child) {
               final height =
-                  constraints.hasBoundedHeight ? constraints.maxHeight : value;
+              constraints.hasBoundedHeight ? constraints.maxHeight : value;
 
               return AnimatedSize(
                 vsync: this,
@@ -217,6 +219,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
               rowHeight: widget.rowHeight,
               dowDecoration: widget.dowDecoration,
               rowDecoration: widget.rowDecoration,
+              withWeekNum: widget.withWeekNum,
               onPageChanged: (index, focusedMonth) {
                 if (!_pageCallbackDisabled) {
                   if (!isSameDay(_focusedDay, focusedMonth)) {
