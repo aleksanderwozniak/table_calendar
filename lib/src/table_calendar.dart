@@ -516,11 +516,13 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                     _isWeekend(day, weekendDays: widget.weekendDays);
 
                 dowCell = Center(
-                  child: Text(
-                    weekdayString,
-                    style: isWeekend
-                        ? widget.daysOfWeekStyle.weekendStyle
-                        : widget.daysOfWeekStyle.weekdayStyle,
+                  child: ExcludeSemantics(
+                    child: Text(
+                      weekdayString,
+                      style: isWeekend
+                          ? widget.daysOfWeekStyle.weekendStyle
+                          : widget.daysOfWeekStyle.weekdayStyle,
+                    ),
                   ),
                 );
               }
@@ -606,6 +608,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isDisabled: isDisabled,
           isWeekend: isWeekend,
           isHoliday: widget.holidayPredicate?.call(day) ?? false,
+          locale: widget.locale,
         );
 
         children.add(content);
