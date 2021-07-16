@@ -28,6 +28,7 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
+  final bool withWeekNum;
 
   const CalendarCore({
     Key? key,
@@ -49,11 +50,14 @@ class CalendarCore extends StatelessWidget {
     this.dowDecoration,
     this.rowDecoration,
     this.scrollPhysics,
+    this.withWeekNum = false,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+
     return PageView.builder(
       controller: pageController,
       physics: scrollPhysics,
@@ -66,7 +70,7 @@ class CalendarCore extends StatelessWidget {
         final actualDowHeight = dowVisible ? dowHeight! : 0.0;
         final constrainedRowHeight = constraints.hasBoundedHeight
             ? (constraints.maxHeight - actualDowHeight) /
-                _getRowCount(calendarFormat, baseDay)
+            _getRowCount(calendarFormat, baseDay)
             : null;
 
         return CalendarPage(
@@ -74,6 +78,7 @@ class CalendarCore extends StatelessWidget {
           dowVisible: dowVisible,
           dowDecoration: dowDecoration,
           rowDecoration: rowDecoration,
+          withWeekNum: withWeekNum,
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
@@ -89,7 +94,6 @@ class CalendarCore extends StatelessWidget {
               baseDay =
                   _getFocusedDay(calendarFormat, previousFocusedDay, index);
             }
-
             return SizedBox(
               height: constrainedRowHeight ?? rowHeight,
               child: dayBuilder(context, day, baseDay),
@@ -245,7 +249,7 @@ class CalendarCore extends StatelessWidget {
     final dayCount = last.difference(first).inDays + 1;
     return List.generate(
       dayCount,
-      (index) => DateTime.utc(first.year, first.month, first.day + index),
+          (index) => DateTime.utc(first.year, first.month, first.day + index),
     );
   }
 
