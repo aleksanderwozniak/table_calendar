@@ -16,6 +16,7 @@ import 'shared/utils.dart';
 import 'table_calendar_base.dart';
 import 'widgets/calendar_header.dart';
 import 'widgets/cell_content.dart';
+import 'dart:developer' as dev;
 
 /// Signature for `onDaySelected` callback. Contains the selected day and focused day.
 typedef OnDaySelected = void Function(DateTime selectedDay, DateTime focusedDay);
@@ -267,13 +268,17 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   late RangeSelectionMode _rangeSelectionMode;
   DateTime? _firstSelectedDay;
 
-  /// Current month shown in the header
-  DateTime selectedMonth = DateTime.now();
+  /// Currently selected day
+  /// This is independent from _focusedDay because it handles the DOW style
+  /// and _focusedDay handles swiping (_focusedDay changes when swiping and I need a date selected on tap)
+  /// Initial value should be the same as the initial value of _focusedDay.
+  late final DateTime _tappedDay;
 
   @override
   void initState() {
     super.initState();
     _focusedDay = ValueNotifier(widget.focusedDay);
+    _tappedDay = _focusedDay.value;
     _rangeSelectionMode = widget.rangeSelectionMode;
   }
 
@@ -390,6 +395,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   void _updateFocusOnTap(DateTime day) {
     if (widget.pageJumpingEnabled) {
       _focusedDay.value = day;
+      _tappedDay = day;
       return;
     }
 
@@ -415,9 +421,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   void _onLeftChevronTap() {
-    setState(() {
-      selectedMonth = DateTime(selectedMonth.year, selectedMonth.month - 1, selectedMonth.day);
-    });
     _pageController.previousPage(
       duration: widget.pageAnimationDuration,
       curve: widget.pageAnimationCurve,
@@ -425,9 +428,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   void _onRightChevronTap() {
-    setState(() {
-      selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, selectedMonth.day);
-    });
     _pageController.nextPage(
       duration: widget.pageAnimationDuration,
       curve: widget.pageAnimationCurve,
@@ -470,8 +470,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                     alignment: widget.headerStyle.titleCentered ? Alignment.center : Alignment.centerLeft,
                     child: Text(
                       widget.headerStyle.titleTextFormatter != null
-                          ? widget.headerStyle.titleTextFormatter!(selectedMonth, widget.locale)
-                          : DateFormat.yMMMM(widget.locale).format(selectedMonth),
+                          ? widget.headerStyle.titleTextFormatter!(_focusedDay.value, widget.locale)
+                          : DateFormat.yMMMM(widget.locale).format(_focusedDay.value),
                       style: widget.headerStyle.titleTextStyle,
                       textAlign: widget.headerStyle.titleCentered ? TextAlign.center : TextAlign.start,
                     ),
@@ -525,6 +525,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 widget.onCalendarCreated?.call(pageController);
               },
               focusedDay: _focusedDay.value,
+              tappedDay: _tappedDay,
               calendarFormat: widget.calendarFormat,
               availableGestures: widget.availableGestures,
               firstDay: widget.firstDay,
@@ -545,7 +546,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
               onVerticalSwipe: _swipeCalendarFormat,
               onPageChanged: (focusedDay) {
-                _focusedDay.value = focusedDay;
+                // setState because the custom header doesn't update otherwise
+                setState(() {
+                  _focusedDay.value = focusedDay;
+                });
                 widget.onPageChanged?.call(focusedDay);
               },
               dowBuilder: (BuildContext context, DateTime day, bool isSelected) {

@@ -10,6 +10,7 @@ typedef _OnCalendarPageChanged = void Function(int pageIndex, DateTime focusedDa
 
 class CalendarCore extends StatelessWidget {
   final DateTime? focusedDay;
+  final DateTime? tappedDay;
   final DateTime firstDay;
   final DateTime lastDay;
   final CalendarFormat calendarFormat;
@@ -44,6 +45,7 @@ class CalendarCore extends StatelessWidget {
     this.calendarFormat = CalendarFormat.month,
     this.pageController,
     this.focusedDay,
+    this.tappedDay,
     this.previousIndex,
     this.sixWeekMonthsEnforced = false,
     this.dowVisible = true,
@@ -78,7 +80,7 @@ class CalendarCore extends StatelessWidget {
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
-              child: dowBuilder?.call(context, day, visibleDays.contains(focusedDay) && focusedDay!.weekday == day.weekday),
+              child: dowBuilder?.call(context, day, visibleDays.contains(tappedDay) && tappedDay!.weekday == day.weekday),
             );
           },
           dayBuilder: (context, day) {

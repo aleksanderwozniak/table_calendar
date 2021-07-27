@@ -11,6 +11,7 @@ class TableCalendarBase extends StatefulWidget {
   final DateTime firstDay;
   final DateTime lastDay;
   final DateTime focusedDay;
+  final DateTime tappedDay;
   final CalendarFormat calendarFormat;
   final DayBuilder? dowBuilder;
   final FocusedDayBuilder dayBuilder;
@@ -38,6 +39,7 @@ class TableCalendarBase extends StatefulWidget {
     required this.firstDay,
     required this.lastDay,
     required this.focusedDay,
+    required this.tappedDay,
     this.calendarFormat = CalendarFormat.month,
     this.dowBuilder,
     required this.dayBuilder,
@@ -75,11 +77,11 @@ class TableCalendarBase extends StatefulWidget {
   _TableCalendarBaseState createState() => _TableCalendarBaseState();
 }
 
-class _TableCalendarBaseState extends State<TableCalendarBase>
-    with SingleTickerProviderStateMixin {
+class _TableCalendarBaseState extends State<TableCalendarBase> with SingleTickerProviderStateMixin {
   late final ValueNotifier<double> _pageHeight;
   late final PageController _pageController;
   late DateTime _focusedDay;
+  late DateTime _tappedDay;
   late int _previousIndex;
   late bool _pageCallbackDisabled;
 
@@ -87,12 +89,12 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
   void initState() {
     super.initState();
     _focusedDay = widget.focusedDay;
+    _tappedDay = widget.tappedDay;
 
     final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
     _pageHeight = ValueNotifier(_getPageHeight(rowCount));
 
-    final initialPage = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, _focusedDay);
+    final initialPage = _calculateFocusedPage(widget.calendarFormat, widget.firstDay, _focusedDay);
 
     _pageController = PageController(initialPage: initialPage);
     widget.onCalendarCreated?.call(_pageController);
@@ -131,30 +133,23 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
   }
 
   bool get _canScrollHorizontally =>
-      widget.availableGestures == AvailableGestures.all ||
-      widget.availableGestures == AvailableGestures.horizontalSwipe;
+      widget.availableGestures == AvailableGestures.all || widget.availableGestures == AvailableGestures.horizontalSwipe;
 
   bool get _canScrollVertically =>
-      widget.availableGestures == AvailableGestures.all ||
-      widget.availableGestures == AvailableGestures.verticalSwipe;
+      widget.availableGestures == AvailableGestures.all || widget.availableGestures == AvailableGestures.verticalSwipe;
 
   void _updatePage({bool shouldAnimate = false}) {
-    final currentIndex = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, _focusedDay);
+    final currentIndex = _calculateFocusedPage(widget.calendarFormat, widget.firstDay, _focusedDay);
 
-    final endIndex = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, widget.lastDay);
+    final endIndex = _calculateFocusedPage(widget.calendarFormat, widget.firstDay, widget.lastDay);
 
-    if (currentIndex != _previousIndex ||
-        currentIndex == 0 ||
-        currentIndex == endIndex) {
+    if (currentIndex != _previousIndex || currentIndex == 0 || currentIndex == endIndex) {
       _pageCallbackDisabled = true;
     }
 
     if (shouldAnimate && widget.pageAnimationEnabled) {
       if ((currentIndex - _previousIndex).abs() > 1) {
-        final jumpIndex =
-            currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
+        final jumpIndex = currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
 
         _pageController.jumpToPage(jumpIndex);
       }
@@ -185,8 +180,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
           child: ValueListenableBuilder<double>(
             valueListenable: _pageHeight,
             builder: (context, value, child) {
-              final height =
-                  constraints.hasBoundedHeight ? constraints.maxHeight : value;
+              final height = constraints.hasBoundedHeight ? constraints.maxHeight : value;
 
               return AnimatedSize(
                 vsync: this,
@@ -203,15 +197,14 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
               child: CalendarCore(
                 constraints: constraints,
                 pageController: _pageController,
-                scrollPhysics: _canScrollHorizontally
-                    ? PageScrollPhysics()
-                    : NeverScrollableScrollPhysics(),
+                scrollPhysics: _canScrollHorizontally ? PageScrollPhysics() : NeverScrollableScrollPhysics(),
                 firstDay: widget.firstDay,
                 lastDay: widget.lastDay,
                 startingDayOfWeek: widget.startingDayOfWeek,
                 calendarFormat: widget.calendarFormat,
                 previousIndex: _previousIndex,
                 focusedDay: _focusedDay,
+                tappedDay: _tappedDay,
                 sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
                 dowVisible: widget.dowVisible,
                 dowHeight: widget.dowHeight,
@@ -224,9 +217,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
                       _focusedDay = focusedMonth;
                     }
 
-                    if (widget.calendarFormat == CalendarFormat.month &&
-                        !widget.sixWeekMonthsEnforced &&
-                        !constraints.hasBoundedHeight) {
+                    if (widget.calendarFormat == CalendarFormat.month && !widget.sixWeekMonthsEnforced && !constraints.hasBoundedHeight) {
                       final rowCount = _getRowCount(
                         widget.calendarFormat,
                         focusedMonth,
@@ -255,8 +246,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
     return dowHeight + rowCount * widget.rowHeight;
   }
 
-  int _calculateFocusedPage(
-      CalendarFormat format, DateTime startDay, DateTime focusedDay) {
+  int _calculateFocusedPage(CalendarFormat format, DateTime startDay, DateTime focusedDay) {
     switch (format) {
       case CalendarFormat.month:
         return _getMonthCount(startDay, focusedDay);
@@ -305,13 +295,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
   }
 
   int _getDaysBefore(DateTime firstDay) {
-    return (firstDay.weekday + 7 - getWeekdayNumber(widget.startingDayOfWeek)) %
-        7;
+    return (firstDay.weekday + 7 - getWeekdayNumber(widget.startingDayOfWeek)) % 7;
   }
 
   int _getDaysAfter(DateTime lastDay) {
-    int invertedStartingWeekday =
-        8 - getWeekdayNumber(widget.startingDayOfWeek);
+    int invertedStartingWeekday = 8 - getWeekdayNumber(widget.startingDayOfWeek);
 
     int daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7);
     if (daysAfter == 7) {
@@ -331,9 +319,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
-    final date = month.month < 12
-        ? DateTime.utc(month.year, month.month + 1, 1)
-        : DateTime.utc(month.year + 1, 1, 1);
+    final date = month.month < 12 ? DateTime.utc(month.year, month.month + 1, 1) : DateTime.utc(month.year + 1, 1, 1);
     return date.subtract(const Duration(days: 1));
   }
 }
