@@ -123,6 +123,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> with SingleTicker
       final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
       _pageHeight.value = _getPageHeight(rowCount);
     }
+
+    _tappedDay = widget.tappedDay;
   }
 
   @override

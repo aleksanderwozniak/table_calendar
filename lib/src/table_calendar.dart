@@ -272,7 +272,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   /// This is independent from _focusedDay because it handles the DOW style
   /// and _focusedDay handles swiping (_focusedDay changes when swiping and I need a date selected on tap)
   /// Initial value should be the same as the initial value of _focusedDay.
-  late final DateTime _tappedDay;
+  DateTime? _tappedDay;
 
   @override
   void initState() {
@@ -395,7 +395,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   void _updateFocusOnTap(DateTime day) {
     if (widget.pageJumpingEnabled) {
       _focusedDay.value = day;
-      _tappedDay = day;
       return;
     }
 
@@ -410,6 +409,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     } else {
       _focusedDay.value = day;
     }
+
+    setState(() {
+      _tappedDay = day;
+    });
   }
 
   void _toggleRangeSelection() {
@@ -525,7 +528,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 widget.onCalendarCreated?.call(pageController);
               },
               focusedDay: _focusedDay.value,
-              tappedDay: _tappedDay,
+              tappedDay: _tappedDay!,
               calendarFormat: widget.calendarFormat,
               availableGestures: widget.availableGestures,
               firstDay: widget.firstDay,
