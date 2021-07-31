@@ -49,6 +49,12 @@ class CalendarStyle {
   /// Margin of each individual day cell.
   final EdgeInsets cellMargin;
 
+  /// Padding of each individual day cell.
+  final EdgeInsets cellPadding;
+
+  /// Alignment of each individual day cell.
+  final AlignmentGeometry cellAlignment;
+
   /// Proportion of range selection highlight size in relation to day cell size.
   ///
   /// Includes `cellMargin` for calculations.
@@ -150,6 +156,8 @@ class CalendarStyle {
     this.markersAlignment = Alignment.bottomCenter,
     this.markersMaxCount = 4,
     this.cellMargin = const EdgeInsets.all(6.0),
+    this.cellPadding = const EdgeInsets.all(0),
+    this.cellAlignment = Alignment.center,
     this.markersOffset = const PositionedOffset(),
     this.rangeHighlightColor = const Color(0xFFBBDDFF),
     this.markerDecoration = const BoxDecoration(
