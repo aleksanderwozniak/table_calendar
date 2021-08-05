@@ -20,7 +20,6 @@ class TableCalendarBase extends StatefulWidget {
   final bool dowVisible;
   final Decoration? dowDecoration;
   final Decoration? rowDecoration;
-  final EdgeInsets rowEdgePadding;
   final Duration formatAnimationDuration;
   final Curve formatAnimationCurve;
   final bool pageAnimationEnabled;
@@ -55,7 +54,6 @@ class TableCalendarBase extends StatefulWidget {
     this.pageAnimationCurve = Curves.easeOut,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.availableGestures = AvailableGestures.all,
-    this.rowEdgePadding = EdgeInsets.zero,
     this.simpleSwipeConfig = const SimpleSwipeConfig(
       verticalThreshold: 25.0,
       swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
@@ -202,7 +200,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
               );
             },
             child: CalendarCore(
-              rowEdgePadding: widget.rowEdgePadding,
               constraints: constraints,
               pageController: _pageController,
               scrollPhysics: _canScrollHorizontally
