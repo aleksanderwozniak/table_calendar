@@ -136,6 +136,9 @@ class CalendarStyle {
   /// Decoration for each interior row of day cells.
   final Decoration rowDecoration;
 
+  /// Border for table
+  final TableBorder tblBorder;
+
   /// Creates a `CalendarStyle` used by `TableCalendar` widget.
   const CalendarStyle({
     this.isTodayHighlighted = true,
@@ -206,6 +209,7 @@ class CalendarStyle {
     this.defaultTextStyle = const TextStyle(),
     this.defaultDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.rowDecoration = const BoxDecoration(),
+    this.tblBorder = const TableBorder(),
   });
 }
 

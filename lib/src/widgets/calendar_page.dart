@@ -9,6 +9,7 @@ class CalendarPage extends StatelessWidget {
   final List<DateTime> visibleDays;
   final Decoration? dowDecoration;
   final Decoration? rowDecoration;
+  final TableBorder? tblBorder;
   final bool dowVisible;
 
   const CalendarPage({
@@ -18,6 +19,7 @@ class CalendarPage extends StatelessWidget {
     required this.dayBuilder,
     this.dowDecoration,
     this.rowDecoration,
+    this.tblBorder,
     this.dowVisible = true,
   })  : assert(!dowVisible || dowBuilder != null),
         super(key: key);
@@ -25,6 +27,7 @@ class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Table(
+      border: tblBorder,
       children: [
         if (dowVisible) _buildDaysOfWeek(context),
         ..._buildCalendarDays(context),
