@@ -53,12 +53,12 @@ class CellContent extends StatelessWidget {
     }
 
     final text = '${day.day}';
-    final weekdayString = DateFormat.EEEE(locale).format(day);
-    final semanticsLabelString =
-        '$weekdayString, ${DateFormat.yMMMMd(locale).format(day)}';
-
     final margin = calendarStyle.cellMargin;
     final duration = const Duration(milliseconds: 250);
+
+    final dowLabel = DateFormat.EEEE(locale).format(day);
+    final dayLabel = DateFormat.yMMMMd(locale).format(day);
+    final semanticsLabel = '$dowLabel, $dayLabel';
 
     if (isDisabled) {
       cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
@@ -67,10 +67,7 @@ class CellContent extends StatelessWidget {
             margin: margin,
             decoration: calendarStyle.disabledDecoration,
             alignment: Alignment.center,
-            child: Semantics(
-                label: semanticsLabelString,
-                excludeSemantics: true,
-                child: Text(text, style: calendarStyle.disabledTextStyle)),
+            child: Text(text, style: calendarStyle.disabledTextStyle),
           );
     } else if (isSelected) {
       cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
@@ -79,10 +76,7 @@ class CellContent extends StatelessWidget {
             margin: margin,
             decoration: calendarStyle.selectedDecoration,
             alignment: Alignment.center,
-            child: Semantics(
-                label: semanticsLabelString,
-                excludeSemantics: true,
-                child: Text(text, style: calendarStyle.selectedTextStyle)),
+            child: Text(text, style: calendarStyle.selectedTextStyle),
           );
     } else if (isRangeStart) {
       cell =
@@ -92,11 +86,7 @@ class CellContent extends StatelessWidget {
                 margin: margin,
                 decoration: calendarStyle.rangeStartDecoration,
                 alignment: Alignment.center,
-                child: Semantics(
-                    label: semanticsLabelString,
-                    excludeSemantics: true,
-                    child:
-                        Text(text, style: calendarStyle.rangeStartTextStyle)),
+                child: Text(text, style: calendarStyle.rangeStartTextStyle),
               );
     } else if (isRangeEnd) {
       cell = calendarBuilders.rangeEndBuilder?.call(context, day, focusedDay) ??
@@ -105,10 +95,7 @@ class CellContent extends StatelessWidget {
             margin: margin,
             decoration: calendarStyle.rangeEndDecoration,
             alignment: Alignment.center,
-            child: Semantics(
-                label: semanticsLabelString,
-                excludeSemantics: true,
-                child: Text(text, style: calendarStyle.rangeEndTextStyle)),
+            child: Text(text, style: calendarStyle.rangeEndTextStyle),
           );
     } else if (isToday && isTodayHighlighted) {
       cell = calendarBuilders.todayBuilder?.call(context, day, focusedDay) ??
@@ -117,10 +104,7 @@ class CellContent extends StatelessWidget {
             margin: margin,
             decoration: calendarStyle.todayDecoration,
             alignment: Alignment.center,
-            child: Semantics(
-                label: semanticsLabelString,
-                excludeSemantics: true,
-                child: Text(text, style: calendarStyle.todayTextStyle)),
+            child: Text(text, style: calendarStyle.todayTextStyle),
           );
     } else if (isHoliday) {
       cell = calendarBuilders.holidayBuilder?.call(context, day, focusedDay) ??
@@ -129,10 +113,7 @@ class CellContent extends StatelessWidget {
             margin: margin,
             decoration: calendarStyle.holidayDecoration,
             alignment: Alignment.center,
-            child: Semantics(
-                label: semanticsLabelString,
-                excludeSemantics: true,
-                child: Text(text, style: calendarStyle.holidayTextStyle)),
+            child: Text(text, style: calendarStyle.holidayTextStyle),
           );
     } else if (isWithinRange) {
       cell =
@@ -142,11 +123,7 @@ class CellContent extends StatelessWidget {
                 margin: margin,
                 decoration: calendarStyle.withinRangeDecoration,
                 alignment: Alignment.center,
-                child: Semantics(
-                    label: semanticsLabelString,
-                    excludeSemantics: true,
-                    child:
-                        Text(text, style: calendarStyle.withinRangeTextStyle)),
+                child: Text(text, style: calendarStyle.withinRangeTextStyle),
               );
     } else if (isOutside) {
       cell = calendarBuilders.outsideBuilder?.call(context, day, focusedDay) ??
@@ -155,10 +132,7 @@ class CellContent extends StatelessWidget {
             margin: margin,
             decoration: calendarStyle.outsideDecoration,
             alignment: Alignment.center,
-            child: Semantics(
-                label: semanticsLabelString,
-                excludeSemantics: true,
-                child: Text(text, style: calendarStyle.outsideTextStyle)),
+            child: Text(text, style: calendarStyle.outsideTextStyle),
           );
     } else {
       cell = calendarBuilders.defaultBuilder?.call(context, day, focusedDay) ??
@@ -169,19 +143,19 @@ class CellContent extends StatelessWidget {
                 ? calendarStyle.weekendDecoration
                 : calendarStyle.defaultDecoration,
             alignment: Alignment.center,
-            child: Semantics(
-              label: semanticsLabelString,
-              excludeSemantics: true,
-              child: Text(
-                text,
-                style: isWeekend
-                    ? calendarStyle.weekendTextStyle
-                    : calendarStyle.defaultTextStyle,
-              ),
+            child: Text(
+              text,
+              style: isWeekend
+                  ? calendarStyle.weekendTextStyle
+                  : calendarStyle.defaultTextStyle,
             ),
           );
     }
 
-    return cell;
+    return Semantics(
+      label: semanticsLabel,
+      excludeSemantics: true,
+      child: cell,
+    );
   }
 }
