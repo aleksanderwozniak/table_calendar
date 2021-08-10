@@ -32,7 +32,7 @@ Add the following line to `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  table_calendar: ^3.0.1
+  table_calendar: ^3.0.2
 ```
 
 ### Basic setup
@@ -184,9 +184,6 @@ calendarBuilders: CalendarBuilders(
   },
 ),
 ```
-
-
-
 
 ### Locale
 

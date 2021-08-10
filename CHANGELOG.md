@@ -1,3 +1,7 @@
+## [3.0.2]
+
+* Improved semantic labels for screen readers
+
 ## [3.0.1]
 
 * Added pageAnimationEnabled property
