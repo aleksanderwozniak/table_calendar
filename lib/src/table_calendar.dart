@@ -144,7 +144,7 @@ class TableCalendar<T> extends StatefulWidget {
   final DaysOfWeekStyle daysOfWeekStyle;
 
   /// Style for `TableCalendar`'s content.
-  final CalendarStyle calendarStyle;
+  final CalendarStyle<T> calendarStyle;
 
   /// Set of custom builders for `TableCalendar` to work with.
   /// Use those to fully tailor the UI.
@@ -675,7 +675,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           width: markerSize,
           height: markerSize,
           margin: widget.calendarStyle.markerMargin,
-          decoration: widget.calendarStyle.markerDecoration,
+          decoration:
+              widget.calendarStyle.markerDecorationFn?.call(event) ??
+                  widget.calendarStyle.markerDecoration,
         );
   }
 

@@ -4,7 +4,7 @@
 import 'package:flutter/widgets.dart';
 
 /// Class containing styling and configuration for `TableCalendar`'s content.
-class CalendarStyle {
+class CalendarStyle<T> {
   /// Maximum amount of single event marker dots to be displayed.
   final int markersMaxCount;
 
@@ -42,6 +42,9 @@ class CalendarStyle {
 
   /// Decoration of single event markers. Affects each marker dot.
   final Decoration markerDecoration;
+
+  /// Optional function to decorate single event markers based on given events.
+  final Decoration? Function(T event)? markerDecorationFn;
 
   /// Margin of single event markers. Affects each marker dot.
   final EdgeInsets markerMargin;
@@ -156,6 +159,7 @@ class CalendarStyle {
       color: const Color(0xFF263238),
       shape: BoxShape.circle,
     ),
+    this.markerDecorationFn,
     this.todayTextStyle = const TextStyle(
       color: const Color(0xFFFAFAFA),
       fontSize: 16.0,
