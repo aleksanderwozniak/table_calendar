@@ -20,6 +20,7 @@ class TableCalendarBase extends StatefulWidget {
   final bool dowVisible;
   final Decoration? dowDecoration;
   final Decoration? rowDecoration;
+  final TableBorder? tableBorder;
   final Duration formatAnimationDuration;
   final Curve formatAnimationCurve;
   final bool pageAnimationEnabled;
@@ -47,6 +48,7 @@ class TableCalendarBase extends StatefulWidget {
     this.dowVisible = true,
     this.dowDecoration,
     this.rowDecoration,
+    this.tableBorder,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
     this.pageAnimationEnabled = true,
@@ -217,6 +219,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
               rowHeight: widget.rowHeight,
               dowDecoration: widget.dowDecoration,
               rowDecoration: widget.rowDecoration,
+              tableBorder: widget.tableBorder,
               onPageChanged: (index, focusedMonth) {
                 if (!_pageCallbackDisabled) {
                   if (!isSameDay(_focusedDay, focusedMonth)) {
