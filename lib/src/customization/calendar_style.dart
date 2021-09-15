@@ -136,8 +136,8 @@ class CalendarStyle {
   /// Decoration for each interior row of day cells.
   final Decoration rowDecoration;
 
-  /// Border for table
-  final TableBorder tblBorder;
+  /// Border for the internal `Table` widget.
+  final TableBorder tableBorder;
 
   /// Creates a `CalendarStyle` used by `TableCalendar` widget.
   const CalendarStyle({
@@ -209,7 +209,7 @@ class CalendarStyle {
     this.defaultTextStyle = const TextStyle(),
     this.defaultDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.rowDecoration = const BoxDecoration(),
-    this.tblBorder = const TableBorder(),
+    this.tableBorder = const TableBorder(),
   });
 }
 
