@@ -32,6 +32,9 @@ enum RangeSelectionMode { disabled, toggledOff, toggledOn, enforced }
 class TableCalendar<T> extends StatefulWidget {
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
+  /// If to show calendar.
+ final bool showCalendar;
+
   /// If nothing is provided, a default locale will be used.
   final dynamic locale;
 
@@ -204,6 +207,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key? key,
+    this.showCalendar = true,
     required DateTime focusedDay,
     required DateTime firstDay,
     required DateTime lastDay,
@@ -472,6 +476,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               );
             },
           ),
+          if(widget.showCalendar)
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
           child: TableCalendarBase(
