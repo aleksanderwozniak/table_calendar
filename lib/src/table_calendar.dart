@@ -33,7 +33,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
   /// If to show calendar.
- final bool showCalendar;
+  final bool showCalendar;
 
   /// If nothing is provided, a default locale will be used.
   final dynamic locale;
@@ -205,10 +205,10 @@ class TableCalendar<T> extends StatefulWidget {
   final void Function(PageController pageController)? onCalendarCreated;
 
   /// Called when the right calendar header chevron is tapped.
-  final void onRightChevronTap;
+  final void Function()? onRightChevronTap;
 
   /// Called when the left calendar header chevron is tapped.
-  final void onLeftChevronTap;
+  final void Function()? onLeftChevronTap;
 
   /// Creates a `TableCalendar` widget.
   TableCalendar({
@@ -465,7 +465,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
                 focusedMonth: value,
                 onLeftChevronTap: widget.onLeftChevronTap ?? _onLeftChevronTap,
-                onRightChevronTap: widget.onRightChevronTap ?? _onRightChevronTap,
+                onRightChevronTap:
+                    widget.onRightChevronTap ?? _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
                 onHeaderLongPress: () =>
                     widget.onHeaderLongPressed?.call(value),
@@ -484,75 +485,75 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               );
             },
           ),
-          if(widget.showCalendar)
-        Flexible(
-          flex: widget.shouldFillViewport ? 1 : 0,
-          child: TableCalendarBase(
-            onCalendarCreated: (pageController) {
-              _pageController = pageController;
-              widget.onCalendarCreated?.call(pageController);
-            },
-            focusedDay: _focusedDay.value,
-            calendarFormat: widget.calendarFormat,
-            availableGestures: widget.availableGestures,
-            firstDay: widget.firstDay,
-            lastDay: widget.lastDay,
-            startingDayOfWeek: widget.startingDayOfWeek,
-            dowDecoration: widget.daysOfWeekStyle.decoration,
-            rowDecoration: widget.calendarStyle.rowDecoration,
-            tableBorder: widget.calendarStyle.tableBorder,
-            dowVisible: widget.daysOfWeekVisible,
-            dowHeight: widget.daysOfWeekHeight,
-            rowHeight: widget.rowHeight,
-            formatAnimationDuration: widget.formatAnimationDuration,
-            formatAnimationCurve: widget.formatAnimationCurve,
-            pageAnimationEnabled: widget.pageAnimationEnabled,
-            pageAnimationDuration: widget.pageAnimationDuration,
-            pageAnimationCurve: widget.pageAnimationCurve,
-            availableCalendarFormats: widget.availableCalendarFormats,
-            simpleSwipeConfig: widget.simpleSwipeConfig,
-            sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
-            onVerticalSwipe: _swipeCalendarFormat,
-            onPageChanged: (focusedDay) {
-              _focusedDay.value = focusedDay;
-              widget.onPageChanged?.call(focusedDay);
-            },
-            dowBuilder: (BuildContext context, DateTime day) {
-              Widget? dowCell =
-                  widget.calendarBuilders.dowBuilder?.call(context, day);
+        if (widget.showCalendar)
+          Flexible(
+            flex: widget.shouldFillViewport ? 1 : 0,
+            child: TableCalendarBase(
+              onCalendarCreated: (pageController) {
+                _pageController = pageController;
+                widget.onCalendarCreated?.call(pageController);
+              },
+              focusedDay: _focusedDay.value,
+              calendarFormat: widget.calendarFormat,
+              availableGestures: widget.availableGestures,
+              firstDay: widget.firstDay,
+              lastDay: widget.lastDay,
+              startingDayOfWeek: widget.startingDayOfWeek,
+              dowDecoration: widget.daysOfWeekStyle.decoration,
+              rowDecoration: widget.calendarStyle.rowDecoration,
+              tableBorder: widget.calendarStyle.tableBorder,
+              dowVisible: widget.daysOfWeekVisible,
+              dowHeight: widget.daysOfWeekHeight,
+              rowHeight: widget.rowHeight,
+              formatAnimationDuration: widget.formatAnimationDuration,
+              formatAnimationCurve: widget.formatAnimationCurve,
+              pageAnimationEnabled: widget.pageAnimationEnabled,
+              pageAnimationDuration: widget.pageAnimationDuration,
+              pageAnimationCurve: widget.pageAnimationCurve,
+              availableCalendarFormats: widget.availableCalendarFormats,
+              simpleSwipeConfig: widget.simpleSwipeConfig,
+              sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
+              onVerticalSwipe: _swipeCalendarFormat,
+              onPageChanged: (focusedDay) {
+                _focusedDay.value = focusedDay;
+                widget.onPageChanged?.call(focusedDay);
+              },
+              dowBuilder: (BuildContext context, DateTime day) {
+                Widget? dowCell =
+                    widget.calendarBuilders.dowBuilder?.call(context, day);
 
-              if (dowCell == null) {
-                final weekdayString = widget.daysOfWeekStyle.dowTextFormatter
-                        ?.call(day, widget.locale) ??
-                    DateFormat.E(widget.locale).format(day);
+                if (dowCell == null) {
+                  final weekdayString = widget.daysOfWeekStyle.dowTextFormatter
+                          ?.call(day, widget.locale) ??
+                      DateFormat.E(widget.locale).format(day);
 
-                final isWeekend =
-                    _isWeekend(day, weekendDays: widget.weekendDays);
+                  final isWeekend =
+                      _isWeekend(day, weekendDays: widget.weekendDays);
 
-                dowCell = Center(
-                  child: ExcludeSemantics(
-                    child: Text(
-                      weekdayString,
-                      style: isWeekend
-                          ? widget.daysOfWeekStyle.weekendStyle
-                          : widget.daysOfWeekStyle.weekdayStyle,
+                  dowCell = Center(
+                    child: ExcludeSemantics(
+                      child: Text(
+                        weekdayString,
+                        style: isWeekend
+                            ? widget.daysOfWeekStyle.weekendStyle
+                            : widget.daysOfWeekStyle.weekdayStyle,
+                      ),
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              return dowCell;
-            },
-            dayBuilder: (context, day, focusedMonth) {
-              return GestureDetector(
-                behavior: widget.dayHitTestBehavior,
-                onTap: () => _onDayTapped(day),
-                onLongPress: () => _onDayLongPressed(day),
-                child: _buildCell(day, focusedMonth),
-              );
-            },
+                return dowCell;
+              },
+              dayBuilder: (context, day, focusedMonth) {
+                return GestureDetector(
+                  behavior: widget.dayHitTestBehavior,
+                  onTap: () => _onDayTapped(day),
+                  onLongPress: () => _onDayLongPressed(day),
+                  child: _buildCell(day, focusedMonth),
+                );
+              },
+            ),
           ),
-        ),
       ],
     );
   }
