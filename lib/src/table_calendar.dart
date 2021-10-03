@@ -183,6 +183,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called whenever any day gets long pressed.
   final OnDaySelected? onDayLongPressed;
 
+  /// Called whenever any day gets double-tapped.
+  final void Function(DateTime day)? onDayDoubleTapped;
+
   /// Called whenever any disabled day gets tapped.
   final void Function(DateTime day)? onDisabledDayTapped;
 
@@ -259,6 +262,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.onRangeSelected,
     this.onDaySelected,
     this.onDayLongPressed,
+    this.onDayDoubleTapped,
     this.onDisabledDayTapped,
     this.onDisabledDayLongPressed,
     this.onHeaderTapped,
@@ -548,6 +552,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return GestureDetector(
                 behavior: widget.dayHitTestBehavior,
                 onTap: () => _onDayTapped(day),
+                onDoubleTap: widget.onDayDoubleTapped != null
+                    ? () => widget.onDayDoubleTapped!(day)
+                    : null,
                 onLongPress: () => _onDayLongPressed(day),
                 child: _buildCell(day, focusedMonth),
               );
