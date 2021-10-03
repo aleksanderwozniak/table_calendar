@@ -205,10 +205,10 @@ class TableCalendar<T> extends StatefulWidget {
   final void Function(PageController pageController)? onCalendarCreated;
 
   /// Called when the right calendar header chevron is tapped.
-  final void Function? onRightChevronTap;
+  final void onRightChevronTap;
 
   /// Called when the left calendar header chevron is tapped.
-  final void Function? onLeftChevronTap;
+  final void onLeftChevronTap;
 
   /// Creates a `TableCalendar` widget.
   TableCalendar({
