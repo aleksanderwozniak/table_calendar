@@ -8,6 +8,7 @@ import 'shared/utils.dart';
 import 'widgets/calendar_core.dart';
 
 class TableCalendarBase extends StatefulWidget {
+  final bool showCalendar;
   final DateTime firstDay;
   final DateTime lastDay;
   final DateTime focusedDay;
@@ -36,6 +37,7 @@ class TableCalendarBase extends StatefulWidget {
 
   TableCalendarBase({
     Key? key,
+    this.showCalendar = true,
     required this.firstDay,
     required this.lastDay,
     required this.focusedDay,
@@ -196,7 +198,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
                 curve: widget.formatAnimationCurve,
                 alignment: Alignment.topCenter,
                 child: SizedBox(
-                  height: height,
+                  height: widget.showCalendar ? height : 0,
                   child: child,
                 ),
               );
