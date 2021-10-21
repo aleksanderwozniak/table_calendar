@@ -1,3 +1,10 @@
+## [3.0.3]
+
+* Added semantic label to prioritizedBuilder
+* Added tableBorder property to CalendarStyle
+* Added cellAlignment property to CalendarStyle
+* Added cellPadding property to CalendarStyle
+
 ## [3.0.2]
 
 * Improved semantic labels for screen readers
