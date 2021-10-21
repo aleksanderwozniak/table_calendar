@@ -45,11 +45,19 @@ class CellContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dowLabel = DateFormat.EEEE(locale).format(day);
+    final dayLabel = DateFormat.yMMMMd(locale).format(day);
+    final semanticsLabel = '$dowLabel, $dayLabel';
+
     Widget? cell =
         calendarBuilders.prioritizedBuilder?.call(context, day, focusedDay);
 
     if (cell != null) {
-      return cell;
+      return Semantics(
+        label: semanticsLabel,
+        excludeSemantics: true,
+        child: cell,
+      );
     }
 
     final text = '${day.day}';
@@ -57,10 +65,6 @@ class CellContent extends StatelessWidget {
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;
     final duration = const Duration(milliseconds: 250);
-
-    final dowLabel = DateFormat.EEEE(locale).format(day);
-    final dayLabel = DateFormat.yMMMMd(locale).format(day);
-    final semanticsLabel = '$dowLabel, $dayLabel';
 
     if (isDisabled) {
       cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
