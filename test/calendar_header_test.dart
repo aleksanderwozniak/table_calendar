@@ -4,17 +4,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:table_calendar/src/customization/header_style.dart';
 import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_header.dart';
 import 'package:table_calendar/src/widgets/custom_icon_button.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
 
-const calendarFormatMap = const {
-  CalendarFormat.month: 'Month',
-  CalendarFormat.twoWeeks: 'Two weeks',
-  CalendarFormat.week: 'week',
-};
+import 'common.dart';
+
+final focusedMonth = DateTime.utc(2021, 7, 15);
 
 Widget setupTestWidget({
   HeaderStyle headerStyle = const HeaderStyle(),
@@ -29,7 +28,7 @@ Widget setupTestWidget({
     textDirection: TextDirection.ltr,
     child: Material(
       child: CalendarHeader(
-        focusedMonth: DateTime.utc(2021, 7, 15),
+        focusedMonth: focusedMonth,
         calendarFormat: CalendarFormat.month,
         headerStyle: headerStyle,
         onLeftChevronTap: () => onLeftChevronTap?.call(),
@@ -44,6 +43,17 @@ Widget setupTestWidget({
 }
 
 void main() {
+  testWidgets(
+    'Displays corrent month and year for given focusedMonth',
+    (tester) async {
+      await tester.pumpWidget(setupTestWidget());
+
+      final headerText = intl.DateFormat.yMMMM().format(focusedMonth);
+
+      expect(find.byType(CalendarHeader), findsOneWidget);
+      expect(find.text(headerText), findsOneWidget);
+    },
+  );
   testWidgets(
     'Ensure chevrons and FormatButton are visible by default, test onTap callbacks',
     (tester) async {
@@ -62,8 +72,6 @@ void main() {
           onFormatButtonTap: (_) => formatButtonTapped = true,
         ),
       );
-
-      await tester.pumpAndSettle();
 
       final leftChevron = find.widgetWithIcon(
         CustomIconButton,
@@ -123,8 +131,6 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
-
       final leftChevron = find.widgetWithIcon(
         CustomIconButton,
         Icons.chevron_left,
@@ -151,8 +157,6 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
-
       final leftChevron = find.widgetWithIcon(
         CustomIconButton,
         Icons.chevron_left,
@@ -177,8 +181,6 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
-
       final formatButton = find.byType(FormatButton);
       expect(formatButton, findsNothing);
     },
@@ -192,8 +194,6 @@ void main() {
           headerStyle: HeaderStyle(formatButtonVisible: false),
         ),
       );
-
-      await tester.pumpAndSettle();
 
       final formatButton = find.byType(FormatButton);
       expect(formatButton, findsNothing);

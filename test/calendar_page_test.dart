@@ -42,7 +42,6 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
       final expectedCellCount = visibleDays.length;
       expect(find.byType(Text), findsNWidgets(expectedCellCount));
     },
@@ -66,11 +65,13 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
       final expectedCellCount = visibleDays.length;
       final expectedDowLabels = 7;
-      expect(find.byType(Text),
-          findsNWidgets(expectedCellCount + expectedDowLabels));
+
+      expect(
+        find.byType(Text),
+        findsNWidgets(expectedCellCount + expectedDowLabels),
+      );
     },
   );
 
@@ -89,8 +90,6 @@ void main() {
             ),
           ),
         );
-
-        await tester.pumpAndSettle();
       }, throwsAssertionError);
     },
   );

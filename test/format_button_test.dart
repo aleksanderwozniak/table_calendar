@@ -7,11 +7,7 @@ import 'package:table_calendar/src/customization/header_style.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-const availableCalendarFormats = const {
-  CalendarFormat.month: 'Month',
-  CalendarFormat.twoWeeks: 'Two weeks',
-  CalendarFormat.week: 'week',
-};
+import 'common.dart';
 
 Widget setupTestWidget(Widget child) {
   return Directionality(
@@ -31,7 +27,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: availableCalendarFormats,
+              availableCalendarFormats: calendarFormatMap,
               calendarFormat: CalendarFormat.month,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -44,7 +40,6 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
         expect(find.byType(FormatButton), findsOneWidget);
         expect(calendarFormat, isNull);
 
@@ -63,7 +58,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: availableCalendarFormats,
+              availableCalendarFormats: calendarFormatMap,
               calendarFormat: CalendarFormat.twoWeeks,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -76,7 +71,6 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
         expect(find.byType(FormatButton), findsOneWidget);
         expect(calendarFormat, isNull);
 
@@ -95,7 +89,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: availableCalendarFormats,
+              availableCalendarFormats: calendarFormatMap,
               calendarFormat: CalendarFormat.week,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -108,7 +102,6 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
         expect(find.byType(FormatButton), findsOneWidget);
         expect(calendarFormat, isNull);
 
@@ -127,18 +120,18 @@ void main() {
 
         final currentFormatIndex = 0;
         final currentFormat =
-            availableCalendarFormats.keys.elementAt(currentFormatIndex);
+            calendarFormatMap.keys.elementAt(currentFormatIndex);
         final currentFormatText =
-            availableCalendarFormats.values.elementAt(currentFormatIndex);
+            calendarFormatMap.values.elementAt(currentFormatIndex);
 
         final nextFormatIndex = 1;
         final nextFormatText =
-            availableCalendarFormats.values.elementAt(nextFormatIndex);
+            calendarFormatMap.values.elementAt(nextFormatIndex);
 
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: availableCalendarFormats,
+              availableCalendarFormats: calendarFormatMap,
               calendarFormat: currentFormat,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -149,7 +142,6 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
         expect(find.byType(FormatButton), findsOneWidget);
         expect(currentFormatText, isNotNull);
         expect(find.text(currentFormatText), findsNothing);
@@ -165,14 +157,14 @@ void main() {
 
         final currentFormatIndex = 0;
         final currentFormat =
-            availableCalendarFormats.keys.elementAt(currentFormatIndex);
+            calendarFormatMap.keys.elementAt(currentFormatIndex);
         final currentFormatText =
-            availableCalendarFormats.values.elementAt(currentFormatIndex);
+            calendarFormatMap.values.elementAt(currentFormatIndex);
 
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: availableCalendarFormats,
+              availableCalendarFormats: calendarFormatMap,
               calendarFormat: currentFormat,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -183,7 +175,6 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
         expect(find.byType(FormatButton), findsOneWidget);
         expect(currentFormatText, isNotNull);
         expect(find.text(currentFormatText), findsOneWidget);

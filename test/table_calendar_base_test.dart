@@ -7,15 +7,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'common.dart';
+
 Widget setupTestWidget(Widget child) {
   return Directionality(
     textDirection: TextDirection.ltr,
     child: child,
   );
-}
-
-ValueKey<String> dateToKey(DateTime date, {String prefix = 'cell-'}) {
-  return ValueKey('$prefix${date.year}-${date.month}-${date.day}');
 }
 
 void main() {
@@ -377,8 +375,6 @@ void main() {
             ),
           ),
         );
-
-        await tester.pumpAndSettle();
       }, throwsAssertionError);
     },
   );

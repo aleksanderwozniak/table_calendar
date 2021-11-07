@@ -30,7 +30,6 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
       final button = find.byType(CustomIconButton);
       expect(button, findsOneWidget);
       expect(buttonTapped, false);

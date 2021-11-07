@@ -460,6 +460,99 @@ void main() {
         expect(eventMarkers.length, 3);
       },
     );
+
+    testWidgets(
+      'currentDay correctly marks given day as today',
+      (tester) async {
+        await tester.pumpWidget(setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+          ),
+        ));
+
+        final currentDayKey = cellContentKey(today);
+        final currentDayCellContent =
+            tester.widget(find.byKey(currentDayKey)) as CellContent;
+
+        expect(currentDayCellContent.isToday, true);
+      },
+    );
+
+    testWidgets(
+      'if currentDay is absent, DateTime.now() is marked as today',
+      (tester) async {
+        final now = DateTime.now();
+        final firstDay = DateTime.utc(now.year, now.month - 3, now.day);
+        final lastDay = DateTime.utc(now.year, now.month + 3, now.day);
+
+        await tester.pumpWidget(setupTestWidget(
+          TableCalendar(
+            focusedDay: now,
+            firstDay: firstDay,
+            lastDay: lastDay,
+          ),
+        ));
+
+        final currentDayKey = cellContentKey(now);
+        final currentDayCellContent =
+            tester.widget(find.byKey(currentDayKey)) as CellContent;
+
+        expect(currentDayCellContent.isToday, true);
+      },
+    );
+
+    testWidgets(
+      'selectedDayPredicate correctly marks given day as selected',
+      (tester) async {
+        final selectedDay = DateTime.utc(2021, 7, 20);
+
+        await tester.pumpWidget(setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            selectedDayPredicate: (day) {
+              return isSameDay(day, selectedDay);
+            },
+          ),
+        ));
+
+        final selectedDayKey = cellContentKey(selectedDay);
+        final selectedDayCellContent =
+            tester.widget(find.byKey(selectedDayKey)) as CellContent;
+
+        expect(selectedDayCellContent.isSelected, true);
+      },
+    );
+
+    testWidgets(
+      'holidayPredicate correctly marks given day as holiday',
+      (tester) async {
+        final holiday = DateTime.utc(2021, 7, 20);
+
+        await tester.pumpWidget(setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            holidayPredicate: (day) {
+              return isSameDay(day, holiday);
+            },
+          ),
+        ));
+
+        final holidayKey = cellContentKey(holiday);
+        final holidayCellContent =
+            tester.widget(find.byKey(holidayKey)) as CellContent;
+
+        expect(holidayCellContent.isHoliday, true);
+      },
+    );
   });
 
   group('CalendarHeader chevrons test:', () {
