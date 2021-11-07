@@ -44,7 +44,7 @@ Widget createTableCalendar({
 }
 
 ValueKey<String> cellContentKey(DateTime date) {
-  return dateToKey(date, prefix: 'cellContent-');
+  return dateToKey(date, prefix: 'CellContent-');
 }
 
 void main() {
