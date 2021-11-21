@@ -201,6 +201,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController)? onCalendarCreated;
 
+  /// Called whenever header chevron icon gets tapped.
+  final void Function()? onChevronTap;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key? key,
@@ -256,6 +259,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.onPageChanged,
     this.onFormatChanged,
     this.onCalendarCreated,
+    this.onChevronTap,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -427,18 +431,20 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     }
   }
 
-  void _onLeftChevronTap() {
+  void onLeftChevronTap() {
     _pageController.previousPage(
       duration: widget.pageAnimationDuration,
       curve: widget.pageAnimationCurve,
     );
+    widget.onChevronTap!.call();
   }
 
-  void _onRightChevronTap() {
+  void onRightChevronTap() {
     _pageController.nextPage(
       duration: widget.pageAnimationDuration,
       curve: widget.pageAnimationCurve,
     );
+    widget.onChevronTap!.call();
   }
 
   @override
@@ -452,8 +458,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return CalendarHeader(
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
                 focusedMonth: value,
-                onLeftChevronTap: _onLeftChevronTap,
-                onRightChevronTap: _onRightChevronTap,
+                onLeftChevronTap: onLeftChevronTap,
+                onRightChevronTap: onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
                 onHeaderLongPress: () =>
                     widget.onHeaderLongPressed?.call(value),
