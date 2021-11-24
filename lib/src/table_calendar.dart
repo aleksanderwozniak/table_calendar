@@ -431,7 +431,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     }
   }
 
-  void onLeftChevronTap() {
+  void _onLeftChevronTap() {
     _pageController.previousPage(
       duration: widget.pageAnimationDuration,
       curve: widget.pageAnimationCurve,
@@ -439,7 +439,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     widget.onChevronTap!.call();
   }
 
-  void onRightChevronTap() {
+  void _onRightChevronTap() {
     _pageController.nextPage(
       duration: widget.pageAnimationDuration,
       curve: widget.pageAnimationCurve,
@@ -458,8 +458,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return CalendarHeader(
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
                 focusedMonth: value,
-                onLeftChevronTap: onLeftChevronTap,
-                onRightChevronTap: onRightChevronTap,
+                onLeftChevronTap: _onLeftChevronTap,
+                onRightChevronTap: _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
                 onHeaderLongPress: () =>
                     widget.onHeaderLongPressed?.call(value),
