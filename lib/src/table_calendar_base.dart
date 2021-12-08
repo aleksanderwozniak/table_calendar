@@ -109,7 +109,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
 
     if (_focusedDay != widget.focusedDay ||
         widget.calendarFormat != oldWidget.calendarFormat ||
-        widget.startingDayOfWeek != oldWidget.startingDayOfWeek) {
+        widget.startingDayOfWeek != oldWidget.startingDayOfWeek ||
+        widget.firstDay != oldWidget.firstDay ||
+        widget.lastDay != oldWidget.lastDay) {
       final shouldAnimate = _focusedDay != widget.focusedDay;
 
       _focusedDay = widget.focusedDay;
