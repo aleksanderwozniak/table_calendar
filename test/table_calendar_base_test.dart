@@ -26,6 +26,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             TableCalendarBase(
+              weekNumbersVisible: false,
               firstDay: DateTime.utc(2021, 5, 15),
               lastDay: DateTime.utc(2021, 8, 18),
               focusedDay: focusedDay,
@@ -72,6 +73,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             TableCalendarBase(
+              weekNumbersVisible: false,
               firstDay: DateTime.utc(2021, 5, 15),
               lastDay: DateTime.utc(2021, 8, 18),
               focusedDay: focusedDay,
@@ -118,6 +120,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             TableCalendarBase(
+              weekNumbersVisible: false,
               firstDay: DateTime.utc(2021, 5, 15),
               lastDay: DateTime.utc(2021, 8, 18),
               focusedDay: focusedDay,
@@ -164,6 +167,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             TableCalendarBase(
+              weekNumbersVisible: false,
               firstDay: DateTime.utc(2021, 5, 15),
               lastDay: DateTime.utc(2021, 8, 18),
               focusedDay: focusedDay,
@@ -210,6 +214,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             TableCalendarBase(
+              weekNumbersVisible: false,
               firstDay: DateTime.utc(2021, 5, 15),
               lastDay: DateTime.utc(2021, 8, 18),
               focusedDay: focusedDay,
@@ -256,6 +261,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             TableCalendarBase(
+              weekNumbersVisible: false,
               firstDay: DateTime.utc(2021, 5, 15),
               lastDay: DateTime.utc(2021, 8, 18),
               focusedDay: focusedDay,
@@ -307,6 +313,7 @@ void main() {
       await tester.pumpWidget(
         setupTestWidget(
           TableCalendarBase(
+            weekNumbersVisible: false,
             firstDay: DateTime.utc(2021, 5, 15),
             lastDay: DateTime.utc(2021, 8, 18),
             focusedDay: focusedDay,
@@ -358,6 +365,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             TableCalendarBase(
+              weekNumbersVisible: false,
               firstDay: DateTime.utc(2021, 5, 15),
               lastDay: DateTime.utc(2021, 8, 18),
               focusedDay: DateTime.utc(2021, 7, 15),
