@@ -1,3 +1,11 @@
+## [2.3.3]
+
+* Updated dependencies
+
+## [2.3.2]
+
+* Added previousPage and nextPage methods to CalendarController
+
 ## [2.3.1]
 
 * Added chevron visibility properties to HeaderStyle

@@ -245,7 +245,8 @@ class CalendarController {
       ? _availableCalendarFormats[_nextFormat()]
       : _availableCalendarFormats[_calendarFormat.value];
 
-  void _selectPrevious() {
+  /// Displays the previous Calendar page.
+  void previousPage() {
     if (calendarFormat == CalendarFormat.month) {
       _selectPreviousMonth();
     } else if (calendarFormat == CalendarFormat.twoWeeks) {
@@ -258,7 +259,8 @@ class CalendarController {
     _decrementPage();
   }
 
-  void _selectNext() {
+  /// Displays the next Calendar page.
+  void nextPage() {
     if (calendarFormat == CalendarFormat.month) {
       _selectNextMonth();
     } else if (calendarFormat == CalendarFormat.twoWeeks) {
