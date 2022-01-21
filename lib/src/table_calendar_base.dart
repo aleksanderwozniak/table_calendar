@@ -80,7 +80,7 @@ class TableCalendarBase extends StatefulWidget {
 class _TableCalendarBaseState extends State<TableCalendarBase>
     with SingleTickerProviderStateMixin {
   late final ValueNotifier<double> _pageHeight;
-  late final PageController _pageController;
+  late PageController _pageController;
   late DateTime _focusedDay;
   late int _previousIndex;
   late bool _pageCallbackDisabled;
@@ -153,7 +153,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
       _pageCallbackDisabled = true;
     }
 
-    if (shouldAnimate && widget.pageAnimationEnabled) {
+    if (!_pageController.hasClients) {
+      _pageController = PageController(initialPage: currentIndex);
+    } else if (shouldAnimate && widget.pageAnimationEnabled) {
       if ((currentIndex - _previousIndex).abs() > 1) {
         final jumpIndex =
             currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
