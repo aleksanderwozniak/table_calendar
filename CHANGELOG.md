@@ -1,3 +1,8 @@
+## [3.0.4]
+
+* Updated dependencies
+* Removed deprecated fields
+
 ## [3.0.3]
 
 * Added semantic label to prioritizedBuilder
