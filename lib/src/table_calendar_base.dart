@@ -77,8 +77,7 @@ class TableCalendarBase extends StatefulWidget {
   _TableCalendarBaseState createState() => _TableCalendarBaseState();
 }
 
-class _TableCalendarBaseState extends State<TableCalendarBase>
-    with SingleTickerProviderStateMixin {
+class _TableCalendarBaseState extends State<TableCalendarBase> {
   late final ValueNotifier<double> _pageHeight;
   late PageController _pageController;
   late DateTime _focusedDay;
@@ -193,7 +192,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase>
                   constraints.hasBoundedHeight ? constraints.maxHeight : value;
 
               return AnimatedSize(
-                vsync: this,
                 duration: widget.formatAnimationDuration,
                 curve: widget.formatAnimationCurve,
                 alignment: Alignment.topCenter,
