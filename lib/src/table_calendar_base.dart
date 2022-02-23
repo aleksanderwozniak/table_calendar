@@ -154,6 +154,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
     if (!_pageController.hasClients) {
       _pageController = PageController(initialPage: currentIndex);
+      widget.onCalendarCreated?.call(_pageController);
     } else if (shouldAnimate && widget.pageAnimationEnabled) {
       if ((currentIndex - _previousIndex).abs() > 1) {
         final jumpIndex =
