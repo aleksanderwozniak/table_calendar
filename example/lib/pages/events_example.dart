@@ -95,8 +95,11 @@ class _TableEventsExampleState extends State<TableEventsExample> {
             lastDay: kLastDay,
             focusedDay: _focusedDay,
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            rangeStartDay: _rangeStart,
-            rangeEndDay: _rangeEnd,
+            ranges: [
+              if (_rangeStart != null) DateRange(_rangeStart!, _rangeEnd)
+            ],
+            // rangeStartDay: _rangeStart,
+            // rangeEndDay: _rangeEnd,
             calendarFormat: _calendarFormat,
             rangeSelectionMode: _rangeSelectionMode,
             eventLoader: _getEventsForDay,

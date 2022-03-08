@@ -1282,8 +1282,9 @@ void main() {
             firstDay: firstDay,
             lastDay: lastDay,
             currentDay: today,
-            rangeStartDay: rangeStart,
-            rangeEndDay: rangeEnd,
+            // rangeStartDay: rangeStart,
+            // rangeEndDay: rangeEnd,
+            ranges: [DateRange(rangeStart, rangeEnd)],
           ),
         ));
 
@@ -1317,8 +1318,9 @@ void main() {
             firstDay: firstDay,
             lastDay: lastDay,
             currentDay: today,
-            rangeStartDay: rangeStart,
-            rangeEndDay: rangeEnd,
+            // rangeStartDay: rangeStart,
+            // rangeEndDay: rangeEnd,
+            ranges: [DateRange(rangeStart, rangeEnd)],
           ),
         ));
 
@@ -1352,8 +1354,9 @@ void main() {
             firstDay: firstDay,
             lastDay: lastDay,
             currentDay: today,
-            rangeStartDay: rangeStart,
-            rangeEndDay: rangeEnd,
+            ranges: [DateRange(rangeStart, rangeEnd)],
+            // rangeStartDay: rangeStart,
+            // rangeEndDay: rangeEnd,
           ),
         ));
 
