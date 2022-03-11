@@ -21,6 +21,8 @@ class CalendarHeader extends StatelessWidget {
   final ValueChanged<CalendarFormat> onFormatButtonTap;
   final Map<CalendarFormat, String> availableCalendarFormats;
   final DayBuilder? headerTitleBuilder;
+  final Widget? Function(GestureTapCallback onTap)? headerLeftButtonBuilder;
+  final Widget? Function(GestureTapCallback onTap)? headerRightButtonBuilder;
 
   const CalendarHeader({
     Key? key,
@@ -35,6 +37,8 @@ class CalendarHeader extends StatelessWidget {
     required this.onFormatButtonTap,
     required this.availableCalendarFormats,
     this.headerTitleBuilder,
+    this.headerLeftButtonBuilder,
+    this.headerRightButtonBuilder,
   }) : super(key: key);
 
   @override
@@ -50,12 +54,13 @@ class CalendarHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           if (headerStyle.leftChevronVisible)
-            CustomIconButton(
-              icon: headerStyle.leftChevronIcon,
-              onTap: onLeftChevronTap,
-              margin: headerStyle.leftChevronMargin,
-              padding: headerStyle.leftChevronPadding,
-            ),
+            headerLeftButtonBuilder?.call(onLeftChevronTap) ??
+                CustomIconButton(
+                  icon: headerStyle.leftChevronIcon,
+                  onTap: onLeftChevronTap,
+                  margin: headerStyle.leftChevronMargin,
+                  padding: headerStyle.leftChevronPadding,
+                ),
           Expanded(
             child: headerTitleBuilder?.call(context, focusedMonth) ??
                 GestureDetector(
@@ -85,12 +90,13 @@ class CalendarHeader extends StatelessWidget {
               ),
             ),
           if (headerStyle.rightChevronVisible)
-            CustomIconButton(
-              icon: headerStyle.rightChevronIcon,
-              onTap: onRightChevronTap,
-              margin: headerStyle.rightChevronMargin,
-              padding: headerStyle.rightChevronPadding,
-            ),
+            headerRightButtonBuilder?.call(onRightChevronTap) ??
+                CustomIconButton(
+                  icon: headerStyle.rightChevronIcon,
+                  onTap: onRightChevronTap,
+                  margin: headerStyle.rightChevronMargin,
+                  padding: headerStyle.rightChevronPadding,
+                ),
         ],
       ),
     );

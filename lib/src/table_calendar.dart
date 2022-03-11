@@ -451,6 +451,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             builder: (context, value, _) {
               return CalendarHeader(
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
+                headerLeftButtonBuilder:
+                    widget.calendarBuilders.headerLeftButtonBuilder,
+                headerRightButtonBuilder:
+                    widget.calendarBuilders.headerRightButtonBuilder,
                 focusedMonth: value,
                 onLeftChevronTap: _onLeftChevronTap,
                 onRightChevronTap: _onRightChevronTap,

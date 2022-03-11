@@ -75,8 +75,22 @@ class CalendarBuilders<T> {
   /// Custom builder for days of the week labels (Mon, Tue, Wed, etc.).
   final DayBuilder? dowBuilder;
 
-  /// Use to customize header's title using different widget
+  /// Use to customize header's title using different widget.
   final DayBuilder? headerTitleBuilder;
+
+  /// Use to customize the left-hand button shown in the header using a
+  /// different widget.
+  ///
+  /// Exposes the callback provided by the calender to navigate to the previous
+  /// available page.
+  final Widget? Function(GestureTapCallback onTap)? headerLeftButtonBuilder;
+
+  /// Use to customize the right-hand button shown in the header using a
+  /// different widget.
+  ///
+  /// Exposes the callback provided by the calender to navigate to the next
+  /// available page.
+  final Widget? Function(GestureTapCallback onTap)? headerRightButtonBuilder;
 
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({
@@ -95,5 +109,7 @@ class CalendarBuilders<T> {
     this.markerBuilder,
     this.dowBuilder,
     this.headerTitleBuilder,
+    this.headerLeftButtonBuilder,
+    this.headerRightButtonBuilder,
   });
 }
