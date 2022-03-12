@@ -81,14 +81,14 @@ class CalendarBuilders<T> {
   /// Use to customize the left-hand button shown in the header using a
   /// different widget.
   ///
-  /// Exposes the callback provided by the calender to navigate to the previous
+  /// Exposes the callback provided by the calendar to navigate to the previous
   /// available page.
   final Widget? Function(GestureTapCallback onTap)? headerLeftButtonBuilder;
 
   /// Use to customize the right-hand button shown in the header using a
   /// different widget.
   ///
-  /// Exposes the callback provided by the calender to navigate to the next
+  /// Exposes the callback provided by the calendar to navigate to the next
   /// available page.
   final Widget? Function(GestureTapCallback onTap)? headerRightButtonBuilder;
 
