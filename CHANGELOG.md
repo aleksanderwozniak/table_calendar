@@ -1,3 +1,8 @@
+## [3.0.5]
+
+* Added a visual indicator to FormatButton
+* Header buttons are now platform-aware
+
 ## [3.0.4]
 
 * Updated dependencies
