@@ -35,7 +35,7 @@ class HeaderStyle {
   final TextStyle formatButtonTextStyle;
 
   /// Background `Decoration` for FormatButton.
-  final Decoration formatButtonDecoration;
+  final BoxDecoration formatButtonDecoration;
 
   /// Internal padding of the whole header.
   final EdgeInsets headerPadding;
@@ -77,7 +77,7 @@ class HeaderStyle {
   final bool rightChevronVisible;
 
   /// Decoration of the header.
-  final Decoration decoration;
+  final BoxDecoration decoration;
 
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
@@ -86,7 +86,7 @@ class HeaderStyle {
     this.formatButtonShowsNext = true,
     this.titleTextFormatter,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
-    this.formatButtonTextStyle = const TextStyle(),
+    this.formatButtonTextStyle = const TextStyle(fontSize: 14.0),
     this.formatButtonDecoration = const BoxDecoration(
       border: const Border.fromBorderSide(BorderSide()),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),

@@ -1,6 +1,10 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CustomIconButton extends StatelessWidget {
@@ -21,14 +25,20 @@ class CustomIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: margin,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(100.0),
-        child: Padding(
-          padding: padding,
-          child: icon,
-        ),
-      ),
+      child: !kIsWeb && (Platform.isIOS || Platform.isMacOS)
+          ? CupertinoButton(
+              onPressed: onTap,
+              padding: padding,
+              child: icon,
+            )
+          : InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(100.0),
+              child: Padding(
+                padding: padding,
+                child: icon,
+              ),
+            ),
     );
   }
 }

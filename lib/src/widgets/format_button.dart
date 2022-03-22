@@ -1,6 +1,10 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../shared/utils.dart' show CalendarFormat;
@@ -9,7 +13,7 @@ class FormatButton extends StatelessWidget {
   final CalendarFormat calendarFormat;
   final ValueChanged<CalendarFormat> onTap;
   final TextStyle textStyle;
-  final Decoration decoration;
+  final BoxDecoration decoration;
   final EdgeInsets padding;
   final bool showsNextFormat;
   final Map<CalendarFormat, String> availableCalendarFormats;
@@ -27,17 +31,27 @@ class FormatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(_nextFormat()),
-      child: Container(
-        decoration: decoration,
-        padding: padding,
-        child: Text(
-          _formatButtonText,
-          style: textStyle,
-        ),
+    final child = Container(
+      decoration: decoration,
+      padding: padding,
+      child: Text(
+        _formatButtonText,
+        style: textStyle,
       ),
     );
+
+    return !kIsWeb && (Platform.isIOS || Platform.isMacOS)
+        ? CupertinoButton(
+            onPressed: () => onTap(_nextFormat()),
+            padding: EdgeInsets.zero,
+            child: child,
+          )
+        : InkWell(
+            borderRadius:
+                decoration.borderRadius?.resolve(Directionality.of(context)),
+            onTap: () => onTap(_nextFormat()),
+            child: child,
+          );
   }
 
   String get _formatButtonText => showsNextFormat
