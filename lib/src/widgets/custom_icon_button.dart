@@ -4,6 +4,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CustomIconButton extends StatelessWidget {
@@ -24,7 +25,7 @@ class CustomIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: margin,
-      child: Platform.isIOS || Platform.isMacOS
+      child: !kIsWeb && (Platform.isIOS || Platform.isMacOS)
           ? CupertinoButton(
               onPressed: onTap,
               padding: padding,
