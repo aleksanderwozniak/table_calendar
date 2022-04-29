@@ -161,6 +161,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Function that assigns a list of events to a specified day.
   final List<T> Function(DateTime day)? eventLoader;
 
+  /// Function that assigns a list of Day with specific pic.
+  final Map<DateTime, String>? eventPic;
+
   /// Function deciding whether given day should be enabled or not.
   /// If `false` is returned, this day will be disabled.
   final bool Function(DateTime day)? enabledDayPredicate;
@@ -243,6 +246,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.calendarBuilders = const CalendarBuilders(),
     this.rangeSelectionMode = RangeSelectionMode.toggledOff,
     this.eventLoader,
+    this.eventPic,
     this.enabledDayPredicate,
     this.selectedDayPredicate,
     this.holidayPredicate,
@@ -594,6 +598,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
+        final imagePath = widget.eventPic![day];
+
         Widget content = CellContent(
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
           day: day,
@@ -611,6 +617,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isWeekend: isWeekend,
           isHoliday: widget.holidayPredicate?.call(day) ?? false,
           locale: widget.locale,
+          cellPic: imagePath,
         );
 
         children.add(content);
@@ -654,7 +661,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             );
           }
 
-          if (markerWidget != null) {
+          if (markerWidget != null && imagePath == null) {
             children.add(markerWidget);
           }
         }

@@ -1,7 +1,7 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../customization/calendar_builders.dart';
@@ -23,6 +23,7 @@ class CellContent extends StatelessWidget {
   final bool isWeekend;
   final CalendarStyle calendarStyle;
   final CalendarBuilders calendarBuilders;
+  final String? cellPic;
 
   const CellContent({
     Key? key,
@@ -40,8 +41,17 @@ class CellContent extends StatelessWidget {
     required this.isDisabled,
     required this.isHoliday,
     required this.isWeekend,
+    this.cellPic,
     this.locale,
   }) : super(key: key);
+
+  Widget _CellPic() {
+    return new Container(
+        decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            image: new DecorationImage(
+                fit: BoxFit.fill, image: new NetworkImage(cellPic!))));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +75,9 @@ class CellContent extends StatelessWidget {
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;
     final duration = const Duration(milliseconds: 250);
-
-    if (isDisabled) {
+    if (cellPic != null) {
+      cell = _CellPic();
+    } else if (isDisabled) {
       cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
@@ -166,7 +177,6 @@ class CellContent extends StatelessWidget {
             ),
           );
     }
-
     return Semantics(
       label: semanticsLabel,
       excludeSemantics: true,

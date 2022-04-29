@@ -49,6 +49,18 @@ class _TableComplexExampleState extends State<TableComplexExample> {
     return kEvents[day] ?? [];
   }
 
+  Map<DateTime, String> _getEventsForDayWithPic = {
+    DateTime.utc(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    ): 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW2iSCVwSERupa3ynVwCt46ui6nK-JVtcHA&usqp=CAU',
+    DateTime.utc(2022, 4, 25):
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW2iSCVwSERupa3ynVwCt46ui6nK-JVtcHA&usqp=CAU',
+    DateTime.utc(2022, 4, 23):
+        'https://miro.medium.com/max/1400/0*LtCDFBQudFeDS_f6'
+  };
+
   List<Event> _getEventsForDays(Iterable<DateTime> days) {
     return [
       for (final d in days) ..._getEventsForDay(d),
@@ -146,6 +158,7 @@ class _TableComplexExampleState extends State<TableComplexExample> {
             calendarFormat: _calendarFormat,
             rangeSelectionMode: _rangeSelectionMode,
             eventLoader: _getEventsForDay,
+            eventPic: _getEventsForDayWithPic,
             holidayPredicate: (day) {
               // Every 20th day of the month will be treated as a holiday
               return day.day == 20;
