@@ -45,6 +45,7 @@ class CellContent extends StatelessWidget {
     this.locale,
   }) : super(key: key);
 
+  // ignore: non_constant_identifier_names
   Widget _CellPic() {
     return new Container(
         decoration: new BoxDecoration(

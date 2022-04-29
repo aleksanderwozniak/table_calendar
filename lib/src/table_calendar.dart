@@ -204,6 +204,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController)? onCalendarCreated;
 
+  /// redirect function for pic
+  final void Function(DateTime day)? picRedirectFunction;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key? key,
@@ -260,6 +263,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.onPageChanged,
     this.onFormatChanged,
     this.onCalendarCreated,
+    this.picRedirectFunction,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -344,6 +348,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   void _onDayTapped(DateTime day) {
+    if (widget.picRedirectFunction != null && widget.eventPic?[day] != null) {
+      widget.picRedirectFunction!(day);
+    }
+
     final isOutside = day.month != _focusedDay.value.month;
     if (isOutside && _shouldBlockOutsideDays) {
       return;
@@ -598,7 +606,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
-        final imagePath = widget.eventPic![day];
+        final imagePath = widget.eventPic?[day];
 
         Widget content = CellContent(
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
