@@ -6,7 +6,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:table_calendar_example/pages/redirectPage_example.dart';
+import 'package:table_calendar_example/pages/eventPage_example.dart';
 
 import '../utils.dart';
 
@@ -45,13 +45,10 @@ class _RedirectionPicExampleState extends State<RedirectionPicExample> {
 
   Map<DateTime, String> _getEventsForDayWithPic = {
     DateTime.utc(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    ): 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW2iSCVwSERupa3ynVwCt46ui6nK-JVtcHA&usqp=CAU',
-    DateTime.utc(2022, 4, 25):
+            DateTime.now().year, DateTime.now().month, DateTime.now().day - 1):
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW2iSCVwSERupa3ynVwCt46ui6nK-JVtcHA&usqp=CAU',
-    DateTime.utc(2022, 4, 23):
+    DateTime.utc(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day + 1):
         'https://miro.medium.com/max/1400/0*LtCDFBQudFeDS_f6'
   };
 
@@ -102,10 +99,16 @@ class _RedirectionPicExampleState extends State<RedirectionPicExample> {
             lastDay: kLastDay,
             focusedDay: _focusedDay.value,
             headerVisible: false,
+            daysOfWeekVisible: false,
             eventPic: _getEventsForDayWithPic,
             onCalendarCreated: (controller) => _pageController = controller,
             onPageChanged: (focusedDay) => _focusedDay.value = focusedDay,
             picRedirectFunction: _picRedirectFunction,
+            locale: 'KO_ko',
+            calendarStyle: CalendarStyle(
+                todayTextStyle: TextStyle(color: Colors.black),
+                todayDecoration: BoxDecoration(
+                    color: Colors.yellow, shape: BoxShape.circle)),
           ),
         ],
       ),
@@ -131,29 +134,23 @@ class _CalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerText = DateFormat.yMMM().format(focusedDay);
+    final headerText = DateFormat.yMMM('EN_en').format(focusedDay);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(width: 16.0),
+          IconButton(
+            icon: Icon(Icons.chevron_left),
+            onPressed: onLeftArrowTap,
+          ),
           SizedBox(
             width: 120.0,
             child: Text(
               headerText,
-              style: TextStyle(fontSize: 26.0),
+              style: TextStyle(fontSize: 20.0),
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.calendar_today, size: 20.0),
-            visualDensity: VisualDensity.compact,
-            onPressed: onTodayButtonTap,
-          ),
-          const Spacer(),
-          IconButton(
-            icon: Icon(Icons.chevron_left),
-            onPressed: onLeftArrowTap,
           ),
           IconButton(
             icon: Icon(Icons.chevron_right),
