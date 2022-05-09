@@ -103,6 +103,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// When set to true, `TableCalendar` will fill available height.
   final bool shouldFillViewport;
 
+  /// Whether to display week numbers on calendar.
+  final bool weekNumbersVisible;
+
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
@@ -224,6 +227,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.pageAnimationEnabled = true,
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
+    this.weekNumbersVisible = false,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
@@ -504,6 +508,27 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
             },
+            weekNumbersVisible: widget.weekNumbersVisible,
+            weekNumberBuilder: (BuildContext context, DateTime day) {
+              final weekNumber = isoWeekNumber(day);
+              Widget? cell = widget.calendarBuilders.weekNumberBuilder
+                  ?.call(context, weekNumber);
+
+              if (cell == null) {
+                cell = Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      weekNumber.toString(),
+                      style: widget.calendarStyle.weekNumberTextStyle,
+                    ),
+                  ),
+                );
+              }
+
+              return cell;
+            },
             dowBuilder: (BuildContext context, DateTime day) {
               Widget? dowCell =
                   widget.calendarBuilders.dowBuilder?.call(context, day);
@@ -542,6 +567,19 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         ),
       ],
     );
+  }
+
+  int isoWeekNumber(DateTime date) {
+    int daysToAdd = DateTime.thursday - date.weekday;
+    DateTime thursdayDate = daysToAdd > 0
+        ? date.add(Duration(days: daysToAdd))
+        : date.subtract(Duration(days: daysToAdd.abs()));
+    int dayOfYearThursday = dayOfYear(thursdayDate);
+    return 1 + ((dayOfYearThursday - 1) / 7).floor();
+  }
+
+  int dayOfYear(DateTime date) {
+    return date.difference(DateTime(date.year, 1, 1)).inDays;
   }
 
   Widget _buildCell(DateTime day, DateTime focusedDay) {

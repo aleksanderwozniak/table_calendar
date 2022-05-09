@@ -78,6 +78,10 @@ class CalendarBuilders<T> {
   /// Use to customize header's title using different widget
   final DayBuilder? headerTitleBuilder;
 
+  /// Custom builder for number of the week labels.
+  final Widget? Function(BuildContext context, int weekNumber)?
+      weekNumberBuilder;
+
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({
     this.prioritizedBuilder,
@@ -95,5 +99,6 @@ class CalendarBuilders<T> {
     this.markerBuilder,
     this.dowBuilder,
     this.headerTitleBuilder,
+    this.weekNumberBuilder,
   });
 }
