@@ -1,8 +1,6 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +21,13 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platform = Theme.of(context).platform;
+
     return Padding(
       padding: margin,
-      child: !kIsWeb && (Platform.isIOS || Platform.isMacOS)
+      child: !kIsWeb &&
+              (platform == TargetPlatform.iOS ||
+                  platform == TargetPlatform.macOS)
           ? CupertinoButton(
               onPressed: onTap,
               padding: padding,

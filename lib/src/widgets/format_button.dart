@@ -1,8 +1,6 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +38,10 @@ class FormatButton extends StatelessWidget {
       ),
     );
 
-    return !kIsWeb && (Platform.isIOS || Platform.isMacOS)
+    final platform = Theme.of(context).platform;
+
+    return !kIsWeb &&
+            (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS)
         ? CupertinoButton(
             onPressed: () => onTap(_nextFormat()),
             padding: EdgeInsets.zero,
