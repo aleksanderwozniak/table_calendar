@@ -1,3 +1,7 @@
+## [3.0.6]
+
+* Fixed issue with missing Flutter Web platform tag
+
 ## [3.0.5]
 
 * Added a visual indicator to FormatButton
