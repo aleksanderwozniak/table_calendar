@@ -56,6 +56,8 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
           // No need to call `setState()` here
           _focusedDay = focusedDay;
         },
+        // Enable week numbers (disabled by default).
+        weekNumbersVisible: true,
       ),
     );
   }

@@ -49,7 +49,7 @@ class TableCalendarBase extends StatefulWidget {
     this.sixWeekMonthsEnforced = false,
     this.dowVisible = true,
     this.weekNumberBuilder,
-    required this.weekNumbersVisible,
+    this.weekNumbersVisible = false,
     this.dowDecoration,
     this.rowDecoration,
     this.tableBorder,

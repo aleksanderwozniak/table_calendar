@@ -9,7 +9,6 @@ import 'pages/complex_example.dart';
 import 'pages/events_example.dart';
 import 'pages/multi_example.dart';
 import 'pages/range_example.dart';
-import 'pages/week_numbers_example.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
@@ -50,14 +49,6 @@ class _StartPageState extends State<StartPage> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => TableBasicsExample()),
-              ),
-            ),
-            const SizedBox(height: 12.0),
-            ElevatedButton(
-              child: Text('Week numbers'),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => TableWeekNumbersExample()),
               ),
             ),
             const SizedBox(height: 12.0),

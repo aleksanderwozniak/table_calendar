@@ -39,7 +39,6 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.month,
               startingDayOfWeek: StartingDayOfWeek.sunday,
-              weekNumbersVisible: false,
             ),
           ),
         );
@@ -86,7 +85,6 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.twoWeeks,
               startingDayOfWeek: StartingDayOfWeek.sunday,
-              weekNumbersVisible: false,
             ),
           ),
         );
@@ -133,7 +131,6 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.week,
               startingDayOfWeek: StartingDayOfWeek.sunday,
-              weekNumbersVisible: false,
             ),
           ),
         );
@@ -180,7 +177,6 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.month,
               startingDayOfWeek: StartingDayOfWeek.monday,
-              weekNumbersVisible: false,
             ),
           ),
         );
@@ -227,7 +223,6 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.twoWeeks,
               startingDayOfWeek: StartingDayOfWeek.monday,
-              weekNumbersVisible: false,
             ),
           ),
         );
@@ -274,7 +269,6 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.week,
               startingDayOfWeek: StartingDayOfWeek.monday,
-              weekNumbersVisible: false,
             ),
           ),
         );
@@ -333,7 +327,6 @@ void main() {
             },
             rowHeight: 52,
             dowVisible: false,
-            weekNumbersVisible: false,
           ),
         ),
       );
@@ -379,7 +372,6 @@ void main() {
               dowBuilder: (context, day) {
                 return Text('${day.weekday}');
               },
-              weekNumbersVisible: false,
             ),
           ),
         );
