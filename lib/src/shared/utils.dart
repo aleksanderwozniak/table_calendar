@@ -3,6 +3,16 @@
 
 import 'package:flutter/widgets.dart';
 
+/// this class will contain the date range values `start and end` dates
+/// `end` date can be null so it's optional
+/// `start` must have a value
+class DateRange {
+  final DateTime rangeStartDay;
+  final DateTime? _rangeEndDay;
+  DateRange(this.rangeStartDay, [this._rangeEndDay]);
+  DateTime get rangeEndDay => _rangeEndDay ?? rangeStartDay;
+}
+
 /// Signature for a function that creates a widget for a given `day`.
 typedef DayBuilder = Widget? Function(BuildContext context, DateTime day);
 

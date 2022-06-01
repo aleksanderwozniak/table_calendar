@@ -35,11 +35,20 @@ class TableCalendar<T> extends StatefulWidget {
   /// If nothing is provided, a default locale will be used.
   final dynamic locale;
 
+  // we don't need this values anymore
+  /*
   /// The start of the selected day range.
   final DateTime? rangeStartDay;
 
   /// The end of the selected day range.
   final DateTime? rangeEndDay;
+  */
+
+  /// this list will contain all date ranges
+  /// each range must have a [rangeStartDay]
+  /// each range have a [rangeEndDay] but it's optional
+  ///   if there is no value passed it will have the same value of [rangeStartDay]
+  final List<DateRange>? ranges;
 
   /// DateTime that determines which days are currently visible and focused.
   final DateTime focusedDay;
@@ -209,8 +218,9 @@ class TableCalendar<T> extends StatefulWidget {
     required DateTime lastDay,
     DateTime? currentDay,
     this.locale,
-    this.rangeStartDay,
-    this.rangeEndDay,
+    // this.rangeStartDay,
+    // this.rangeEndDay,
+    this.ranges,
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
     this.calendarFormat = CalendarFormat.month,
     this.availableCalendarFormats = const {
@@ -297,7 +307,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
       _rangeSelectionMode = widget.rangeSelectionMode;
     }
 
-    if (widget.rangeStartDay == null && widget.rangeEndDay == null) {
+    if (widget.ranges == null || widget.ranges!.isEmpty) {
       _firstSelectedDay = null;
     }
   }
@@ -559,12 +569,16 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final children = <Widget>[];
 
-        final isWithinRange = widget.rangeStartDay != null &&
-            widget.rangeEndDay != null &&
-            _isWithinRange(day, widget.rangeStartDay!, widget.rangeEndDay!);
+        final isWithinRange = widget.ranges != null &&
+            widget.ranges!.any((range) =>
+                _isWithinRange(day, range.rangeStartDay, range.rangeEndDay));
 
-        final isRangeStart = isSameDay(day, widget.rangeStartDay);
-        final isRangeEnd = isSameDay(day, widget.rangeEndDay);
+        final isRangeStart = widget.ranges != null &&
+            widget.ranges!
+                .any((element) => isSameDay(day, element.rangeStartDay));
+        final isRangeEnd = widget.ranges != null &&
+            widget.ranges!
+                .any((element) => isSameDay(day, element.rangeEndDay));
 
         Widget? rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder
             ?.call(context, day, isWithinRange);

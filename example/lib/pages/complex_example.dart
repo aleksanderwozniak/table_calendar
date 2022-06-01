@@ -141,8 +141,11 @@ class _TableComplexExampleState extends State<TableComplexExample> {
             focusedDay: _focusedDay.value,
             headerVisible: false,
             selectedDayPredicate: (day) => _selectedDays.contains(day),
-            rangeStartDay: _rangeStart,
-            rangeEndDay: _rangeEnd,
+            ranges: [
+              if (_rangeStart != null) DateRange(_rangeStart!, _rangeEnd)
+            ],
+            // rangeStartDay: _rangeStart,
+            // rangeEndDay: _rangeEnd,
             calendarFormat: _calendarFormat,
             rangeSelectionMode: _rangeSelectionMode,
             eventLoader: _getEventsForDay,
