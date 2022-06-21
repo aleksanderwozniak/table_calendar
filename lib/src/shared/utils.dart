@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
-import 'package:lunar_calendar/lunar_calendar.dart';
+import 'package:table_calendar/src/shared/lunar_calendar.dart';
 
 /// Signature for a function that creates a widget for a given `day`.
 typedef DayBuilder = Widget? Function(BuildContext context, DateTime day);
@@ -45,8 +45,14 @@ DateTime normalizeDate(DateTime date) {
 }
 
 DateTime lunarDate(DateTime date) {
-  var _date = CalendarConverter.solarToLunar(
-      date.year, date.month, date.day, Timezone.Vietnamese);
+  var _date = CalendarConverter.solarToLunar(date.year, date.month, date.day);
+
+  return DateTime.utc(_date[2], _date[1], _date[0]);
+}
+
+DateTime lunarToSolar(DateTime date) {
+  var _date =
+      CalendarConverter.lunarToSolar(date.year, date.month, date.day, 0);
 
   return DateTime.utc(_date[2], _date[1], _date[0]);
 }

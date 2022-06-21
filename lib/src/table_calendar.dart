@@ -205,7 +205,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key? key,
-    this.isLunarCalendar=false,
+    this.isLunarCalendar = false,
     required DateTime focusedDay,
     required DateTime firstDay,
     required DateTime lastDay,
@@ -264,7 +264,7 @@ class TableCalendar<T> extends StatefulWidget {
             ? weekendDays.every(
                 (day) => day >= DateTime.monday && day <= DateTime.sunday)
             : true),
-       focusedDay = isLunarCalendar == false
+        focusedDay = isLunarCalendar == false
             ? normalizeDate(focusedDay)
             : DateTime(lunarDate(focusedDay).year,
                 lunarDate(focusedDay).month + 1, lunarDate(focusedDay).day),
@@ -462,7 +462,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             builder: (context, value, _) {
               return CalendarHeader(
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
-                focusedMonth:  widget.isLunarCalendar == true ? lunarDate(value) : value,
+                focusedMonth:
+                    widget.isLunarCalendar == true ? lunarDate(value) : value,
                 onLeftChevronTap: _onLeftChevronTap,
                 onRightChevronTap: _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
@@ -542,7 +543,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
-               if (widget.isLunarCalendar == true) {
+              if (widget.isLunarCalendar == true) {
                 day = lunarDate(day);
               }
               return GestureDetector(
@@ -559,9 +560,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   Widget _buildCell(DateTime day, DateTime focusedDay) {
-    
     var isOutside = day.month != focusedDay.month;
-     if (widget.isLunarCalendar == true) {
+    if (widget.isLunarCalendar == true) {
       isOutside = day.month != focusedDay.month - 1;
     }
 
@@ -579,7 +579,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final isWithinRange = widget.rangeStartDay != null &&
             widget.rangeEndDay != null &&
-            _isWithinRange(day,  widget.isLunarCalendar == true
+            _isWithinRange(
+                day,
+                widget.isLunarCalendar == true
                     ? lunarDate(widget.rangeStartDay!)
                     : widget.rangeStartDay!,
                 widget.isLunarCalendar == true
