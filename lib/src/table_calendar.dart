@@ -34,6 +34,7 @@ class TableCalendar<T> extends StatefulWidget {
   ///
   /// If nothing is provided, a default locale will be used.
   final dynamic locale;
+  final bool isLunarCalendar;
 
   /// The start of the selected day range.
   final DateTime? rangeStartDay;
@@ -204,6 +205,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key? key,
+    this.isLunarCalendar=false,
     required DateTime focusedDay,
     required DateTime firstDay,
     required DateTime lastDay,
@@ -262,10 +264,19 @@ class TableCalendar<T> extends StatefulWidget {
             ? weekendDays.every(
                 (day) => day >= DateTime.monday && day <= DateTime.sunday)
             : true),
-        focusedDay = normalizeDate(focusedDay),
-        firstDay = normalizeDate(firstDay),
-        lastDay = normalizeDate(lastDay),
-        currentDay = currentDay ?? DateTime.now(),
+       focusedDay = isLunarCalendar == false
+            ? normalizeDate(focusedDay)
+            : DateTime(lunarDate(focusedDay).year,
+                lunarDate(focusedDay).month + 1, lunarDate(focusedDay).day),
+        firstDay = isLunarCalendar == false
+            ? normalizeDate(firstDay)
+            : lunarDate(firstDay),
+        lastDay = isLunarCalendar == false
+            ? normalizeDate(lastDay)
+            : lunarDate(lastDay),
+        currentDay = isLunarCalendar == false
+            ? (currentDay ?? DateTime.now())
+            : lunarDate(currentDay ?? DateTime.now()),
         super(key: key);
 
   @override
@@ -451,7 +462,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             builder: (context, value, _) {
               return CalendarHeader(
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
-                focusedMonth: value,
+                focusedMonth:  widget.isLunarCalendar == true ? lunarDate(value) : value,
                 onLeftChevronTap: _onLeftChevronTap,
                 onRightChevronTap: _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
@@ -531,6 +542,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
+               if (widget.isLunarCalendar == true) {
+                day = lunarDate(day);
+              }
               return GestureDetector(
                 behavior: widget.dayHitTestBehavior,
                 onTap: () => _onDayTapped(day),
@@ -545,7 +559,11 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   Widget _buildCell(DateTime day, DateTime focusedDay) {
-    final isOutside = day.month != focusedDay.month;
+    
+    var isOutside = day.month != focusedDay.month;
+     if (widget.isLunarCalendar == true) {
+      isOutside = day.month != focusedDay.month - 1;
+    }
 
     if (isOutside && _shouldBlockOutsideDays) {
       return Container();
@@ -561,7 +579,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final isWithinRange = widget.rangeStartDay != null &&
             widget.rangeEndDay != null &&
-            _isWithinRange(day, widget.rangeStartDay!, widget.rangeEndDay!);
+            _isWithinRange(day,  widget.isLunarCalendar == true
+                    ? lunarDate(widget.rangeStartDay!)
+                    : widget.rangeStartDay!,
+                widget.isLunarCalendar == true
+                    ? lunarDate(widget.rangeEndDay!)
+                    : widget.rangeEndDay!);
 
         final isRangeStart = isSameDay(day, widget.rangeStartDay);
         final isRangeEnd = isSameDay(day, widget.rangeEndDay);

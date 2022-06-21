@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
+import 'package:lunar_calendar/lunar_calendar.dart';
 
 /// Signature for a function that creates a widget for a given `day`.
 typedef DayBuilder = Widget? Function(BuildContext context, DateTime day);
@@ -41,6 +42,13 @@ int getWeekdayNumber(StartingDayOfWeek weekday) {
 /// Returns `date` in UTC format, without its time part.
 DateTime normalizeDate(DateTime date) {
   return DateTime.utc(date.year, date.month, date.day);
+}
+
+DateTime lunarDate(DateTime date) {
+  var _date = CalendarConverter.solarToLunar(
+      date.year, date.month, date.day, Timezone.Vietnamese);
+
+  return DateTime.utc(_date[2], _date[1], _date[0]);
 }
 
 /// Checks if two DateTime objects are the same day.

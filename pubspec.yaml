@@ -14,6 +14,8 @@ dependencies:
 
   intl: ^0.17.0
   simple_gesture_detector: ^0.2.0
+  lunar_calendar: ^1.0.1
+
 
 dev_dependencies:
   flutter_test:
