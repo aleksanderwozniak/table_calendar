@@ -23,6 +23,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         title: Text('TableCalendar - Basics'),
       ),
       body: TableCalendar(
+        isLunarCalendar: true,
         firstDay: kFirstDay,
         lastDay: kLastDay,
         focusedDay: _focusedDay,
@@ -33,7 +34,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
 
           // Using `isSameDay` is recommended to disregard
           // the time-part of compared DateTime objects.
-          return isSameDay(_selectedDay, day);
+          return isSameDay(_focusedDay, day);
         },
         onDaySelected: (selectedDay, focusedDay) {
           if (!isSameDay(_selectedDay, selectedDay)) {

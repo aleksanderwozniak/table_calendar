@@ -462,8 +462,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             builder: (context, value, _) {
               return CalendarHeader(
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
-                focusedMonth:
-                    widget.isLunarCalendar == true ? lunarDate(value) : value,
+                focusedMonth: widget.isLunarCalendar == true
+                    ? DateTime(lunarDate(value).year,
+                        lunarDate(value).month - 1, lunarDate(value).day)
+                    : value,
                 onLeftChevronTap: _onLeftChevronTap,
                 onRightChevronTap: _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
@@ -543,9 +545,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
-              if (widget.isLunarCalendar == true) {
-                day = lunarDate(day);
-              }
               return GestureDetector(
                 behavior: widget.dayHitTestBehavior,
                 onTap: () => _onDayTapped(day),
@@ -562,7 +561,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   Widget _buildCell(DateTime day, DateTime focusedDay) {
     var isOutside = day.month != focusedDay.month;
     if (widget.isLunarCalendar == true) {
-      isOutside = day.month != focusedDay.month - 1;
+      isOutside = day.month != focusedDay.month - 2;
     }
 
     if (isOutside && _shouldBlockOutsideDays) {

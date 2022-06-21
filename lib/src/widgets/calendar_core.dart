@@ -29,9 +29,11 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
+  final bool isLunarCalendar;
 
   const CalendarCore({
     Key? key,
+    this.isLunarCalendar = false,
     this.dowBuilder,
     required this.dayBuilder,
     required this.onPageChanged,
@@ -61,16 +63,20 @@ class CalendarCore extends StatelessWidget {
       physics: scrollPhysics,
       itemCount: _getPageCount(calendarFormat, firstDay, lastDay),
       itemBuilder: (context, index) {
-        final baseDay = _getBaseDay(calendarFormat, index);
+        final baseDay = isLunarCalendar == true
+            ? lunarDate(_getBaseDay(calendarFormat, index))
+            : _getBaseDay(calendarFormat, index);
         final visibleRange = _getVisibleRange(calendarFormat, baseDay);
-        final visibleDays = _daysInRange(visibleRange.start, visibleRange.end);
+        var visibleDays = _daysInRange(visibleRange.start, visibleRange.end);
 
         final actualDowHeight = dowVisible ? dowHeight! : 0.0;
         final constrainedRowHeight = constraints.hasBoundedHeight
             ? (constraints.maxHeight - actualDowHeight) /
                 _getRowCount(calendarFormat, baseDay)
             : null;
-
+        if (isLunarCalendar == true) {
+          visibleDays = visibleDays.map((e) => lunarDate(e)).toList();
+        }
         return CalendarPage(
           visibleDays: visibleDays,
           dowVisible: dowVisible,
@@ -95,7 +101,7 @@ class CalendarCore extends StatelessWidget {
 
             return SizedBox(
               height: constrainedRowHeight ?? rowHeight,
-              child: dayBuilder(context, day, baseDay),
+              child: dayBuilder(context, (day), (baseDay)),
             );
           },
         );

@@ -46,7 +46,6 @@ DateTime normalizeDate(DateTime date) {
 
 DateTime lunarDate(DateTime date) {
   var _date = CalendarConverter.solarToLunar(date.year, date.month, date.day);
-
   return DateTime.utc(_date[2], _date[1], _date[0]);
 }
 

@@ -99,7 +99,7 @@ class CalendarConverter {
     } else {
       deltat = -0.000278 + 0.000265 * T + 0.000262 * T2;
     }
-    ;
+
     JdNew = Jd1 + C1 - deltat;
     return INT(JdNew + 0.5 + timeZone / 24);
   }
