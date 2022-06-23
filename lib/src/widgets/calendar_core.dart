@@ -63,9 +63,8 @@ class CalendarCore extends StatelessWidget {
       physics: scrollPhysics,
       itemCount: _getPageCount(calendarFormat, firstDay, lastDay),
       itemBuilder: (context, index) {
-        final baseDay = isLunarCalendar == true
-            ? lunarDate(_getBaseDay(calendarFormat, index))
-            : _getBaseDay(calendarFormat, index);
+        final baseDay = _getBaseDay(calendarFormat, index);
+
         final visibleRange = _getVisibleRange(calendarFormat, baseDay);
         var visibleDays = _daysInRange(visibleRange.start, visibleRange.end);
 
@@ -77,6 +76,7 @@ class CalendarCore extends StatelessWidget {
         if (isLunarCalendar == true) {
           visibleDays = visibleDays.map((e) => lunarDate(e)).toList();
         }
+
         return CalendarPage(
           visibleDays: visibleDays,
           dowVisible: dowVisible,
@@ -98,7 +98,6 @@ class CalendarCore extends StatelessWidget {
               baseDay =
                   _getFocusedDay(calendarFormat, previousFocusedDay, index);
             }
-
             return SizedBox(
               height: constrainedRowHeight ?? rowHeight,
               child: dayBuilder(context, (day), (baseDay)),
@@ -160,6 +159,7 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif);
+
         break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
@@ -176,7 +176,6 @@ class CalendarCore extends StatelessWidget {
     } else if (day.isAfter(lastDay)) {
       day = lastDay;
     }
-
     return day;
   }
 
@@ -202,7 +201,6 @@ class CalendarCore extends StatelessWidget {
     } else if (day.isAfter(lastDay)) {
       day = lastDay;
     }
-
     return day;
   }
 
@@ -234,28 +232,45 @@ class CalendarCore extends StatelessWidget {
   }
 
   DateTimeRange _daysInMonth(DateTime focusedDay) {
-    final first = _firstDayOfMonth(focusedDay);
-    final daysBefore = _getDaysBefore(first);
-    final firstToDisplay = first.subtract(Duration(days: daysBefore));
-
+    final first = _firstDayOfMonth((focusedDay));
+    final daysBefore = _getDaysBefore((first));
+    var firstToDisplay = first.subtract(Duration(days: daysBefore));
     if (sixWeekMonthsEnforced) {
       final end = firstToDisplay.add(const Duration(days: 42));
       return DateTimeRange(start: firstToDisplay, end: end);
     }
 
-    final last = _lastDayOfMonth(focusedDay);
+    final last = _lastDayOfMonth((focusedDay));
     final daysAfter = _getDaysAfter(last);
-    final lastToDisplay = last.add(Duration(days: daysAfter));
+    final lastToDisplay = last.add(Duration(days: daysAfter + 1));
+    if (isLunarCalendar == true) {
+      List listMonth;
 
-    return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
+      listMonth =
+          _daysInRange(lunarDate(firstToDisplay), lunarDate(lastToDisplay))
+              .map((e) => e.month)
+              .toSet()
+              .toList();
+
+      if (listMonth.length == 2) {
+        firstToDisplay = firstToDisplay
+            .subtract(Duration(days: lunarDate(firstToDisplay).day + 1));
+        return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
+      }
+    }
+    var visibleRange =
+        DateTimeRange(start: (firstToDisplay), end: (lastToDisplay));
+
+    return visibleRange;
   }
 
   List<DateTime> _daysInRange(DateTime first, DateTime last) {
     final dayCount = last.difference(first).inDays + 1;
-    return List.generate(
+    var list = List.generate(
       dayCount,
       (index) => DateTime.utc(first.year, first.month, first.day + index),
     );
+    return list;
   }
 
   DateTime _firstDayOfWeek(DateTime week) {
