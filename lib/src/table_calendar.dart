@@ -460,7 +460,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           ValueListenableBuilder<DateTime>(
             valueListenable: _focusedDay,
             builder: (context, value, _) {
-              var lunarValue = lunarDate(value.add(Duration(days: 2)));
+              var lunarValue = lunarDate(value);
               return CalendarHeader(
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
                 focusedMonth:
@@ -561,10 +561,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   Widget _buildCell(DateTime day, DateTime focusedDay) {
     var isOutside = day.month != focusedDay.month;
     if (widget.isLunarCalendar == true) {
-      print(lunarDate(focusedDay.add(Duration(days: 2))).month);
       //true -hide
       isOutside =
-          day.month != lunarDate(focusedDay.add(Duration(days: 2))).month;
+          day.month != lunarDate(focusedDay).month;
     }
 
     if (isOutside && _shouldBlockOutsideDays) {
