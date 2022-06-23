@@ -60,7 +60,7 @@ class CellContent extends StatelessWidget {
       );
     }
 
-    final text = '${day.day}/${day.month} - ${focusedDay.month}';
+    final text = '${day.day}';
     final margin = calendarStyle.cellMargin;
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;
