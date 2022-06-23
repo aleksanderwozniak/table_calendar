@@ -98,18 +98,18 @@ class CalendarCore extends StatelessWidget {
                 index,
               );
             }
+            if (isLunarCalendar == true) {
+              List<int> listMonth = [];
 
-            List<int> listMonth = [];
+              listMonth = visibleDays.map((e) => lunarDate(e).month).toList();
 
-            listMonth = visibleDays.map((e) => lunarDate(e).month).toList();
-
-            if (isLunarCalendar == true && listMonth.isNotEmpty) {
-              baseDay = DateTime(
-                  lunarDate(day).year, getMostValueInList(listMonth).first, 1);
-            } else {
-              baseDay = day;
+              if (listMonth.isNotEmpty) {
+                baseDay = DateTime(lunarDate(day).year,
+                    getMostValueInList(listMonth).first, 1);
+              } else {
+                baseDay = day;
+              }
             }
-
             return SizedBox(
               height: constrainedRowHeight ?? rowHeight,
               child: dayBuilder(context, (day), (baseDay)),
