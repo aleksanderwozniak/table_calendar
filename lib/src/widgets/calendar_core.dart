@@ -92,9 +92,24 @@ class CalendarCore extends StatelessWidget {
             if (previousFocusedDay == null || previousIndex == null) {
               baseDay = _getBaseDay(calendarFormat, index);
             } else {
-              baseDay =
-                  _getFocusedDay(calendarFormat, previousFocusedDay, index);
+              baseDay = _getFocusedDay(
+                calendarFormat,
+                previousFocusedDay,
+                index,
+              );
             }
+
+            List<int> listMonth = [];
+
+            listMonth = visibleDays.map((e) => lunarDate(e).month).toList();
+
+            if (isLunarCalendar == true && listMonth.isNotEmpty) {
+              baseDay = DateTime(
+                  lunarDate(day).year, getMostValueInList(listMonth).first, 1);
+            } else {
+              baseDay = day;
+            }
+
             return SizedBox(
               height: constrainedRowHeight ?? rowHeight,
               child: dayBuilder(context, (day), (baseDay)),
@@ -177,6 +192,38 @@ class CalendarCore extends StatelessWidget {
     }
 
     return day;
+  }
+
+  List<int> getMostValueInList(List list) {
+    list.sort();
+    List<int> popularNumbers = [];
+    List<Map<dynamic, dynamic>> data = [];
+    var maxOccurrence = 0;
+
+    var i = 0;
+    while (i < list.length) {
+      var number = list[i];
+      var occurrence = 1;
+      for (int j = 0; j < list.length; j++) {
+        if (j == i) {
+          continue;
+        } else if (number == list[j]) {
+          occurrence++;
+        }
+      }
+      list.removeWhere((it) => it == number);
+      data.add({number: occurrence});
+      if (maxOccurrence < occurrence) {
+        maxOccurrence = occurrence;
+      }
+    }
+
+    data.forEach((map) {
+      if (map[map.keys.toList()[0]] == maxOccurrence) {
+        popularNumbers.add(map.keys.toList()[0]);
+      }
+    });
+    return popularNumbers;
   }
 
   DateTime _getBaseDay(CalendarFormat format, int pageIndex) {

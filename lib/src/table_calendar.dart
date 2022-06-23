@@ -551,7 +551,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   Widget _buildCell(DateTime day, DateTime focusedDay) {
     var isOutside = day.month != focusedDay.month;
     if (widget.isLunarCalendar == true) {
-      isOutside = lunarDate(day).month != lunarDate(focusedDay).month;
+      isOutside = lunarDate(day).month != (focusedDay).month;
     }
 
     if (isOutside && _shouldBlockOutsideDays) {
