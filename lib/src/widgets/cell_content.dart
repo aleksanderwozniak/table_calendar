@@ -3,6 +3,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/src/shared/utils.dart';
 
 import '../customization/calendar_builders.dart';
 import '../customization/calendar_style.dart';
@@ -22,6 +23,7 @@ class CellContent extends StatelessWidget {
   final bool isHoliday;
   final bool isWeekend;
   final CalendarStyle calendarStyle;
+  final bool isLunarCalendar;
   final CalendarBuilders calendarBuilders;
 
   const CellContent({
@@ -41,6 +43,7 @@ class CellContent extends StatelessWidget {
     required this.isHoliday,
     required this.isWeekend,
     this.locale,
+    this.isLunarCalendar = false,
   }) : super(key: key);
 
   @override
@@ -60,7 +63,8 @@ class CellContent extends StatelessWidget {
       );
     }
 
-    final text = '${day.day}';
+    final text =
+        isLunarCalendar == true ? '${lunarDate(day).day}' : '${day.day}';
     final margin = calendarStyle.cellMargin;
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;

@@ -21,6 +21,7 @@ class CalendarHeader extends StatelessWidget {
   final ValueChanged<CalendarFormat> onFormatButtonTap;
   final Map<CalendarFormat, String> availableCalendarFormats;
   final DayBuilder? headerTitleBuilder;
+  final bool isLunarCalendar;
 
   const CalendarHeader({
     Key? key,
@@ -35,12 +36,16 @@ class CalendarHeader extends StatelessWidget {
     required this.onFormatButtonTap,
     required this.availableCalendarFormats,
     this.headerTitleBuilder,
+    this.isLunarCalendar = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final text = headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
-        DateFormat.yMMMM(locale).format(focusedMonth);
+    var value = isLunarCalendar == true
+        ? DateTime(focusedMonth.year, focusedMonth.month - 1, focusedMonth.day)
+        : focusedMonth;
+    final text = headerStyle.titleTextFormatter?.call(value, locale) ??
+        DateFormat.yMMMM(locale).format(value);
 
     return Container(
       decoration: headerStyle.decoration,

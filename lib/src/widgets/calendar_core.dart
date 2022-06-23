@@ -73,9 +73,6 @@ class CalendarCore extends StatelessWidget {
             ? (constraints.maxHeight - actualDowHeight) /
                 _getRowCount(calendarFormat, baseDay)
             : null;
-        if (isLunarCalendar == true) {
-          visibleDays = visibleDays.map((e) => lunarDate(e)).toList();
-        }
 
         return CalendarPage(
           visibleDays: visibleDays,
@@ -148,7 +145,10 @@ class CalendarCore extends StatelessWidget {
   }
 
   DateTime _getFocusedDay(
-      CalendarFormat format, DateTime prevFocusedDay, int pageIndex) {
+    CalendarFormat format,
+    DateTime prevFocusedDay,
+    int pageIndex,
+  ) {
     if (pageIndex == previousIndex) {
       return prevFocusedDay;
     }
@@ -159,7 +159,6 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif);
-
         break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
@@ -176,6 +175,7 @@ class CalendarCore extends StatelessWidget {
     } else if (day.isAfter(lastDay)) {
       day = lastDay;
     }
+
     return day;
   }
 
@@ -242,22 +242,8 @@ class CalendarCore extends StatelessWidget {
 
     final last = _lastDayOfMonth((focusedDay));
     final daysAfter = _getDaysAfter(last);
-    final lastToDisplay = last.add(Duration(days: daysAfter + 1));
-    if (isLunarCalendar == true) {
-      List listMonth;
+    final lastToDisplay = last.add(Duration(days: daysAfter));
 
-      listMonth =
-          _daysInRange(lunarDate(firstToDisplay), lunarDate(lastToDisplay))
-              .map((e) => e.month)
-              .toSet()
-              .toList();
-
-      if (listMonth.length == 2) {
-        firstToDisplay = firstToDisplay
-            .subtract(Duration(days: lunarDate(firstToDisplay).day + 1));
-        return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
-      }
-    }
     var visibleRange =
         DateTimeRange(start: (firstToDisplay), end: (lastToDisplay));
 

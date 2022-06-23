@@ -264,19 +264,10 @@ class TableCalendar<T> extends StatefulWidget {
             ? weekendDays.every(
                 (day) => day >= DateTime.monday && day <= DateTime.sunday)
             : true),
-        focusedDay = isLunarCalendar == false
-            ? normalizeDate(focusedDay)
-            : DateTime(lunarDate(focusedDay).year,
-                lunarDate(focusedDay).month + 1, lunarDate(focusedDay).day),
-        firstDay = isLunarCalendar == false
-            ? normalizeDate(firstDay)
-            : lunarDate(firstDay),
-        lastDay = isLunarCalendar == false
-            ? normalizeDate(lastDay)
-            : lunarDate(lastDay),
-        currentDay = isLunarCalendar == false
-            ? (currentDay ?? DateTime.now())
-            : lunarDate(currentDay ?? DateTime.now()),
+        focusedDay = normalizeDate(focusedDay),
+        firstDay = normalizeDate(firstDay),
+        lastDay = normalizeDate(lastDay),
+        currentDay = (currentDay ?? DateTime.now()),
         super(key: key);
 
   @override
@@ -460,11 +451,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           ValueListenableBuilder<DateTime>(
             valueListenable: _focusedDay,
             builder: (context, value, _) {
-              var lunarValue = lunarDate(value.add(Duration(days: 2)));
               return CalendarHeader(
+                isLunarCalendar: widget.isLunarCalendar,
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
-                focusedMonth:
-                    widget.isLunarCalendar == true ? lunarValue : value,
+                focusedMonth: value,
                 onLeftChevronTap: _onLeftChevronTap,
                 onRightChevronTap: _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
@@ -561,10 +551,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   Widget _buildCell(DateTime day, DateTime focusedDay) {
     var isOutside = day.month != focusedDay.month;
     if (widget.isLunarCalendar == true) {
-      print(lunarDate(focusedDay.add(Duration(days: 2))).month);
-      //true -hide
-      isOutside =
-          day.month != lunarDate(focusedDay.add(Duration(days: 2))).month;
+      isOutside = lunarDate(day).month != lunarDate(focusedDay).month;
     }
 
     if (isOutside && _shouldBlockOutsideDays) {
@@ -581,14 +568,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final isWithinRange = widget.rangeStartDay != null &&
             widget.rangeEndDay != null &&
-            _isWithinRange(
-                day,
-                widget.isLunarCalendar == true
-                    ? lunarDate(widget.rangeStartDay!)
-                    : widget.rangeStartDay!,
-                widget.isLunarCalendar == true
-                    ? lunarDate(widget.rangeEndDay!)
-                    : widget.rangeEndDay!);
+            _isWithinRange(day, widget.rangeStartDay!, widget.rangeEndDay!);
 
         final isRangeStart = isSameDay(day, widget.rangeStartDay);
         final isRangeEnd = isSameDay(day, widget.rangeEndDay);
@@ -622,6 +602,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
         Widget content = CellContent(
+          isLunarCalendar: widget.isLunarCalendar,
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
           day: day,
           focusedDay: focusedDay,
