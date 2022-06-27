@@ -267,7 +267,9 @@ class TableCalendar<T> extends StatefulWidget {
         focusedDay = normalizeDate(focusedDay),
         firstDay = normalizeDate(firstDay),
         lastDay = normalizeDate(lastDay),
-        currentDay = (currentDay ?? DateTime.now()),
+        currentDay = isLunarCalendar == false
+            ? (currentDay ?? DateTime.now())
+            : lunarDate(currentDay ?? DateTime.now()),
         super(key: key);
 
   @override
