@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import 'shared/utils.dart';
@@ -34,9 +35,11 @@ class TableCalendarBase extends StatefulWidget {
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
   final bool isLunarCalendar;
+  final dynamic locale;
 
   TableCalendarBase({
     Key? key,
+    this.locale,
     this.isLunarCalendar = false,
     required this.firstDay,
     required this.lastDay,
@@ -190,7 +193,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
             builder: (context, value, child) {
               final height =
                   constraints.hasBoundedHeight ? constraints.maxHeight : value;
-
               return AnimatedSize(
                 duration: widget.formatAnimationDuration,
                 curve: widget.formatAnimationCurve,
@@ -202,6 +204,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               );
             },
             child: CalendarCore(
+              locale: widget.locale,
               isLunarCalendar: widget.isLunarCalendar,
               constraints: constraints,
               pageController: _pageController,
@@ -297,13 +300,106 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
     final first = _firstDayOfMonth(focusedDay);
     final daysBefore = _getDaysBefore(first);
-    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+    var firstToDisplay = first.subtract(Duration(days: daysBefore));
 
     final last = _lastDayOfMonth(focusedDay);
     final daysAfter = _getDaysAfter(last);
-    final lastToDisplay = last.add(Duration(days: daysAfter));
+    var lastToDisplay = last.add(Duration(days: daysAfter));
+
+    if (widget.isLunarCalendar == true) {
+      var rangeLunarDate =
+          _addRangeLunarDate(firstToDisplay, lastToDisplay, focusedDay);
+
+      return ((rangeLunarDate.end).difference(rangeLunarDate.start).inDays +
+              1) ~/
+          7;
+    }
 
     return (lastToDisplay.difference(firstToDisplay).inDays + 1) ~/ 7;
+  }
+
+  List<DateTime> _daysInRange(DateTime first, DateTime last) {
+    final dayCount = last.difference(first).inDays + 1;
+    var list = List.generate(
+      dayCount,
+      (index) => DateTime.utc(first.year, first.month, first.day + index),
+    );
+    return list;
+  }
+
+  DateTimeRange _addRangeLunarDate(
+    DateTime firstToDisplay,
+    DateTime lastToDisplay,
+    DateTime focusedDay,
+  ) {
+    var daysInMonthFocused = _daysInRange(firstToDisplay, lastToDisplay)
+        .where((e) => lunarDate(e).month == lunarDate(focusedDay).month)
+        .toList();
+
+    if (lunarDate(daysInMonthFocused.first).day == 1) {
+    } else {
+      final firstValue =
+          DateFormat.E(widget.locale).format(daysInMonthFocused.first);
+
+      int countWeek = 1;
+      if (lunarDate(daysInMonthFocused.first).day <= 7) {
+        countWeek = 1;
+      } else if (lunarDate(daysInMonthFocused.first).day > 7 &&
+          lunarDate(daysInMonthFocused.first).day <= 14) {
+        countWeek = 2;
+      } else if (lunarDate(daysInMonthFocused.first).day > 14 &&
+          lunarDate(daysInMonthFocused.first).day <= 21) {
+        countWeek = 3;
+      } else if (lunarDate(daysInMonthFocused.first).day > 21 &&
+          lunarDate(daysInMonthFocused.first).day <= 28) {
+        countWeek = 4;
+      } else if (lunarDate(daysInMonthFocused.first).day > 28) {
+        countWeek = 5;
+      }
+
+      if (firstValue == "Th 2" || firstValue == "Mon") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 7 * countWeek));
+      } else if (firstValue == "Th 3" || firstValue == "Tue") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 6 * countWeek));
+      } else if (firstValue == "Th 4" || firstValue == "Wed") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 5 * countWeek));
+      } else if (firstValue == "Th 5" || firstValue == "Thu") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 4 * countWeek));
+      } else if (firstValue == "Th 6" || firstValue == "Fri") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 3 * countWeek));
+      } else if (firstValue == "Th 7" || firstValue == "Sat") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 2 * countWeek));
+      } else if (firstValue == "CN" || firstValue == "Sun") {
+        firstToDisplay = firstToDisplay;
+      } else {
+        firstToDisplay = DateTime.now();
+      }
+    }
+    if (lunarDate(daysInMonthFocused.last).day < 31) {
+      lastToDisplay = daysInMonthFocused.last
+          .add(Duration(days: 31 - daysInMonthFocused.last.day));
+    }
+    final lastValue =
+        DateFormat.E(widget.locale).format(daysInMonthFocused.last);
+    if (lastValue == "Th 2" || lastValue == "Mon") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 6));
+    } else if (lastValue == "Th 3" || lastValue == "Tue") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 5));
+    } else if (lastValue == "Th 4" || lastValue == "Wed") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 4));
+    } else if (lastValue == "Th 5" || lastValue == "Thu") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 3));
+    } else if (lastValue == "Th 6" || lastValue == "Fri") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 2));
+    } else if (lastValue == "Th 7" || lastValue == "Sat") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 1));
+    } else if (lastValue == "CN" || lastValue == "Sun") {
+      lastToDisplay = daysInMonthFocused.last;
+    } else {
+      lastToDisplay = DateTime.now();
+    }
+
+    return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
   }
 
   int _getDaysBefore(DateTime firstDay) {

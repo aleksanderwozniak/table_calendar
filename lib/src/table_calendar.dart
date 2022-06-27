@@ -266,8 +266,7 @@ class TableCalendar<T> extends StatefulWidget {
             : true),
         focusedDay = isLunarCalendar == false
             ? normalizeDate(focusedDay)
-            : DateTime(lunarDate(focusedDay).year,
-                lunarDate(focusedDay).month + 1, lunarDate(focusedDay).day),
+            : lunarDate(focusedDay),
         firstDay = isLunarCalendar == false
             ? normalizeDate(firstDay)
             : lunarDate(firstDay),
@@ -488,6 +487,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
           child: TableCalendarBase(
+            locale: widget.locale,
             isLunarCalendar: widget.isLunarCalendar,
             onCalendarCreated: (pageController) {
               _pageController = pageController;
@@ -561,9 +561,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   Widget _buildCell(DateTime day, DateTime focusedDay) {
     var isOutside = day.month != focusedDay.month;
     if (widget.isLunarCalendar == true) {
-      //true -hide
-      isOutside =
-          day.month != lunarDate(focusedDay).month;
+      isOutside = day.month != focusedDay.month;
     }
 
     if (isOutside && _shouldBlockOutsideDays) {
@@ -591,7 +589,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final isRangeStart = isSameDay(day, widget.rangeStartDay);
         final isRangeEnd = isSameDay(day, widget.rangeEndDay);
-
         Widget? rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder
             ?.call(context, day, isWithinRange);
 

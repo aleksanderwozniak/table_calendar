@@ -1,7 +1,10 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../shared/utils.dart';
 import 'calendar_page.dart';
@@ -30,11 +33,13 @@ class CalendarCore extends StatelessWidget {
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
   final bool isLunarCalendar;
+  final dynamic locale;
 
   const CalendarCore({
     Key? key,
     this.isLunarCalendar = false,
     this.dowBuilder,
+    this.locale,
     required this.dayBuilder,
     required this.onPageChanged,
     required this.firstDay,
@@ -64,20 +69,20 @@ class CalendarCore extends StatelessWidget {
       itemCount: _getPageCount(calendarFormat, firstDay, lastDay),
       itemBuilder: (context, index) {
         final baseDay = _getBaseDay(calendarFormat, index);
-
         final visibleRange = _getVisibleRange(calendarFormat, baseDay);
         var visibleDays = _daysInRange(visibleRange.start, visibleRange.end);
-
         final actualDowHeight = dowVisible ? dowHeight! : 0.0;
         final constrainedRowHeight = constraints.hasBoundedHeight
             ? (constraints.maxHeight - actualDowHeight) /
                 _getRowCount(calendarFormat, baseDay)
             : null;
+
         if (isLunarCalendar == true) {
           visibleDays = visibleDays.map((e) => lunarDate(e)).toList();
         }
 
         return CalendarPage(
+          isLunarCalendar: isLunarCalendar,
           visibleDays: visibleDays,
           dowVisible: dowVisible,
           dowDecoration: dowDecoration,
@@ -98,6 +103,12 @@ class CalendarCore extends StatelessWidget {
               baseDay =
                   _getFocusedDay(calendarFormat, previousFocusedDay, index);
             }
+            if (isLunarCalendar == true) {
+              List<int> listMonth = visibleDays.map((e) => (e).month).toList();
+              baseDay = DateTime(
+                  lunarDate(day).year, _getMostValueInList(listMonth).first, 1);
+            }
+
             return SizedBox(
               height: constrainedRowHeight ?? rowHeight,
               child: dayBuilder(context, (day), (baseDay)),
@@ -117,6 +128,38 @@ class CalendarCore extends StatelessWidget {
         return onPageChanged(index, baseDay);
       },
     );
+  }
+
+  List<int> _getMostValueInList(List list) {
+    list.sort();
+    List<int> popularNumbers = [];
+    List<Map<dynamic, dynamic>> data = [];
+    var maxOccurrence = 0;
+
+    var i = 0;
+    while (i < list.length) {
+      var number = list[i];
+      var occurrence = 1;
+      for (int j = 0; j < list.length; j++) {
+        if (j == i) {
+          continue;
+        } else if (number == list[j]) {
+          occurrence++;
+        }
+      }
+      list.removeWhere((it) => it == number);
+      data.add({number: occurrence});
+      if (maxOccurrence < occurrence) {
+        maxOccurrence = occurrence;
+      }
+    }
+
+    data.forEach((map) {
+      if (map[map.keys.toList()[0]] == maxOccurrence) {
+        popularNumbers.add(map.keys.toList()[0]);
+      }
+    });
+    return popularNumbers;
   }
 
   int _getPageCount(CalendarFormat format, DateTime first, DateTime last) {
@@ -185,6 +228,7 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(firstDay.year, firstDay.month + pageIndex);
+
         break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(
@@ -201,6 +245,7 @@ class CalendarCore extends StatelessWidget {
     } else if (day.isAfter(lastDay)) {
       day = lastDay;
     }
+
     return day;
   }
 
@@ -242,26 +287,87 @@ class CalendarCore extends StatelessWidget {
 
     final last = _lastDayOfMonth((focusedDay));
     final daysAfter = _getDaysAfter(last);
-    final lastToDisplay = last.add(Duration(days: daysAfter + 1));
+    var lastToDisplay = last.add(Duration(days: daysAfter));
     if (isLunarCalendar == true) {
-      List listMonth;
+      var rangeLunarDate =
+          _addRangeLunarDate(firstToDisplay, lastToDisplay, focusedDay);
+      return DateTimeRange(
+          start: rangeLunarDate.start, end: rangeLunarDate.end);
+    }
 
-      listMonth =
-          _daysInRange(lunarDate(firstToDisplay), lunarDate(lastToDisplay))
-              .map((e) => e.month)
-              .toSet()
-              .toList();
+    return DateTimeRange(start: (firstToDisplay), end: (lastToDisplay));
+  }
 
-      if (listMonth.length == 2) {
-        firstToDisplay = firstToDisplay
-            .subtract(Duration(days: lunarDate(firstToDisplay).day + 1));
-        return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
+  DateTimeRange _addRangeLunarDate(
+    DateTime firstToDisplay,
+    DateTime lastToDisplay,
+    DateTime focusedDay,
+  ) {
+    var daysInMonthFocused = _daysInRange(firstToDisplay, lastToDisplay)
+        .where((e) => lunarDate(e).month == lunarDate(focusedDay).month)
+        .toList();
+
+    if (lunarDate(daysInMonthFocused.first).day != 1) {
+      final firstValue = DateFormat.E(locale).format(daysInMonthFocused.first);
+
+      int countWeek = 1;
+      if (lunarDate(daysInMonthFocused.first).day <= 7) {
+        countWeek = 1;
+      } else if (lunarDate(daysInMonthFocused.first).day > 7 &&
+          lunarDate(daysInMonthFocused.first).day <= 14) {
+        countWeek = 2;
+      } else if (lunarDate(daysInMonthFocused.first).day > 14 &&
+          lunarDate(daysInMonthFocused.first).day <= 21) {
+        countWeek = 3;
+      } else if (lunarDate(daysInMonthFocused.first).day > 21 &&
+          lunarDate(daysInMonthFocused.first).day <= 28) {
+        countWeek = 4;
+      } else if (lunarDate(daysInMonthFocused.first).day > 28) {
+        countWeek = 5;
+      }
+
+      if (firstValue == "Th 2" || firstValue == "Mon") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 7 * countWeek));
+      } else if (firstValue == "Th 3" || firstValue == "Tue") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 6 * countWeek));
+      } else if (firstValue == "Th 4" || firstValue == "Wed") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 5 * countWeek));
+      } else if (firstValue == "Th 5" || firstValue == "Thu") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 4 * countWeek));
+      } else if (firstValue == "Th 6" || firstValue == "Fri") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 3 * countWeek));
+      } else if (firstValue == "Th 7" || firstValue == "Sat") {
+        firstToDisplay = firstToDisplay.subtract(Duration(days: 2 * countWeek));
+      } else if (firstValue == "CN" || firstValue == "Sun") {
+        firstToDisplay = firstToDisplay;
+      } else {
+        firstToDisplay = DateTime.now();
       }
     }
-    var visibleRange =
-        DateTimeRange(start: (firstToDisplay), end: (lastToDisplay));
+    if (lunarDate(daysInMonthFocused.last).day < 31) {
+      lastToDisplay = daysInMonthFocused.last
+          .add(Duration(days: 31 - daysInMonthFocused.last.day));
+    }
+    final lastValue = DateFormat.E(locale).format(daysInMonthFocused.last);
+    if (lastValue == "Th 2" || lastValue == "Mon") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 6));
+    } else if (lastValue == "Th 3" || lastValue == "Tue") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 5));
+    } else if (lastValue == "Th 4" || lastValue == "Wed") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 4));
+    } else if (lastValue == "Th 5" || lastValue == "Thu") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 3));
+    } else if (lastValue == "Th 6" || lastValue == "Fri") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 2));
+    } else if (lastValue == "Th 7" || lastValue == "Sat") {
+      lastToDisplay = daysInMonthFocused.last.add(Duration(days: 1));
+    } else if (lastValue == "CN" || lastValue == "Sun") {
+      lastToDisplay = daysInMonthFocused.last;
+    } else {
+      lastToDisplay = DateTime.now();
+    }
 
-    return visibleRange;
+    return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
   }
 
   List<DateTime> _daysInRange(DateTime first, DateTime last) {
@@ -300,11 +406,19 @@ class CalendarCore extends StatelessWidget {
 
     final first = _firstDayOfMonth(focusedDay);
     final daysBefore = _getDaysBefore(first);
-    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+    var firstToDisplay = first.subtract(Duration(days: daysBefore));
 
     final last = _lastDayOfMonth(focusedDay);
     final daysAfter = _getDaysAfter(last);
-    final lastToDisplay = last.add(Duration(days: daysAfter));
+    var lastToDisplay = last.add(Duration(days: daysAfter));
+    if (isLunarCalendar == true) {
+      var rangeLunarDate =
+          _addRangeLunarDate(firstToDisplay, lastToDisplay, focusedDay);
+
+      return ((rangeLunarDate.end).difference(rangeLunarDate.start).inDays +
+              1) ~/
+          7;
+    }
 
     return (lastToDisplay.difference(firstToDisplay).inDays + 1) ~/ 7;
   }

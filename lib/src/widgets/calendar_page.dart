@@ -11,9 +11,11 @@ class CalendarPage extends StatelessWidget {
   final Decoration? rowDecoration;
   final TableBorder? tableBorder;
   final bool dowVisible;
+  final bool isLunarCalendar;
 
   const CalendarPage({
     Key? key,
+    this.isLunarCalendar = false,
     required this.visibleDays,
     this.dowBuilder,
     required this.dayBuilder,
@@ -36,18 +38,29 @@ class CalendarPage extends StatelessWidget {
   }
 
   TableRow _buildDaysOfWeek(BuildContext context) {
+    var list = [
+      DateTime(2022, 6, 6),
+      DateTime(2022, 6, 7),
+      DateTime(2022, 6, 8),
+      DateTime(2022, 6, 9),
+      DateTime(2022, 6, 10),
+      DateTime(2022, 6, 11),
+      DateTime(2022, 6, 12),
+    ];
     return TableRow(
       decoration: dowDecoration,
       children: List.generate(
         7,
-        (index) => dowBuilder!(context, visibleDays[index]),
+        (index) {
+          return dowBuilder!(context,
+              isLunarCalendar == true ? list[index] : visibleDays[index]);
+        },
       ).toList(),
     );
   }
 
   List<TableRow> _buildCalendarDays(BuildContext context) {
-    final rowAmount = visibleDays.length ~/ 7;
-
+    final rowAmount = (visibleDays.length) ~/ 7;
     return List.generate(rowAmount, (index) => index * 7)
         .map((index) => TableRow(
               decoration: rowDecoration,
