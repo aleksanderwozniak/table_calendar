@@ -264,18 +264,10 @@ class TableCalendar<T> extends StatefulWidget {
             ? weekendDays.every(
                 (day) => day >= DateTime.monday && day <= DateTime.sunday)
             : true),
-        focusedDay = isLunarCalendar == false
-            ? normalizeDate(focusedDay)
-            : lunarDate(focusedDay),
-        firstDay = isLunarCalendar == false
-            ? normalizeDate(firstDay)
-            : lunarDate(firstDay),
-        lastDay = isLunarCalendar == false
-            ? normalizeDate(lastDay)
-            : lunarDate(lastDay),
-        currentDay = isLunarCalendar == false
-            ? (currentDay ?? DateTime.now())
-            : lunarDate(currentDay ?? DateTime.now()),
+        focusedDay = normalizeDate(focusedDay),
+        firstDay = normalizeDate(firstDay),
+        lastDay = normalizeDate(lastDay),
+        currentDay = (currentDay ?? DateTime.now()),
         super(key: key);
 
   @override
@@ -459,11 +451,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           ValueListenableBuilder<DateTime>(
             valueListenable: _focusedDay,
             builder: (context, value, _) {
-              var lunarValue = lunarDate(value);
               return CalendarHeader(
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
                 focusedMonth:
-                    widget.isLunarCalendar == true ? lunarValue : value,
+                    widget.isLunarCalendar == true ? lunarDate(value) : value,
                 onLeftChevronTap: _onLeftChevronTap,
                 onRightChevronTap: _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
