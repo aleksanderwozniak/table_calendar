@@ -375,7 +375,7 @@ void main() {
             ),
           ),
         );
-      }, throwsAssertionError);
+      }, throwsAssertionError,);
     },
   );
 }

@@ -437,7 +437,7 @@ void main() {
               return [];
             },
           ),
-        ));
+        ),);
 
         final eventDayKey = cellContentKey(eventDay);
         final eventDayCellContent = find.byKey(eventDayKey);
@@ -470,7 +470,7 @@ void main() {
             lastDay: lastDay,
             currentDay: today,
           ),
-        ));
+        ),);
 
         final currentDayKey = cellContentKey(today);
         final currentDayCellContent =
@@ -493,7 +493,7 @@ void main() {
             firstDay: firstDay,
             lastDay: lastDay,
           ),
-        ));
+        ),);
 
         final currentDayKey = cellContentKey(now);
         final currentDayCellContent =
@@ -518,7 +518,7 @@ void main() {
               return isSameDay(day, selectedDay);
             },
           ),
-        ));
+        ),);
 
         final selectedDayKey = cellContentKey(selectedDay);
         final selectedDayCellContent =
@@ -543,7 +543,7 @@ void main() {
               return isSameDay(day, holiday);
             },
           ),
-        ));
+        ),);
 
         final holidayKey = cellContentKey(holiday);
         final holidayCellContent =
@@ -645,7 +645,7 @@ void main() {
             calendarFormat = format;
           },
         ),
-      ));
+      ),);
 
       await tester.drag(find.byType(CellContent).first, const Offset(0, -500));
       await tester.pumpAndSettle();
@@ -670,7 +670,7 @@ void main() {
             calendarFormat = format;
           },
         ),
-      ));
+      ),);
 
       await tester.drag(find.byType(CellContent).first, const Offset(0, -500));
       await tester.pumpAndSettle();
@@ -695,7 +695,7 @@ void main() {
             calendarFormat = format;
           },
         ),
-      ));
+      ),);
 
       await tester.drag(find.byType(CellContent).first, const Offset(0, -500));
       await tester.pumpAndSettle();
@@ -723,7 +723,7 @@ void main() {
               selectedDay = selected;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
 
@@ -751,7 +751,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(focusedDay, isNull);
 
@@ -781,7 +781,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
         expect(focusedDay, isNull);
@@ -815,7 +815,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
         expect(focusedDay, isNull);
@@ -849,7 +849,7 @@ void main() {
               selectedDay = selected;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
 
@@ -877,7 +877,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(focusedDay, isNull);
 
@@ -907,7 +907,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
         expect(focusedDay, isNull);
@@ -941,7 +941,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
         expect(focusedDay, isNull);
@@ -980,7 +980,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1024,7 +1024,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1074,7 +1074,7 @@ void main() {
             },
             onDayLongPressed: null,
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1129,7 +1129,7 @@ void main() {
             },
             onDayLongPressed: null,
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1184,7 +1184,7 @@ void main() {
             },
             onDayLongPressed: null,
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1239,7 +1239,7 @@ void main() {
             },
             onDayLongPressed: null,
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1286,7 +1286,7 @@ void main() {
             // rangeEndDay: rangeEnd,
             ranges: [DateRange(rangeStart, rangeEnd)],
           ),
-        ));
+        ),);
 
         final rangeStartKey = cellContentKey(rangeStart);
         final rangeStartCellContent =
@@ -1322,7 +1322,7 @@ void main() {
             // rangeEndDay: rangeEnd,
             ranges: [DateRange(rangeStart, rangeEnd)],
           ),
-        ));
+        ),);
 
         final dayCount = rangeEnd.difference(rangeStart).inDays - 1;
         expect(dayCount, 4);
@@ -1358,7 +1358,7 @@ void main() {
             // rangeStartDay: rangeStart,
             // rangeEndDay: rangeEnd,
           ),
-        ));
+        ),);
 
         final oobStart = rangeStart.subtract(const Duration(days: 1));
         final oobEnd = rangeEnd.add(const Duration(days: 1));

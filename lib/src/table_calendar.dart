@@ -18,12 +18,12 @@ import 'widgets/cell_content.dart';
 
 /// Signature for `onDaySelected` callback. Contains the selected day and focused day.
 typedef OnDaySelected = void Function(
-    DateTime selectedDay, DateTime focusedDay);
+    DateTime selectedDay, DateTime focusedDay,);
 
 /// Signature for `onRangeSelected` callback.
 /// Contains start and end of the selected range, as well as currently focused day.
 typedef OnRangeSelected = void Function(
-    DateTime? start, DateTime? end, DateTime focusedDay);
+    DateTime? start, DateTime? end, DateTime focusedDay,);
 
 /// Modes that range selection can operate in.
 enum RangeSelectionMode { disabled, toggledOff, toggledOn, enforced }
@@ -270,8 +270,8 @@ class TableCalendar<T> extends StatefulWidget {
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
             ? weekendDays.every(
-                (day) => day >= DateTime.monday && day <= DateTime.sunday)
-            : true),
+                (day) => day >= DateTime.monday && day <= DateTime.sunday,)
+            : true,),
         focusedDay = normalizeDate(focusedDay),
         firstDay = normalizeDate(firstDay),
         lastDay = normalizeDate(lastDay),
@@ -571,7 +571,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final isWithinRange = widget.ranges != null &&
             widget.ranges!.any((range) =>
-                _isWithinRange(day, range.rangeStartDay, range.rangeEndDay));
+                _isWithinRange(day, range.rangeStartDay, range.rangeEndDay),);
 
         final isRangeStart = widget.ranges != null &&
             widget.ranges!

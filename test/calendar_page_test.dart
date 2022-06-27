@@ -90,7 +90,7 @@ void main() {
             ),
           ),
         );
-      }, throwsAssertionError);
+      }, throwsAssertionError,);
     },
   );
 }
