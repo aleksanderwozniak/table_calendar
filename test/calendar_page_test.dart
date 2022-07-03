@@ -66,7 +66,7 @@ void main() {
       );
 
       final expectedCellCount = visibleDays.length;
-      final expectedDowLabels = 7;
+      const expectedDowLabels = 7;
 
       expect(
         find.byType(Text),
