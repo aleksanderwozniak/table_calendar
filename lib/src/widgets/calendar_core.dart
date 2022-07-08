@@ -31,6 +31,8 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
+  final bool fourColumnsWeek;
+  final Widget Function(BuildContext context)? placeHolder;
 
   const CalendarCore({
     Key? key,
@@ -55,6 +57,8 @@ class CalendarCore extends StatelessWidget {
     this.rowDecoration,
     this.tableBorder,
     this.scrollPhysics,
+    this.fourColumnsWeek = false,
+    this.placeHolder,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -102,6 +106,8 @@ class CalendarCore extends StatelessWidget {
               child: dayBuilder(context, day, baseDay),
             );
           },
+          fourColumns: fourColumnsWeek && calendarFormat == CalendarFormat.week,
+          placeHolder: placeHolder,
           dowHeight: dowHeight,
           weekNumberVisible: weekNumbersVisible,
           weekNumberBuilder: (context, day) {
@@ -284,7 +290,7 @@ class CalendarCore extends StatelessWidget {
     if (format == CalendarFormat.twoWeeks) {
       return 2;
     } else if (format == CalendarFormat.week) {
-      return 1;
+      return fourColumnsWeek ? 2 : 1;
     } else if (sixWeekMonthsEnforced) {
       return 6;
     }

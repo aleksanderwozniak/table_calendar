@@ -35,6 +35,8 @@ class TableCalendarBase extends StatefulWidget {
   final SwipeCallback? onVerticalSwipe;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
+  final bool fourColumnWeek;
+  final Widget Function(BuildContext context)? placeHolder;
 
   TableCalendarBase({
     Key? key,
@@ -72,6 +74,8 @@ class TableCalendarBase extends StatefulWidget {
     this.onVerticalSwipe,
     this.onPageChanged,
     this.onCalendarCreated,
+    this.fourColumnWeek = false,
+    this.placeHolder,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
         assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay)),
@@ -248,6 +252,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               },
               dowBuilder: widget.dowBuilder,
               dayBuilder: widget.dayBuilder,
+              fourColumnsWeek: widget.fourColumnWeek,
+              placeHolder: widget.placeHolder,
             ),
           ),
         );
@@ -293,7 +299,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     if (format == CalendarFormat.twoWeeks) {
       return 2;
     } else if (format == CalendarFormat.week) {
-      return 1;
+      return widget.fourColumnWeek ? 2 : 1;
     } else if (widget.sixWeekMonthsEnforced) {
       return 6;
     }

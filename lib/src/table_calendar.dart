@@ -204,6 +204,12 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController)? onCalendarCreated;
 
+  /// Enable week displayed on 4 columns monday to thursday and friday to sunday
+  final bool fourColumnsWeek;
+
+  /// Placeholder for monday in case of 4 columns week
+  final Widget Function(BuildContext context)? placeHolder;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     Key? key,
@@ -260,6 +266,8 @@ class TableCalendar<T> extends StatefulWidget {
     this.onPageChanged,
     this.onFormatChanged,
     this.onCalendarCreated,
+    this.fourColumnsWeek = false,
+    this.placeHolder,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -562,6 +570,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 child: _buildCell(day, focusedMonth),
               );
             },
+            fourColumnWeek: widget.fourColumnsWeek,
+            placeHolder: widget.placeHolder,
           ),
         ),
       ],

@@ -23,6 +23,8 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         title: Text('TableCalendar - Basics'),
       ),
       body: TableCalendar(
+        fourColumnsWeek: true,
+        placeHolder: (context) => Container(color: Colors.blue,),
         firstDay: kFirstDay,
         lastDay: kLastDay,
         focusedDay: _focusedDay,
