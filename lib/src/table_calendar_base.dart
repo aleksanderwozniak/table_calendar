@@ -21,6 +21,7 @@ class TableCalendarBase extends StatefulWidget {
   final Decoration? dowDecoration;
   final Decoration? rowDecoration;
   final TableBorder? tableBorder;
+  final EdgeInsets? tablePadding;
   final Duration formatAnimationDuration;
   final Curve formatAnimationCurve;
   final bool pageAnimationEnabled;
@@ -49,6 +50,7 @@ class TableCalendarBase extends StatefulWidget {
     this.dowDecoration,
     this.rowDecoration,
     this.tableBorder,
+    this.tablePadding,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
     this.pageAnimationEnabled = true,
@@ -218,6 +220,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               dowDecoration: widget.dowDecoration,
               rowDecoration: widget.rowDecoration,
               tableBorder: widget.tableBorder,
+              tablePadding: widget.tablePadding,
               onPageChanged: (index, focusedMonth) {
                 if (!_pageCallbackDisabled) {
                   if (!isSameDay(_focusedDay, focusedMonth)) {
@@ -250,8 +253,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   }
 
   double _getPageHeight(int rowCount) {
+    final tablePaddingHeight = widget.tablePadding?.vertical ?? 0.0;
     final dowHeight = widget.dowVisible ? widget.dowHeight! : 0.0;
-    return dowHeight + rowCount * widget.rowHeight;
+    return dowHeight + rowCount * widget.rowHeight + tablePaddingHeight;
   }
 
   int _calculateFocusedPage(

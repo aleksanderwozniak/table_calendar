@@ -21,6 +21,7 @@ class CalendarCore extends StatelessWidget {
   final Decoration? dowDecoration;
   final Decoration? rowDecoration;
   final TableBorder? tableBorder;
+  final EdgeInsets? tablePadding;
   final double? dowHeight;
   final double? rowHeight;
   final BoxConstraints constraints;
@@ -50,6 +51,7 @@ class CalendarCore extends StatelessWidget {
     this.dowDecoration,
     this.rowDecoration,
     this.tableBorder,
+    this.tablePadding,
     this.scrollPhysics,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
@@ -77,6 +79,7 @@ class CalendarCore extends StatelessWidget {
           dowDecoration: dowDecoration,
           rowDecoration: rowDecoration,
           tableBorder: tableBorder,
+          tablePadding: tablePadding,
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
