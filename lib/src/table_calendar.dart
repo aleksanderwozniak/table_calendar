@@ -217,6 +217,7 @@ class TableCalendar<T> extends StatefulWidget {
       CalendarFormat.month: 'Month',
       CalendarFormat.twoWeeks: '2 weeks',
       CalendarFormat.week: 'Week',
+      CalendarFormat.threeDays: '3 days',
     },
     this.headerVisible = true,
     this.daysOfWeekVisible = true,
@@ -273,8 +274,8 @@ class TableCalendar<T> extends StatefulWidget {
 }
 
 class _TableCalendarState<T> extends State<TableCalendar<T>> {
-  late final PageController _pageController;
   late final ValueNotifier<DateTime> _focusedDay;
+  late PageController _pageController;
   late RangeSelectionMode _rangeSelectionMode;
   DateTime? _firstSelectedDay;
 

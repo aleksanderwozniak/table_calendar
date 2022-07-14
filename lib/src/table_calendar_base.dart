@@ -79,7 +79,7 @@ class TableCalendarBase extends StatefulWidget {
 
 class _TableCalendarBaseState extends State<TableCalendarBase> {
   late final ValueNotifier<double> _pageHeight;
-  late final PageController _pageController;
+  late PageController _pageController;
   late DateTime _focusedDay;
   late int _previousIndex;
   late bool _pageCallbackDisabled;
@@ -152,7 +152,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
       _pageCallbackDisabled = true;
     }
 
-    if (shouldAnimate && widget.pageAnimationEnabled) {
+    if (!_pageController.hasClients) {
+      _pageController = PageController(initialPage: currentIndex);
+      widget.onCalendarCreated?.call(_pageController);
+    } else if (shouldAnimate && widget.pageAnimationEnabled) {
       if ((currentIndex - _previousIndex).abs() > 1) {
         final jumpIndex =
             currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
@@ -263,8 +266,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         return _getTwoWeekCount(startDay, focusedDay);
       case CalendarFormat.week:
         return _getWeekCount(startDay, focusedDay);
-      default:
-        return _getMonthCount(startDay, focusedDay);
+      case CalendarFormat.threeDays:
+        return _getThreeDaysCount(startDay, focusedDay);
     }
   }
 
@@ -279,6 +282,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     return last.difference(_firstDayOfWeek(first)).inDays ~/ 7;
   }
 
+  int _getThreeDaysCount(DateTime first, DateTime last) {
+    return last.difference(first).inDays ~/ 3;
+  }
+
   int _getTwoWeekCount(DateTime first, DateTime last) {
     return last.difference(_firstDayOfWeek(first)).inDays ~/ 14;
   }
@@ -286,7 +293,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   int _getRowCount(CalendarFormat format, DateTime focusedDay) {
     if (format == CalendarFormat.twoWeeks) {
       return 2;
-    } else if (format == CalendarFormat.week) {
+    } else if (format == CalendarFormat.week ||
+        format == CalendarFormat.threeDays) {
       return 1;
     } else if (widget.sixWeekMonthsEnforced) {
       return 6;

@@ -77,6 +77,7 @@ class CalendarCore extends StatelessWidget {
           dowDecoration: dowDecoration,
           rowDecoration: rowDecoration,
           tableBorder: tableBorder,
+          calendarFormat: calendarFormat,
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
@@ -122,8 +123,8 @@ class CalendarCore extends StatelessWidget {
         return _getTwoWeekCount(first, last) + 1;
       case CalendarFormat.week:
         return _getWeekCount(first, last) + 1;
-      default:
-        return _getMonthCount(first, last) + 1;
+      case CalendarFormat.threeDays:
+        return _getThreeDaysCount(first, last) + 1;
     }
   }
 
@@ -136,6 +137,10 @@ class CalendarCore extends StatelessWidget {
 
   int _getWeekCount(DateTime first, DateTime last) {
     return last.difference(_firstDayOfWeek(first)).inDays ~/ 7;
+  }
+
+  int _getThreeDaysCount(DateTime first, DateTime last) {
+    return last.difference(first).inDays ~/ 3;
   }
 
   int _getTwoWeekCount(DateTime first, DateTime last) {
@@ -163,6 +168,10 @@ class CalendarCore extends StatelessWidget {
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
             prevFocusedDay.day + pageDif * 7);
         break;
+      case CalendarFormat.threeDays:
+        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
+            prevFocusedDay.day + pageDif * 3);
+        break;
     }
 
     if (day.isBefore(firstDay)) {
@@ -189,6 +198,10 @@ class CalendarCore extends StatelessWidget {
         day = DateTime.utc(
             firstDay.year, firstDay.month, firstDay.day + pageIndex * 7);
         break;
+      case CalendarFormat.threeDays:
+        day = DateTime.utc(
+            firstDay.year, firstDay.month, firstDay.day + pageIndex * 3);
+        break;
     }
 
     if (day.isBefore(firstDay)) {
@@ -208,8 +221,8 @@ class CalendarCore extends StatelessWidget {
         return _daysInTwoWeeks(focusedDay);
       case CalendarFormat.week:
         return _daysInWeek(focusedDay);
-      default:
-        return _daysInMonth(focusedDay);
+      case CalendarFormat.threeDays:
+        return _threeDayRange(focusedDay);
     }
   }
 
@@ -217,6 +230,12 @@ class CalendarCore extends StatelessWidget {
     final daysBefore = _getDaysBefore(focusedDay);
     final firstToDisplay = focusedDay.subtract(Duration(days: daysBefore));
     final lastToDisplay = firstToDisplay.add(const Duration(days: 7));
+    return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
+  }
+
+  DateTimeRange _threeDayRange(DateTime focusedDay) {
+    final firstToDisplay = focusedDay;
+    final lastToDisplay = focusedDay.add(const Duration(days: 2));
     return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
   }
 
@@ -271,7 +290,8 @@ class CalendarCore extends StatelessWidget {
   int _getRowCount(CalendarFormat format, DateTime focusedDay) {
     if (format == CalendarFormat.twoWeeks) {
       return 2;
-    } else if (format == CalendarFormat.week) {
+    } else if (format == CalendarFormat.week ||
+        format == CalendarFormat.threeDays) {
       return 1;
     } else if (sixWeekMonthsEnforced) {
       return 6;

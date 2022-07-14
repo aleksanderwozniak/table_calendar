@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_page.dart';
 
 Widget setupTestWidget(Widget child) {
@@ -33,6 +34,7 @@ void main() {
       await tester.pumpWidget(
         setupTestWidget(
           CalendarPage(
+            calendarFormat: CalendarFormat.month,
             visibleDays: visibleDays,
             dayBuilder: (context, day) {
               return Text('${day.day}');
@@ -53,6 +55,7 @@ void main() {
       await tester.pumpWidget(
         setupTestWidget(
           CalendarPage(
+            calendarFormat: CalendarFormat.month,
             visibleDays: visibleDays,
             dayBuilder: (context, day) {
               return Text('${day.day}');
@@ -82,6 +85,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             CalendarPage(
+              calendarFormat: CalendarFormat.month,
               visibleDays: visibleDays,
               dayBuilder: (context, day) {
                 return Text('${day.day}');
