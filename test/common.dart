@@ -12,4 +12,5 @@ const calendarFormatMap = const {
   CalendarFormat.month: 'Month',
   CalendarFormat.twoWeeks: 'Two weeks',
   CalendarFormat.week: 'week',
+  CalendarFormat.threeDays: 'Three days',
 };
