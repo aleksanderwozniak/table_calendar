@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
+import 'package:table_calendar/src/shared/utils.dart';
 
 class CalendarPage extends StatelessWidget {
   final Widget Function(BuildContext context, DateTime day)? dowBuilder;
@@ -11,6 +12,7 @@ class CalendarPage extends StatelessWidget {
   final Decoration? rowDecoration;
   final TableBorder? tableBorder;
   final bool dowVisible;
+  final CalendarFormat calendarFormat;
 
   const CalendarPage({
     Key? key,
@@ -21,6 +23,7 @@ class CalendarPage extends StatelessWidget {
     this.rowDecoration,
     this.tableBorder,
     this.dowVisible = true,
+    required this.calendarFormat,
   })  : assert(!dowVisible || dowBuilder != null),
         super(key: key);
 
@@ -39,20 +42,22 @@ class CalendarPage extends StatelessWidget {
     return TableRow(
       decoration: dowDecoration,
       children: List.generate(
-        7,
+        _rowSize,
         (index) => dowBuilder!(context, visibleDays[index]),
       ).toList(),
     );
   }
 
-  List<TableRow> _buildCalendarDays(BuildContext context) {
-    final rowAmount = visibleDays.length ~/ 7;
+  int get _rowSize => calendarFormat == CalendarFormat.threeDays ? 3 : 7;
 
-    return List.generate(rowAmount, (index) => index * 7)
+  List<TableRow> _buildCalendarDays(BuildContext context) {
+    final rowAmount = visibleDays.length ~/ _rowSize;
+
+    return List.generate(rowAmount, (index) => index * _rowSize)
         .map((index) => TableRow(
               decoration: rowDecoration,
               children: List.generate(
-                7,
+                _rowSize,
                 (id) => dayBuilder(context, visibleDays[index + id]),
               ),
             ))
