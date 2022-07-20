@@ -103,6 +103,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// When set to true, `TableCalendar` will fill available height.
   final bool shouldFillViewport;
 
+  /// Whether to display week numbers on calendar.
+  final bool weekNumbersVisible;
+
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
@@ -224,6 +227,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.pageAnimationEnabled = true,
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
+    this.weekNumbersVisible = false,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
@@ -504,6 +508,26 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
             },
+            weekNumbersVisible: widget.weekNumbersVisible,
+            weekNumberBuilder: (BuildContext context, DateTime day) {
+              final weekNumber = _calculateWeekNumber(day);
+              Widget? cell = widget.calendarBuilders.weekNumberBuilder
+                  ?.call(context, weekNumber);
+
+              if (cell == null) {
+                cell = Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Center(
+                    child: Text(
+                      weekNumber.toString(),
+                      style: widget.calendarStyle.weekNumberTextStyle,
+                    ),
+                  ),
+                );
+              }
+
+              return cell;
+            },
             dowBuilder: (BuildContext context, DateTime day) {
               Widget? dowCell =
                   widget.calendarBuilders.dowBuilder?.call(context, day);
@@ -679,6 +703,20 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           margin: widget.calendarStyle.markerMargin,
           decoration: widget.calendarStyle.markerDecoration,
         );
+  }
+
+  int _calculateWeekNumber(DateTime date) {
+    final middleDay = date.add(const Duration(days: 3));
+    final dayOfYear = _dayOfYear(middleDay);
+
+    return 1 + ((dayOfYear - 1) / 7).floor();
+  }
+
+  int _dayOfYear(DateTime date) {
+    return normalizeDate(date)
+            .difference(DateTime.utc(date.year, 1, 1))
+            .inDays +
+        1;
   }
 
   bool _isWithinRange(DateTime day, DateTime start, DateTime end) {

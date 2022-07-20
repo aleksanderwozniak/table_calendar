@@ -61,6 +61,7 @@ void main() {
             dowBuilder: (context, day) {
               return Text('${day.weekday}');
             },
+            dowHeight: 5,
           ),
         ),
       );
@@ -93,4 +94,59 @@ void main() {
       }, throwsAssertionError);
     },
   );
+
+  testWidgets(
+    'Week numbers are not visible by default',
+    (tester) async {
+      await tester.pumpWidget(
+        setupTestWidget(
+          CalendarPage(
+            visibleDays: visibleDays,
+            dayBuilder: (context, day) {
+              return Text('${day.day}');
+            },
+            dowVisible: true,
+            dowBuilder: (context, day) {
+              return Text('${day.weekday}');
+            },
+            dowHeight: 5,
+          ),
+        ),
+      );
+
+      expect(
+        find.byType(Column),
+        findsNWidgets(0),
+      );
+    },
+  );
+
+  testWidgets(
+    'Week numbers are visible',
+    (tester) async {
+      await tester.pumpWidget(setupTestWidget(
+        CalendarPage(
+          visibleDays: visibleDays,
+          dayBuilder: (context, day) {
+            return Text('${day.day}');
+          },
+          dowVisible: true,
+          dowBuilder: (context, day) {
+            return Text('${day.weekday}');
+          },
+          dowHeight: 5,
+          weekNumberVisible: true,
+          weekNumberBuilder: (BuildContext context, DateTime day) {
+            return Text(day.weekday.toString());
+          },
+        ),
+      ));
+
+      expect(
+        find.byType(Column),
+        findsNWidgets(1),
+      );
+    },
+  );
+
 }
