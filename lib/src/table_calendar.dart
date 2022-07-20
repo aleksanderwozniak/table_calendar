@@ -510,15 +510,14 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             },
             weekNumbersVisible: widget.weekNumbersVisible,
             weekNumberBuilder: (BuildContext context, DateTime day) {
-              final weekNumber = isoWeekNumber(day);
+              final weekNumber = _calculateWeekNumber(day);
               Widget? cell = widget.calendarBuilders.weekNumberBuilder
                   ?.call(context, weekNumber);
 
               if (cell == null) {
                 cell = Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Container(
-                    alignment: Alignment.center,
+                  child: Center(
                     child: Text(
                       weekNumber.toString(),
                       style: widget.calendarStyle.weekNumberTextStyle,
@@ -567,19 +566,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         ),
       ],
     );
-  }
-
-  int isoWeekNumber(DateTime date) {
-    int daysToAdd = DateTime.thursday - date.weekday;
-    DateTime thursdayDate = daysToAdd > 0
-        ? date.add(Duration(days: daysToAdd))
-        : date.subtract(Duration(days: daysToAdd.abs()));
-    int dayOfYearThursday = dayOfYear(thursdayDate);
-    return 1 + ((dayOfYearThursday - 1) / 7).floor();
-  }
-
-  int dayOfYear(DateTime date) {
-    return date.difference(DateTime(date.year, 1, 1)).inDays;
   }
 
   Widget _buildCell(DateTime day, DateTime focusedDay) {
@@ -717,6 +703,20 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           margin: widget.calendarStyle.markerMargin,
           decoration: widget.calendarStyle.markerDecoration,
         );
+  }
+
+  int _calculateWeekNumber(DateTime date) {
+    final middleDay = date.add(const Duration(days: 3));
+    final dayOfYear = _dayOfYear(middleDay);
+
+    return 1 + ((dayOfYear - 1) / 7).floor();
+  }
+
+  int _dayOfYear(DateTime date) {
+    return normalizeDate(date)
+            .difference(DateTime.utc(date.year, 1, 1))
+            .inDays +
+        1;
   }
 
   bool _isWithinRange(DateTime day, DateTime start, DateTime end) {
