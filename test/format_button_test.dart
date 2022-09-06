@@ -11,7 +11,7 @@ import 'common.dart';
 Widget setupTestWidget(Widget child) {
   return Directionality(
     textDirection: TextDirection.ltr,
-    child: child,
+    child: Material(child: child),
   );
 }
 
