@@ -148,7 +148,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.6"
+    version: "3.0.7"
   term_glyph:
     dependency: transitive
     description:

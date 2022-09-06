@@ -1,3 +1,7 @@
+## [3.0.7]
+
+* Added week numbering feature
+
 ## [3.0.6]
 
 * Fixed issue with missing Flutter Web platform tag
