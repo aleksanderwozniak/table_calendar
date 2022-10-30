@@ -15,13 +15,14 @@ class TableComplexExample extends StatefulWidget {
 }
 
 class _TableComplexExampleState extends State<TableComplexExample> {
-  late final PageController _pageController;
   late final ValueNotifier<List<Event>> _selectedEvents;
   final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
     hashCode: getHashCode,
   );
+
+  late PageController _pageController;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime? _rangeStart;

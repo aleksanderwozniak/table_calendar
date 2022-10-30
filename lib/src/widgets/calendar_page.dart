@@ -57,12 +57,14 @@ class CalendarPage extends StatelessWidget {
 
   Widget _buildWeekNumbers(BuildContext context) {
     final rowAmount = visibleDays.length ~/ 7;
+
     return Column(
       children: [
         if (dowVisible) SizedBox(height: dowHeight ?? 0),
         ...List.generate(rowAmount, (index) => index * 7)
             .map((index) => Expanded(
-                child: weekNumberBuilder!(context, visibleDays[index])))
+                  child: weekNumberBuilder!(context, visibleDays[index]),
+                ))
             .toList()
       ],
     );
