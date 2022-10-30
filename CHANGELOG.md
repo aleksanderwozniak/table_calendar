@@ -1,3 +1,7 @@
+## [3.0.8]
+
+* Added tablePadding property to CalendarStyle
+
 ## [3.0.7]
 
 * Added week numbering feature
