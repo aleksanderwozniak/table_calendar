@@ -11,6 +11,7 @@ class CalendarPage extends StatelessWidget {
   final Decoration? dowDecoration;
   final Decoration? rowDecoration;
   final TableBorder? tableBorder;
+  final EdgeInsets? tablePadding;
   final bool dowVisible;
   final bool weekNumberVisible;
   final double? dowHeight;
@@ -24,6 +25,7 @@ class CalendarPage extends StatelessWidget {
     this.dowDecoration,
     this.rowDecoration,
     this.tableBorder,
+    this.tablePadding,
     this.dowVisible = true,
     this.weekNumberVisible = false,
     this.dowHeight,
@@ -33,20 +35,23 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (weekNumberVisible) _buildWeekNumbers(context),
-        Expanded(
-          child: Table(
-            border: tableBorder,
-            children: [
-              if (dowVisible) _buildDaysOfWeek(context),
-              ..._buildCalendarDays(context),
-            ],
+    return Padding(
+      padding: tablePadding ?? EdgeInsets.zero,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (weekNumberVisible) _buildWeekNumbers(context),
+          Expanded(
+            child: Table(
+              border: tableBorder,
+              children: [
+                if (dowVisible) _buildDaysOfWeek(context),
+                ..._buildCalendarDays(context),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -56,7 +61,8 @@ class CalendarPage extends StatelessWidget {
       children: [
         if (dowVisible) SizedBox(height: dowHeight ?? 0),
         ...List.generate(rowAmount, (index) => index * 7)
-            .map((index) => Expanded(child: weekNumberBuilder!(context, visibleDays[index])))
+            .map((index) => Expanded(
+                child: weekNumberBuilder!(context, visibleDays[index])))
             .toList()
       ],
     );

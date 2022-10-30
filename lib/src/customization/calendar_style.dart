@@ -148,6 +148,9 @@ class CalendarStyle {
   /// Border for the internal `Table` widget.
   final TableBorder tableBorder;
 
+  /// Padding for the internal `Table` widget.
+  final EdgeInsets tablePadding;
+
   /// Creates a `CalendarStyle` used by `TableCalendar` widget.
   const CalendarStyle({
     this.isTodayHighlighted = true,
@@ -223,6 +226,7 @@ class CalendarStyle {
     this.defaultDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.rowDecoration = const BoxDecoration(),
     this.tableBorder = const TableBorder(),
+    this.tablePadding = const EdgeInsets.all(0),
   });
 }
 
