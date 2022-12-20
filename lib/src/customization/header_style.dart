@@ -1,8 +1,5 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
-
-import 'dart:js_util';
-
 import 'package:flutter/material.dart';
 
 import '../shared/utils.dart' show TextFormatter;
