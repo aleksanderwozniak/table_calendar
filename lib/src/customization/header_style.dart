@@ -1,6 +1,8 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 
 import '../shared/utils.dart' show TextFormatter;
@@ -81,6 +83,8 @@ class HeaderStyle {
 
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
+    required this.leftChevronIcon,
+    required this.rightChevronIcon,
     this.titleCentered = false,
     this.formatButtonVisible = true,
     this.formatButtonShowsNext = true,
@@ -99,8 +103,6 @@ class HeaderStyle {
     this.rightChevronPadding = const EdgeInsets.all(12.0),
     this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.leftChevronIcon = const Icon(Icons.chevron_left),
-    this.rightChevronIcon = const Icon(Icons.chevron_right),
     this.leftChevronVisible = true,
     this.rightChevronVisible = true,
     this.decoration = const BoxDecoration(),
