@@ -556,11 +556,14 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
-              return GestureDetector(
-                behavior: widget.dayHitTestBehavior,
-                onTap: () => _onDayTapped(day),
-                onLongPress: () => _onDayLongPressed(day),
-                child: _buildCell(day, focusedMonth),
+              return Semantics(
+                excludeSemantics: _isDayDisabled(day),
+                child: GestureDetector(
+                  behavior: widget.dayHitTestBehavior,
+                  onTap: () => _onDayTapped(day),
+                  onLongPress: () => _onDayLongPressed(day),
+                  child: _buildCell(day, focusedMonth),
+                ),
               );
             },
           ),
