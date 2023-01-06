@@ -1,3 +1,8 @@
+## [3.0.9]
+
+* Updated intl version to 0.18.0
+* Added explicit android:exported value to AndroidManifest
+
 ## [3.0.8]
 
 * Added tablePadding property to CalendarStyle
