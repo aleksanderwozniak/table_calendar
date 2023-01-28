@@ -42,7 +42,7 @@ dependencies:
 **TableCalendar** requires you to provide `firstDay`, `lastDay` and `focusedDay`:
 * `firstDay` is the first available day for the calendar. Users will not be able to access days before it.
 * `lastDay` is the last available day for the calendar. Users will not be able to access days after it.
-* `focusedDay` is the currently targeted day. Use this property to determine which month should be currently visible.
+* `focusedDay` is the currently targeted day. Use this property to determine which month should be currently visible. The calendar will show that month with the chosen focused day highlighted.
 
 ```dart
 TableCalendar(
