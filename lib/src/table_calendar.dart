@@ -3,7 +3,7 @@
 
 import 'dart:math';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -147,7 +147,10 @@ class TableCalendar<T> extends StatefulWidget {
   final DaysOfWeekStyle daysOfWeekStyle;
 
   /// Style for `TableCalendar`'s content.
-  final CalendarStyle calendarStyle;
+  /// 
+  /// If not specified the closest surrounding [CalendarStyle] will be used.
+  /// If there isn't one a new one will be created.
+  final CalendarStyle? calendarStyle;
 
   /// Set of custom builders for `TableCalendar` to work with.
   /// Use those to fully tailor the UI.
@@ -243,7 +246,7 @@ class TableCalendar<T> extends StatefulWidget {
     ),
     this.headerStyle = const HeaderStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
-    this.calendarStyle = const CalendarStyle(),
+    this.calendarStyle,
     this.calendarBuilders = const CalendarBuilders(),
     this.rangeSelectionMode = RangeSelectionMode.toggledOff,
     this.eventLoader,
@@ -312,6 +315,11 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     super.dispose();
   }
 
+  CalendarStyle get _calendarStyle =>
+      widget.calendarStyle ??
+      Theme.of(context).extension<CalendarStyle>() ??
+      const CalendarStyle();
+
   bool get _isRangeSelectionToggleable =>
       _rangeSelectionMode == RangeSelectionMode.toggledOn ||
       _rangeSelectionMode == RangeSelectionMode.toggledOff;
@@ -321,7 +329,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
       _rangeSelectionMode == RangeSelectionMode.enforced;
 
   bool get _shouldBlockOutsideDays =>
-      !widget.calendarStyle.outsideDaysVisible &&
+      !_calendarStyle.outsideDaysVisible &&
       widget.calendarFormat == CalendarFormat.month;
 
   void _swipeCalendarFormat(SwipeDirection direction) {
@@ -490,9 +498,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             lastDay: widget.lastDay,
             startingDayOfWeek: widget.startingDayOfWeek,
             dowDecoration: widget.daysOfWeekStyle.decoration,
-            rowDecoration: widget.calendarStyle.rowDecoration,
-            tableBorder: widget.calendarStyle.tableBorder,
-            tablePadding: widget.calendarStyle.tablePadding,
+            rowDecoration: _calendarStyle.rowDecoration,
+            tableBorder: _calendarStyle.tableBorder,
+            tablePadding: _calendarStyle.tablePadding,
             dowVisible: widget.daysOfWeekVisible,
             dowHeight: widget.daysOfWeekHeight,
             rowHeight: widget.rowHeight,
@@ -521,7 +529,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                   child: Center(
                     child: Text(
                       weekNumber.toString(),
-                      style: widget.calendarStyle.weekNumberTextStyle,
+                      style: _calendarStyle.weekNumberTextStyle,
                     ),
                   ),
                 );
@@ -602,10 +610,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                   start: isRangeStart ? constraints.maxWidth * 0.5 : 0.0,
                   end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
                 ),
-                height:
-                    (shorterSide - widget.calendarStyle.cellMargin.vertical) *
-                        widget.calendarStyle.rangeHighlightScale,
-                color: widget.calendarStyle.rangeHighlightColor,
+                height: (shorterSide - _calendarStyle.cellMargin.vertical) *
+                    _calendarStyle.rangeHighlightScale,
+                color: _calendarStyle.rangeHighlightColor,
               ),
             );
           }
@@ -623,9 +630,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
           day: day,
           focusedDay: focusedDay,
-          calendarStyle: widget.calendarStyle,
+          calendarStyle: _calendarStyle,
           calendarBuilders: widget.calendarBuilders,
-          isTodayHighlighted: widget.calendarStyle.isTodayHighlighted,
+          isTodayHighlighted: _calendarStyle.isTodayHighlighted,
           isToday: isToday,
           isSelected: widget.selectedDayPredicate?.call(day) ?? false,
           isRangeStart: isRangeStart,
@@ -648,31 +655,31 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           if (events.isNotEmpty && markerWidget == null) {
             final center = constraints.maxHeight / 2;
 
-            final markerSize = widget.calendarStyle.markerSize ??
-                (shorterSide - widget.calendarStyle.cellMargin.vertical) *
-                    widget.calendarStyle.markerSizeScale;
+            final markerSize = _calendarStyle.markerSize ??
+                (shorterSide - _calendarStyle.cellMargin.vertical) *
+                    _calendarStyle.markerSizeScale;
 
             final markerAutoAlignmentTop = center +
-                (shorterSide - widget.calendarStyle.cellMargin.vertical) / 2 -
-                (markerSize * widget.calendarStyle.markersAnchor);
+                (shorterSide - _calendarStyle.cellMargin.vertical) / 2 -
+                (markerSize * _calendarStyle.markersAnchor);
 
             markerWidget = PositionedDirectional(
-              top: widget.calendarStyle.markersAutoAligned
+              top: _calendarStyle.markersAutoAligned
                   ? markerAutoAlignmentTop
-                  : widget.calendarStyle.markersOffset.top,
-              bottom: widget.calendarStyle.markersAutoAligned
+                  : _calendarStyle.markersOffset.top,
+              bottom: _calendarStyle.markersAutoAligned
                   ? null
-                  : widget.calendarStyle.markersOffset.bottom,
-              start: widget.calendarStyle.markersAutoAligned
+                  : _calendarStyle.markersOffset.bottom,
+              start: _calendarStyle.markersAutoAligned
                   ? null
-                  : widget.calendarStyle.markersOffset.start,
-              end: widget.calendarStyle.markersAutoAligned
+                  : _calendarStyle.markersOffset.start,
+              end: _calendarStyle.markersAutoAligned
                   ? null
-                  : widget.calendarStyle.markersOffset.end,
+                  : _calendarStyle.markersOffset.end,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: events
-                    .take(widget.calendarStyle.markersMaxCount)
+                    .take(_calendarStyle.markersMaxCount)
                     .map((event) => _buildSingleMarker(day, event, markerSize))
                     .toList(),
               ),
@@ -685,11 +692,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         }
 
         return Stack(
-          alignment: widget.calendarStyle.markersAlignment,
+          alignment: _calendarStyle.markersAlignment,
           children: children,
-          clipBehavior: widget.calendarStyle.canMarkersOverflow
-              ? Clip.none
-              : Clip.hardEdge,
+          clipBehavior:
+              _calendarStyle.canMarkersOverflow ? Clip.none : Clip.hardEdge,
         );
       },
     );
@@ -701,8 +707,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         Container(
           width: markerSize,
           height: markerSize,
-          margin: widget.calendarStyle.markerMargin,
-          decoration: widget.calendarStyle.markerDecoration,
+          margin: _calendarStyle.markerMargin,
+          decoration: _calendarStyle.markerDecoration,
         );
   }
 

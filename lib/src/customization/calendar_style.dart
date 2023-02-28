@@ -1,10 +1,13 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/widgets.dart';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 /// Class containing styling and configuration for `TableCalendar`'s content.
-class CalendarStyle {
+@immutable
+class CalendarStyle extends ThemeExtension<CalendarStyle> {
   /// Maximum amount of single event marker dots to be displayed.
   final int markersMaxCount;
 
@@ -228,6 +231,171 @@ class CalendarStyle {
     this.tableBorder = const TableBorder(),
     this.tablePadding = const EdgeInsets.all(0),
   });
+
+  @override
+  ThemeExtension<CalendarStyle> copyWith({
+    int? markersMaxCount,
+    bool? canMarkersOverflow,
+    bool? markersAutoAligned,
+    double? markersAnchor,
+    double? markerSize,
+    double? markerSizeScale,
+    PositionedOffset? markersOffset,
+    AlignmentGeometry? markersAlignment,
+    Decoration? markerDecoration,
+    EdgeInsets? markerMargin,
+    EdgeInsets? cellMargin,
+    EdgeInsets? cellPadding,
+    AlignmentGeometry? cellAlignment,
+    double? rangeHighlightScale,
+    Color? rangeHighlightColor,
+    bool? outsideDaysVisible,
+    bool? isTodayHighlighted,
+    TextStyle? todayTextStyle,
+    Decoration? todayDecoration,
+    TextStyle? selectedTextStyle,
+    Decoration? selectedDecoration,
+    TextStyle? rangeStartTextStyle,
+    Decoration? rangeStartDecoration,
+    TextStyle? rangeEndTextStyle,
+    Decoration? rangeEndDecoration,
+    TextStyle? withinRangeTextStyle,
+    Decoration? withinRangeDecoration,
+    TextStyle? outsideTextStyle,
+    Decoration? outsideDecoration,
+    TextStyle? disabledTextStyle,
+    Decoration? disabledDecoration,
+    TextStyle? holidayTextStyle,
+    Decoration? holidayDecoration,
+    TextStyle? weekendTextStyle,
+    Decoration? weekendDecoration,
+    TextStyle? weekNumberTextStyle,
+    TextStyle? defaultTextStyle,
+    Decoration? defaultDecoration,
+    Decoration? rowDecoration,
+    TableBorder? tableBorder,
+    EdgeInsets? tablePadding,
+  }) {
+    return CalendarStyle(
+      markersMaxCount: markersMaxCount ?? this.markersMaxCount,
+      canMarkersOverflow: canMarkersOverflow ?? this.canMarkersOverflow,
+      markersAutoAligned: markersAutoAligned ?? this.markersAutoAligned,
+      markersAnchor: markersAnchor ?? this.markersAnchor,
+      markerSize: markerSize ?? this.markerSize,
+      markerSizeScale: markerSizeScale ?? this.markerSizeScale,
+      markersOffset: markersOffset ?? this.markersOffset,
+      markersAlignment: markersAlignment ?? this.markersAlignment,
+      markerDecoration: markerDecoration ?? this.markerDecoration,
+      markerMargin: markerMargin ?? this.markerMargin,
+      cellMargin: cellMargin ?? this.cellMargin,
+      cellPadding: cellPadding ?? this.cellPadding,
+      cellAlignment: cellAlignment ?? this.cellAlignment,
+      rangeHighlightScale: rangeHighlightScale ?? this.rangeHighlightScale,
+      rangeHighlightColor: rangeHighlightColor ?? this.rangeHighlightColor,
+      outsideDaysVisible: outsideDaysVisible ?? this.outsideDaysVisible,
+      isTodayHighlighted: isTodayHighlighted ?? this.isTodayHighlighted,
+      todayTextStyle: todayTextStyle ?? this.todayTextStyle,
+      todayDecoration: todayDecoration ?? this.todayDecoration,
+      selectedTextStyle: selectedTextStyle ?? this.selectedTextStyle,
+      selectedDecoration: selectedDecoration ?? this.selectedDecoration,
+      rangeStartTextStyle: rangeStartTextStyle ?? this.rangeStartTextStyle,
+      rangeStartDecoration: rangeStartDecoration ?? this.rangeStartDecoration,
+      rangeEndTextStyle: rangeEndTextStyle ?? this.rangeEndTextStyle,
+      rangeEndDecoration: rangeEndDecoration ?? this.rangeEndDecoration,
+      withinRangeTextStyle: withinRangeTextStyle ?? this.withinRangeTextStyle,
+      withinRangeDecoration:
+          withinRangeDecoration ?? this.withinRangeDecoration,
+      outsideTextStyle: outsideTextStyle ?? this.outsideTextStyle,
+      outsideDecoration: outsideDecoration ?? this.outsideDecoration,
+      disabledTextStyle: disabledTextStyle ?? this.disabledTextStyle,
+      disabledDecoration: disabledDecoration ?? this.disabledDecoration,
+      holidayTextStyle: holidayTextStyle ?? this.holidayTextStyle,
+      holidayDecoration: holidayDecoration ?? this.holidayDecoration,
+      weekendTextStyle: weekendTextStyle ?? this.weekendTextStyle,
+      weekendDecoration: weekendDecoration ?? this.weekendDecoration,
+      weekNumberTextStyle: weekNumberTextStyle ?? this.weekNumberTextStyle,
+      defaultTextStyle: defaultTextStyle ?? this.defaultTextStyle,
+      defaultDecoration: defaultDecoration ?? this.defaultDecoration,
+      rowDecoration: rowDecoration ?? this.rowDecoration,
+      tableBorder: tableBorder ?? this.tableBorder,
+      tablePadding: tablePadding ?? this.tablePadding,
+    );
+  }
+
+  @override
+  ThemeExtension<CalendarStyle> lerp(
+    covariant ThemeExtension<CalendarStyle>? other,
+    double t,
+  ) {
+    if (other is! CalendarStyle) {
+      return this;
+    }
+
+    return this.copyWith(
+      markersAnchor: lerpDouble(markersAnchor, other.markersAnchor, t),
+      markerSize: lerpDouble(markerSize, other.markerSize, t),
+      markerSizeScale: lerpDouble(markerSizeScale, other.markerSizeScale, t),
+      markersOffset:
+          PositionedOffset.lerp(markersOffset, other.markersOffset, t),
+      markersAlignment:
+          AlignmentGeometry.lerp(markersAlignment, other.markersAlignment, t),
+      markerDecoration:
+          Decoration.lerp(markerDecoration, other.markerDecoration, t),
+      markerMargin: EdgeInsets.lerp(markerMargin, other.markerMargin, t),
+      cellMargin: EdgeInsets.lerp(cellMargin, other.cellMargin, t),
+      cellPadding: EdgeInsets.lerp(cellPadding, other.cellPadding, t),
+      cellAlignment:
+          AlignmentGeometry.lerp(cellAlignment, other.cellAlignment, t),
+      rangeHighlightScale:
+          lerpDouble(rangeHighlightScale, other.rangeHighlightScale, t),
+      rangeHighlightColor:
+          Color.lerp(rangeHighlightColor, other.rangeHighlightColor, t),
+      todayTextStyle: TextStyle.lerp(todayTextStyle, other.todayTextStyle, t),
+      todayDecoration:
+          Decoration.lerp(todayDecoration, other.todayDecoration, t),
+      selectedTextStyle:
+          TextStyle.lerp(selectedTextStyle, other.selectedTextStyle, t),
+      selectedDecoration:
+          Decoration.lerp(selectedDecoration, other.selectedDecoration, t),
+      rangeStartTextStyle:
+          TextStyle.lerp(rangeStartTextStyle, other.rangeStartTextStyle, t),
+      rangeStartDecoration:
+          Decoration.lerp(rangeStartDecoration, other.rangeStartDecoration, t),
+      rangeEndTextStyle:
+          TextStyle.lerp(rangeEndTextStyle, other.rangeEndTextStyle, t),
+      rangeEndDecoration:
+          Decoration.lerp(rangeEndDecoration, other.rangeEndDecoration, t),
+      withinRangeTextStyle:
+          TextStyle.lerp(withinRangeTextStyle, other.withinRangeTextStyle, t),
+      withinRangeDecoration: Decoration.lerp(
+          withinRangeDecoration, other.withinRangeDecoration, t),
+      outsideTextStyle:
+          TextStyle.lerp(outsideTextStyle, other.outsideTextStyle, t),
+      outsideDecoration:
+          Decoration.lerp(outsideDecoration, other.outsideDecoration, t),
+      disabledTextStyle:
+          TextStyle.lerp(disabledTextStyle, other.disabledTextStyle, t),
+      disabledDecoration:
+          Decoration.lerp(disabledDecoration, other.disabledDecoration, t),
+      holidayTextStyle:
+          TextStyle.lerp(holidayTextStyle, other.holidayTextStyle, t),
+      holidayDecoration:
+          Decoration.lerp(holidayDecoration, other.holidayDecoration, t),
+      weekendTextStyle:
+          TextStyle.lerp(weekendTextStyle, other.weekendTextStyle, t),
+      weekendDecoration:
+          Decoration.lerp(weekendDecoration, other.weekendDecoration, t),
+      weekNumberTextStyle:
+          TextStyle.lerp(weekNumberTextStyle, other.weekNumberTextStyle, t),
+      defaultTextStyle:
+          TextStyle.lerp(defaultTextStyle, other.defaultTextStyle, t),
+      defaultDecoration:
+          Decoration.lerp(defaultDecoration, other.defaultDecoration, t),
+      rowDecoration: Decoration.lerp(rowDecoration, other.rowDecoration, t),
+      tableBorder: TableBorder.lerp(tableBorder, other.tableBorder, t),
+      tablePadding: EdgeInsets.lerp(tablePadding, other.tablePadding, t),
+    );
+  }
 }
 
 /// Helper class containing data for internal `Positioned` widget.
@@ -246,4 +414,21 @@ class PositionedOffset {
 
   /// Creates a `PositionedOffset`. Values are set to `null` by default.
   const PositionedOffset({this.top, this.bottom, this.start, this.end});
+
+  static PositionedOffset? lerp(
+    PositionedOffset? a,
+    PositionedOffset? b,
+    double t,
+  ) {
+    if (a == null && b == null) {
+      return null;
+    }
+
+    return PositionedOffset(
+      top: lerpDouble(a?.top, b?.top, t),
+      bottom: lerpDouble(a?.bottom, b?.bottom, t),
+      start: lerpDouble(a?.start, b?.start, t),
+      end: lerpDouble(a?.end, b?.end, t),
+    );
+  }
 }
