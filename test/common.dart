@@ -8,7 +8,7 @@ ValueKey<String> dateToKey(DateTime date, {String prefix = ''}) {
   return ValueKey('$prefix${date.year}-${date.month}-${date.day}');
 }
 
-const calendarFormatMap = const {
+const calendarFormatMap = {
   CalendarFormat.month: 'Month',
   CalendarFormat.twoWeeks: 'Two weeks',
   CalendarFormat.week: 'week',

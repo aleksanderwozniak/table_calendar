@@ -255,7 +255,7 @@ void main() {
           ),
         );
 
-        var dayCells = tester.widgetList(find.byType(CellContent));
+        final dayCells = tester.widgetList(find.byType(CellContent));
         expect(dayCells.length, 7);
       },
     );
@@ -269,7 +269,7 @@ void main() {
           ),
         );
 
-        var dayCells = tester.widgetList(find.byType(CellContent));
+        final dayCells = tester.widgetList(find.byType(CellContent));
         expect(dayCells.length, 14);
       },
     );
@@ -279,11 +279,11 @@ void main() {
       (tester) async {
         await tester.pumpWidget(
           createTableCalendar(
-            calendarFormat: CalendarFormat.month,
+            
           ),
         );
 
-        var dayCells = tester.widgetList(find.byType(CellContent));
+        final dayCells = tester.widgetList(find.byType(CellContent));
         expect(dayCells.length, 35);
       },
     );
@@ -293,12 +293,11 @@ void main() {
       (tester) async {
         await tester.pumpWidget(
           createTableCalendar(
-            calendarFormat: CalendarFormat.month,
             sixWeekMonthsEnforced: true,
           ),
         );
 
-        var dayCells = tester.widgetList(find.byType(CellContent));
+        final dayCells = tester.widgetList(find.byType(CellContent));
         expect(dayCells.length, 42);
       },
     );
@@ -437,7 +436,7 @@ void main() {
               return [];
             },
           ),
-        ));
+        ),);
 
         final eventDayKey = cellContentKey(eventDay);
         final eventDayCellContent = find.byKey(eventDayKey);
@@ -470,7 +469,7 @@ void main() {
             lastDay: lastDay,
             currentDay: today,
           ),
-        ));
+        ),);
 
         final currentDayKey = cellContentKey(today);
         final currentDayCellContent =
@@ -493,7 +492,7 @@ void main() {
             firstDay: firstDay,
             lastDay: lastDay,
           ),
-        ));
+        ),);
 
         final currentDayKey = cellContentKey(now);
         final currentDayCellContent =
@@ -518,7 +517,7 @@ void main() {
               return isSameDay(day, selectedDay);
             },
           ),
-        ));
+        ),);
 
         final selectedDayKey = cellContentKey(selectedDay);
         final selectedDayCellContent =
@@ -543,7 +542,7 @@ void main() {
               return isSameDay(day, holiday);
             },
           ),
-        ));
+        ),);
 
         final holidayKey = cellContentKey(holiday);
         final holidayCellContent =
@@ -645,7 +644,7 @@ void main() {
             calendarFormat = format;
           },
         ),
-      ));
+      ),);
 
       await tester.drag(find.byType(CellContent).first, const Offset(0, -500));
       await tester.pumpAndSettle();
@@ -670,7 +669,7 @@ void main() {
             calendarFormat = format;
           },
         ),
-      ));
+      ),);
 
       await tester.drag(find.byType(CellContent).first, const Offset(0, -500));
       await tester.pumpAndSettle();
@@ -695,7 +694,7 @@ void main() {
             calendarFormat = format;
           },
         ),
-      ));
+      ),);
 
       await tester.drag(find.byType(CellContent).first, const Offset(0, -500));
       await tester.pumpAndSettle();
@@ -723,7 +722,7 @@ void main() {
               selectedDay = selected;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
 
@@ -751,7 +750,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(focusedDay, isNull);
 
@@ -781,7 +780,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
         expect(focusedDay, isNull);
@@ -789,7 +788,7 @@ void main() {
         final tappedDay = DateTime.utc(2021, 6, 30);
         final tappedDayKey = cellContentKey(tappedDay);
 
-        final expectedFocusedDay = DateTime.utc(2021, 7, 1);
+        final expectedFocusedDay = DateTime.utc(2021, 7);
 
         await tester.tap(find.byKey(tappedDayKey));
         await tester.pumpAndSettle();
@@ -815,12 +814,12 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
         expect(focusedDay, isNull);
 
-        final tappedDay = DateTime.utc(2021, 9, 1);
+        final tappedDay = DateTime.utc(2021, 9);
         final tappedDayKey = cellContentKey(tappedDay);
 
         final expectedFocusedDay = DateTime.utc(2021, 8, 31);
@@ -849,7 +848,7 @@ void main() {
               selectedDay = selected;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
 
@@ -877,7 +876,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(focusedDay, isNull);
 
@@ -907,7 +906,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
         expect(focusedDay, isNull);
@@ -915,7 +914,7 @@ void main() {
         final longPressedDay = DateTime.utc(2021, 6, 30);
         final longPressedDayKey = cellContentKey(longPressedDay);
 
-        final expectedFocusedDay = DateTime.utc(2021, 7, 1);
+        final expectedFocusedDay = DateTime.utc(2021, 7);
 
         await tester.longPress(find.byKey(longPressedDayKey));
         await tester.pumpAndSettle();
@@ -941,12 +940,12 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(selectedDay, isNull);
         expect(focusedDay, isNull);
 
-        final longPressedDay = DateTime.utc(2021, 9, 1);
+        final longPressedDay = DateTime.utc(2021, 9);
         final longPressedDayKey = cellContentKey(longPressedDay);
 
         final expectedFocusedDay = DateTime.utc(2021, 8, 31);
@@ -980,7 +979,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1024,7 +1023,7 @@ void main() {
               focusedDay = focused;
             },
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1062,7 +1061,6 @@ void main() {
             firstDay: firstDay,
             lastDay: lastDay,
             currentDay: today,
-            rangeSelectionMode: RangeSelectionMode.toggledOff,
             onDaySelected: (selected, focused) {
               selectedDay = selected;
               focusedDay = focused;
@@ -1072,9 +1070,8 @@ void main() {
               rangeEnd = end;
               focusedDay = focused;
             },
-            onDayLongPressed: null,
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1127,9 +1124,8 @@ void main() {
               rangeEnd = end;
               focusedDay = focused;
             },
-            onDayLongPressed: null,
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1182,9 +1178,8 @@ void main() {
               rangeEnd = end;
               focusedDay = focused;
             },
-            onDayLongPressed: null,
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1237,9 +1232,8 @@ void main() {
               rangeEnd = end;
               focusedDay = focused;
             },
-            onDayLongPressed: null,
           ),
-        ));
+        ),);
 
         expect(rangeStart, isNull);
         expect(rangeEnd, isNull);
@@ -1285,7 +1279,7 @@ void main() {
             rangeStartDay: rangeStart,
             rangeEndDay: rangeEnd,
           ),
-        ));
+        ),);
 
         final rangeStartKey = cellContentKey(rangeStart);
         final rangeStartCellContent =
@@ -1320,7 +1314,7 @@ void main() {
             rangeStartDay: rangeStart,
             rangeEndDay: rangeEnd,
           ),
-        ));
+        ),);
 
         final dayCount = rangeEnd.difference(rangeStart).inDays - 1;
         expect(dayCount, 4);
@@ -1355,7 +1349,7 @@ void main() {
             rangeStartDay: rangeStart,
             rangeEndDay: rangeEnd,
           ),
-        ));
+        ),);
 
         final oobStart = rangeStart.subtract(const Duration(days: 1));
         final oobEnd = rangeEnd.add(const Duration(days: 1));

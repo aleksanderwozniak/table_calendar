@@ -57,7 +57,6 @@ void main() {
             dayBuilder: (context, day) {
               return Text('${day.day}');
             },
-            dowVisible: true,
             dowBuilder: (context, day) {
               return Text('${day.weekday}');
             },
@@ -67,7 +66,7 @@ void main() {
       );
 
       final expectedCellCount = visibleDays.length;
-      final expectedDowLabels = 7;
+      const expectedDowLabels = 7;
 
       expect(
         find.byType(Text),
@@ -87,11 +86,10 @@ void main() {
               dayBuilder: (context, day) {
                 return Text('${day.day}');
               },
-              dowVisible: true,
             ),
           ),
         );
-      }, throwsAssertionError);
+      }, throwsAssertionError,);
     },
   );
 
@@ -105,7 +103,6 @@ void main() {
             dayBuilder: (context, day) {
               return Text('${day.day}');
             },
-            dowVisible: true,
             dowBuilder: (context, day) {
               return Text('${day.weekday}');
             },
@@ -130,7 +127,6 @@ void main() {
           dayBuilder: (context, day) {
             return Text('${day.day}');
           },
-          dowVisible: true,
           dowBuilder: (context, day) {
             return Text('${day.weekday}');
           },
@@ -140,7 +136,7 @@ void main() {
             return Text(day.weekday.toString());
           },
         ),
-      ));
+      ),);
 
       expect(
         find.byType(Column),

@@ -124,7 +124,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         setupTestWidget(
-          headerStyle: HeaderStyle(
+          headerStyle: const HeaderStyle(
             leftChevronVisible: false,
           ),
         ),
@@ -150,7 +150,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         setupTestWidget(
-          headerStyle: HeaderStyle(
+          headerStyle: const HeaderStyle(
             rightChevronVisible: false,
           ),
         ),
@@ -190,7 +190,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         setupTestWidget(
-          headerStyle: HeaderStyle(formatButtonVisible: false),
+          headerStyle: const HeaderStyle(formatButtonVisible: false),
         ),
       );
 

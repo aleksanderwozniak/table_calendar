@@ -37,8 +37,6 @@ void main() {
               },
               rowHeight: 52,
               dowVisible: false,
-              calendarFormat: CalendarFormat.month,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
             ),
           ),
         );
@@ -84,7 +82,6 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.twoWeeks,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
             ),
           ),
         );
@@ -130,7 +127,6 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.week,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
             ),
           ),
         );
@@ -175,14 +171,13 @@ void main() {
               },
               rowHeight: 52,
               dowVisible: false,
-              calendarFormat: CalendarFormat.month,
               startingDayOfWeek: StartingDayOfWeek.monday,
             ),
           ),
         );
 
         final firstVisibleDay = DateTime.utc(2021, 6, 28);
-        final lastVisibleDay = DateTime.utc(2021, 8, 1);
+        final lastVisibleDay = DateTime.utc(2021, 8);
 
         final focusedDayKey = dateToKey(focusedDay);
         final firstVisibleDayKey = dateToKey(firstVisibleDay);
@@ -368,14 +363,13 @@ void main() {
                 );
               },
               rowHeight: 52,
-              dowVisible: true,
               dowBuilder: (context, day) {
                 return Text('${day.weekday}');
               },
             ),
           ),
         );
-      }, throwsAssertionError);
+      }, throwsAssertionError,);
     },
   );
 }
