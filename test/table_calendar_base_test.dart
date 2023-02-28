@@ -37,8 +37,6 @@ void main() {
               },
               rowHeight: 52,
               dowVisible: false,
-              calendarFormat: CalendarFormat.month,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
             ),
           ),
         );
@@ -84,7 +82,6 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.twoWeeks,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
             ),
           ),
         );
@@ -130,7 +127,6 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.week,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
             ),
           ),
         );
@@ -175,14 +171,13 @@ void main() {
               },
               rowHeight: 52,
               dowVisible: false,
-              calendarFormat: CalendarFormat.month,
               startingDayOfWeek: StartingDayOfWeek.monday,
             ),
           ),
         );
 
         final firstVisibleDay = DateTime.utc(2021, 6, 28);
-        final lastVisibleDay = DateTime.utc(2021, 8, 1);
+        final lastVisibleDay = DateTime.utc(2021, 8);
 
         final focusedDayKey = dateToKey(focusedDay);
         final firstVisibleDayKey = dateToKey(firstVisibleDay);
@@ -354,28 +349,30 @@ void main() {
   testWidgets(
     'Throw AssertionError when TableCalendarBase is built with dowVisible and dowBuilder, but dowHeight is absent',
     (tester) async {
-      expect(() async {
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendarBase(
-              firstDay: DateTime.utc(2021, 5, 15),
-              lastDay: DateTime.utc(2021, 8, 18),
-              focusedDay: DateTime.utc(2021, 7, 15),
-              dayBuilder: (context, day, focusedDay) {
-                return Text(
-                  '${day.day}',
-                  key: dateToKey(day),
-                );
-              },
-              rowHeight: 52,
-              dowVisible: true,
-              dowBuilder: (context, day) {
-                return Text('${day.weekday}');
-              },
+      expect(
+        () async {
+          await tester.pumpWidget(
+            setupTestWidget(
+              TableCalendarBase(
+                firstDay: DateTime.utc(2021, 5, 15),
+                lastDay: DateTime.utc(2021, 8, 18),
+                focusedDay: DateTime.utc(2021, 7, 15),
+                dayBuilder: (context, day, focusedDay) {
+                  return Text(
+                    '${day.day}',
+                    key: dateToKey(day),
+                  );
+                },
+                rowHeight: 52,
+                dowBuilder: (context, day) {
+                  return Text('${day.weekday}');
+                },
+              ),
             ),
-          ),
-        );
-      }, throwsAssertionError);
+          );
+        },
+        throwsAssertionError,
+      );
     },
   );
 }

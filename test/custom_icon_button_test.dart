@@ -21,7 +21,7 @@ void main() {
       await tester.pumpWidget(
         setupTestWidget(
           CustomIconButton(
-            icon: Icon(Icons.chevron_left),
+            icon: const Icon(Icons.chevron_left),
             onTap: () {
               buttonTapped = true;
             },

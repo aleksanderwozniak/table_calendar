@@ -57,7 +57,6 @@ void main() {
             dayBuilder: (context, day) {
               return Text('${day.day}');
             },
-            dowVisible: true,
             dowBuilder: (context, day) {
               return Text('${day.weekday}');
             },
@@ -67,7 +66,7 @@ void main() {
       );
 
       final expectedCellCount = visibleDays.length;
-      final expectedDowLabels = 7;
+      const expectedDowLabels = 7;
 
       expect(
         find.byType(Text),
@@ -79,19 +78,21 @@ void main() {
   testWidgets(
     'Throw AssertionError when CalendarPage is built with dowVisible set to true, but dowBuilder is absent',
     (tester) async {
-      expect(() async {
-        await tester.pumpWidget(
-          setupTestWidget(
-            CalendarPage(
-              visibleDays: visibleDays,
-              dayBuilder: (context, day) {
-                return Text('${day.day}');
-              },
-              dowVisible: true,
+      expect(
+        () async {
+          await tester.pumpWidget(
+            setupTestWidget(
+              CalendarPage(
+                visibleDays: visibleDays,
+                dayBuilder: (context, day) {
+                  return Text('${day.day}');
+                },
+              ),
             ),
-          ),
-        );
-      }, throwsAssertionError);
+          );
+        },
+        throwsAssertionError,
+      );
     },
   );
 
@@ -105,7 +106,6 @@ void main() {
             dayBuilder: (context, day) {
               return Text('${day.day}');
             },
-            dowVisible: true,
             dowBuilder: (context, day) {
               return Text('${day.weekday}');
             },
@@ -124,23 +124,24 @@ void main() {
   testWidgets(
     'Week numbers are visible',
     (tester) async {
-      await tester.pumpWidget(setupTestWidget(
-        CalendarPage(
-          visibleDays: visibleDays,
-          dayBuilder: (context, day) {
-            return Text('${day.day}');
-          },
-          dowVisible: true,
-          dowBuilder: (context, day) {
-            return Text('${day.weekday}');
-          },
-          dowHeight: 5,
-          weekNumberVisible: true,
-          weekNumberBuilder: (BuildContext context, DateTime day) {
-            return Text(day.weekday.toString());
-          },
+      await tester.pumpWidget(
+        setupTestWidget(
+          CalendarPage(
+            visibleDays: visibleDays,
+            dayBuilder: (context, day) {
+              return Text('${day.day}');
+            },
+            dowBuilder: (context, day) {
+              return Text('${day.weekday}');
+            },
+            dowHeight: 5,
+            weekNumberVisible: true,
+            weekNumberBuilder: (BuildContext context, DateTime day) {
+              return Text(day.weekday.toString());
+            },
+          ),
         ),
-      ));
+      );
 
       expect(
         find.byType(Column),
@@ -148,5 +149,4 @@ void main() {
       );
     },
   );
-
 }

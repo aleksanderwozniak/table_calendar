@@ -20,7 +20,7 @@ Widget setupTestWidget(
   bool isHoliday = false,
   bool isTodayHighlighted = true,
 }) {
-  final calendarStyle = CalendarStyle();
+  const calendarStyle = CalendarStyle();
 
   return Directionality(
     textDirection: TextDirection.ltr,
