@@ -83,13 +83,15 @@ class CalendarPage extends StatelessWidget {
   List<TableRow> _buildCalendarDays(BuildContext context) {
     final rowAmount = visibleDays.length ~/ 7;
 
-    return List.generate(rowAmount, (index) => TableRow(
-            decoration: rowDecoration,
-            children: List.generate(
-              7,
-              (id) => dayBuilder(context, visibleDays[index * 7 + id]),
-            ),
-          ),
-        );
+    return List.generate(
+      rowAmount,
+      (index) => TableRow(
+        decoration: rowDecoration,
+        children: List.generate(
+          7,
+          (id) => dayBuilder(context, visibleDays[index * 7 + id]),
+        ),
+      ),
+    );
   }
 }

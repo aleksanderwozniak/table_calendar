@@ -78,18 +78,21 @@ void main() {
   testWidgets(
     'Throw AssertionError when CalendarPage is built with dowVisible set to true, but dowBuilder is absent',
     (tester) async {
-      expect(() async {
-        await tester.pumpWidget(
-          setupTestWidget(
-            CalendarPage(
-              visibleDays: visibleDays,
-              dayBuilder: (context, day) {
-                return Text('${day.day}');
-              },
+      expect(
+        () async {
+          await tester.pumpWidget(
+            setupTestWidget(
+              CalendarPage(
+                visibleDays: visibleDays,
+                dayBuilder: (context, day) {
+                  return Text('${day.day}');
+                },
+              ),
             ),
-          ),
-        );
-      }, throwsAssertionError,);
+          );
+        },
+        throwsAssertionError,
+      );
     },
   );
 
@@ -121,22 +124,24 @@ void main() {
   testWidgets(
     'Week numbers are visible',
     (tester) async {
-      await tester.pumpWidget(setupTestWidget(
-        CalendarPage(
-          visibleDays: visibleDays,
-          dayBuilder: (context, day) {
-            return Text('${day.day}');
-          },
-          dowBuilder: (context, day) {
-            return Text('${day.weekday}');
-          },
-          dowHeight: 5,
-          weekNumberVisible: true,
-          weekNumberBuilder: (BuildContext context, DateTime day) {
-            return Text(day.weekday.toString());
-          },
+      await tester.pumpWidget(
+        setupTestWidget(
+          CalendarPage(
+            visibleDays: visibleDays,
+            dayBuilder: (context, day) {
+              return Text('${day.day}');
+            },
+            dowBuilder: (context, day) {
+              return Text('${day.weekday}');
+            },
+            dowHeight: 5,
+            weekNumberVisible: true,
+            weekNumberBuilder: (BuildContext context, DateTime day) {
+              return Text(day.weekday.toString());
+            },
+          ),
         ),
-      ),);
+      );
 
       expect(
         find.byType(Column),
@@ -144,5 +149,4 @@ void main() {
       );
     },
   );
-
 }

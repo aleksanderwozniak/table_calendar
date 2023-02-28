@@ -5,7 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import 'package:table_calendar/src/customization/header_style.dart';
-import 'package:table_calendar/src/shared/utils.dart' show CalendarFormat, DayBuilder;
+import 'package:table_calendar/src/shared/utils.dart'
+    show CalendarFormat, DayBuilder;
 import 'package:table_calendar/src/widgets/custom_icon_button.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
 

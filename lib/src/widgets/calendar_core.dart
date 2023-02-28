@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_page.dart';
 
-
 class CalendarCore extends StatelessWidget {
   final DateTime? focusedDay;
   final DateTime firstDay;
@@ -155,7 +154,10 @@ class CalendarCore extends StatelessWidget {
   }
 
   DateTime _getFocusedDay(
-      CalendarFormat format, DateTime prevFocusedDay, int pageIndex,) {
+    CalendarFormat format,
+    DateTime prevFocusedDay,
+    int pageIndex,
+  ) {
     if (pageIndex == previousIndex) {
       return prevFocusedDay;
     }
@@ -168,12 +170,18 @@ class CalendarCore extends StatelessWidget {
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif);
         break;
       case CalendarFormat.twoWeeks:
-        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
-            prevFocusedDay.day + pageDif * 14,);
+        day = DateTime.utc(
+          prevFocusedDay.year,
+          prevFocusedDay.month,
+          prevFocusedDay.day + pageDif * 14,
+        );
         break;
       case CalendarFormat.week:
-        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
-            prevFocusedDay.day + pageDif * 7,);
+        day = DateTime.utc(
+          prevFocusedDay.year,
+          prevFocusedDay.month,
+          prevFocusedDay.day + pageDif * 7,
+        );
         break;
     }
 
@@ -195,11 +203,17 @@ class CalendarCore extends StatelessWidget {
         break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(
-            firstDay.year, firstDay.month, firstDay.day + pageIndex * 14,);
+          firstDay.year,
+          firstDay.month,
+          firstDay.day + pageIndex * 14,
+        );
         break;
       case CalendarFormat.week:
         day = DateTime.utc(
-            firstDay.year, firstDay.month, firstDay.day + pageIndex * 7,);
+          firstDay.year,
+          firstDay.month,
+          firstDay.day + pageIndex * 7,
+        );
         break;
     }
 

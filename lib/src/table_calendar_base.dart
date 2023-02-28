@@ -100,7 +100,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     _pageHeight = ValueNotifier(_getPageHeight(rowCount));
 
     final initialPage = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, _focusedDay,);
+      widget.calendarFormat,
+      widget.firstDay,
+      _focusedDay,
+    );
 
     _pageController = PageController(initialPage: initialPage);
     widget.onCalendarCreated?.call(_pageController);
@@ -148,10 +151,16 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
   void _updatePage({bool shouldAnimate = false}) {
     final currentIndex = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, _focusedDay,);
+      widget.calendarFormat,
+      widget.firstDay,
+      _focusedDay,
+    );
 
     final endIndex = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, widget.lastDay,);
+      widget.calendarFormat,
+      widget.firstDay,
+      widget.lastDay,
+    );
 
     if (currentIndex != _previousIndex ||
         currentIndex == 0 ||
@@ -266,7 +275,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   }
 
   int _calculateFocusedPage(
-      CalendarFormat format, DateTime startDay, DateTime focusedDay,) {
+    CalendarFormat format,
+    DateTime startDay,
+    DateTime focusedDay,
+  ) {
     switch (format) {
       case CalendarFormat.month:
         return _getMonthCount(startDay, focusedDay);

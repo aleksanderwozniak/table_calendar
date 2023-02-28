@@ -20,12 +20,17 @@ import 'package:table_calendar/src/widgets/cell_content.dart';
 
 /// Signature for `onDaySelected` callback. Contains the selected day and focused day.
 typedef OnDaySelected = void Function(
-    DateTime selectedDay, DateTime focusedDay,);
+  DateTime selectedDay,
+  DateTime focusedDay,
+);
 
 /// Signature for `onRangeSelected` callback.
 /// Contains start and end of the selected range, as well as currently focused day.
 typedef OnRangeSelected = void Function(
-    DateTime? start, DateTime? end, DateTime focusedDay,);
+  DateTime? start,
+  DateTime? end,
+  DateTime focusedDay,
+);
 
 /// Modes that range selection can operate in.
 enum RangeSelectionMode { disabled, toggledOff, toggledOn, enforced }
@@ -264,9 +269,12 @@ class TableCalendar<T> extends StatefulWidget {
     this.onCalendarCreated,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
-        assert(weekendDays.isNotEmpty
-            && weekendDays.every(
-                (day) => day >= DateTime.monday && day <= DateTime.sunday,),),
+        assert(
+          weekendDays.isNotEmpty &&
+              weekendDays.every(
+                (day) => day >= DateTime.monday && day <= DateTime.sunday,
+              ),
+        ),
         focusedDay = normalizeDate(focusedDay),
         firstDay = normalizeDate(firstDay),
         lastDay = normalizeDate(lastDay),
@@ -515,15 +523,16 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               final cell = widget.calendarBuilders.weekNumberBuilder
                   ?.call(context, weekNumber);
 
-              return cell ?? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Center(
-                    child: Text(
-                      weekNumber.toString(),
-                      style: widget.calendarStyle.weekNumberTextStyle,
+              return cell ??
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Center(
+                      child: Text(
+                        weekNumber.toString(),
+                        style: widget.calendarStyle.weekNumberTextStyle,
+                      ),
                     ),
-                  ),
-                );
+                  );
             },
             dowBuilder: (BuildContext context, DateTime day) {
               Widget? dowCell =
@@ -710,10 +719,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   int _dayOfYear(DateTime date) {
-    return normalizeDate(date)
-            .difference(DateTime.utc(date.year))
-            .inDays +
-        1;
+    return normalizeDate(date).difference(DateTime.utc(date.year)).inDays + 1;
   }
 
   bool _isWithinRange(DateTime day, DateTime start, DateTime end) {
@@ -735,7 +741,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   bool _isDayAvailable(DateTime day) {
-    if (widget.enabledDayPredicate == null){
+    if (widget.enabledDayPredicate == null) {
       return true;
     }
 
