@@ -105,6 +105,9 @@ class CalendarStyle {
   /// This will affect day cells that do not match the currently focused month.
   final TextStyle outsideTextStyle;
 
+  /// TextStyle for day cells that both outside and weekend
+  final TextStyle isWeekendAndisOutside;
+
   /// Decoration for day cells, of which the `day.month` is different than `focusedDay.month`.
   /// This will affect day cells that do not match the currently focused month.
   final Decoration outsideDecoration;
@@ -227,6 +230,8 @@ class CalendarStyle {
     this.rowDecoration = const BoxDecoration(),
     this.tableBorder = const TableBorder(),
     this.tablePadding = const EdgeInsets.all(0),
+    this.isWeekendAndisOutside =
+        const TextStyle(color: const Color(0xFFEF9A9A)),
   });
 }
 
