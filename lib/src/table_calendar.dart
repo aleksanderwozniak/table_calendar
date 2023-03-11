@@ -618,7 +618,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isToday = isSameDay(day, widget.currentDay);
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
-
+        final isWeekendAndisOutside =
+            (isWeekend == true && isOutside == true) ? true : false;
         Widget content = CellContent(
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
           day: day,
@@ -633,6 +634,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isWithinRange: isWithinRange,
           isOutside: isOutside,
           isDisabled: isDisabled,
+          isWeekendAndisOutside: isWeekendAndisOutside,
           isWeekend: isWeekend,
           isHoliday: widget.holidayPredicate?.call(day) ?? false,
           locale: widget.locale,
