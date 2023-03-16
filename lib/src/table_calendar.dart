@@ -556,7 +556,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
-              return GestureDetector(
+              return day.weekday == 7 ? Container(width: 0,) : GestureDetector(
                 behavior: widget.dayHitTestBehavior,
                 onTap: () => _onDayTapped(day),
                 onLongPress: () => _onDayLongPressed(day),
