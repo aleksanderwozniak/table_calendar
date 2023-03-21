@@ -32,6 +32,8 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
+  final bool? onlyWeekdays; 
+  final List<int> weekendDays;
 
   const CalendarCore({
     Key? key,
@@ -57,6 +59,8 @@ class CalendarCore extends StatelessWidget {
     this.tableBorder,
     this.tablePadding,
     this.scrollPhysics,
+    this.onlyWeekdays = false,
+    this.weekendDays = const [DateTime.saturday, DateTime.sunday],
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -69,7 +73,7 @@ class CalendarCore extends StatelessWidget {
       itemBuilder: (context, index) {
         final baseDay = _getBaseDay(calendarFormat, index);
         final visibleRange = _getVisibleRange(calendarFormat, baseDay);
-        final visibleDays = _daysInRange(visibleRange.start, visibleRange.end);
+        final visibleDays = onlyWeekdays == false ? _daysInRange(visibleRange.start, visibleRange.end) : _weekdaysInRange(visibleRange.start, visibleRange.end);
 
         final actualDowHeight = dowVisible ? dowHeight! : 0.0;
         final constrainedRowHeight = constraints.hasBoundedHeight
@@ -84,6 +88,7 @@ class CalendarCore extends StatelessWidget {
           rowDecoration: rowDecoration,
           tableBorder: tableBorder,
           tablePadding: tablePadding,
+          daysInWeek: onlyWeekdays == false ? 7 : 5,
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
@@ -265,6 +270,17 @@ class CalendarCore extends StatelessWidget {
       dayCount,
       (index) => DateTime.utc(first.year, first.month, first.day + index),
     );
+  }
+
+  List<DateTime> _weekdaysInRange(DateTime first, DateTime last) {
+    int dayCount = (last.difference(first).inDays + 1);
+    List<DateTime> weekdays = List.generate(
+      dayCount,
+      (index) => DateTime.utc(first.year, first.month, first.day + index),
+    );
+
+    weekdays.removeWhere((element) => weekendDays.contains(element.weekday));
+    return weekdays;
   }
 
   DateTime _firstDayOfWeek(DateTime week) {

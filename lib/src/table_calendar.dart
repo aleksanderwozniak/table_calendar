@@ -106,6 +106,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Whether to display week numbers on calendar.
   final bool weekNumbersVisible;
 
+  /// Wether to display only weekdays
+  final bool onlyWeekdays;
+
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
@@ -228,6 +231,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
     this.weekNumbersVisible = false,
+    this.onlyWeekdays = false,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
@@ -505,6 +509,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
             onVerticalSwipe: _swipeCalendarFormat,
+            onlyWeekdays: widget.onlyWeekdays,
+            weekendDays: widget.weekendDays,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
