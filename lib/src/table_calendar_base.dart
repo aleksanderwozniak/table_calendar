@@ -37,6 +37,7 @@ class TableCalendarBase extends StatefulWidget {
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
   final bool? onlyWeekdays;
+  final List<int> weekendDays;
 
   TableCalendarBase({
     Key? key,
@@ -76,6 +77,7 @@ class TableCalendarBase extends StatefulWidget {
     this.onPageChanged,
     this.onCalendarCreated,
     this.onlyWeekdays = false,
+    this.weekendDays = const [DateTime.saturday, DateTime.sunday],
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
         assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay)),
@@ -254,6 +256,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               dowBuilder: widget.dowBuilder,
               dayBuilder: widget.dayBuilder,
               onlyWeekdays: widget.onlyWeekdays,
+              weekendDays: widget.weekendDays,
             ),
           ),
         );

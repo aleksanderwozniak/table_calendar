@@ -33,6 +33,7 @@ class CalendarCore extends StatelessWidget {
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
   final bool? onlyWeekdays; 
+  final List<int> weekendDays;
 
   const CalendarCore({
     Key? key,
@@ -59,6 +60,7 @@ class CalendarCore extends StatelessWidget {
     this.tablePadding,
     this.scrollPhysics,
     this.onlyWeekdays = false,
+    this.weekendDays = const [DateTime.saturday, DateTime.sunday],
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -277,7 +279,7 @@ class CalendarCore extends StatelessWidget {
       (index) => DateTime.utc(first.year, first.month, first.day + index),
     );
 
-    weekdays.removeWhere((element) => element.weekday == 6 || element.weekday == 7);
+    weekdays.removeWhere((element) => weekendDays.contains(element.weekday));
     return weekdays;
   }
 
