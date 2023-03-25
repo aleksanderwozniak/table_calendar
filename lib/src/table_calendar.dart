@@ -538,8 +538,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                         ?.call(day, widget.locale) ??
                     DateFormat.E(widget.locale).format(day);
 
-                final isWeekend =
-                    _isWeekend(day, weekendDays: widget.weekendDays);
                 final isSunday = (day.weekday == DateTime.sunday);
                 final isSaturday = (day.weekday == DateTime.saturday);
 

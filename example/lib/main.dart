@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'TableCalendar Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'ACCKidsHeart',
       ),
       home: StartPage(),
     );

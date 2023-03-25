@@ -23,6 +23,16 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         title: Text('TableCalendar - Basics'),
       ),
       body: TableCalendar(
+        locale: 'ko_KR',
+        availableGestures: AvailableGestures.horizontalSwipe,
+        headerStyle: new HeaderStyle(
+          titleCentered: true,
+          titleTextStyle: new TextStyle(
+            fontSize: 22.0,
+            fontFamily: 'ACCKidsHeart',
+          ),
+          formatButtonVisible: false,
+        ),
         firstDay: kFirstDay,
         lastDay: kLastDay,
         focusedDay: _focusedDay,
