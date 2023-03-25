@@ -215,17 +215,28 @@ class CalendarStyle {
       color: const Color(0xFF6699FF),
     ),
     this.withinRangeTextStyle = const TextStyle(),
-    this.withinRangeDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.withinRangeDecoration = const BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10.0),
+      ),
+    ),
     this.outsideTextStyle = const TextStyle(color: const Color(0xFFAEAEAE)),
-    this.outsideDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.outsideDecoration = const BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10.0),
+      ),
+    ),
     this.disabledTextStyle = const TextStyle(color: const Color(0xFFBFBFBF)),
-    this.disabledDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.disabledDecoration = const BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10.0),
+      ),
+    ),
     this.holidayTextStyle = const TextStyle(color: const Color(0xFF5C6BC0)),
     this.holidayDecoration = const BoxDecoration(
       border: const Border.fromBorderSide(
         const BorderSide(color: const Color(0xFF9FA8DA), width: 1.4),
       ),
-      shape: BoxShape.circle,
     ),
     this.weekendTextStyle = const TextStyle(color: const Color(0xFF5A5A5A)),
     this.weekendDecoration = const BoxDecoration(
