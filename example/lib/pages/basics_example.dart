@@ -36,7 +36,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
             width: 32,
           ),
           rightChevronMargin: EdgeInsets.only(right: 60.0),
-          headerMargin: EdgeInsets.fromLTRB(10, 30, 10, 30),
+          headerMargin: EdgeInsets.all(10.0),
           titleCentered: true,
           titleYearTextStyle: new TextStyle(
             fontSize: 18.0,
@@ -49,6 +49,24 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        daysOfWeekStyle: DaysOfWeekStyle(
+          weekdayStyle: const TextStyle(
+            color: const Color(0xFF4F4F4F),
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+          sundayStyle: const TextStyle(
+            color: Color.fromARGB(255, 255, 0, 0),
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+          saturdayStyle: const TextStyle(
+            color: Color.fromARGB(255, 0, 89, 255),
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        daysOfWeekHeight: 50,
         firstDay: kFirstDay,
         lastDay: kLastDay,
         focusedDay: _focusedDay,
