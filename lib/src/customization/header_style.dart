@@ -80,25 +80,33 @@ class HeaderStyle {
 
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
-    this.titleCentered = false,
+    this.titleCentered = true,
     this.formatButtonShowsNext = true,
     this.titleTextFormatter,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
-    this.titleYearTextStyle = const TextStyle(fontSize: 17.0),
-    this.titleMonthTextStyle = const TextStyle(fontSize: 17.0),
+    this.titleYearTextStyle = const TextStyle(
+      fontSize: 18.0,
+      fontFamily: 'ACCKidsHeart',
+      fontWeight: FontWeight.normal,
+    ),
+    this.titleMonthTextStyle = const TextStyle(
+      fontSize: 24.0,
+      fontFamily: 'ACCKidsHeart',
+      fontWeight: FontWeight.bold,
+    ),
     this.formatButtonTextStyle = const TextStyle(fontSize: 14.0),
     this.formatButtonDecoration = const BoxDecoration(
       border: const Border.fromBorderSide(BorderSide()),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     ),
-    this.headerMargin = const EdgeInsets.all(0.0),
+    this.headerMargin = const EdgeInsets.all(10.0),
     this.headerPadding = const EdgeInsets.symmetric(vertical: 8.0),
     this.formatButtonPadding =
         const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
     this.leftChevronPadding = const EdgeInsets.all(12.0),
     this.rightChevronPadding = const EdgeInsets.all(12.0),
-    this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.leftChevronMargin = const EdgeInsets.only(left: 60.0),
+    this.rightChevronMargin = const EdgeInsets.only(right: 60.0),
     this.leftChevronIcon = const Icon(Icons.chevron_left),
     this.rightChevronIcon = const Icon(Icons.chevron_right),
     this.leftChevronVisible = true,

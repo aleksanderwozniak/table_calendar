@@ -19,3 +19,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  assets:
+    - packages/table_calendar/assets/images/icons8-go-back-64.png
+    - packages/table_calendar/assets/images/icons8-circled-right-64.png

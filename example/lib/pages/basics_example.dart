@@ -24,52 +24,6 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
       ),
       body: TableCalendar(
         availableGestures: AvailableGestures.horizontalSwipe,
-        headerStyle: HeaderStyle(
-          leftChevronIcon: Image.asset(
-            'assets/images/icons8-go-back-64.png',
-            width: 32,
-          ),
-          leftChevronMargin: EdgeInsets.only(left: 60.0),
-          rightChevronIcon: Image.asset(
-            'assets/images/icons8-circled-right-64.png',
-            width: 32,
-          ),
-          rightChevronMargin: EdgeInsets.only(right: 60.0),
-          headerMargin: EdgeInsets.all(10.0),
-          titleCentered: true,
-          titleYearTextStyle: new TextStyle(
-            fontSize: 18.0,
-            fontFamily: 'ACCKidsHeart',
-            fontWeight: FontWeight.normal,
-          ),
-          titleMonthTextStyle: new TextStyle(
-            fontSize: 24.0,
-            fontFamily: 'ACCKidsHeart',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        daysOfWeekStyle: DaysOfWeekStyle(
-          weekdayStyle: const TextStyle(
-            color: const Color(0xFF4F4F4F),
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-          sundayStyle: const TextStyle(
-            color: Color.fromARGB(255, 255, 0, 0),
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-          saturdayStyle: const TextStyle(
-            color: Color.fromARGB(255, 0, 89, 255),
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        daysOfWeekHeight: 50,
-        calendarStyle: CalendarStyle(
-          weekendTextStyle:
-              const TextStyle(color: Color.fromARGB(255, 251, 4, 4)),
-        ),
         firstDay: kFirstDay,
         lastDay: kLastDay,
         focusedDay: _focusedDay,

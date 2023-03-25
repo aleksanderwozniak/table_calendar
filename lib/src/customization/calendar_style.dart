@@ -222,6 +222,11 @@ class CalendarStyle {
     ),
     this.outsideTextStyle = const TextStyle(color: const Color(0xFFAEAEAE)),
     this.outsideDecoration = const BoxDecoration(
+      border: const Border.fromBorderSide(
+        const BorderSide(
+          color: Color.fromARGB(66, 193, 193, 193),
+        ),
+      ),
       borderRadius: BorderRadius.all(
         Radius.circular(10.0),
       ),
@@ -242,7 +247,7 @@ class CalendarStyle {
     this.weekendDecoration = const BoxDecoration(
       border: const Border.fromBorderSide(
         const BorderSide(
-          color: const Color.fromARGB(66, 118, 191, 130),
+          color: Color.fromARGB(66, 182, 60, 191),
         ),
       ),
       borderRadius: BorderRadius.all(
@@ -253,7 +258,7 @@ class CalendarStyle {
     this.defaultDecoration = const BoxDecoration(
       border: const Border.fromBorderSide(
         const BorderSide(
-          color: Color.fromARGB(66, 191, 118, 118),
+          color: Color.fromARGB(66, 80, 151, 72),
         ),
       ),
       borderRadius: BorderRadius.all(

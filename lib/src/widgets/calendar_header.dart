@@ -54,7 +54,10 @@ class CalendarHeader extends StatelessWidget {
         children: [
           if (headerStyle.leftChevronVisible)
             CustomIconButton(
-              icon: headerStyle.leftChevronIcon,
+              icon: Image(
+                  width: 32,
+                  image: AssetImage('assets/images/icons8-go-back-64.png',
+                      package: 'table_calendar')),
               onTap: onLeftChevronTap,
               margin: headerStyle.leftChevronMargin,
               padding: headerStyle.leftChevronPadding,
@@ -86,7 +89,10 @@ class CalendarHeader extends StatelessWidget {
           ),
           if (headerStyle.rightChevronVisible)
             CustomIconButton(
-              icon: headerStyle.rightChevronIcon,
+              icon: Image(
+                  width: 32,
+                  image: AssetImage('assets/images/icons8-circled-right-64.png',
+                      package: 'table_calendar')),
               onTap: onRightChevronTap,
               margin: headerStyle.rightChevronMargin,
               padding: headerStyle.rightChevronPadding,

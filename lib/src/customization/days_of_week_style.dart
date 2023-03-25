@@ -36,10 +36,21 @@ class DaysOfWeekStyle {
   const DaysOfWeekStyle({
     this.dowTextFormatter,
     this.decoration = const BoxDecoration(),
-    this.weekdayStyle = const TextStyle(color: const Color(0xFF4F4F4F)),
+    this.weekdayStyle = const TextStyle(
+      color: const Color(0xFF4F4F4F),
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+    ),
     this.weekendStyle = const TextStyle(color: const Color(0xFF6A6A6A)),
-    this.sundayStyle = const TextStyle(color: Color.fromARGB(255, 250, 2, 2)),
-    this.saturdayStyle =
-        const TextStyle(color: Color.fromARGB(255, 2, 19, 250)),
+    this.sundayStyle = const TextStyle(
+      color: Color.fromARGB(255, 255, 0, 0),
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+    ),
+    this.saturdayStyle = const TextStyle(
+      color: Color.fromARGB(255, 0, 89, 255),
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+    ),
   });
 }
