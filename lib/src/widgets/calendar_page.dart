@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 class CalendarPage extends StatelessWidget {
   final Widget Function(BuildContext context, DateTime day)? dowBuilder;
   final Widget Function(BuildContext context, DateTime day) dayBuilder;
-  final Widget Function(BuildContext context, DateTime day)? weekNumberBuilder;
   final List<DateTime> visibleDays;
   final Decoration? dowDecoration;
   final Decoration? rowDecoration;
@@ -21,7 +20,6 @@ class CalendarPage extends StatelessWidget {
     required this.visibleDays,
     this.dowBuilder,
     required this.dayBuilder,
-    this.weekNumberBuilder,
     this.dowDecoration,
     this.rowDecoration,
     this.tableBorder,
@@ -30,7 +28,6 @@ class CalendarPage extends StatelessWidget {
     this.weekNumberVisible = false,
     this.dowHeight,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
-        assert(!weekNumberVisible || weekNumberBuilder != null),
         super(key: key);
 
   @override
@@ -40,7 +37,6 @@ class CalendarPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (weekNumberVisible) _buildWeekNumbers(context),
           Expanded(
             child: Table(
               border: tableBorder,
@@ -52,21 +48,6 @@ class CalendarPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildWeekNumbers(BuildContext context) {
-    final rowAmount = visibleDays.length ~/ 7;
-
-    return Column(
-      children: [
-        if (dowVisible) SizedBox(height: dowHeight ?? 0),
-        ...List.generate(rowAmount, (index) => index * 7)
-            .map((index) => Expanded(
-                  child: weekNumberBuilder!(context, visibleDays[index]),
-                ))
-            .toList()
-      ],
     );
   }
 

@@ -135,10 +135,6 @@ void main() {
             return Text('${day.weekday}');
           },
           dowHeight: 5,
-          weekNumberVisible: true,
-          weekNumberBuilder: (BuildContext context, DateTime day) {
-            return Text(day.weekday.toString());
-          },
         ),
       ));
 
@@ -148,5 +144,4 @@ void main() {
       );
     },
   );
-
 }
