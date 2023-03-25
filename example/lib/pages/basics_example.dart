@@ -27,11 +27,16 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         availableGestures: AvailableGestures.horizontalSwipe,
         headerStyle: new HeaderStyle(
           titleCentered: true,
-          titleTextStyle: new TextStyle(
-            fontSize: 22.0,
+          titleYearTextStyle: new TextStyle(
+            fontSize: 18.0,
             fontFamily: 'ACCKidsHeart',
+            fontWeight: FontWeight.normal,
           ),
-          formatButtonVisible: false,
+          titleMonthTextStyle: new TextStyle(
+            fontSize: 24.0,
+            fontFamily: 'ACCKidsHeart',
+            fontWeight: FontWeight.bold,
+          ),
         ),
         firstDay: kFirstDay,
         lastDay: kLastDay,

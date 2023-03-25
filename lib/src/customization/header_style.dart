@@ -10,9 +10,6 @@ class HeaderStyle {
   /// Responsible for making title Text centered.
   final bool titleCentered;
 
-  /// Responsible for FormatButton visibility.
-  final bool formatButtonVisible;
-
   /// Controls the text inside FormatButton.
   /// * `true` - the button will show next CalendarFormat
   /// * `false` - the button will show current CalendarFormat
@@ -30,6 +27,8 @@ class HeaderStyle {
 
   /// Style for title Text (month-year) displayed in header.
   final TextStyle titleTextStyle;
+  final TextStyle titleYearTextStyle;
+  final TextStyle titleMonthTextStyle;
 
   /// Style for FormatButton `Text`.
   final TextStyle formatButtonTextStyle;
@@ -82,10 +81,11 @@ class HeaderStyle {
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
     this.titleCentered = false,
-    this.formatButtonVisible = true,
     this.formatButtonShowsNext = true,
     this.titleTextFormatter,
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
+    this.titleYearTextStyle = const TextStyle(fontSize: 17.0),
+    this.titleMonthTextStyle = const TextStyle(fontSize: 17.0),
     this.formatButtonTextStyle = const TextStyle(fontSize: 14.0),
     this.formatButtonDecoration = const BoxDecoration(
       border: const Border.fromBorderSide(BorderSide()),

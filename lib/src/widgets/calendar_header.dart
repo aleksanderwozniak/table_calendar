@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import '../customization/header_style.dart';
 import '../shared/utils.dart' show CalendarFormat, DayBuilder;
 import 'custom_icon_button.dart';
-import 'format_button.dart';
 
 class CalendarHeader extends StatelessWidget {
   final dynamic locale;
@@ -39,8 +38,12 @@ class CalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
-        DateFormat.yMMMM(locale).format(focusedMonth);
+    final yearText =
+        headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
+            DateFormat.y(locale).format(focusedMonth);
+    final monthText =
+        headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
+            DateFormat.MMMM(locale).format(focusedMonth);
 
     return Container(
       decoration: headerStyle.decoration,
@@ -61,29 +64,26 @@ class CalendarHeader extends StatelessWidget {
                 GestureDetector(
                   onTap: onHeaderTap,
                   onLongPress: onHeaderLongPress,
-                  child: Text(
-                    text,
-                    style: headerStyle.titleTextStyle,
-                    textAlign: headerStyle.titleCentered
-                        ? TextAlign.center
-                        : TextAlign.start,
+                  child: Column(
+                    children: [
+                      Text(
+                        yearText,
+                        style: headerStyle.titleYearTextStyle,
+                        textAlign: headerStyle.titleCentered
+                            ? TextAlign.center
+                            : TextAlign.start,
+                      ),
+                      Text(
+                        monthText,
+                        style: headerStyle.titleMonthTextStyle,
+                        textAlign: headerStyle.titleCentered
+                            ? TextAlign.center
+                            : TextAlign.start,
+                      )
+                    ],
                   ),
                 ),
           ),
-          if (headerStyle.formatButtonVisible &&
-              availableCalendarFormats.length > 1)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: FormatButton(
-                onTap: onFormatButtonTap,
-                availableCalendarFormats: availableCalendarFormats,
-                calendarFormat: calendarFormat,
-                decoration: headerStyle.formatButtonDecoration,
-                padding: headerStyle.formatButtonPadding,
-                textStyle: headerStyle.formatButtonTextStyle,
-                showsNextFormat: headerStyle.formatButtonShowsNext,
-              ),
-            ),
           if (headerStyle.rightChevronVisible)
             CustomIconButton(
               icon: headerStyle.rightChevronIcon,

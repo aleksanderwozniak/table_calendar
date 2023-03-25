@@ -190,7 +190,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         setupTestWidget(
-          headerStyle: HeaderStyle(formatButtonVisible: false),
+          headerStyle: HeaderStyle(),
         ),
       );
 
