@@ -26,6 +26,16 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         locale: 'ko_KR',
         availableGestures: AvailableGestures.horizontalSwipe,
         headerStyle: new HeaderStyle(
+          leftChevronIcon: Image.asset(
+            'assets/images/icons8-go-back-64.png',
+            width: 32,
+          ),
+          leftChevronMargin: EdgeInsets.only(left: 60.0),
+          rightChevronIcon: Image.asset(
+            'assets/images/icons8-circled-right-64.png',
+            width: 32,
+          ),
+          rightChevronMargin: EdgeInsets.only(right: 60.0),
           headerMargin: EdgeInsets.fromLTRB(10, 30, 10, 30),
           titleCentered: true,
           titleYearTextStyle: new TextStyle(
