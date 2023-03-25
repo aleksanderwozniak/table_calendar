@@ -23,9 +23,8 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         title: Text('TableCalendar - Basics'),
       ),
       body: TableCalendar(
-        locale: 'ko_KR',
         availableGestures: AvailableGestures.horizontalSwipe,
-        headerStyle: new HeaderStyle(
+        headerStyle: HeaderStyle(
           leftChevronIcon: Image.asset(
             'assets/images/icons8-go-back-64.png',
             width: 32,
@@ -67,6 +66,10 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
           ),
         ),
         daysOfWeekHeight: 50,
+        calendarStyle: CalendarStyle(
+          weekendTextStyle:
+              const TextStyle(color: Color.fromARGB(255, 251, 4, 4)),
+        ),
         firstDay: kFirstDay,
         lastDay: kLastDay,
         focusedDay: _focusedDay,

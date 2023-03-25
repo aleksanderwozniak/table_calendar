@@ -1,6 +1,7 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
@@ -277,6 +278,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   late final ValueNotifier<DateTime> _focusedDay;
   late RangeSelectionMode _rangeSelectionMode;
   DateTime? _firstSelectedDay;
+  late final String sysLocale = Platform.localeName;
 
   @override
   void initState() {
@@ -460,7 +462,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 headerStyle: widget.headerStyle,
                 availableCalendarFormats: widget.availableCalendarFormats,
                 calendarFormat: widget.calendarFormat,
-                locale: widget.locale,
+                locale: sysLocale,
                 onFormatButtonTap: (format) {
                   assert(
                     widget.onFormatChanged != null,
@@ -511,8 +513,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
               if (dowCell == null) {
                 final weekdayString = widget.daysOfWeekStyle.dowTextFormatter
-                        ?.call(day, widget.locale) ??
-                    DateFormat.E(widget.locale).format(day);
+                        ?.call(day, sysLocale) ??
+                    DateFormat.E(sysLocale).format(day);
 
                 final isSunday = (day.weekday == DateTime.sunday);
                 final isSaturday = (day.weekday == DateTime.saturday);
@@ -596,6 +598,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isToday = isSameDay(day, widget.currentDay);
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
+        final isSunday = (day.weekday == DateTime.sunday);
+        final isSaturday = (day.weekday == DateTime.saturday);
 
         Widget content = CellContent(
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
@@ -612,8 +616,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isOutside: isOutside,
           isDisabled: isDisabled,
           isWeekend: isWeekend,
+          isSunday: isSunday,
+          isSaturday: isSaturday,
           isHoliday: widget.holidayPredicate?.call(day) ?? false,
-          locale: widget.locale,
+          locale: sysLocale,
         );
 
         children.add(content);
