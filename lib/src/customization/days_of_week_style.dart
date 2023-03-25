@@ -26,11 +26,20 @@ class DaysOfWeekStyle {
   /// Style for weekend days on the top of calendar.
   final TextStyle weekendStyle;
 
+  /// Style for sunday days on the top of calendar.
+  final TextStyle sundayStyle;
+
+  /// Style for saturday days on the top of calendar.
+  final TextStyle saturdayStyle;
+
   /// Creates a `DaysOfWeekStyle` used by `TableCalendar` widget.
   const DaysOfWeekStyle({
     this.dowTextFormatter,
     this.decoration = const BoxDecoration(),
     this.weekdayStyle = const TextStyle(color: const Color(0xFF4F4F4F)),
     this.weekendStyle = const TextStyle(color: const Color(0xFF6A6A6A)),
+    this.sundayStyle = const TextStyle(color: Color.fromARGB(255, 250, 2, 2)),
+    this.saturdayStyle =
+        const TextStyle(color: Color.fromARGB(255, 2, 19, 250)),
   });
 }
