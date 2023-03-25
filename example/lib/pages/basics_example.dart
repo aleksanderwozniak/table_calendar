@@ -26,6 +26,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         locale: 'ko_KR',
         availableGestures: AvailableGestures.horizontalSwipe,
         headerStyle: new HeaderStyle(
+          headerMargin: EdgeInsets.fromLTRB(10, 30, 10, 30),
           titleCentered: true,
           titleYearTextStyle: new TextStyle(
             fontSize: 18.0,
