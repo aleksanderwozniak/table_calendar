@@ -685,7 +685,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           width: markerSize,
           height: markerSize,
           // margin: widget.calendarStyle.markerMargin,
-          // decoration: widget.calendarStyle.markerDecoration,
           child: Icon(
             Icons.star,
             size: markerSize,
