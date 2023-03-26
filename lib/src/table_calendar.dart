@@ -636,16 +636,14 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 (shorterSide - widget.calendarStyle.cellMargin.vertical) *
                     widget.calendarStyle.markerSizeScale;
 
-            final markerAutoAlignmentTop = center +
-                (shorterSide - widget.calendarStyle.cellMargin.vertical) / 2 -
-                (markerSize * widget.calendarStyle.markersAnchor);
+            final markerAutoAlignmentBottom = 16.0;
 
             markerWidget = PositionedDirectional(
               top: widget.calendarStyle.markersAutoAligned
-                  ? markerAutoAlignmentTop
+                  ? null
                   : widget.calendarStyle.markersOffset.top,
               bottom: widget.calendarStyle.markersAutoAligned
-                  ? null
+                  ? markerAutoAlignmentBottom
                   : widget.calendarStyle.markersOffset.bottom,
               start: widget.calendarStyle.markersAutoAligned
                   ? null
