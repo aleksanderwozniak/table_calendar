@@ -86,12 +86,10 @@ class HeaderStyle {
     this.titleTextStyle = const TextStyle(fontSize: 17.0),
     this.titleYearTextStyle = const TextStyle(
       fontSize: 18.0,
-      fontFamily: 'ACCKidsHeart',
       fontWeight: FontWeight.normal,
     ),
     this.titleMonthTextStyle = const TextStyle(
       fontSize: 24.0,
-      fontFamily: 'ACCKidsHeart',
       fontWeight: FontWeight.bold,
     ),
     this.formatButtonTextStyle = const TextStyle(fontSize: 14.0),
