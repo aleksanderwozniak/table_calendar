@@ -161,15 +161,19 @@ class CellContent extends StatelessWidget {
             duration: duration,
             margin: margin,
             padding: padding,
-            decoration: isWeekend
-                ? calendarStyle.weekendDecoration
-                : calendarStyle.defaultDecoration,
+            decoration: isSunday
+                ? calendarStyle.sundayDecoration
+                : (isSaturday
+                    ? calendarStyle.saturdayDecoration
+                    : calendarStyle.defaultDecoration),
             alignment: alignment,
             child: Text(
               text,
-              style: isWeekend
-                  ? calendarStyle.weekendTextStyle
-                  : calendarStyle.defaultTextStyle,
+              style: isSunday
+                  ? calendarStyle.sundayTextStyle
+                  : (isSaturday
+                      ? calendarStyle.saturdayTextStyle
+                      : calendarStyle.defaultTextStyle),
             ),
           );
     }
