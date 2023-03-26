@@ -4,6 +4,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -636,7 +637,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 (shorterSide - widget.calendarStyle.cellMargin.vertical) *
                     widget.calendarStyle.markerSizeScale;
 
-            final markerAutoAlignmentBottom = 16.0;
+            final markerAutoAlignmentBottom = 14.0;
 
             markerWidget = PositionedDirectional(
               top: widget.calendarStyle.markersAutoAligned
@@ -683,8 +684,13 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         Container(
           width: markerSize,
           height: markerSize,
-          margin: widget.calendarStyle.markerMargin,
-          decoration: widget.calendarStyle.markerDecoration,
+          // margin: widget.calendarStyle.markerMargin,
+          // decoration: widget.calendarStyle.markerDecoration,
+          child: Icon(
+            Icons.star,
+            size: markerSize,
+            color: Color.fromARGB(255, 199, 220, 62),
+          ),
         );
   }
 
