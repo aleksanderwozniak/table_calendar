@@ -689,7 +689,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           child: Icon(
             Icons.star,
             size: markerSize,
-            color: Color.fromARGB(255, 199, 220, 62),
+            color: widget.calendarStyle.markerColor,
           ),
         );
   }
