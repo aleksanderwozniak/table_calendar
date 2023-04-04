@@ -3,6 +3,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/src/widgets/today_button.dart';
 
 import '../customization/header_style.dart';
 import '../shared/utils.dart' show CalendarFormat, DayBuilder;
@@ -21,6 +22,7 @@ class CalendarHeader extends StatelessWidget {
   final ValueChanged<CalendarFormat> onFormatButtonTap;
   final Map<CalendarFormat, String> availableCalendarFormats;
   final DayBuilder? headerTitleBuilder;
+  final VoidCallback? onTodayButtonTap;
 
   const CalendarHeader({
     Key? key,
@@ -33,6 +35,7 @@ class CalendarHeader extends StatelessWidget {
     required this.onHeaderTap,
     required this.onHeaderLongPress,
     required this.onFormatButtonTap,
+    this.onTodayButtonTap,
     required this.availableCalendarFormats,
     this.headerTitleBuilder,
   }) : super(key: key);
@@ -70,20 +73,26 @@ class CalendarHeader extends StatelessWidget {
                   ),
                 ),
           ),
-          if (headerStyle.formatButtonVisible &&
-              availableCalendarFormats.length > 1)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: FormatButton(
-                onTap: onFormatButtonTap,
-                availableCalendarFormats: availableCalendarFormats,
-                calendarFormat: calendarFormat,
-                decoration: headerStyle.formatButtonDecoration,
-                padding: headerStyle.formatButtonPadding,
-                textStyle: headerStyle.formatButtonTextStyle,
-                showsNextFormat: headerStyle.formatButtonShowsNext,
-              ),
-            ),
+          (headerStyle.formatButtonVisible &&
+                  availableCalendarFormats.length > 1)
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: FormatButton(
+                    onTap: onFormatButtonTap,
+                    availableCalendarFormats: availableCalendarFormats,
+                    calendarFormat: calendarFormat,
+                    decoration: headerStyle.formatButtonDecoration,
+                    padding: headerStyle.formatButtonPadding,
+                    textStyle: headerStyle.formatButtonTextStyle,
+                    showsNextFormat: headerStyle.formatButtonShowsNext,
+                  ),
+                )
+              : (headerStyle.todayButtonVisible) ? TodayButton(
+                  onTap: onTodayButtonTap,
+                  textStyle: headerStyle.todayButtonTextStyle,
+                  textButton: headerStyle.todayButtonText,
+                  decoration: headerStyle.todayButtonDecoration,
+                  padding: headerStyle.todayButtonPadding) : Container(),
           if (headerStyle.rightChevronVisible)
             CustomIconButton(
               icon: headerStyle.rightChevronIcon,

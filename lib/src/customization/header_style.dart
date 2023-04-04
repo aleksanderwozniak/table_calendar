@@ -13,6 +13,18 @@ class HeaderStyle {
   /// Responsible for FormatButton visibility.
   final bool formatButtonVisible;
 
+  final String todayButtonText;
+  final bool todayButtonVisible;
+
+  /// Style for FormatButton `Text`.
+  final TextStyle todayButtonTextStyle;
+
+  /// Background `Decoration` for FormatButton.
+  final BoxDecoration todayButtonDecoration;
+
+  /// Internal padding of FormatButton.
+  final EdgeInsets todayButtonPadding;
+
   /// Controls the text inside FormatButton.
   /// * `true` - the button will show next CalendarFormat
   /// * `false` - the button will show current CalendarFormat
@@ -104,5 +116,11 @@ class HeaderStyle {
     this.leftChevronVisible = true,
     this.rightChevronVisible = true,
     this.decoration = const BoxDecoration(),
+    this.todayButtonText = "",
+    this.todayButtonVisible = false,
+    this.todayButtonTextStyle = const TextStyle(fontSize: 14.0),
+    this.todayButtonDecoration =  const BoxDecoration(),
+    this.todayButtonPadding =
+    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
   });
 }
