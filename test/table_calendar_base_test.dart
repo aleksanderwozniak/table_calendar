@@ -38,7 +38,7 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.month,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
+              startingDayOfWeek: StartingDayOfWeek.sunday, physics: BouncingScrollPhysics(),
             ),
           ),
         );
@@ -84,7 +84,7 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.twoWeeks,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
+              startingDayOfWeek: StartingDayOfWeek.sunday, physics: ClampingScrollPhysics(),
             ),
           ),
         );
@@ -130,7 +130,7 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.week,
-              startingDayOfWeek: StartingDayOfWeek.sunday,
+              startingDayOfWeek: StartingDayOfWeek.sunday,physics: BouncingScrollPhysics(),
             ),
           ),
         );
@@ -176,7 +176,7 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.month,
-              startingDayOfWeek: StartingDayOfWeek.monday,
+              startingDayOfWeek: StartingDayOfWeek.monday,physics: BouncingScrollPhysics(),
             ),
           ),
         );
@@ -222,7 +222,7 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.twoWeeks,
-              startingDayOfWeek: StartingDayOfWeek.monday,
+              startingDayOfWeek: StartingDayOfWeek.monday, physics: BouncingScrollPhysics(),
             ),
           ),
         );
@@ -268,7 +268,7 @@ void main() {
               rowHeight: 52,
               dowVisible: false,
               calendarFormat: CalendarFormat.week,
-              startingDayOfWeek: StartingDayOfWeek.monday,
+              startingDayOfWeek: StartingDayOfWeek.monday, physics: BouncingScrollPhysics(),
             ),
           ),
         );
@@ -327,6 +327,7 @@ void main() {
             },
             rowHeight: 52,
             dowVisible: false,
+            physics: BouncingScrollPhysics(),
           ),
         ),
       );
@@ -372,6 +373,7 @@ void main() {
               dowBuilder: (context, day) {
                 return Text('${day.weekday}');
               },
+              physics: BouncingScrollPhysics(),
             ),
           ),
         );
