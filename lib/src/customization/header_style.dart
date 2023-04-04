@@ -116,11 +116,14 @@ class HeaderStyle {
     this.leftChevronVisible = true,
     this.rightChevronVisible = true,
     this.decoration = const BoxDecoration(),
-    this.todayButtonText = "",
+    this.todayButtonText = "Today",
     this.todayButtonVisible = false,
     this.todayButtonTextStyle = const TextStyle(fontSize: 14.0),
-    this.todayButtonDecoration =  const BoxDecoration(),
+    this.todayButtonDecoration = const BoxDecoration(
+      border: const Border.fromBorderSide(BorderSide()),
+      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+    ),
     this.todayButtonPadding =
-    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
   });
 }
