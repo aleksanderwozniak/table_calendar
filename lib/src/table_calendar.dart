@@ -177,6 +177,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called whenever a day range gets selected.
   final OnRangeSelected? onRangeSelected;
 
+  /// Scroll Physics for the calendar
+  final ScrollPhysics physics;
+
   /// Called whenever any day gets tapped.
   final OnDaySelected? onDaySelected;
 
@@ -214,6 +217,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.locale,
     this.rangeStartDay,
     this.rangeEndDay,
+    this.physics = const ScrollPhysics(),
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
     this.calendarFormat = CalendarFormat.month,
     this.availableCalendarFormats = const {
@@ -509,6 +513,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
             },
+            physics: widget.physics,
             weekNumbersVisible: widget.weekNumbersVisible,
             weekNumberBuilder: (BuildContext context, DateTime day) {
               final weekNumber = _calculateWeekNumber(day);
