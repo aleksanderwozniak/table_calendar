@@ -36,10 +36,12 @@ class TableCalendarBase extends StatefulWidget {
   final SwipeCallback? onVerticalSwipe;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
+  final ScrollPhysics physics;
 
   TableCalendarBase({
     Key? key,
     required this.firstDay,
+    required this.physics,
     required this.lastDay,
     required this.focusedDay,
     this.calendarFormat = CalendarFormat.month,
@@ -209,7 +211,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               constraints: constraints,
               pageController: _pageController,
               scrollPhysics: _canScrollHorizontally
-                  ? BouncingScrollPhysics()
+                  ? widget.physics
                   : NeverScrollableScrollPhysics(),
               firstDay: widget.firstDay,
               lastDay: widget.lastDay,

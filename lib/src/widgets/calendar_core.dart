@@ -64,7 +64,7 @@ class CalendarCore extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageView.builder(
       controller: pageController,
-      physics: BouncingScrollPhysics(),
+      physics: scrollPhysics,
       itemCount: _getPageCount(calendarFormat, firstDay, lastDay),
       itemBuilder: (context, index) {
         final baseDay = _getBaseDay(calendarFormat, index);
