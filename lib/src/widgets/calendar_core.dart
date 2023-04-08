@@ -86,7 +86,7 @@ class CalendarCore extends StatelessWidget {
               child: dowBuilder?.call(context, day),
             );
           },
-          dayBuilder: (context, day, focusedDay) {
+          dayBuilder: (context, day) {
             DateTime baseDay;
             final previousFocusedDay = focusedDay;
             if (previousFocusedDay == null || previousIndex == null) {
