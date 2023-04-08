@@ -89,6 +89,7 @@ class _TableTunneExampleState extends State<TableTunneExample> {
         children: [
           TableCalendar<Event>(
             focusedDay: _focusedDay,
+            availableGestures: AvailableGestures.horizontalSwipe,
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             rangeStartDay: _rangeStart,
             rangeEndDay: _rangeEnd,
