@@ -224,7 +224,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.pageAnimationEnabled = true,
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
-    this.rowHeight = 67.0,
+    this.rowHeight = 57.0,
     this.daysOfWeekHeight = 50.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,

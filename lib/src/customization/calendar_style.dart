@@ -180,23 +180,24 @@ class CalendarStyle {
     this.rangeHighlightColor = const Color(0xFFBBDDFF),
     this.markerColor = const Color.fromARGB(255, 194, 131, 242),
     this.todayTextStyle = const TextStyle(
-      color: const Color(0xFFFAFAFA),
+      // color: const Color(0xFFFAFAFA),
       fontSize: 18.0,
     ), //
     this.todayDecoration = const BoxDecoration(
-      color: const Color(0xFF9FA8DA),
-      border: const Border.fromBorderSide(
-        const BorderSide(
-          color: const Color(0xFF9FA8DA),
-        ),
-      ),
+      color: Color.fromARGB(255, 211, 211, 211),
+      // border: const Border.fromBorderSide(
+      //   const BorderSide(
+      //     color: const Color(0xFF9FA8DA),
+      //   ),
+      // ),
       borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
+        Radius.circular(60.0),
       ),
     ),
     this.selectedTextStyle = const TextStyle(
-      color: const Color(0xFFFAFAFA),
-      fontSize: 18.0,
+      color: Color.fromARGB(255, 7, 7, 7),
+      fontWeight: FontWeight.w700,
+      fontSize: 28.0,
     ),
     this.selectedDecoration = const BoxDecoration(
       color: const Color(0xFF5C6BC0),

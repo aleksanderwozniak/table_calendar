@@ -1,11 +1,13 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../customization/calendar_builders.dart';
 import '../customization/calendar_style.dart';
+import 'cell_selected.dart';
 
 class CellContent extends StatelessWidget {
   final DateTime day;
@@ -68,7 +70,7 @@ class CellContent extends StatelessWidget {
     final margin = calendarStyle.cellMargin;
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;
-    final duration = const Duration(milliseconds: 250);
+    final duration = const Duration(milliseconds: 3250);
 
     if (isDisabled) {
       cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
@@ -82,14 +84,29 @@ class CellContent extends StatelessWidget {
           );
     } else if (isSelected) {
       cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
-          AnimatedContainer(
-            duration: duration,
+          Container(
             margin: margin,
             padding: padding,
-            decoration: calendarStyle.selectedDecoration,
-            alignment: alignment,
-            child: Text(text, style: calendarStyle.selectedTextStyle),
+            child: CellSelected(
+              // margin: margin,
+              // padding: padding,
+              text: text,
+            ),
           );
+
+      // AnimatedContainer(
+      //   duration: duration,
+      //   margin: margin,
+      //   padding: padding,
+      //   decoration: calendarStyle.selectedDecoration,
+      //   alignment: alignment,
+      //   child: AnimatedDefaultTextStyle(
+      //     child: Text(text),
+      //     style: calendarStyle.selectedTextStyle,
+      //     duration: duration,
+      //     curve: Curves.easeIn,
+      //   ),
+      // );
     } else if (isRangeStart) {
       cell =
           calendarBuilders.rangeStartBuilder?.call(context, day, focusedDay) ??
