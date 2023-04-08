@@ -295,6 +295,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     } else if (widget.sixWeekMonthsEnforced) {
       return 6;
     }
+    return 6;
 
     final first = _firstDayOfMonth(focusedDay);
     final daysBefore = _getDaysBefore(first);

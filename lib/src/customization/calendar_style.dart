@@ -166,14 +166,14 @@ class CalendarStyle {
     this.canMarkersOverflow = true,
     this.outsideDaysVisible = true,
     this.markersAutoAligned = true,
-    this.markerSize = 13.0,
+    this.markerSize = 6.0,
     this.markerSizeScale = 0.2,
     this.markersAnchor = 0.7,
     this.rangeHighlightScale = 1.0,
     this.markerMargin = const EdgeInsets.symmetric(horizontal: 0.1),
     this.markersAlignment = Alignment.bottomCenter,
     this.markersMaxCount = 3,
-    this.cellMargin = const EdgeInsets.all(6.0),
+    this.cellMargin = const EdgeInsets.all(0.0),
     this.cellPadding = const EdgeInsets.fromLTRB(0, 0, 0, 16),
     this.cellAlignment = Alignment.center,
     this.markersOffset = const PositionedOffset(),
@@ -230,19 +230,19 @@ class CalendarStyle {
       ),
     ),
     this.outsideTextStyle = const TextStyle(
-      color: const Color(0xFFAEAEAE),
+      // color: const Color(0xFFAEAEAE),
       fontSize: 18.0,
     ),
     this.outsideDecoration = const BoxDecoration(
-      border: const Border.fromBorderSide(
-        const BorderSide(
-          color: Color.fromARGB(66, 193, 193, 193),
+        // border: const Border.fromBorderSide(
+        //   const BorderSide(
+        //     color: Color.fromARGB(66, 193, 193, 193),
+        //   ),
+        // ),
+        // borderRadius: BorderRadius.all(
+        //   Radius.circular(10.0),
+        // ),
         ),
-      ),
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      ),
-    ),
     this.disabledTextStyle = const TextStyle(
       color: const Color(0xFFBFBFBF),
       fontSize: 18.0,
@@ -277,45 +277,45 @@ class CalendarStyle {
       fontSize: 18.0,
     ),
     this.sundayDecoration = const BoxDecoration(
-      border: const Border.fromBorderSide(
-        const BorderSide(
-          color: Color.fromARGB(66, 182, 60, 191),
+        // border: const Border.fromBorderSide(
+        //   const BorderSide(
+        //     color: Color.fromARGB(66, 182, 60, 191),
+        //   ),
+        // ),
+        // borderRadius: BorderRadius.all(
+        //   Radius.circular(10.0),
+        // ),
         ),
-      ),
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      ),
-    ),
     this.saturdayTextStyle = const TextStyle(
       color: const Color.fromARGB(255, 0, 89, 255),
       fontSize: 18.0,
     ),
     this.saturdayDecoration = const BoxDecoration(
-      border: const Border.fromBorderSide(
-        const BorderSide(
-          color: Color.fromARGB(66, 182, 60, 191),
+        // border: const Border.fromBorderSide(
+        //   const BorderSide(
+        //     color: Color.fromARGB(66, 182, 60, 191),
+        //   ),
+        // ),
+        // borderRadius: BorderRadius.all(
+        //   Radius.circular(10.0),
+        // ),
         ),
-      ),
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      ),
-    ),
     this.defaultTextStyle = const TextStyle(
       fontSize: 18.0,
     ),
     this.defaultDecoration = const BoxDecoration(
-      border: const Border.fromBorderSide(
-        const BorderSide(
-          color: Color.fromARGB(66, 80, 151, 72),
+        // border: const Border.fromBorderSide(
+        //   const BorderSide(
+        //     color: Color.fromARGB(66, 80, 151, 72),
+        //   ),
+        // ),
+        // borderRadius: BorderRadius.all(
+        //   Radius.circular(10.0),
+        // ),
         ),
-      ),
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      ),
-    ),
     this.rowDecoration = const BoxDecoration(),
     this.tableBorder = const TableBorder(),
-    this.tablePadding = const EdgeInsets.all(0),
+    this.tablePadding = const EdgeInsets.only(left: 70.0, right: 70.0),
   });
 }
 

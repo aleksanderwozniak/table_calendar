@@ -24,8 +24,6 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
       ),
       body: TableCalendar(
         availableGestures: AvailableGestures.horizontalSwipe,
-        firstDay: kFirstDay,
-        lastDay: kLastDay,
         focusedDay: _focusedDay,
         calendarFormat: _calendarFormat,
         selectedDayPredicate: (day) {

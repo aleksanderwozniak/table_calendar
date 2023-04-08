@@ -137,8 +137,6 @@ class _TableComplexExampleState extends State<TableComplexExample> {
             },
           ),
           TableCalendar<Event>(
-            firstDay: kFirstDay,
-            lastDay: kLastDay,
             focusedDay: _focusedDay.value,
             headerVisible: false,
             selectedDayPredicate: (day) => _selectedDays.contains(day),
