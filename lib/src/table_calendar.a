@@ -207,6 +207,8 @@ class TableCalendar<T> extends StatefulWidget {
   TableCalendar({
     Key? key,
     required DateTime focusedDay,
+    required DateTime firstDay,
+    required DateTime lastDay,
     DateTime? currentDay,
     this.locale,
     this.rangeStartDay,
@@ -263,6 +265,8 @@ class TableCalendar<T> extends StatefulWidget {
                 (day) => day >= DateTime.monday && day <= DateTime.sunday)
             : true),
         focusedDay = normalizeDate(focusedDay),
+        firstDay = normalizeDate(firstDay),
+        lastDay = normalizeDate(lastDay),
         currentDay = currentDay ?? DateTime.now(),
         super(key: key);
 
@@ -471,9 +475,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               );
             },
           ),
-        SizedBox(
-          height: 30.0,
-        ),
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
           child: TableCalendarBase(
@@ -564,36 +565,36 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final children = <Widget>[];
 
-        // final isWithinRange = widget.rangeStartDay != null &&
-        //     widget.rangeEndDay != null &&
-        //     _isWithinRange(day, widget.rangeStartDay!, widget.rangeEndDay!);
+        final isWithinRange = widget.rangeStartDay != null &&
+            widget.rangeEndDay != null &&
+            _isWithinRange(day, widget.rangeStartDay!, widget.rangeEndDay!);
 
-        // final isRangeStart = isSameDay(day, widget.rangeStartDay);
-        // final isRangeEnd = isSameDay(day, widget.rangeEndDay);
+        final isRangeStart = isSameDay(day, widget.rangeStartDay);
+        final isRangeEnd = isSameDay(day, widget.rangeEndDay);
 
-        // Widget? rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder
-        //     ?.call(context, day, isWithinRange);
+        Widget? rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder
+            ?.call(context, day, isWithinRange);
 
-        // if (rangeHighlight == null) {
-        //   if (isWithinRange) {
-        //     rangeHighlight = Center(
-        //       child: Container(
-        //         margin: EdgeInsetsDirectional.only(
-        //           start: isRangeStart ? constraints.maxWidth * 0.5 : 0.0,
-        //           end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
-        //         ),
-        //         height:
-        //             (shorterSide - widget.calendarStyle.cellMargin.vertical) *
-        //                 widget.calendarStyle.rangeHighlightScale,
-        //         color: widget.calendarStyle.rangeHighlightColor,
-        //       ),
-        //     );
-        //   }
-        // }
+        if (rangeHighlight == null) {
+          if (isWithinRange) {
+            rangeHighlight = Center(
+              child: Container(
+                margin: EdgeInsetsDirectional.only(
+                  start: isRangeStart ? constraints.maxWidth * 0.5 : 0.0,
+                  end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
+                ),
+                height:
+                    (shorterSide - widget.calendarStyle.cellMargin.vertical) *
+                        widget.calendarStyle.rangeHighlightScale,
+                color: widget.calendarStyle.rangeHighlightColor,
+              ),
+            );
+          }
+        }
 
-        // if (rangeHighlight != null) {
-        //   children.add(rangeHighlight);
-        // }
+        if (rangeHighlight != null) {
+          children.add(rangeHighlight);
+        }
 
         final isToday = isSameDay(day, widget.currentDay);
         final isDisabled = _isDayDisabled(day);
@@ -610,9 +611,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isTodayHighlighted: widget.calendarStyle.isTodayHighlighted,
           isToday: isToday,
           isSelected: widget.selectedDayPredicate?.call(day) ?? false,
-          isRangeStart: false,
-          isRangeEnd: false,
-          isWithinRange: false,
+          isRangeStart: isRangeStart,
+          isRangeEnd: isRangeEnd,
+          isWithinRange: isWithinRange,
           isOutside: isOutside,
           isDisabled: isDisabled,
           isWeekend: isWeekend,
