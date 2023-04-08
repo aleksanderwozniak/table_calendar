@@ -472,7 +472,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             },
           ),
         SizedBox(
-          height: 30.0,
+          height: 10.0,
         ),
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
@@ -544,6 +544,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               );
             },
           ),
+        ),
+        SizedBox(
+          height: 20.0,
         ),
       ],
     );

@@ -39,7 +39,9 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TableCalendar Example'),
+        backgroundColor: Colors.transparent,
+        // title: Text('TableCalendar Example'),
+        elevation: 0.0,
       ),
       body: Center(child: TableTunneExample()
           // Column(
