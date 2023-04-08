@@ -51,7 +51,10 @@ class CellContent extends StatelessWidget {
     final dayLabel = DateFormat.yMMMMd(locale).format(day);
     final semanticsLabel = '$dowLabel, $dayLabel';
 
-    Widget? cell = calendarBuilders.prioritizedBuilder?.call(context, day);
+    Widget? cell = calendarBuilders.prioritizedBuilder?.call(
+      context,
+      day,
+    );
 
     if (cell != null) {
       return Semantics(

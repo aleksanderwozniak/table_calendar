@@ -86,19 +86,19 @@ class CalendarCore extends StatelessWidget {
               child: dowBuilder?.call(context, day),
             );
           },
-          dayBuilder: (context, day) {
-            // DateTime baseDay;
-            // final previousFocusedDay = focusedDay;
-            // if (previousFocusedDay == null || previousIndex == null) {
-            //   baseDay = _getBaseDay(calendarFormat, index);
-            // } else {
-            //   baseDay =
-            //       _getFocusedDay(calendarFormat, previousFocusedDay, index);
-            // }
+          dayBuilder: (context, day, focusedDay) {
+            DateTime baseDay;
+            final previousFocusedDay = focusedDay;
+            if (previousFocusedDay == null || previousIndex == null) {
+              baseDay = _getBaseDay(calendarFormat, index);
+            } else {
+              baseDay =
+                  _getFocusedDay(calendarFormat, previousFocusedDay, index);
+            }
 
             return SizedBox(
               height: constrainedRowHeight ?? rowHeight,
-              child: dayBuilder(context, day),
+              child: dayBuilder(context, day, baseDay),
             );
           },
           dowHeight: dowHeight,

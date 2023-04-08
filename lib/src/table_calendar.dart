@@ -536,12 +536,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
               return dowCell;
             },
-            dayBuilder: (context, day) {
+            dayBuilder: (context, day, focusedMonth) {
               return GestureDetector(
                 behavior: widget.dayHitTestBehavior,
                 onTap: () => _onDayTapped(day),
                 onLongPress: () => _onDayLongPressed(day),
-                child: _buildCell(day),
+                child: _buildCell(day, focusedMonth),
               );
             },
           ),
@@ -550,8 +550,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     );
   }
 
-  Widget _buildCell(DateTime day) {
-    final isOutside = day.month != widget.currentDay!.month;
+  Widget _buildCell(DateTime day, DateTime focusedDay) {
+    final isOutside = day.month != focusedDay.month;
 
     if (isOutside && _shouldBlockOutsideDays) {
       return Container();
