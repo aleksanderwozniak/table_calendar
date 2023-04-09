@@ -70,7 +70,7 @@ class CellContent extends StatelessWidget {
     final margin = calendarStyle.cellMargin;
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;
-    final duration = const Duration(milliseconds: 3250);
+    final duration = const Duration(milliseconds: 250);
 
     if (isDisabled) {
       cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
@@ -86,27 +86,15 @@ class CellContent extends StatelessWidget {
       cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
           Container(
             margin: margin,
-            padding: padding,
+            padding: calendarStyle.cellSelectedPadding,
             child: CellSelected(
               // margin: margin,
               // padding: padding,
               text: text,
+              beginStyle: calendarStyle.selectedAniBeginTextStyle,
+              endStyle: calendarStyle.selectedAniEndTextStyle,
             ),
           );
-
-      // AnimatedContainer(
-      //   duration: duration,
-      //   margin: margin,
-      //   padding: padding,
-      //   decoration: calendarStyle.selectedDecoration,
-      //   alignment: alignment,
-      //   child: AnimatedDefaultTextStyle(
-      //     child: Text(text),
-      //     style: calendarStyle.selectedTextStyle,
-      //     duration: duration,
-      //     curve: Curves.easeIn,
-      //   ),
-      // );
     } else if (isRangeStart) {
       cell =
           calendarBuilders.rangeStartBuilder?.call(context, day, focusedDay) ??

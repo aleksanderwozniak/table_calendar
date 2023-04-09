@@ -3,16 +3,22 @@
 
 import 'package:flutter/material.dart';
 
+import '../customization/calendar_style.dart';
+
 class CellSelected extends StatefulWidget {
   // final EdgeInsetsGeometry margin;
   // final EdgeInsetsGeometry padding;
   final String text;
+  final TextStyle beginStyle;
+  final TextStyle endStyle;
 
   const CellSelected({
     Key? key,
     // required this.margin,
     // required this.padding,
     required this.text,
+    required this.beginStyle,
+    required this.endStyle,
   }) : super(key: key);
 
   @override
@@ -29,24 +35,16 @@ class _CellContentState extends State<CellSelected>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 140),
+      duration: const Duration(milliseconds: 240),
       vsync: this,
     );
     _styleTween = TextStyleTween(
-      begin: const TextStyle(
-          fontSize: 18,
-          fontFamily: 'ACCKidsHeart',
-          color: Colors.blue,
-          fontWeight: FontWeight.w100),
-      end: const TextStyle(
-          fontSize: 28,
-          fontFamily: 'ACCKidsHeart',
-          color: Colors.red,
-          fontWeight: FontWeight.w700),
+      begin: widget.beginStyle,
+      end: widget.endStyle,
     );
     _curvedAnimation = CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeIn,
+      curve: Curves.easeOutCubic,
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) => startAnimation());

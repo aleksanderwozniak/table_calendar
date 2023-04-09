@@ -52,6 +52,9 @@ class CalendarStyle {
   /// Padding of each individual day cell.
   final EdgeInsets cellPadding;
 
+  /// Padding of each individual day selected cell.
+  final EdgeInsets cellSelectedPadding;
+
   /// Alignment of each individual day cell.
   final AlignmentGeometry cellAlignment;
 
@@ -79,6 +82,12 @@ class CalendarStyle {
 
   /// TextStyle for day cells that are currently marked as selected by `selectedDayPredicate`.
   final TextStyle selectedTextStyle;
+
+  /// animate first TextStyle for day cells that are currently marked as selected by `selectedDayPredicate`.
+  final TextStyle selectedAniBeginTextStyle;
+
+  /// animate second TextStyle for day cells that are currently marked as selected by `selectedDayPredicate`.
+  final TextStyle selectedAniEndTextStyle;
 
   /// Decoration for day cells that are currently marked as selected by `selectedDayPredicate`.
   final Decoration selectedDecoration;
@@ -175,6 +184,7 @@ class CalendarStyle {
     this.markersMaxCount = 3,
     this.cellMargin = const EdgeInsets.all(0.0),
     this.cellPadding = const EdgeInsets.fromLTRB(0, 0, 0, 16),
+    this.cellSelectedPadding = const EdgeInsets.fromLTRB(0, 0, 0, 12),
     this.cellAlignment = Alignment.center,
     this.markersOffset = const PositionedOffset(),
     this.rangeHighlightColor = const Color(0xFFBBDDFF),
@@ -198,6 +208,18 @@ class CalendarStyle {
       color: Color.fromARGB(255, 7, 7, 7),
       fontWeight: FontWeight.w700,
       fontSize: 28.0,
+    ),
+    this.selectedAniBeginTextStyle = const TextStyle(
+      color: Color.fromARGB(255, 105, 105, 105),
+      fontWeight: FontWeight.w100,
+      fontSize: 20,
+      fontFamily: 'ACCKidsHeart',
+    ),
+    this.selectedAniEndTextStyle = const TextStyle(
+      color: Color.fromARGB(255, 0, 0, 0),
+      fontWeight: FontWeight.w900,
+      fontSize: 30,
+      fontFamily: 'ACCKidsHeart',
     ),
     this.selectedDecoration = const BoxDecoration(
       color: const Color(0xFF5C6BC0),
