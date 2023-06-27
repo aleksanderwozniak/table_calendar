@@ -60,7 +60,10 @@ class CellContent extends StatelessWidget {
       );
     }
 
-    final text = '${day.day}';
+    final dayString = day.day.toString();
+    final text = isToday
+        ? calendarStyle.todayText ?? dayString
+        : dayString;
     final margin = calendarStyle.cellMargin;
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;

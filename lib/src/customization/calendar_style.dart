@@ -74,6 +74,9 @@ class CalendarStyle {
   /// TextStyle for a day cell that matches the current day.
   final TextStyle todayTextStyle;
 
+  /// Alternative text to express today instead of numbers
+  final String? todayText;
+
   /// Decoration for a day cell that matches the current day.
   final Decoration todayDecoration;
 
@@ -177,6 +180,7 @@ class CalendarStyle {
       color: const Color(0xFFFAFAFA),
       fontSize: 16.0,
     ), //
+    this.todayText,
     this.todayDecoration = const BoxDecoration(
       color: const Color(0xFF9FA8DA),
       shape: BoxShape.circle,
