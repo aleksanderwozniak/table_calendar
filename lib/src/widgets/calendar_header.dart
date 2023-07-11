@@ -115,17 +115,6 @@ class CalendarHeader extends StatelessWidget {
                 ),
             ],
           ),
-          if (headerStyle.todayButtonVisible)
-            Container(
-              margin: headerStyle.rightChevronMargin,
-              child: InkWell(
-                onTap: onTodayButtonTap,
-                child: Text(
-                  headerStyle.todayButtonText,
-                  style: headerStyle.todayButtonTextStyle,
-                ),
-              ),
-            )
         ],
       ),
     );
