@@ -445,6 +445,35 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     );
   }
 
+  void _jumpToPage(int page) {
+    _pageController.animateToPage(
+      page,
+      duration: widget.pageAnimationDuration,
+      curve: widget.pageAnimationCurve,
+    );
+  }
+
+  void _onTodayButtonTap() {
+    _jumpToPage(_differencePageIndex);
+
+    widget.onDaySelected?.call(_currentDay, _focusedDay.value);
+  }
+
+  int get differenceInMounth => _currentDay.month - _focusedDay.value.month;
+
+  int get differenceInWeek =>
+      (_currentDay.difference(_focusedDay.value).inDays / 7).floor();
+
+  int get _differencePageIndex =>
+      _pageController.page!.toInt() +
+      {
+        CalendarFormat.month: differenceInMounth,
+        CalendarFormat.week: differenceInWeek,
+        CalendarFormat.twoWeeks: (differenceInWeek / 2).floor(),
+      }[widget.calendarFormat]!;
+
+  DateTime get _currentDay => DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -462,6 +491,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 onHeaderLongPress: () =>
                     widget.onHeaderLongPressed?.call(value),
                 headerStyle: widget.headerStyle,
+                onTodayButtonTap: _onTodayButtonTap,
                 availableCalendarFormats: widget.availableCalendarFormats,
                 calendarFormat: widget.calendarFormat,
                 locale: widget.locale,
