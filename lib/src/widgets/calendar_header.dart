@@ -87,9 +87,9 @@ class CalendarHeader extends StatelessWidget {
                   child: TodayButton(
                     onTap: onTodayButtonTap ?? () {},
                     text: headerStyle.todayButtonText,
-                    decoration: headerStyle.formatButtonDecoration,
-                    padding: headerStyle.formatButtonPadding,
-                    textStyle: headerStyle.formatButtonTextStyle,
+                    decoration: headerStyle.todayButtonDecoration,
+                    padding: headerStyle.todayButtonPadding,
+                    textStyle: headerStyle.todayButtonTextStyle,
                   ),
                 ),
               if (headerStyle.formatButtonVisible &&
