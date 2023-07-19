@@ -13,6 +13,9 @@ class HeaderStyle {
   /// Responsible for FormatButton visibility.
   final bool formatButtonVisible;
 
+  /// Responsible for TodayButton visibility.
+  final bool todayButtonVisible;
+
   /// Controls the text inside FormatButton.
   /// * `true` - the button will show next CalendarFormat
   /// * `false` - the button will show current CalendarFormat
@@ -37,6 +40,14 @@ class HeaderStyle {
   /// Background `Decoration` for FormatButton.
   final BoxDecoration formatButtonDecoration;
 
+  final String todayButtonText;
+
+  /// Style for TodayButton `Text`.
+  final TextStyle todayButtonTextStyle;
+
+  /// Background `Decoration` for TodayButton.
+  final BoxDecoration todayButtonDecoration;
+
   /// Internal padding of the whole header.
   final EdgeInsets headerPadding;
 
@@ -45,6 +56,9 @@ class HeaderStyle {
 
   /// Internal padding of FormatButton.
   final EdgeInsets formatButtonPadding;
+
+  /// Internal padding of TodayButton.
+  final EdgeInsets todayButtonPadding;
 
   /// Internal padding of left chevron.
   /// Determines how much of ripple animation is visible during taps.
@@ -81,7 +95,16 @@ class HeaderStyle {
 
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
+    this.todayButtonText = 'Today',
     this.titleCentered = false,
+    this.todayButtonVisible = false,
+    this.todayButtonTextStyle = const TextStyle(fontSize: 14.0),
+    this.todayButtonDecoration = const BoxDecoration(
+      border: const Border.fromBorderSide(BorderSide()),
+      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+    ),
+    this.todayButtonPadding =
+        const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
     this.formatButtonVisible = true,
     this.formatButtonShowsNext = true,
     this.titleTextFormatter,
