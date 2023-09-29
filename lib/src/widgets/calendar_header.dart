@@ -3,6 +3,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 
 import '../customization/header_style.dart';
 import '../shared/utils.dart' show CalendarFormat, DayBuilder;
@@ -46,51 +47,66 @@ class CalendarHeader extends StatelessWidget {
       decoration: headerStyle.decoration,
       margin: headerStyle.headerMargin,
       padding: headerStyle.headerPadding,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
+      child: Column(
         children: [
-          if (headerStyle.leftChevronVisible)
-            CustomIconButton(
-              icon: headerStyle.leftChevronIcon,
-              onTap: onLeftChevronTap,
-              margin: headerStyle.leftChevronMargin,
-              padding: headerStyle.leftChevronPadding,
-            ),
-          Expanded(
-            child: headerTitleBuilder?.call(context, focusedMonth) ??
-                GestureDetector(
-                  onTap: onHeaderTap,
-                  onLongPress: onHeaderLongPress,
-                  child: Text(
-                    text,
-                    style: headerStyle.titleTextStyle,
-                    textAlign: headerStyle.titleCentered
-                        ? TextAlign.center
-                        : TextAlign.start,
-                  ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              if (headerStyle.leftChevronVisible)
+                CustomIconButton(
+                  icon: headerStyle.leftChevronIcon,
+                  onTap: onLeftChevronTap,
+                  margin: headerStyle.leftChevronMargin,
+                  padding: headerStyle.leftChevronPadding,
                 ),
+              Expanded(
+                child: headerTitleBuilder?.call(context, focusedMonth) ??
+                    GestureDetector(
+                      onTap: onHeaderTap,
+                      onLongPress: onHeaderLongPress,
+                      child: Text(
+                        text,
+                        style: headerStyle.titleTextStyle,
+                        textAlign: headerStyle.titleCentered
+                            ? TextAlign.center
+                            : TextAlign.start,
+                      ),
+                    ),
+              ),
+              // if (headerStyle.formatButtonVisible &&
+              //     availableCalendarFormats.length > 1)
+              //   Padding(
+              //     padding: const EdgeInsets.only(left: 8.0),
+              //     child: FormatButton(
+              //       onTap: onFormatButtonTap,
+              //       availableCalendarFormats: availableCalendarFormats,
+              //       calendarFormat: calendarFormat,
+              //       decoration: headerStyle.formatButtonDecoration,
+              //       padding: headerStyle.formatButtonPadding,
+              //       textStyle: headerStyle.formatButtonTextStyle,
+              //       showsNextFormat: headerStyle.formatButtonShowsNext,
+              //     ),
+              //   ),
+              if (headerStyle.rightChevronVisible)
+                CustomIconButton(
+                  icon: headerStyle.rightChevronIcon,
+                  onTap: onRightChevronTap,
+                  margin: headerStyle.rightChevronMargin,
+                  padding: headerStyle.rightChevronPadding,
+                ),
+            ],
           ),
-          // if (headerStyle.formatButtonVisible &&
-          //     availableCalendarFormats.length > 1)
-          //   Padding(
-          //     padding: const EdgeInsets.only(left: 8.0),
-          //     child: FormatButton(
-          //       onTap: onFormatButtonTap,
-          //       availableCalendarFormats: availableCalendarFormats,
-          //       calendarFormat: calendarFormat,
-          //       decoration: headerStyle.formatButtonDecoration,
-          //       padding: headerStyle.formatButtonPadding,
-          //       textStyle: headerStyle.formatButtonTextStyle,
-          //       showsNextFormat: headerStyle.formatButtonShowsNext,
-          //     ),
-          //   ),
-          if (headerStyle.rightChevronVisible)
-            CustomIconButton(
-              icon: headerStyle.rightChevronIcon,
-              onTap: onRightChevronTap,
-              margin: headerStyle.rightChevronMargin,
-              padding: headerStyle.rightChevronPadding,
+          Container(
+            width: double.infinity,
+            height: 1.5,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: Colors.red,
+                width: 1.5,
+              ),
             ),
+          ),
         ],
       ),
     );
