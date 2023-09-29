@@ -102,7 +102,7 @@ class CalendarHeader extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                color: Colors.red,
+                color: Color(0xFFFFEFD1),
                 width: 1.5,
               ),
             ),
