@@ -13,6 +13,7 @@ class TableCalendarBase extends StatefulWidget {
   final DateTime focusedDay;
   final CalendarFormat calendarFormat;
   final DayBuilder? dowBuilder;
+  final OverlayBuilder? overlayBuilder;
   final DayBuilder? weekNumberBuilder;
   final FocusedDayBuilder dayBuilder;
   final double? dowHeight;
@@ -36,6 +37,7 @@ class TableCalendarBase extends StatefulWidget {
   final SwipeCallback? onVerticalSwipe;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
+  final List<DateTimeRange>? overlayRanges;
 
   TableCalendarBase({
     Key? key,
@@ -45,6 +47,7 @@ class TableCalendarBase extends StatefulWidget {
     this.calendarFormat = CalendarFormat.month,
     this.dowBuilder,
     required this.dayBuilder,
+    this.overlayBuilder,
     this.dowHeight,
     required this.rowHeight,
     this.sixWeekMonthsEnforced = false,
@@ -55,6 +58,7 @@ class TableCalendarBase extends StatefulWidget {
     this.rowDecoration,
     this.tableBorder,
     this.tablePadding,
+    this.overlayRanges,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
     this.pageAnimationEnabled = true,
@@ -227,6 +231,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               rowDecoration: widget.rowDecoration,
               tableBorder: widget.tableBorder,
               tablePadding: widget.tablePadding,
+              overlayRanges: widget.overlayRanges,
               onPageChanged: (index, focusedMonth) {
                 if (!_pageCallbackDisabled) {
                   if (!isSameDay(_focusedDay, focusedMonth)) {
@@ -251,6 +256,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               },
               dowBuilder: widget.dowBuilder,
               dayBuilder: widget.dayBuilder,
+              overlayBuilder: widget.overlayBuilder,
             ),
           ),
         );

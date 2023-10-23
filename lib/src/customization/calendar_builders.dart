@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../shared/utils.dart' show DayBuilder, FocusedDayBuilder;
 
@@ -61,6 +62,7 @@ class CalendarBuilders<T> {
   /// Custom builder for background highlight of range selection.
   /// If `isWithinRange` is true, then `day` is within the selected range.
   final HighlightBuilder? rangeHighlightBuilder;
+  final OverlayBuilder? overlayBuilder;
 
   /// Custom builder for a single event marker. Each of those will be displayed in a `Row` above of the day cell.
   /// You can adjust markers' position with `CalendarStyle` properties.
@@ -100,5 +102,6 @@ class CalendarBuilders<T> {
     this.dowBuilder,
     this.headerTitleBuilder,
     this.weekNumberBuilder,
+    this.overlayBuilder,
   });
 }

@@ -15,6 +15,7 @@ class CalendarCore extends StatelessWidget {
   final DateTime lastDay;
   final CalendarFormat calendarFormat;
   final DayBuilder? dowBuilder;
+  final OverlayBuilder? overlayBuilder;
   final DayBuilder? weekNumberBuilder;
   final FocusedDayBuilder dayBuilder;
   final bool sixWeekMonthsEnforced;
@@ -32,6 +33,7 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
+  final List<DateTimeRange>? overlayRanges;
 
   const CalendarCore({
     Key? key,
@@ -43,6 +45,7 @@ class CalendarCore extends StatelessWidget {
     required this.constraints,
     this.dowHeight,
     this.rowHeight,
+    this.overlayBuilder,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.calendarFormat = CalendarFormat.month,
     this.pageController,
@@ -57,6 +60,7 @@ class CalendarCore extends StatelessWidget {
     this.tableBorder,
     this.tablePadding,
     this.scrollPhysics,
+    this.overlayRanges,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -78,12 +82,17 @@ class CalendarCore extends StatelessWidget {
             : null;
 
         return CalendarPage(
+          rowHeight: rowHeight,
+          overlayRanges: overlayRanges,
           visibleDays: visibleDays,
           dowVisible: dowVisible,
           dowDecoration: dowDecoration,
           rowDecoration: rowDecoration,
           tableBorder: tableBorder,
           tablePadding: tablePadding,
+          overlayBuilder: (context, range) {
+            return overlayBuilder?.call(context, range) ?? SizedBox.shrink();
+          },
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
