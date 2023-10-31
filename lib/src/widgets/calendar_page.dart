@@ -63,12 +63,13 @@ class CalendarPage extends StatelessWidget {
                       return dayBuilder(context, _day);
                     },
                   ),
-                  if (overlayBuilder != null && (overlayRanges?.isNotEmpty ?? false))
-                    ...getEventWidgets(
-                      context: context,
+                  if (overlayBuilder != null &&
+                      (overlayRanges?.isNotEmpty ?? false))
+                    getEventWidgets(
                       constraints: constraints,
+                      context: context,
                       dateRanges: overlayRanges!,
-                    ),
+                    )
                 ],
               );
             }),
@@ -78,44 +79,65 @@ class CalendarPage extends StatelessWidget {
     );
   }
 
-  List<Widget> getEventWidgets({
+  List<DateTimeRange> splitOverlays(List<DateTimeRange> overlays) {
+    final List<DateTimeRange> ranges = [];
+    overlays.map((overlay) {
+      final range = splitRangeIntoWeeks(overlay);
+      ranges.addAll(range);
+    }).toList();
+
+    return ranges;
+  }
+
+  List<DateTimeRange> splitRangeIntoWeeks(DateTimeRange dateRange) {
+    DateTime startDate = dateRange.start;
+    DateTime endDate = dateRange.end;
+
+    List<DateTimeRange> range = [];
+
+    for (int i = 0; i < visibleDays.length; i += 7) {
+      DateTime rowStartDate = visibleDays[i];
+      DateTime rowEndDate =
+          visibleDays[math.min(i + 6, visibleDays.length - 1)];
+
+      DateTime eventStartDate =
+          (startDate.isAfter(rowStartDate)) ? startDate : rowStartDate;
+      DateTime eventEndDate =
+          (endDate.isBefore(rowEndDate)) ? endDate : rowEndDate;
+      if (eventStartDate.isBefore(eventEndDate) ||
+          eventStartDate.isAtSameMomentAs(eventEndDate)) {
+        range.add(DateTimeRange(
+          start: DateTime(
+              eventStartDate.year, eventStartDate.month, eventStartDate.day),
+          end:
+              DateTime(eventEndDate.year, eventEndDate.month, eventEndDate.day),
+        ));
+      }
+    }
+    return range;
+  }
+
+  Widget getEventWidgets({
     required BuildContext context,
     required BoxConstraints constraints,
     required List<DateTimeRange> dateRanges,
   }) {
-    List<Widget> widgets = [];
+    final dividedDateRanges = splitOverlays(dateRanges);
 
-    for (DateTimeRange dateRange in dateRanges) {
-      DateTime startDate = dateRange.start;
-      DateTime endDate = dateRange.end;
-
-      for (int i = 0; i < visibleDays.length; i += 7) {
-        DateTime rowStartDate = visibleDays[i];
-        DateTime rowEndDate =
-            visibleDays[math.min(i + 6, visibleDays.length - 1)];
-
-        DateTime eventStartDate =
-            (startDate.isAfter(rowStartDate)) ? startDate : rowStartDate;
-        DateTime eventEndDate =
-            (endDate.isBefore(rowEndDate)) ? endDate : rowEndDate;
-
-        if (eventStartDate.isBefore(eventEndDate) ||
-            eventStartDate.isAtSameMomentAs(eventEndDate)) {
-          final overlay = Positioned(
-            child:
-                overlayBuilder?.call(context, dateRange) ?? SizedBox.shrink(),
-            top: getTopOffset(eventStartDate, rowHeight!),
-            left: getLeftOffset(eventStartDate, constraints.maxWidth / 7),
-            width: getWidgetWidth(
-                eventStartDate, eventEndDate, constraints.maxWidth / 7),
-            height: rowHeight,
-          );
-          widgets.add(overlay);
-        }
-      }
-    }
-
-    return widgets;
+    return CustomMultiChildLayout(
+      delegate: CalendarLayoutDelegate(
+        overlayRanges: dividedDateRanges,
+        constraints: constraints,
+        rowHeight: rowHeight ?? 52,
+        visibleDays: visibleDays,
+      ),
+      children: dividedDateRanges.asMap().entries.map((entry) {
+        return LayoutId(
+          id: entry.key,
+          child: overlayBuilder!.call(context, entry.value),
+        );
+      }).toList(),
+    );
   }
 
   int getCellIndex(DateTime date) {
@@ -174,4 +196,89 @@ class _DayPickerGridDelegate extends SliverGridDelegate {
 
   @override
   bool shouldRelayout(_DayPickerGridDelegate oldDelegate) => false;
+}
+
+class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
+  final List<DateTimeRange> overlayRanges;
+  final BoxConstraints constraints;
+  final double rowHeight;
+  final List<DateTime> visibleDays;
+
+  CalendarLayoutDelegate({
+    required this.overlayRanges,
+    required this.constraints,
+    required this.rowHeight,
+    required this.visibleDays,
+  });
+
+  @override
+  void performLayout(Size size) {
+    // Sort the range by start date so overlapping ranges are grouped together
+    overlayRanges.sort((a, b) => a.start.compareTo(b.start));
+
+    // Check for overlap and store indexes
+    List<List<int>> overlapGroups = [];
+    for (int i = 0; i < overlayRanges.length; i++) {
+      if (i == 0) {
+        overlapGroups.add([i]);
+      } else {
+        if (overlayRanges[i].start.isBefore(overlayRanges[i - 1].end)) {
+          overlapGroups.last.add(i);
+        } else {
+          overlapGroups.add([i]);
+        }
+      }
+    }
+
+    overlapGroups.forEach((group) {
+      double sharedHeight = rowHeight / group.length;
+
+      double yOffset = 0;
+      for (var i in group) {
+        DateTime startDate = overlayRanges[i].start;
+        DateTime endDate = overlayRanges[i].end;
+
+        double xOffset = getLeftOffset(startDate, constraints.maxWidth / 7);
+        yOffset = getTopOffset(startDate, size.height / 5) + yOffset;
+
+        double widgetWidth =
+            getWidgetWidth(startDate, endDate, constraints.maxWidth / 7);
+
+        layoutChild(i,
+            BoxConstraints.tightFor(width: widgetWidth, height: sharedHeight));
+
+        positionChild(i, Offset(xOffset, yOffset));
+        yOffset += sharedHeight;
+      }
+    });
+  }
+
+  @override
+  bool shouldRelayout(CalendarLayoutDelegate oldDelegate) {
+    return overlayRanges != oldDelegate.overlayRanges;
+  }
+
+  int getCellIndex(DateTime date) {
+    return visibleDays.indexWhere((element) =>
+        element.year == date.year &&
+        element.month == date.month &&
+        element.day == date.day);
+  }
+
+  double getTopOffset(DateTime date, double cellHeight) {
+    int index = getCellIndex(date);
+    return (index ~/ 7) * cellHeight;
+  }
+
+  double getLeftOffset(DateTime date, double cellWidth) {
+    int index = getCellIndex(date);
+    return (index % 7) * cellWidth;
+  }
+
+  double getWidgetWidth(
+      DateTime startDate, DateTime endDate, double cellWidth) {
+    int startIndex = getCellIndex(startDate);
+    int endIndex = getCellIndex(endDate);
+    return ((endIndex % 7) - (startIndex % 7) + 1) * cellWidth;
+  }
 }
