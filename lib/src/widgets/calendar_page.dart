@@ -79,8 +79,8 @@ class CalendarPage extends StatelessWidget {
     );
   }
 
-  List<DateTimeRange> splitOverlays(List<DateTimeRange> overlays) {
-    final List<DateTimeRange> ranges = [];
+  List<CustomRange> splitOverlays(List<DateTimeRange> overlays) {
+    final List<CustomRange> ranges = [];
     overlays.map((overlay) {
       final range = splitRangeIntoWeeks(overlay);
       ranges.addAll(range);
@@ -89,11 +89,11 @@ class CalendarPage extends StatelessWidget {
     return ranges;
   }
 
-  List<DateTimeRange> splitRangeIntoWeeks(DateTimeRange dateRange) {
+  List<CustomRange> splitRangeIntoWeeks(DateTimeRange dateRange) {
     DateTime startDate = dateRange.start;
     DateTime endDate = dateRange.end;
 
-    List<DateTimeRange> range = [];
+    List<CustomRange> range = [];
 
     for (int i = 0; i < visibleDays.length; i += 7) {
       DateTime rowStartDate = visibleDays[i];
@@ -106,12 +106,13 @@ class CalendarPage extends StatelessWidget {
           (endDate.isBefore(rowEndDate)) ? endDate : rowEndDate;
       if (eventStartDate.isBefore(eventEndDate) ||
           eventStartDate.isAtSameMomentAs(eventEndDate)) {
-        range.add(DateTimeRange(
+        final newRange = DateTimeRange(
           start: DateTime(
               eventStartDate.year, eventStartDate.month, eventStartDate.day),
           end:
               DateTime(eventEndDate.year, eventEndDate.month, eventEndDate.day),
-        ));
+        );
+        range.add(CustomRange(originalRange: dateRange, newRange: newRange));
       }
     }
     return range;
@@ -134,7 +135,7 @@ class CalendarPage extends StatelessWidget {
       children: dividedDateRanges.asMap().entries.map((entry) {
         return LayoutId(
           id: entry.key,
-          child: overlayBuilder!.call(context, entry.value),
+          child: overlayBuilder!.call(context, entry.value.originalRange),
         );
       }).toList(),
     );
@@ -199,7 +200,7 @@ class _DayPickerGridDelegate extends SliverGridDelegate {
 }
 
 class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
-  final List<DateTimeRange> overlayRanges;
+  final List<CustomRange> overlayRanges;
   final BoxConstraints constraints;
   final double rowHeight;
   final List<DateTime> visibleDays;
@@ -213,16 +214,17 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    // Sort the range by start date so overlapping ranges are grouped together
-    overlayRanges.sort((a, b) => a.start.compareTo(b.start));
+    overlayRanges.sort((a, b) => a.newRange.start.compareTo(b.newRange.start));
 
-    // Check for overlap and store indexes
     List<List<int>> overlapGroups = [];
     for (int i = 0; i < overlayRanges.length; i++) {
       if (i == 0) {
         overlapGroups.add([i]);
       } else {
-        if (overlayRanges[i].start.isBefore(overlayRanges[i - 1].end)) {
+        if (overlayRanges[i]
+            .newRange
+            .start
+            .isBefore(overlayRanges[i - 1].newRange.end)) {
           overlapGroups.last.add(i);
         } else {
           overlapGroups.add([i]);
@@ -235,8 +237,8 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
 
       double yOffset = 0;
       for (var i in group) {
-        DateTime startDate = overlayRanges[i].start;
-        DateTime endDate = overlayRanges[i].end;
+        DateTime startDate = overlayRanges[i].newRange.start;
+        DateTime endDate = overlayRanges[i].newRange.end;
 
         double xOffset = getLeftOffset(startDate, constraints.maxWidth / 7);
         yOffset = getTopOffset(startDate, size.height / 5) + yOffset;
@@ -281,4 +283,11 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
     int endIndex = getCellIndex(endDate);
     return ((endIndex % 7) - (startIndex % 7) + 1) * cellWidth;
   }
+}
+
+class CustomRange {
+  final DateTimeRange originalRange;
+  final DateTimeRange newRange;
+
+  CustomRange({required this.originalRange, required this.newRange});
 }
