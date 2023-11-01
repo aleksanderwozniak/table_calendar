@@ -235,13 +235,13 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
     overlapGroups.forEach((group) {
       double sharedHeight = rowHeight / group.length;
 
-      double yOffset = 0;
+      double sharedYOffset = 0;
       for (var i in group) {
         DateTime startDate = overlayRanges[i].newRange.start;
         DateTime endDate = overlayRanges[i].newRange.end;
 
         double xOffset = getLeftOffset(startDate, constraints.maxWidth / 7);
-        yOffset = getTopOffset(startDate, size.height / 5) + yOffset;
+        double yOffset = getTopOffset(startDate, size.height / 5) + sharedYOffset;
 
         double widgetWidth =
             getWidgetWidth(startDate, endDate, constraints.maxWidth / 7);
@@ -250,7 +250,7 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
             BoxConstraints.tightFor(width: widgetWidth, height: sharedHeight));
 
         positionChild(i, Offset(xOffset, yOffset));
-        yOffset += sharedHeight;
+        sharedYOffset += sharedHeight;
       }
     });
   }
