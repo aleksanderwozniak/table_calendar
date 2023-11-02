@@ -8,6 +8,7 @@ import 'dart:math' as math;
 class CalendarPage extends StatelessWidget {
   final Widget Function(BuildContext context, DateTimeRange range)?
       overlayBuilder;
+  final Widget Function(BuildContext context)? overlayDefaultBuilder;
   final Widget Function(BuildContext context, DateTime day)? dowBuilder;
   final Widget Function(BuildContext context, DateTime day) dayBuilder;
   final Widget Function(BuildContext context, DateTime day)? weekNumberBuilder;
@@ -21,6 +22,7 @@ class CalendarPage extends StatelessWidget {
   final double? dowHeight;
   final double? rowHeight;
   final List<DateTimeRange>? overlayRanges;
+  final int rowSpanLimit;
 
   const CalendarPage({
     Key? key,
@@ -37,7 +39,9 @@ class CalendarPage extends StatelessWidget {
     this.dowHeight,
     this.rowHeight = 52,
     this.overlayBuilder,
+    this.overlayDefaultBuilder,
     this.overlayRanges,
+    this.rowSpanLimit = -1,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(!weekNumberVisible || weekNumberBuilder != null),
         super(key: key);
@@ -125,19 +129,74 @@ class CalendarPage extends StatelessWidget {
   }) {
     final dividedDateRanges = splitOverlays(dateRanges);
 
+    dividedDateRanges
+        .sort((a, b) => a.newRange.start.compareTo(b.newRange.start));
+
+    List<List<CustomRange>> overlapGroups = [];
+    for (int i = 0; i < dividedDateRanges.length; i++) {
+      final range = dividedDateRanges[i];
+      if (i == 0) {
+        overlapGroups.add([range]);
+      } else {
+        if (dividedDateRanges[i]
+            .newRange
+            .start
+            .isBefore(dividedDateRanges[i - 1].newRange.end)) {
+          if (rowSpanLimit == -1) {
+            overlapGroups.last.add(range);
+          } else {
+            if (overlapGroups.last.length < rowSpanLimit) {
+              overlapGroups.last.add(range);
+            } else if (overlapGroups.last.length == rowSpanLimit && overlayDefaultBuilder != null) {
+              overlapGroups.last.add(
+                CustomRange(
+                  originalRange: range.originalRange,
+                  newRange: DateTimeRange(
+                    start: range.newRange.start,
+                    end: range.newRange.start.add(
+                      Duration(days: 3),
+                    ),
+                  ),
+                  isDefault: true,
+                ),
+              );
+            }
+          }
+        } else {
+          overlapGroups.add([range]);
+        }
+      }
+    }
+
+    final children = <Widget>[];
+
+    for (int i = 0; i < overlapGroups.length; i++) {
+      final group = overlapGroups[i];
+      for (int j = 0; j < group.length; j++) {
+        final range = group[j];
+        if (range.isDefault) {
+          children.add(LayoutId(
+            id: (i + j).toString() + range.newRange.toString(),
+            child: overlayDefaultBuilder?.call(context) ??
+                Container(child: Text('Override default overlay')),
+          ));
+        } else {
+          children.add(LayoutId(
+            id: (i + j).toString() + range.newRange.toString(),
+            child: overlayBuilder!.call(context, range.originalRange),
+          ));
+        }
+      }
+    }
+
     return CustomMultiChildLayout(
       delegate: CalendarLayoutDelegate(
-        overlayRanges: dividedDateRanges,
         constraints: constraints,
         rowHeight: rowHeight ?? 52,
         visibleDays: visibleDays,
+        overlapGroups: overlapGroups,
       ),
-      children: dividedDateRanges.asMap().entries.map((entry) {
-        return LayoutId(
-          id: entry.key,
-          child: overlayBuilder!.call(context, entry.value.originalRange),
-        );
-      }).toList(),
+      children: children,
     );
   }
 
@@ -200,64 +259,50 @@ class _DayPickerGridDelegate extends SliverGridDelegate {
 }
 
 class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
-  final List<CustomRange> overlayRanges;
   final BoxConstraints constraints;
   final double rowHeight;
   final List<DateTime> visibleDays;
+  final List<List<CustomRange>> overlapGroups;
 
   CalendarLayoutDelegate({
-    required this.overlayRanges,
     required this.constraints,
     required this.rowHeight,
     required this.visibleDays,
+    required this.overlapGroups,
   });
 
   @override
   void performLayout(Size size) {
-    overlayRanges.sort((a, b) => a.newRange.start.compareTo(b.newRange.start));
-
-    List<List<int>> overlapGroups = [];
-    for (int i = 0; i < overlayRanges.length; i++) {
-      if (i == 0) {
-        overlapGroups.add([i]);
-      } else {
-        if (overlayRanges[i]
-            .newRange
-            .start
-            .isBefore(overlayRanges[i - 1].newRange.end)) {
-          overlapGroups.last.add(i);
-        } else {
-          overlapGroups.add([i]);
-        }
-      }
-    }
-
-    overlapGroups.forEach((group) {
+    for (int i = 0; i < overlapGroups.length; i++) {
+      final group = overlapGroups[i];
       double sharedHeight = rowHeight / group.length;
 
       double sharedYOffset = 0;
-      for (var i in group) {
-        DateTime startDate = overlayRanges[i].newRange.start;
-        DateTime endDate = overlayRanges[i].newRange.end;
+      for (var j = 0; j < group.length; j++) {
+        final range = group[j];
+        DateTime startDate = range.newRange.start;
+        DateTime endDate = range.newRange.end;
 
         double xOffset = getLeftOffset(startDate, constraints.maxWidth / 7);
-        double yOffset = getTopOffset(startDate, size.height / 5) + sharedYOffset;
+        double yOffset =
+            getTopOffset(startDate, size.height / 5) + sharedYOffset;
 
         double widgetWidth =
             getWidgetWidth(startDate, endDate, constraints.maxWidth / 7);
 
-        layoutChild(i,
+        layoutChild((i + j).toString() + range.newRange.toString(),
             BoxConstraints.tightFor(width: widgetWidth, height: sharedHeight));
 
-        positionChild(i, Offset(xOffset, yOffset));
+        positionChild((i + j).toString() + range.newRange.toString(),
+            Offset(xOffset, yOffset));
         sharedYOffset += sharedHeight;
       }
-    });
+    }
   }
 
   @override
   bool shouldRelayout(CalendarLayoutDelegate oldDelegate) {
-    return overlayRanges != oldDelegate.overlayRanges;
+    return overlapGroups != oldDelegate.overlapGroups;
   }
 
   int getCellIndex(DateTime date) {
@@ -288,6 +333,13 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
 class CustomRange {
   final DateTimeRange originalRange;
   final DateTimeRange newRange;
+  final bool isDefault;
+  final int? collapsedChildrenLength;
 
-  CustomRange({required this.originalRange, required this.newRange});
+  CustomRange({
+    required this.originalRange,
+    required this.newRange,
+    this.isDefault = false,
+    this.collapsedChildrenLength,
+  });
 }

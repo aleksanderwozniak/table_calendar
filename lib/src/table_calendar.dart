@@ -109,6 +109,7 @@ class TableCalendar<T> extends StatefulWidget {
 
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
+  final int rowSpanLimit;
 
   /// Used for setting the height of `TableCalendar`'s days of week row.
   final double daysOfWeekHeight;
@@ -171,6 +172,8 @@ class TableCalendar<T> extends StatefulWidget {
 
   /// Function deciding whether given day should be marked as selected.
   final bool Function(DateTime day)? selectedDayPredicate;
+
+  final bool Function(DateTime day)? markedDayPredicate;
 
   /// Function deciding whether given day is treated as a holiday.
   final bool Function(DateTime day)? holidayPredicate;
@@ -252,6 +255,8 @@ class TableCalendar<T> extends StatefulWidget {
     this.eventLoader,
     this.enabledDayPredicate,
     this.selectedDayPredicate,
+    this.markedDayPredicate,
+    this.rowSpanLimit = -1,
     this.holidayPredicate,
     this.onRangeSelected,
     this.onDaySelected,
@@ -573,6 +578,11 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                       ?.call(context, range) ??
                   SizedBox.shrink();
             },
+            overlayDefaultBuilder: (context) {
+              return widget.calendarBuilders.overlayDefaultBuilder
+                  ?.call(context);
+            },
+            rowSpanLimit: widget.rowSpanLimit,
           ),
         ),
       ],
@@ -646,6 +656,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isWeekend: isWeekend,
           isHoliday: widget.holidayPredicate?.call(day) ?? false,
           locale: widget.locale,
+          isMarked: widget.markedDayPredicate?.call(day) ?? false,
         );
 
         children.add(content);

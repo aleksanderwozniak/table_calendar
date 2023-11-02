@@ -63,6 +63,7 @@ class CalendarBuilders<T> {
   /// If `isWithinRange` is true, then `day` is within the selected range.
   final HighlightBuilder? rangeHighlightBuilder;
   final OverlayBuilder? overlayBuilder;
+  final OverlayDefaultBuilder? overlayDefaultBuilder;
 
   /// Custom builder for a single event marker. Each of those will be displayed in a `Row` above of the day cell.
   /// You can adjust markers' position with `CalendarStyle` properties.
@@ -103,5 +104,6 @@ class CalendarBuilders<T> {
     this.headerTitleBuilder,
     this.weekNumberBuilder,
     this.overlayBuilder,
+    this.overlayDefaultBuilder,
   });
 }

@@ -14,6 +14,8 @@ class TableCalendarBase extends StatefulWidget {
   final CalendarFormat calendarFormat;
   final DayBuilder? dowBuilder;
   final OverlayBuilder? overlayBuilder;
+  final OverlayDefaultBuilder? overlayDefaultBuilder;
+  final int rowSpanLimit;
   final DayBuilder? weekNumberBuilder;
   final FocusedDayBuilder dayBuilder;
   final double? dowHeight;
@@ -50,6 +52,8 @@ class TableCalendarBase extends StatefulWidget {
     this.overlayBuilder,
     this.dowHeight,
     required this.rowHeight,
+    this.overlayDefaultBuilder,
+    this.rowSpanLimit = -1,
     this.sixWeekMonthsEnforced = false,
     this.dowVisible = true,
     this.weekNumberBuilder,
@@ -257,6 +261,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               dowBuilder: widget.dowBuilder,
               dayBuilder: widget.dayBuilder,
               overlayBuilder: widget.overlayBuilder,
+              rowSpanLimit: widget.rowSpanLimit,
+              overlayDefaultBuilder: widget.overlayDefaultBuilder,
             ),
           ),
         );

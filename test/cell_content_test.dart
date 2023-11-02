@@ -39,6 +39,7 @@ Widget setupTestWidget(
       isWithinRange: isWithinRange,
       isHoliday: isHoliday,
       isTodayHighlighted: isTodayHighlighted,
+      isMarked: false,
     ),
   );
 }

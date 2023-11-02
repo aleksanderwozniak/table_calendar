@@ -16,6 +16,8 @@ class CalendarCore extends StatelessWidget {
   final CalendarFormat calendarFormat;
   final DayBuilder? dowBuilder;
   final OverlayBuilder? overlayBuilder;
+  final OverlayDefaultBuilder? overlayDefaultBuilder;
+  final int rowSpanLimit;
   final DayBuilder? weekNumberBuilder;
   final FocusedDayBuilder dayBuilder;
   final bool sixWeekMonthsEnforced;
@@ -61,6 +63,8 @@ class CalendarCore extends StatelessWidget {
     this.tablePadding,
     this.scrollPhysics,
     this.overlayRanges,
+    this.rowSpanLimit = -1,
+    this.overlayDefaultBuilder,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -90,6 +94,10 @@ class CalendarCore extends StatelessWidget {
           rowDecoration: rowDecoration,
           tableBorder: tableBorder,
           tablePadding: tablePadding,
+          rowSpanLimit: rowSpanLimit,
+          overlayDefaultBuilder: (context) {
+            return overlayDefaultBuilder?.call(context) ?? SizedBox.shrink();
+          },
           overlayBuilder: (context, range) {
             return overlayBuilder?.call(context, range) ?? SizedBox.shrink();
           },
