@@ -40,6 +40,10 @@ class TableCalendarBase extends StatefulWidget {
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
   final List<DateTimeRange>? overlayRanges;
+  final String? toolTip;
+  final TextStyle? toolTipStyle;
+  final DateTime? toolTipDate;
+  final Color? toolTipBackgroundColor;
 
   TableCalendarBase({
     Key? key,
@@ -82,6 +86,10 @@ class TableCalendarBase extends StatefulWidget {
     this.onVerticalSwipe,
     this.onPageChanged,
     this.onCalendarCreated,
+    this.toolTip,
+    this.toolTipStyle,
+    this.toolTipDate,
+    this.toolTipBackgroundColor,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
         assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay)),
@@ -232,6 +240,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
             rowDecoration: widget.rowDecoration,
             tableBorder: widget.tableBorder,
             tablePadding: widget.tablePadding,
+            toolTip: widget.toolTip,
+            toolTipBackgroundColor: widget.toolTipBackgroundColor,
+            toolTipDate: widget.toolTipDate,
+            toolTipStyle: widget.toolTipStyle,
             overlayRanges: widget.overlayRanges,
             onPageChanged: (index, focusedMonth) {
               if (!_pageCallbackDisabled) {

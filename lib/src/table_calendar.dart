@@ -209,6 +209,10 @@ class TableCalendar<T> extends StatefulWidget {
   final void Function(PageController pageController)? onCalendarCreated;
 
   final List<DateTimeRange>? overlayRanges;
+  final String? toolTip;
+  final TextStyle? toolTipStyle;
+  final DateTime? toolTipDate;
+  final Color? toolTipBackgroundColor;
 
   /// Creates a `TableCalendar` widget.
   TableCalendar({
@@ -269,6 +273,10 @@ class TableCalendar<T> extends StatefulWidget {
     this.onFormatChanged,
     this.onCalendarCreated,
     this.overlayRanges,
+    this.toolTip,
+    this.toolTipStyle,
+    this.toolTipDate,
+    this.toolTipBackgroundColor,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -515,6 +523,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
             onVerticalSwipe: _swipeCalendarFormat,
             overlayRanges: widget.overlayRanges,
+            toolTip: widget.toolTip,
+            toolTipBackgroundColor: widget.toolTipBackgroundColor,
+            toolTipDate: widget.toolTipDate,
+            toolTipStyle: widget.toolTipStyle,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);

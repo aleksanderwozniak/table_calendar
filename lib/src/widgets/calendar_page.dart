@@ -23,6 +23,10 @@ class CalendarPage extends StatelessWidget {
   final double? rowHeight;
   final List<DateTimeRange>? overlayRanges;
   final int rowSpanLimit;
+  final String? toolTip;
+  final TextStyle? toolTipStyle;
+  final DateTime? toolTipDate;
+  final Color? toolTipBackgroundColor;
 
   const CalendarPage({
     Key? key,
@@ -42,12 +46,37 @@ class CalendarPage extends StatelessWidget {
     this.overlayDefaultBuilder,
     this.overlayRanges,
     this.rowSpanLimit = -1,
+    this.toolTip,
+    this.toolTipStyle,
+    this.toolTipDate,
+    this.toolTipBackgroundColor,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(!weekNumberVisible || weekNumberBuilder != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double? widgetWidth;
+    bool? isInFirstLine;
+
+    if (toolTip != null && toolTipDate != null) {
+      final painter = TextPainter(
+        text: TextSpan(
+            text: toolTip,
+            style: toolTipStyle ?? TextStyle(color: Colors.white)),
+        textDirection: TextDirection.ltr,
+      );
+      painter.layout();
+
+      final double textWidth = painter.width;
+      widgetWidth = textWidth + 2 * 10;
+      final index = visibleDays.indexOf(toolTipDate!);
+      isInFirstLine = false;
+      if (index != -1 && index < 7) {
+        isInFirstLine = true;
+      }
+    }
+
     return Padding(
       padding: tablePadding ?? EdgeInsets.zero,
       child: Column(
@@ -73,7 +102,29 @@ class CalendarPage extends StatelessWidget {
                       constraints: constraints,
                       context: context,
                       dateRanges: overlayRanges!,
-                    )
+                    ),
+                  if (toolTip != null && toolTipDate != null)
+                    Positioned(
+                      left: getLeftOffset(
+                              toolTipDate!, constraints.maxWidth / 7) +
+                          0.5 * constraints.maxWidth / 7 -
+                          0.5 * widgetWidth!,
+                      top: getTopOffset(
+                              toolTipDate!, constraints.maxHeight / 5) -
+                          50 +
+                          (isInFirstLine! ? constraints.maxHeight / 5 : 0),
+                      child: CustomPaint(
+                        painter: CustomStyleArrow(
+                            color: toolTipBackgroundColor ?? Colors.black,
+                            preferBelow: !isInFirstLine),
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: Text(toolTip!,
+                              style: toolTipStyle ??
+                                  TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    ),
                 ],
               );
             }),
@@ -147,7 +198,8 @@ class CalendarPage extends StatelessWidget {
           } else {
             if (overlapGroups.last.length < rowSpanLimit) {
               overlapGroups.last.add(range);
-            } else if (overlapGroups.last.length == rowSpanLimit && overlayDefaultBuilder != null) {
+            } else if (overlapGroups.last.length == rowSpanLimit &&
+                overlayDefaultBuilder != null) {
               overlapGroups.last.add(
                 CustomRange(
                   originalRange: range.originalRange,
@@ -342,4 +394,50 @@ class CustomRange {
     this.isDefault = false,
     this.collapsedChildrenLength,
   });
+}
+
+class CustomStyleArrow extends CustomPainter {
+  final Color? color;
+  final BorderRadius? borderRadius;
+  final bool preferBelow;
+
+  CustomStyleArrow({this.color, this.borderRadius, this.preferBelow = true});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = color ?? Colors.white
+      ..strokeWidth = 1
+      ..style = PaintingStyle.fill;
+
+    final double triangleH = 10;
+    final double triangleW = 20.0;
+    final double width = size.width;
+    final double height = size.height;
+
+    final Path trianglePath = Path();
+    if (preferBelow) {
+      trianglePath
+        ..moveTo(width / 2 - triangleW / 2, height)
+        ..lineTo(width / 2, height + triangleH)
+        ..lineTo(width / 2 + triangleW / 2, height);
+    } else {
+      trianglePath
+        ..moveTo(width / 2 - triangleW / 2, 0)
+        ..lineTo(width / 2, 0 - triangleH)
+        ..lineTo(width / 2 + triangleW / 2, 0);
+    }
+    trianglePath.close();
+
+    canvas.drawPath(trianglePath, paint);
+    final BorderRadius br = borderRadius ?? BorderRadius.circular(8);
+    final Rect rect = (preferBelow)
+        ? Rect.fromLTRB(0, 0, width, height)
+        : Rect.fromLTRB(0, 0, width, height);
+    final RRect outer = br.toRRect(rect);
+    canvas.drawRRect(outer, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

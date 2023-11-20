@@ -36,6 +36,10 @@ class CalendarCore extends StatelessWidget {
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
   final List<DateTimeRange>? overlayRanges;
+  final String? toolTip;
+  final TextStyle? toolTipStyle;
+  final DateTime? toolTipDate;
+  final Color? toolTipBackgroundColor;
 
   const CalendarCore({
     Key? key,
@@ -65,6 +69,10 @@ class CalendarCore extends StatelessWidget {
     this.overlayRanges,
     this.rowSpanLimit = -1,
     this.overlayDefaultBuilder,
+    this.toolTip,
+    this.toolTipStyle,
+    this.toolTipDate,
+    this.toolTipBackgroundColor,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -95,6 +103,10 @@ class CalendarCore extends StatelessWidget {
           tableBorder: tableBorder,
           tablePadding: tablePadding,
           rowSpanLimit: rowSpanLimit,
+          toolTip: toolTip,
+          toolTipBackgroundColor: toolTipBackgroundColor,
+          toolTipDate: toolTipDate,
+          toolTipStyle: toolTipStyle,
           overlayDefaultBuilder: (context) {
             return overlayDefaultBuilder?.call(context) ?? SizedBox.shrink();
           },
