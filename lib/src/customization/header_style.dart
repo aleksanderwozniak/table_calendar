@@ -73,6 +73,9 @@ class HeaderStyle {
   /// Determines left chevron's visibility.
   final bool leftChevronVisible;
 
+  /// Align title to left and chevrons to right position.
+  final bool titleLeft;
+
   /// Determines right chevron's visibility.
   final bool rightChevronVisible;
 
@@ -81,6 +84,7 @@ class HeaderStyle {
 
   /// Creates a `HeaderStyle` used by `TableCalendar` widget.
   const HeaderStyle({
+    this.titleLeft = false,
     this.titleCentered = false,
     this.formatButtonVisible = true,
     this.formatButtonShowsNext = true,
