@@ -8,7 +8,8 @@ import 'dart:math' as math;
 class CalendarPage extends StatelessWidget {
   final Widget Function(BuildContext context, DateTimeRange range)?
       overlayBuilder;
-  final Widget Function(BuildContext context)? overlayDefaultBuilder;
+  final Widget Function(BuildContext context, int? collapsedLength)?
+      overlayDefaultBuilder;
   final Widget Function(BuildContext context, DateTime day)? dowBuilder;
   final Widget Function(BuildContext context, DateTime day) dayBuilder;
   final Widget Function(BuildContext context, DateTime day)? weekNumberBuilder;
@@ -26,6 +27,7 @@ class CalendarPage extends StatelessWidget {
   final String? toolTip;
   final TextStyle? toolTipStyle;
   final DateTime? toolTipDate;
+  final bool? showTooltip;
   final Color? toolTipBackgroundColor;
 
   const CalendarPage({
@@ -50,6 +52,7 @@ class CalendarPage extends StatelessWidget {
     this.toolTipStyle,
     this.toolTipDate,
     this.toolTipBackgroundColor,
+    this.showTooltip,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(!weekNumberVisible || weekNumberBuilder != null),
         super(key: key);
@@ -59,7 +62,7 @@ class CalendarPage extends StatelessWidget {
     double? widgetWidth;
     bool? isInFirstLine;
 
-    if (toolTip != null && toolTipDate != null) {
+    if (toolTip != null && toolTipDate != null && showTooltip == true) {
       final painter = TextPainter(
         text: TextSpan(
             text: toolTip,
@@ -103,7 +106,9 @@ class CalendarPage extends StatelessWidget {
                       context: context,
                       dateRanges: overlayRanges!,
                     ),
-                  if (toolTip != null && toolTipDate != null)
+                  if (toolTip != null &&
+                      toolTipDate != null &&
+                      showTooltip == true)
                     Positioned(
                       left: getLeftOffset(
                               toolTipDate!, constraints.maxWidth / 7) +
@@ -134,6 +139,8 @@ class CalendarPage extends StatelessWidget {
     );
   }
 
+  /// Since we werent able to render continous span acros multiple week we are splitting them
+  /// into multiples such that they fit in single row and keeping their original date intact to render widget
   List<CustomRange> splitOverlays(List<DateTimeRange> overlays) {
     final List<CustomRange> ranges = [];
     overlays.map((overlay) {
@@ -173,6 +180,18 @@ class CalendarPage extends StatelessWidget {
     return range;
   }
 
+  CustomRange _buildDefaultRange(List<CustomRange> ranges) {
+    return CustomRange(
+      originalRange: ranges.first.originalRange,
+      newRange: DateTimeRange(
+        start: ranges.first.newRange.start,
+        end: ranges.first.newRange.start.add(Duration(days: 3)),
+      ),
+      isDefault: true,
+      collapsedChildrenLength: ranges.length,
+    );
+  }
+
   Widget getEventWidgets({
     required BuildContext context,
     required BoxConstraints constraints,
@@ -184,40 +203,30 @@ class CalendarPage extends StatelessWidget {
         .sort((a, b) => a.newRange.start.compareTo(b.newRange.start));
 
     List<List<CustomRange>> overlapGroups = [];
+    List<CustomRange> omittedRanges = [];
     for (int i = 0; i < dividedDateRanges.length; i++) {
       final range = dividedDateRanges[i];
-      if (i == 0) {
+      if (i == 0 || !doesOverlap(dividedDateRanges, i)) {
+        if (omittedRanges.isNotEmpty &&
+            overlayDefaultBuilder != null &&
+            overlapGroups.isNotEmpty) {
+          overlapGroups.last.add(_buildDefaultRange(omittedRanges));
+          omittedRanges.clear();
+        }
         overlapGroups.add([range]);
       } else {
-        if (dividedDateRanges[i]
-            .newRange
-            .start
-            .isBefore(dividedDateRanges[i - 1].newRange.end)) {
-          if (rowSpanLimit == -1) {
-            overlapGroups.last.add(range);
-          } else {
-            if (overlapGroups.last.length < rowSpanLimit) {
-              overlapGroups.last.add(range);
-            } else if (overlapGroups.last.length == rowSpanLimit &&
-                overlayDefaultBuilder != null) {
-              overlapGroups.last.add(
-                CustomRange(
-                  originalRange: range.originalRange,
-                  newRange: DateTimeRange(
-                    start: range.newRange.start,
-                    end: range.newRange.start.add(
-                      Duration(days: 3),
-                    ),
-                  ),
-                  isDefault: true,
-                ),
-              );
-            }
-          }
+        if (rowSpanLimit == -1 || overlapGroups.last.length < rowSpanLimit) {
+          overlapGroups.last.add(range);
         } else {
-          overlapGroups.add([range]);
+          omittedRanges.add(range);
         }
       }
+    }
+    if (omittedRanges.isNotEmpty &&
+        overlayDefaultBuilder != null &&
+        overlapGroups.isNotEmpty) {
+      overlapGroups.last.add(_buildDefaultRange(omittedRanges));
+      omittedRanges.clear();
     }
 
     final children = <Widget>[];
@@ -229,7 +238,8 @@ class CalendarPage extends StatelessWidget {
         if (range.isDefault) {
           children.add(LayoutId(
             id: (i + j).toString() + range.newRange.toString(),
-            child: overlayDefaultBuilder?.call(context) ??
+            child: overlayDefaultBuilder?.call(
+                    context, range.collapsedChildrenLength) ??
                 Container(child: Text('Override default overlay')),
           ));
         } else {
@@ -250,6 +260,19 @@ class CalendarPage extends StatelessWidget {
       ),
       children: children,
     );
+  }
+
+  bool doesOverlap(List<CustomRange> dividedDateRanges, int i) {
+    int startPosition = i - 7 >= 0 ? i - 7 : 0;
+    for (int index = startPosition; index < i; index++) {
+      if (dividedDateRanges[i]
+          .newRange
+          .start
+          .isBefore(dividedDateRanges[index].newRange.end)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   int getCellIndex(DateTime date) {

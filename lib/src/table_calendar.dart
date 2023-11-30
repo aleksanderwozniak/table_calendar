@@ -4,7 +4,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -211,6 +210,7 @@ class TableCalendar<T> extends StatefulWidget {
   final List<DateTimeRange>? overlayRanges;
   final String? toolTip;
   final TextStyle? toolTipStyle;
+  final bool? showTooltip;
   final DateTime? toolTipDate;
   final Color? toolTipBackgroundColor;
 
@@ -277,6 +277,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.toolTipStyle,
     this.toolTipDate,
     this.toolTipBackgroundColor,
+    this.showTooltip,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -527,6 +528,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             toolTipBackgroundColor: widget.toolTipBackgroundColor,
             toolTipDate: widget.toolTipDate,
             toolTipStyle: widget.toolTipStyle,
+            showTooltip: widget.showTooltip,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
@@ -590,9 +592,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                       ?.call(context, range) ??
                   SizedBox.shrink();
             },
-            overlayDefaultBuilder: (context) {
+            overlayDefaultBuilder: (context, collapsedLength) {
               return widget.calendarBuilders.overlayDefaultBuilder
-                  ?.call(context);
+                  ?.call(context, collapsedLength);
             },
             rowSpanLimit: widget.rowSpanLimit,
           ),

@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 /// Signature for a function that creates a widget for a given `day`.
 typedef DayBuilder = Widget? Function(BuildContext context, DateTime day);
 
-typedef OverlayBuilder = Widget? Function(BuildContext context, DateTimeRange range);
+typedef OverlayBuilder = Widget? Function(
+    BuildContext context, DateTimeRange range);
 
-typedef OverlayDefaultBuilder = Widget? Function(BuildContext context);
+typedef OverlayDefaultBuilder = Widget? Function(
+    BuildContext context, int? collapsedLength);
 
 /// Signature for a function that creates a widget for a given `day`.
 /// Additionally, contains the currently focused day.

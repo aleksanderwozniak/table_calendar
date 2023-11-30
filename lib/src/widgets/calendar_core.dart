@@ -38,6 +38,7 @@ class CalendarCore extends StatelessWidget {
   final List<DateTimeRange>? overlayRanges;
   final String? toolTip;
   final TextStyle? toolTipStyle;
+  final bool? showTooltip;
   final DateTime? toolTipDate;
   final Color? toolTipBackgroundColor;
 
@@ -73,6 +74,7 @@ class CalendarCore extends StatelessWidget {
     this.toolTipStyle,
     this.toolTipDate,
     this.toolTipBackgroundColor,
+    this.showTooltip,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -107,8 +109,10 @@ class CalendarCore extends StatelessWidget {
           toolTipBackgroundColor: toolTipBackgroundColor,
           toolTipDate: toolTipDate,
           toolTipStyle: toolTipStyle,
-          overlayDefaultBuilder: (context) {
-            return overlayDefaultBuilder?.call(context) ?? SizedBox.shrink();
+          showTooltip: showTooltip,
+          overlayDefaultBuilder: (context, collapsedLength) {
+            return overlayDefaultBuilder?.call(context, collapsedLength) ??
+                SizedBox.shrink();
           },
           overlayBuilder: (context, range) {
             return overlayBuilder?.call(context, range) ?? SizedBox.shrink();
