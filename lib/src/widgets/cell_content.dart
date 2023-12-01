@@ -66,27 +66,7 @@ class CellContent extends StatelessWidget {
     final alignment = calendarStyle.cellAlignment;
     final duration = const Duration(milliseconds: 250);
 
-    if (isDisabled) {
-      cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
-          AnimatedContainer(
-            duration: duration,
-            margin: margin,
-            padding: padding,
-            decoration: calendarStyle.disabledDecoration,
-            alignment: alignment,
-            child: Text(text, style: calendarStyle.disabledTextStyle),
-          );
-    } else if (isSelected) {
-      cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
-          AnimatedContainer(
-            duration: duration,
-            margin: margin,
-            padding: padding,
-            decoration: calendarStyle.selectedDecoration,
-            alignment: alignment,
-            child: Text(text, style: calendarStyle.selectedTextStyle),
-          );
-    } else if (isRangeStart) {
+    if (isRangeStart) {
       cell =
           calendarBuilders.rangeStartBuilder?.call(context, day, focusedDay) ??
               AnimatedContainer(
@@ -147,6 +127,26 @@ class CellContent extends StatelessWidget {
             decoration: calendarStyle.outsideDecoration,
             alignment: alignment,
             child: Text(text, style: calendarStyle.outsideTextStyle),
+          );
+    } else if (isSelected) {
+      cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
+          AnimatedContainer(
+            duration: duration,
+            margin: margin,
+            padding: padding,
+            decoration: calendarStyle.selectedDecoration,
+            alignment: alignment,
+            child: Text(text, style: calendarStyle.selectedTextStyle),
+          );
+    } else if (isDisabled) {
+      cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
+          AnimatedContainer(
+            duration: duration,
+            margin: margin,
+            padding: padding,
+            decoration: calendarStyle.disabledDecoration,
+            alignment: alignment,
+            child: Text(text, style: calendarStyle.disabledTextStyle),
           );
     } else {
       cell = calendarBuilders.defaultBuilder?.call(context, day, focusedDay) ??
