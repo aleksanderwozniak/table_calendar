@@ -115,9 +115,13 @@ class CalendarPage extends StatelessWidget {
                           0.5 * constraints.maxWidth / 7 -
                           0.5 * widgetWidth!,
                       top: getTopOffset(
-                              toolTipDate!, constraints.maxHeight / 5) -
+                              toolTipDate!,
+                              constraints.maxHeight /
+                                  (visibleDays.length / 7)) -
                           50 +
-                          (isInFirstLine! ? constraints.maxHeight / 5 : 0),
+                          (isInFirstLine!
+                              ? constraints.maxHeight / (visibleDays.length / 7)
+                              : 0),
                       child: CustomPaint(
                         painter: CustomStyleArrow(
                             color: toolTipBackgroundColor ?? Colors.black,
@@ -185,7 +189,7 @@ class CalendarPage extends StatelessWidget {
       originalRange: ranges.first.originalRange,
       newRange: DateTimeRange(
         start: ranges.first.newRange.start,
-        end: ranges.first.newRange.start.add(Duration(days: 3)),
+        end: ranges.first.newRange.start.add(Duration(days: 2)),
       ),
       isDefault: true,
       collapsedChildrenLength: ranges.length,
@@ -360,7 +364,8 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
 
         double xOffset = getLeftOffset(startDate, constraints.maxWidth / 7);
         double yOffset =
-            getTopOffset(startDate, size.height / 5) + sharedYOffset;
+            getTopOffset(startDate, size.height / (visibleDays.length / 7)) +
+                sharedYOffset;
 
         double widgetWidth =
             getWidgetWidth(startDate, endDate, constraints.maxWidth / 7);
