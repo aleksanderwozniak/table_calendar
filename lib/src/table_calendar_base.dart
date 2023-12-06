@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'shared/utils.dart';
 import 'widgets/calendar_core.dart';
@@ -39,7 +40,7 @@ class TableCalendarBase extends StatefulWidget {
   final SwipeCallback? onVerticalSwipe;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
-  final List<DateTimeRange>? overlayRanges;
+  final List<CustomRange>? overlayRanges;
   final String? toolTip;
   final TextStyle? toolTipStyle;
   final bool? showTooltip;

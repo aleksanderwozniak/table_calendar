@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../shared/utils.dart';
 import 'calendar_page.dart';
@@ -35,7 +36,7 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
-  final List<DateTimeRange>? overlayRanges;
+  final List<CustomRange>? overlayRanges;
   final String? toolTip;
   final TextStyle? toolTipStyle;
   final bool? showTooltip;

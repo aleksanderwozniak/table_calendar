@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math' as math;
 
+import 'package:table_calendar/table_calendar.dart';
+import 'package:collection/collection.dart';
+
 class CalendarPage extends StatelessWidget {
-  final Widget Function(BuildContext context, DateTimeRange range)?
+  final Widget Function(BuildContext context, CustomRange range)?
       overlayBuilder;
   final Widget Function(BuildContext context, int? collapsedLength)?
       overlayDefaultBuilder;
@@ -22,7 +25,7 @@ class CalendarPage extends StatelessWidget {
   final bool weekNumberVisible;
   final double? dowHeight;
   final double? rowHeight;
-  final List<DateTimeRange>? overlayRanges;
+  final List<CustomRange>? overlayRanges;
   final int rowSpanLimit;
   final String? toolTip;
   final TextStyle? toolTipStyle;
@@ -145,8 +148,8 @@ class CalendarPage extends StatelessWidget {
 
   /// Since we werent able to render continous span acros multiple week we are splitting them
   /// into multiples such that they fit in single row and keeping their original date intact to render widget
-  List<CustomRange> splitOverlays(List<DateTimeRange> overlays) {
-    final List<CustomRange> ranges = [];
+  List<InternalRange> splitOverlays(List<CustomRange> overlays) {
+    final List<InternalRange> ranges = [];
     overlays.map((overlay) {
       final range = splitRangeIntoWeeks(overlay);
       ranges.addAll(range);
@@ -155,11 +158,12 @@ class CalendarPage extends StatelessWidget {
     return ranges;
   }
 
-  List<CustomRange> splitRangeIntoWeeks(DateTimeRange dateRange) {
+  List<InternalRange> splitRangeIntoWeeks(CustomRange dateRange) {
     DateTime startDate = dateRange.start;
     DateTime endDate = dateRange.end;
+    String id = dateRange.id;
 
-    List<CustomRange> range = [];
+    List<InternalRange> range = [];
 
     for (int i = 0; i < visibleDays.length; i += 7) {
       DateTime rowStartDate = visibleDays[i];
@@ -178,14 +182,16 @@ class CalendarPage extends StatelessWidget {
           end:
               DateTime(eventEndDate.year, eventEndDate.month, eventEndDate.day),
         );
-        range.add(CustomRange(originalRange: dateRange, newRange: newRange));
+        range.add(InternalRange(
+            originalRange: dateRange, newRange: newRange, id: id));
       }
     }
     return range;
   }
 
-  CustomRange _buildDefaultRange(List<CustomRange> ranges) {
-    return CustomRange(
+  InternalRange _buildDefaultRange(List<InternalRange> ranges) {
+    return InternalRange(
+      id: ranges.first.id,
       originalRange: ranges.first.originalRange,
       newRange: DateTimeRange(
         start: ranges.first.newRange.start,
@@ -199,18 +205,19 @@ class CalendarPage extends StatelessWidget {
   Widget getEventWidgets({
     required BuildContext context,
     required BoxConstraints constraints,
-    required List<DateTimeRange> dateRanges,
+    required List<CustomRange> dateRanges,
   }) {
+    dateRanges.sort((a, b) => a.start.compareTo(b.start));
     final dividedDateRanges = splitOverlays(dateRanges);
 
     dividedDateRanges
         .sort((a, b) => a.newRange.start.compareTo(b.newRange.start));
 
-    List<List<CustomRange>> overlapGroups = [];
-    List<CustomRange> omittedRanges = [];
+    List<List<InternalRange>> overlapGroups = [];
+    List<InternalRange> omittedRanges = [];
     for (int i = 0; i < dividedDateRanges.length; i++) {
       final range = dividedDateRanges[i];
-      if (i == 0 || !doesOverlap(dividedDateRanges, i)) {
+      if (i == 0 || !doesOverlap(dividedDateRanges, omittedRanges, i)) {
         if (omittedRanges.isNotEmpty &&
             overlayDefaultBuilder != null &&
             overlapGroups.isNotEmpty) {
@@ -266,13 +273,25 @@ class CalendarPage extends StatelessWidget {
     );
   }
 
-  bool doesOverlap(List<CustomRange> dividedDateRanges, int i) {
+  bool doesOverlap(List<InternalRange> dividedDateRanges,
+      List<InternalRange> omittedRanges, int i) {
+    InternalRange? omitted = omittedRanges.firstWhereOrNull(
+        (element) => element.id == dividedDateRanges[i - 1].id);
+
+    if (dividedDateRanges[i]
+            .newRange
+            .start
+            .isAtSameMomentAs(dividedDateRanges[i - 1].newRange.end) &&
+        omitted == null) {
+      return true;
+    }
+
     int startPosition = i - 7 >= 0 ? i - 7 : 0;
     for (int index = startPosition; index < i; index++) {
-      if (dividedDateRanges[i]
-          .newRange
-          .start
-          .isBefore(dividedDateRanges[index].newRange.end)) {
+      DateTime rangeStart = dividedDateRanges[i].newRange.start;
+      DateTime rangeEnd = dividedDateRanges[index].newRange.end;
+
+      if (rangeStart.isBefore(rangeEnd)) {
         return true;
       }
     }
@@ -341,7 +360,7 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
   final BoxConstraints constraints;
   final double rowHeight;
   final List<DateTime> visibleDays;
-  final List<List<CustomRange>> overlapGroups;
+  final List<List<InternalRange>> overlapGroups;
 
   CalendarLayoutDelegate({
     required this.constraints,
@@ -354,7 +373,7 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     for (int i = 0; i < overlapGroups.length; i++) {
       final group = overlapGroups[i];
-      double sharedHeight = rowHeight / group.length;
+      double sharedHeight = (rowHeight - 18) / group.length;
 
       double sharedYOffset = 0;
       for (var j = 0; j < group.length; j++) {
@@ -365,7 +384,8 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
         double xOffset = getLeftOffset(startDate, constraints.maxWidth / 7);
         double yOffset =
             getTopOffset(startDate, size.height / (visibleDays.length / 7)) +
-                sharedYOffset;
+                sharedYOffset +
+                18;
 
         double widgetWidth =
             getWidgetWidth(startDate, endDate, constraints.maxWidth / 7);
@@ -410,13 +430,15 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
   }
 }
 
-class CustomRange {
-  final DateTimeRange originalRange;
+class InternalRange {
+  final String id;
+  final CustomRange originalRange;
   final DateTimeRange newRange;
   final bool isDefault;
   final int? collapsedChildrenLength;
 
-  CustomRange({
+  InternalRange({
+    required this.id,
     required this.originalRange,
     required this.newRange,
     this.isDefault = false,

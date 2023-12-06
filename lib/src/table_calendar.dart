@@ -16,6 +16,19 @@ import 'table_calendar_base.dart';
 import 'widgets/calendar_header.dart';
 import 'widgets/cell_content.dart';
 
+class CustomRange extends DateTimeRange {
+  final String id;
+
+  /// The start of the range of dates.
+  final DateTime start;
+
+  /// The end of the range of dates.
+  final DateTime end;
+
+  CustomRange({required this.id, required this.start, required this.end})
+      : super(start: start, end: end);
+}
+
 /// Signature for `onDaySelected` callback. Contains the selected day and focused day.
 typedef OnDaySelected = void Function(
     DateTime selectedDay, DateTime focusedDay);
@@ -207,7 +220,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController)? onCalendarCreated;
 
-  final List<DateTimeRange>? overlayRanges;
+  final List<CustomRange>? overlayRanges;
   final String? toolTip;
   final TextStyle? toolTipStyle;
   final bool? showTooltip;
