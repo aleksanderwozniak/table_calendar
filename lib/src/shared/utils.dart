@@ -11,7 +11,7 @@ typedef OverlayBuilder = Widget? Function(
     BuildContext context, CustomRange range);
 
 typedef OverlayDefaultBuilder = Widget? Function(
-    BuildContext context, int? collapsedLength);
+    BuildContext context, int? collapsedLength, List<String> children);
 
 /// Signature for a function that creates a widget for a given `day`.
 /// Additionally, contains the currently focused day.

@@ -112,8 +112,9 @@ class CalendarCore extends StatelessWidget {
           toolTipDate: toolTipDate,
           toolTipStyle: toolTipStyle,
           showTooltip: showTooltip,
-          overlayDefaultBuilder: (context, collapsedLength) {
-            return overlayDefaultBuilder?.call(context, collapsedLength) ??
+          overlayDefaultBuilder: (context, collapsedLength, children) {
+            return overlayDefaultBuilder?.call(
+                    context, collapsedLength, children) ??
                 SizedBox.shrink();
           },
           overlayBuilder: (context, range) {

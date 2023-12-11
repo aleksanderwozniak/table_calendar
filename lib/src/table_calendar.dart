@@ -607,9 +607,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                       ?.call(context, range) ??
                   SizedBox.shrink();
             },
-            overlayDefaultBuilder: (context, collapsedLength) {
+            overlayDefaultBuilder: (context, collapsedLength, children) {
               return widget.calendarBuilders.overlayDefaultBuilder
-                  ?.call(context, collapsedLength);
+                  ?.call(context, collapsedLength, children);
             },
             rowSpanLimit: widget.rowSpanLimit,
             topMargin: widget.topMargin,

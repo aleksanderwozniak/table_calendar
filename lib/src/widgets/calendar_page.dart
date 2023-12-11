@@ -11,8 +11,8 @@ import 'package:collection/collection.dart';
 class CalendarPage extends StatelessWidget {
   final Widget Function(BuildContext context, CustomRange range)?
       overlayBuilder;
-  final Widget Function(BuildContext context, int? collapsedLength)?
-      overlayDefaultBuilder;
+  final Widget Function(BuildContext context, int? collapsedLength,
+      List<String> collapsedChildren)? overlayDefaultBuilder;
   final Widget Function(BuildContext context, DateTime day)? dowBuilder;
   final Widget Function(BuildContext context, DateTime day) dayBuilder;
   final Widget Function(BuildContext context, DateTime day)? weekNumberBuilder;
@@ -201,6 +201,7 @@ class CalendarPage extends StatelessWidget {
       ),
       isDefault: true,
       collapsedChildrenLength: ranges.length,
+      collapsedChildren: ranges.map((e) => e.id).toList(),
     );
   }
 
@@ -251,8 +252,8 @@ class CalendarPage extends StatelessWidget {
         if (range.isDefault) {
           children.add(LayoutId(
             id: (i + j).toString() + range.newRange.toString(),
-            child: overlayDefaultBuilder?.call(
-                    context, range.collapsedChildrenLength) ??
+            child: overlayDefaultBuilder?.call(context,
+                    range.collapsedChildrenLength, range.collapsedChildren) ??
                 Container(child: Text('Override default overlay')),
           ));
         } else {
@@ -278,23 +279,19 @@ class CalendarPage extends StatelessWidget {
 
   bool doesOverlap(List<InternalRange> dividedDateRanges,
       List<InternalRange> omittedRanges, int i) {
-    InternalRange? omitted = omittedRanges.firstWhereOrNull(
-        (element) => element.id == dividedDateRanges[i - 1].id);
-
-    if (dividedDateRanges[i]
-            .newRange
-            .start
-            .isAtSameMomentAs(dividedDateRanges[i - 1].newRange.end) &&
-        omitted == null) {
-      return true;
-    }
-
     int startPosition = i - 7 >= 0 ? i - 7 : 0;
     for (int index = startPosition; index < i; index++) {
       DateTime rangeStart = dividedDateRanges[i].newRange.start;
       DateTime rangeEnd = dividedDateRanges[index].newRange.end;
       InternalRange? internalOmitted = omittedRanges.firstWhereOrNull(
           (element) => element.id == dividedDateRanges[index].id);
+
+      if (dividedDateRanges[i]
+          .newRange
+          .start
+          .isAtSameMomentAs(dividedDateRanges[i - index].newRange.end)) {
+        return true;
+      }
 
       if (rangeStart.isBefore(rangeEnd) && internalOmitted == null) {
         return true;
@@ -443,6 +440,7 @@ class InternalRange {
   final DateTimeRange newRange;
   final bool isDefault;
   final int? collapsedChildrenLength;
+  final List<String> collapsedChildren;
 
   InternalRange({
     required this.id,
@@ -450,6 +448,7 @@ class InternalRange {
     required this.newRange,
     this.isDefault = false,
     this.collapsedChildrenLength,
+    this.collapsedChildren = const <String>[],
   });
 }
 
