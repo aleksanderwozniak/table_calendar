@@ -122,6 +122,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
   final int rowSpanLimit;
+  final int topMargin;
 
   /// Used for setting the height of `TableCalendar`'s days of week row.
   final double daysOfWeekHeight;
@@ -291,6 +292,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.toolTipDate,
     this.toolTipBackgroundColor,
     this.showTooltip,
+    this.topMargin = 0,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -610,6 +612,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                   ?.call(context, collapsedLength);
             },
             rowSpanLimit: widget.rowSpanLimit,
+            topMargin: widget.topMargin,
           ),
         ),
       ],

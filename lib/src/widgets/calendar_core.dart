@@ -4,7 +4,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../shared/utils.dart';
 import 'calendar_page.dart';
 
 typedef _OnCalendarPageChanged = void Function(
@@ -30,6 +29,7 @@ class CalendarCore extends StatelessWidget {
   final EdgeInsets? tablePadding;
   final double? dowHeight;
   final double? rowHeight;
+  final int topMargin;
   final BoxConstraints constraints;
   final int? previousIndex;
   final StartingDayOfWeek startingDayOfWeek;
@@ -76,6 +76,7 @@ class CalendarCore extends StatelessWidget {
     this.toolTipDate,
     this.toolTipBackgroundColor,
     this.showTooltip,
+    required this.topMargin,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -147,6 +148,7 @@ class CalendarCore extends StatelessWidget {
               child: weekNumberBuilder?.call(context, day),
             );
           },
+          topMargin: topMargin,
         );
       },
       onPageChanged: (index) {

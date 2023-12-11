@@ -32,6 +32,7 @@ class CalendarPage extends StatelessWidget {
   final DateTime? toolTipDate;
   final bool? showTooltip;
   final Color? toolTipBackgroundColor;
+  final int topMargin;
 
   const CalendarPage({
     Key? key,
@@ -56,6 +57,7 @@ class CalendarPage extends StatelessWidget {
     this.toolTipDate,
     this.toolTipBackgroundColor,
     this.showTooltip,
+    this.topMargin = 0,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(!weekNumberVisible || weekNumberBuilder != null),
         super(key: key);
@@ -268,6 +270,7 @@ class CalendarPage extends StatelessWidget {
         rowHeight: rowHeight ?? 52,
         visibleDays: visibleDays,
         overlapGroups: overlapGroups,
+        topMargin: topMargin,
       ),
       children: children,
     );
@@ -290,8 +293,10 @@ class CalendarPage extends StatelessWidget {
     for (int index = startPosition; index < i; index++) {
       DateTime rangeStart = dividedDateRanges[i].newRange.start;
       DateTime rangeEnd = dividedDateRanges[index].newRange.end;
+      InternalRange? internalOmitted = omittedRanges.firstWhereOrNull(
+          (element) => element.id == dividedDateRanges[index].id);
 
-      if (rangeStart.isBefore(rangeEnd)) {
+      if (rangeStart.isBefore(rangeEnd) && internalOmitted == null) {
         return true;
       }
     }
@@ -361,19 +366,21 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
   final double rowHeight;
   final List<DateTime> visibleDays;
   final List<List<InternalRange>> overlapGroups;
+  final int topMargin;
 
   CalendarLayoutDelegate({
     required this.constraints,
     required this.rowHeight,
     required this.visibleDays,
     required this.overlapGroups,
+    required this.topMargin,
   });
 
   @override
   void performLayout(Size size) {
     for (int i = 0; i < overlapGroups.length; i++) {
       final group = overlapGroups[i];
-      double sharedHeight = (rowHeight - 18) / group.length;
+      double sharedHeight = (rowHeight - topMargin) / group.length;
 
       double sharedYOffset = 0;
       for (var j = 0; j < group.length; j++) {
@@ -385,7 +392,7 @@ class CalendarLayoutDelegate extends MultiChildLayoutDelegate {
         double yOffset =
             getTopOffset(startDate, size.height / (visibleDays.length / 7)) +
                 sharedYOffset +
-                18;
+                topMargin;
 
         double widgetWidth =
             getWidgetWidth(startDate, endDate, constraints.maxWidth / 7);
