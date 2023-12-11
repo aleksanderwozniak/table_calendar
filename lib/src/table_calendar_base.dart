@@ -3,8 +3,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-import 'shared/utils.dart';
 import 'widgets/calendar_core.dart';
 
 class TableCalendarBase extends StatefulWidget {
@@ -20,6 +20,7 @@ class TableCalendarBase extends StatefulWidget {
   final FocusedDayBuilder dayBuilder;
   final double? dowHeight;
   final double rowHeight;
+  final int topMargin;
   final bool sixWeekMonthsEnforced;
   final bool dowVisible;
   final bool weekNumbersVisible;
@@ -39,7 +40,7 @@ class TableCalendarBase extends StatefulWidget {
   final SwipeCallback? onVerticalSwipe;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
-  final List<DateTimeRange>? overlayRanges;
+  final List<CustomRange>? overlayRanges;
   final String? toolTip;
   final TextStyle? toolTipStyle;
   final bool? showTooltip;
@@ -92,6 +93,7 @@ class TableCalendarBase extends StatefulWidget {
     this.toolTipDate,
     this.toolTipBackgroundColor,
     this.showTooltip,
+    this.topMargin = 0,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
         assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay)),
@@ -158,10 +160,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   bool get _canScrollHorizontally =>
       widget.availableGestures == AvailableGestures.all ||
       widget.availableGestures == AvailableGestures.horizontalSwipe;
-
-  bool get _canScrollVertically =>
-      widget.availableGestures == AvailableGestures.all ||
-      widget.availableGestures == AvailableGestures.verticalSwipe;
 
   void _updatePage({bool shouldAnimate = false}) {
     final currentIndex = _calculateFocusedPage(
@@ -275,6 +273,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
             overlayBuilder: widget.overlayBuilder,
             rowSpanLimit: widget.rowSpanLimit,
             overlayDefaultBuilder: widget.overlayDefaultBuilder,
+            topMargin: widget.topMargin,
           ),
         );
       },

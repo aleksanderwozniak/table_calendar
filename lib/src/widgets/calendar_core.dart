@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-import '../shared/utils.dart';
 import 'calendar_page.dart';
 
 typedef _OnCalendarPageChanged = void Function(
@@ -29,13 +29,14 @@ class CalendarCore extends StatelessWidget {
   final EdgeInsets? tablePadding;
   final double? dowHeight;
   final double? rowHeight;
+  final int topMargin;
   final BoxConstraints constraints;
   final int? previousIndex;
   final StartingDayOfWeek startingDayOfWeek;
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
-  final List<DateTimeRange>? overlayRanges;
+  final List<CustomRange>? overlayRanges;
   final String? toolTip;
   final TextStyle? toolTipStyle;
   final bool? showTooltip;
@@ -75,6 +76,7 @@ class CalendarCore extends StatelessWidget {
     this.toolTipDate,
     this.toolTipBackgroundColor,
     this.showTooltip,
+    required this.topMargin,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -110,8 +112,9 @@ class CalendarCore extends StatelessWidget {
           toolTipDate: toolTipDate,
           toolTipStyle: toolTipStyle,
           showTooltip: showTooltip,
-          overlayDefaultBuilder: (context, collapsedLength) {
-            return overlayDefaultBuilder?.call(context, collapsedLength) ??
+          overlayDefaultBuilder: (context, collapsedLength, children) {
+            return overlayDefaultBuilder?.call(
+                    context, collapsedLength, children) ??
                 SizedBox.shrink();
           },
           overlayBuilder: (context, range) {
@@ -146,6 +149,7 @@ class CalendarCore extends StatelessWidget {
               child: weekNumberBuilder?.call(context, day),
             );
           },
+          topMargin: topMargin,
         );
       },
       onPageChanged: (index) {

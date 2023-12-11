@@ -2,15 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 /// Signature for a function that creates a widget for a given `day`.
 typedef DayBuilder = Widget? Function(BuildContext context, DateTime day);
 
 typedef OverlayBuilder = Widget? Function(
-    BuildContext context, DateTimeRange range);
+    BuildContext context, CustomRange range);
 
 typedef OverlayDefaultBuilder = Widget? Function(
-    BuildContext context, int? collapsedLength);
+    BuildContext context, int? collapsedLength, List<String> children);
 
 /// Signature for a function that creates a widget for a given `day`.
 /// Additionally, contains the currently focused day.
