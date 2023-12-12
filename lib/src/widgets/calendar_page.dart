@@ -192,12 +192,15 @@ class CalendarPage extends StatelessWidget {
   }
 
   InternalRange _buildDefaultRange(List<InternalRange> ranges) {
+    final int adjustedWeekday = ranges.first.newRange.start.weekday % 7;
+    final int endDays = math.min(6 - adjustedWeekday, 3);
     return InternalRange(
       id: ranges.first.id,
       originalRange: ranges.first.originalRange,
       newRange: DateTimeRange(
         start: ranges.first.newRange.start,
-        end: ranges.first.newRange.start.add(Duration(days: 2)),
+        end: ranges.first.newRange.start
+            .add(Duration(days: endDays < 0 ? 0 : endDays)),
       ),
       isDefault: true,
       collapsedChildrenLength: ranges.length,
@@ -280,20 +283,20 @@ class CalendarPage extends StatelessWidget {
   bool doesOverlap(List<InternalRange> dividedDateRanges,
       List<InternalRange> omittedRanges, int i) {
     int startPosition = i - 7 >= 0 ? i - 7 : 0;
-    for (int index = startPosition; index < i; index++) {
-      DateTime rangeStart = dividedDateRanges[i].newRange.start;
-      DateTime rangeEnd = dividedDateRanges[index].newRange.end;
-      InternalRange? internalOmitted = omittedRanges.firstWhereOrNull(
-          (element) => element.id == dividedDateRanges[index].id);
-
+    for (int index = startPosition; index < math.min(i, 2); index++) {
       if (dividedDateRanges[i]
           .newRange
-          .start
+          .end
           .isAtSameMomentAs(dividedDateRanges[i - index].newRange.end)) {
         return true;
       }
+    }
 
-      if (rangeStart.isBefore(rangeEnd) && internalOmitted == null) {
+    for (int index = startPosition; index < i; index++) {
+      DateTime rangeStart = dividedDateRanges[i].newRange.start;
+      DateTime rangeEnd = dividedDateRanges[index].newRange.end;
+
+      if (rangeStart.isBefore(rangeEnd)) {
         return true;
       }
     }
