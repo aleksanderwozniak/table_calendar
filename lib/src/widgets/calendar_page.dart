@@ -283,20 +283,12 @@ class CalendarPage extends StatelessWidget {
   bool doesOverlap(List<InternalRange> dividedDateRanges,
       List<InternalRange> omittedRanges, int i) {
     int startPosition = i - 7 >= 0 ? i - 7 : 0;
-    for (int index = startPosition; index < math.min(i, 2); index++) {
-      if (dividedDateRanges[i]
-          .newRange
-          .end
-          .isAtSameMomentAs(dividedDateRanges[i - index].newRange.end)) {
-        return true;
-      }
-    }
-
     for (int index = startPosition; index < i; index++) {
       DateTime rangeStart = dividedDateRanges[i].newRange.start;
       DateTime rangeEnd = dividedDateRanges[index].newRange.end;
 
-      if (rangeStart.isBefore(rangeEnd)) {
+      if (rangeStart.isBefore(rangeEnd) ||
+          rangeStart.isAtSameMomentAs(rangeEnd)) {
         return true;
       }
     }
