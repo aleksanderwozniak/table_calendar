@@ -12,7 +12,7 @@ class TableBasicsExample extends StatefulWidget {
 }
 
 class _TableBasicsExampleState extends State<TableBasicsExample> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat _calendarFormat = CalendarFormat.day;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
@@ -20,11 +20,11 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TableCalendar - Basics'),
+        title: Text('TableCalendar - Basics ${_focusedDay.day}'),
       ),
       body: TableCalendar(
         firstDay: kFirstDay,
-        lastDay: kLastDay,
+        lastDay: DateTime.now(),
         focusedDay: _focusedDay,
         calendarFormat: _calendarFormat,
         selectedDayPredicate: (day) {

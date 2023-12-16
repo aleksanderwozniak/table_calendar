@@ -70,6 +70,7 @@ class TableCalendarBase extends StatefulWidget {
       CalendarFormat.month: 'Month',
       CalendarFormat.twoWeeks: '2 weeks',
       CalendarFormat.week: 'Week',
+      CalendarFormat.day: 'Day',
     },
     this.onVerticalSwipe,
     this.onPageChanged,
@@ -148,7 +149,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   void _updatePage({bool shouldAnimate = false}) {
     final currentIndex = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, _focusedDay);
-
     final endIndex = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, widget.lastDay);
 
@@ -273,6 +273,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         return _getTwoWeekCount(startDay, focusedDay);
       case CalendarFormat.week:
         return _getWeekCount(startDay, focusedDay);
+      case CalendarFormat.day:
+        return _getDaysCount(startDay, focusedDay) ;
       default:
         return _getMonthCount(startDay, focusedDay);
     }
@@ -289,6 +291,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     return last.difference(_firstDayOfWeek(first)).inDays ~/ 7;
   }
 
+  int _getDaysCount(DateTime first, DateTime last) {
+
+    return last.difference(first).inDays;
+  }
+
   int _getTwoWeekCount(DateTime first, DateTime last) {
     return last.difference(_firstDayOfWeek(first)).inDays ~/ 14;
   }
@@ -297,6 +304,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     if (format == CalendarFormat.twoWeeks) {
       return 2;
     } else if (format == CalendarFormat.week) {
+      return 1;
+    } else if (format == CalendarFormat.day) {
       return 1;
     } else if (widget.sixWeekMonthsEnforced) {
       return 6;

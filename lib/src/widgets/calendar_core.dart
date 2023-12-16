@@ -77,6 +77,7 @@ class CalendarCore extends StatelessWidget {
                 _getRowCount(calendarFormat, baseDay)
             : null;
 
+
         return CalendarPage(
           visibleDays: visibleDays,
           dowVisible: dowVisible,
@@ -91,6 +92,7 @@ class CalendarCore extends StatelessWidget {
             );
           },
           dayBuilder: (context, day) {
+
             DateTime baseDay;
             final previousFocusedDay = focusedDay;
             if (previousFocusedDay == null || previousIndex == null) {
@@ -99,7 +101,6 @@ class CalendarCore extends StatelessWidget {
               baseDay =
                   _getFocusedDay(calendarFormat, previousFocusedDay, index);
             }
-
             return SizedBox(
               height: constrainedRowHeight ?? rowHeight,
               child: dayBuilder(context, day, baseDay),
@@ -137,6 +138,8 @@ class CalendarCore extends StatelessWidget {
         return _getTwoWeekCount(first, last) + 1;
       case CalendarFormat.week:
         return _getWeekCount(first, last) + 1;
+      case CalendarFormat.day:
+        return _getDayCount(first, last) + 1;
       default:
         return _getMonthCount(first, last) + 1;
     }
@@ -151,6 +154,11 @@ class CalendarCore extends StatelessWidget {
 
   int _getWeekCount(DateTime first, DateTime last) {
     return last.difference(_firstDayOfWeek(first)).inDays ~/ 7;
+  }
+
+  int _getDayCount(DateTime first, DateTime last) {
+    var res= last.difference(_firstDayOfWeek(first)).inDays ~/ 1;
+    return last.difference(first).inDays;
   }
 
   int _getTwoWeekCount(DateTime first, DateTime last) {
@@ -178,7 +186,13 @@ class CalendarCore extends StatelessWidget {
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
             prevFocusedDay.day + pageDif * 7);
         break;
+      case CalendarFormat.day:
+        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
+            prevFocusedDay.day + pageDif);
+        break;
     }
+
+    // TODO DAY ADDED SWITCH CASE
 
     if (day.isBefore(firstDay)) {
       day = firstDay;
@@ -204,7 +218,14 @@ class CalendarCore extends StatelessWidget {
         day = DateTime.utc(
             firstDay.year, firstDay.month, firstDay.day + pageIndex * 7);
         break;
+      case CalendarFormat.day:
+        day = DateTime.utc(
+            firstDay.year, firstDay.month, firstDay.day + pageIndex);
+        break;
     }
+
+    // TODO DAY ADDED SWITCH CASE
+    if(calendarFormat == CalendarFormat.day) return day;
 
     if (day.isBefore(firstDay)) {
       day = firstDay;
@@ -223,6 +244,8 @@ class CalendarCore extends StatelessWidget {
         return _daysInTwoWeeks(focusedDay);
       case CalendarFormat.week:
         return _daysInWeek(focusedDay);
+      case CalendarFormat.day:
+        return _daysInDay(focusedDay);
       default:
         return _daysInMonth(focusedDay);
     }
@@ -233,6 +256,13 @@ class CalendarCore extends StatelessWidget {
     final firstToDisplay = focusedDay.subtract(Duration(days: daysBefore));
     final lastToDisplay = firstToDisplay.add(const Duration(days: 7));
     return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
+  }
+
+  DateTimeRange _daysInDay(DateTime focusedDay) {
+    final daysBefore = _getDaysBefore(focusedDay);
+    final firstToDisplay = focusedDay.subtract(Duration(days: daysBefore));
+    final lastToDisplay = firstToDisplay.add(const Duration(days: 1));
+    return DateTimeRange(start: focusedDay, end: focusedDay);
   }
 
   DateTimeRange _daysInTwoWeeks(DateTime focusedDay) {
@@ -287,6 +317,8 @@ class CalendarCore extends StatelessWidget {
     if (format == CalendarFormat.twoWeeks) {
       return 2;
     } else if (format == CalendarFormat.week) {
+      return 1;
+    } else if (format == CalendarFormat.day) {
       return 1;
     } else if (sixWeekMonthsEnforced) {
       return 6;
