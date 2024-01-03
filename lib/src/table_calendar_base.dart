@@ -195,14 +195,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               final height =
                   constraints.hasBoundedHeight ? constraints.maxHeight : value;
 
-              return AnimatedSize(
-                duration: widget.formatAnimationDuration,
-                curve: widget.formatAnimationCurve,
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  height: height,
-                  child: child,
-                ),
+              return SizedBox(
+                height: height,
+                child: child,
               );
             },
             child: CalendarCore(
