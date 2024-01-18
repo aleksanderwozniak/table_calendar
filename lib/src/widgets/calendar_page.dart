@@ -65,9 +65,9 @@ class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double? widgetWidth;
-    bool? isInFirstLine;
+    bool isInFirstLine = false;
 
-    if (toolTip != null && toolTipDate != null && showTooltip == true) {
+    if (toolTip != null && toolTipDate != null) {
       final painter = TextPainter(
         text: TextSpan(
             text: toolTip,
@@ -92,6 +92,25 @@ class CalendarPage extends StatelessWidget {
           if (dowVisible) _buildDaysOfWeek(context),
           Expanded(
             child: LayoutBuilder(builder: (context, constraints) {
+              double leftValue = isTooltipEnable
+                  ? calculateTooltipLeftValue(widgetWidth, constraints)
+                  : 0;
+
+              double topValue = isTooltipEnable
+                  ? calculateTooltipTopValue(
+                      widgetWidth, constraints, isInFirstLine)
+                  : 0;
+
+              double centerOfDate = isTooltipEnable
+                  ? getLeftOffset(toolTipDate!, constraints.maxWidth / 7) +
+                      (constraints.maxWidth / 7) * 0.5
+                  : 0;
+
+              double relativeArrowPosition = centerOfDate - leftValue;
+              final arrowOffset = widgetWidth == null
+                  ? 0.5
+                  : (relativeArrowPosition / widgetWidth).clamp(0.0, 1.0);
+
               return Stack(
                 children: [
                   GridView.builder(
@@ -111,26 +130,15 @@ class CalendarPage extends StatelessWidget {
                       context: context,
                       dateRanges: overlayRanges!,
                     ),
-                  if (toolTip != null &&
-                      toolTipDate != null &&
-                      showTooltip == true)
+                  if (isTooltipEnable)
                     Positioned(
-                      left: getLeftOffset(
-                              toolTipDate!, constraints.maxWidth / 7) +
-                          0.5 * constraints.maxWidth / 7 -
-                          0.5 * widgetWidth!,
-                      top: getTopOffset(
-                              toolTipDate!,
-                              constraints.maxHeight /
-                                  (visibleDays.length / 7)) -
-                          50 +
-                          (isInFirstLine!
-                              ? constraints.maxHeight / (visibleDays.length / 7)
-                              : 0),
+                      top: topValue,
+                      left: leftValue,
                       child: CustomPaint(
                         painter: CustomStyleArrow(
                             color: toolTipBackgroundColor ?? Colors.black,
-                            preferBelow: !isInFirstLine),
+                            preferBelow: !isInFirstLine,
+                            arrowOffset: arrowOffset),
                         child: Container(
                           padding: EdgeInsets.all(8),
                           child: Text(toolTip!,
@@ -327,6 +335,41 @@ class CalendarPage extends StatelessWidget {
       ),
     );
   }
+
+  double calculateTooltipLeftValue(
+      double? widgetWidth, BoxConstraints constraints) {
+    double leftValue = 0;
+    if (widgetWidth == null) return leftValue;
+    leftValue = getLeftOffset(toolTipDate!, constraints.maxWidth / 7) +
+        0.5 * constraints.maxWidth / 7 -
+        0.5 * widgetWidth;
+    if (leftValue < 0) {
+      leftValue = 0;
+    } else if (leftValue + widgetWidth > constraints.maxWidth) {
+      leftValue = constraints.maxWidth - widgetWidth;
+    }
+    return leftValue;
+  }
+
+  double calculateTooltipTopValue(
+      double? widgetWidth, BoxConstraints constraints, bool isInFirstLine) {
+    double topValue = 0;
+    if (widgetWidth == null) return topValue;
+    topValue = getTopOffset(
+            toolTipDate!, constraints.maxHeight / (visibleDays.length / 7)) -
+        50 +
+        (isInFirstLine ? constraints.maxHeight / (visibleDays.length / 7) : 0);
+    if (topValue < 0) {
+      topValue = constraints.maxHeight / (visibleDays.length / 7);
+    } else if (topValue > constraints.maxHeight) {
+      topValue = constraints.maxHeight / (visibleDays.length / 7) - 50;
+    }
+    return topValue;
+  }
+
+  bool get isTooltipEnable {
+    return toolTip != null && toolTipDate != null && showTooltip == true;
+  }
 }
 
 class _DayPickerGridDelegate extends SliverGridDelegate {
@@ -451,8 +494,13 @@ class CustomStyleArrow extends CustomPainter {
   final Color? color;
   final BorderRadius? borderRadius;
   final bool preferBelow;
+  final double arrowOffset;
 
-  CustomStyleArrow({this.color, this.borderRadius, this.preferBelow = true});
+  CustomStyleArrow(
+      {this.color,
+      this.borderRadius,
+      this.preferBelow = true,
+      required this.arrowOffset});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -469,15 +517,16 @@ class CustomStyleArrow extends CustomPainter {
     final Path trianglePath = Path();
     if (preferBelow) {
       trianglePath
-        ..moveTo(width / 2 - triangleW / 2, height)
-        ..lineTo(width / 2, height + triangleH)
-        ..lineTo(width / 2 + triangleW / 2, height);
+        ..moveTo(width * arrowOffset - triangleW / 2, height)
+        ..lineTo(width * arrowOffset, height + triangleH)
+        ..lineTo(width * arrowOffset + triangleW / 2, height);
     } else {
       trianglePath
-        ..moveTo(width / 2 - triangleW / 2, 0)
-        ..lineTo(width / 2, 0 - triangleH)
-        ..lineTo(width / 2 + triangleW / 2, 0);
+        ..moveTo(width * arrowOffset - triangleW / 2, 0)
+        ..lineTo(width * arrowOffset, 0 - triangleH)
+        ..lineTo(width * arrowOffset + triangleW / 2, 0);
     }
+
     trianglePath.close();
 
     canvas.drawPath(trianglePath, paint);
