@@ -67,7 +67,9 @@ class CalendarPage extends StatelessWidget {
     double? widgetWidth;
     bool isInFirstLine = false;
 
-    if (toolTip != null && toolTipDate != null) {
+    if (toolTip != null &&
+        toolTipDate != null &&
+        visibleDays.contains(toolTipDate)) {
       final painter = TextPainter(
         text: TextSpan(
             text: toolTip,
@@ -368,7 +370,10 @@ class CalendarPage extends StatelessWidget {
   }
 
   bool get isTooltipEnable {
-    return toolTip != null && toolTipDate != null && showTooltip == true;
+    return toolTip != null &&
+        toolTipDate != null &&
+        showTooltip == true &&
+        visibleDays.contains(toolTipDate);
   }
 }
 
