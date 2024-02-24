@@ -20,7 +20,14 @@ void main() {
     testWidgets(
       'Initial format month returns twoWeeks when tapped',
       (tester) async {
-        final headerStyle = HeaderStyle();
+        final headerStyle = HeaderStyle(
+          leftChevronIcon: Icon(
+            Icons.chevron_left,
+          ),
+          rightChevronIcon: Icon(
+            Icons.chevron_right,
+          ),
+        );
         CalendarFormat? calendarFormat;
 
         await tester.pumpWidget(
@@ -51,7 +58,14 @@ void main() {
     testWidgets(
       'Initial format twoWeeks returns week when tapped',
       (tester) async {
-        final headerStyle = HeaderStyle();
+        final headerStyle = HeaderStyle(
+          leftChevronIcon: Icon(
+            Icons.chevron_left,
+          ),
+          rightChevronIcon: Icon(
+            Icons.chevron_right,
+          ),
+        );
         CalendarFormat? calendarFormat;
 
         await tester.pumpWidget(
@@ -82,7 +96,14 @@ void main() {
     testWidgets(
       'Initial format week return month when tapped',
       (tester) async {
-        final headerStyle = HeaderStyle();
+        final headerStyle = HeaderStyle(
+          leftChevronIcon: Icon(
+            Icons.chevron_left,
+          ),
+          rightChevronIcon: Icon(
+            Icons.chevron_right,
+          ),
+        );
         CalendarFormat? calendarFormat;
 
         await tester.pumpWidget(
@@ -115,7 +136,14 @@ void main() {
     testWidgets(
       'true - display next calendar format',
       (tester) async {
-        final headerStyle = HeaderStyle(formatButtonShowsNext: true);
+        final headerStyle = HeaderStyle(
+            leftChevronIcon: Icon(
+              Icons.chevron_left,
+            ),
+            rightChevronIcon: Icon(
+              Icons.chevron_right,
+            ),
+            formatButtonShowsNext: true);
 
         final currentFormatIndex = 0;
         final currentFormat =
@@ -152,7 +180,14 @@ void main() {
     testWidgets(
       'false - display current calendar format',
       (tester) async {
-        final headerStyle = HeaderStyle(formatButtonShowsNext: false);
+        final headerStyle = HeaderStyle(
+            leftChevronIcon: Icon(
+              Icons.chevron_left,
+            ),
+            rightChevronIcon: Icon(
+              Icons.chevron_right,
+            ),
+            formatButtonShowsNext: false);
 
         final currentFormatIndex = 0;
         final currentFormat =

@@ -15,7 +15,14 @@ import 'common.dart';
 final focusedMonth = DateTime.utc(2021, 7, 15);
 
 Widget setupTestWidget({
-  HeaderStyle headerStyle = const HeaderStyle(),
+  HeaderStyle headerStyle = const HeaderStyle(
+    leftChevronIcon: Icon(
+      Icons.chevron_left,
+    ),
+    rightChevronIcon: Icon(
+      Icons.chevron_right,
+    ),
+  ),
   VoidCallback? onLeftChevronTap,
   VoidCallback? onRightChevronTap,
   VoidCallback? onHeaderTap,
@@ -125,6 +132,12 @@ void main() {
       await tester.pumpWidget(
         setupTestWidget(
           headerStyle: HeaderStyle(
+            leftChevronIcon: Icon(
+              Icons.chevron_left,
+            ),
+            rightChevronIcon: Icon(
+              Icons.chevron_right,
+            ),
             leftChevronVisible: false,
           ),
         ),
@@ -151,6 +164,12 @@ void main() {
       await tester.pumpWidget(
         setupTestWidget(
           headerStyle: HeaderStyle(
+            leftChevronIcon: Icon(
+              Icons.chevron_left,
+            ),
+            rightChevronIcon: Icon(
+              Icons.chevron_right,
+            ),
             rightChevronVisible: false,
           ),
         ),
@@ -190,7 +209,14 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         setupTestWidget(
-          headerStyle: HeaderStyle(formatButtonVisible: false),
+          headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+              formatButtonVisible: false),
         ),
       );
 
