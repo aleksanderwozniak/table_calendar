@@ -3,6 +3,8 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:table_calendar/src/widgets/cell_content.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -19,6 +21,7 @@ Widget setupTestWidget(
   bool isWithinRange = false,
   bool isHoliday = false,
   bool isTodayHighlighted = true,
+  String? locale,
 }) {
   final calendarStyle = CalendarStyle();
 
@@ -39,6 +42,7 @@ Widget setupTestWidget(
       isWithinRange: isWithinRange,
       isHoliday: isHoliday,
       isTodayHighlighted: isTodayHighlighted,
+      locale: locale,
     ),
   );
 }
@@ -309,5 +313,39 @@ void main() {
         expect(builderName, 'prioritizedBuilder');
       },
     );
+  });
+
+  group('CalendarBuilders Locale test:', () {
+    testWidgets('en locale', (tester) async {
+      final locale = 'en';
+      initializeDateFormatting(locale, null);
+
+      final cellDay = DateTime.utc(2021, 7, 15);
+      await tester.pumpWidget(
+        setupTestWidget(
+          cellDay,
+          locale: locale,
+        ),
+      );
+
+      final dayFinder = find.text(DateFormat.d(locale).format(cellDay));
+      expect(dayFinder, findsOneWidget);
+    });
+
+    testWidgets('ar locale', (tester) async {
+      final locale = 'ar';
+      initializeDateFormatting(locale, null);
+
+      final cellDay = DateTime.utc(2021, 7, 15);
+      await tester.pumpWidget(
+        setupTestWidget(
+          cellDay,
+          locale: locale,
+        ),
+      );
+
+      final dayFinder = find.text(DateFormat.d(locale).format(cellDay));
+      expect(dayFinder, findsOneWidget);
+    });
   });
 }
