@@ -76,6 +76,7 @@ class CalendarBuilders<T> {
   final DayBuilder? dowBuilder;
 
   /// Use to customize header's title using different widget
+  /// If you want to fill the remaining space, wrap expand outside
   final DayBuilder? headerTitleBuilder;
 
   /// Custom builder for number of the week labels.
