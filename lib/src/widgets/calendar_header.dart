@@ -48,6 +48,7 @@ class CalendarHeader extends StatelessWidget {
       padding: headerStyle.headerPadding,
       child: Row(
         mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: headerStyle.mainAxisAlignment,
         children: [
           if (headerStyle.leftChevronVisible)
             CustomIconButton(
