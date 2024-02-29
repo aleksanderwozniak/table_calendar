@@ -161,6 +161,11 @@ class TableCalendar<T> extends StatefulWidget {
   /// * `RangeSelectionMode.enforced` - range selection is always on.
   final RangeSelectionMode rangeSelectionMode;
 
+  /// List of display days Number
+  /// eg. Starting Days is Monday and displayDaysNumber is 5 -> Mon, Tue, Wed, Thu, Fri
+  /// eg. Starting Days is Sunday and displayDaysNumber is 3 -> Sun, Mon, Tue, Wed
+  final int displayDaysNumber;
+
   /// Function that assigns a list of events to a specified day.
   final List<T> Function(DateTime day)? eventLoader;
 
@@ -246,6 +251,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.calendarStyle = const CalendarStyle(),
     this.calendarBuilders = const CalendarBuilders(),
     this.rangeSelectionMode = RangeSelectionMode.toggledOff,
+    this.displayDaysNumber = 7,
     this.eventLoader,
     this.enabledDayPredicate,
     this.selectedDayPredicate,
@@ -509,6 +515,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
             },
+            displayDaysNumber: widget.displayDaysNumber,
             weekNumbersVisible: widget.weekNumbersVisible,
             weekNumberBuilder: (BuildContext context, DateTime day) {
               final weekNumber = _calculateWeekNumber(day);

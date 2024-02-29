@@ -32,6 +32,7 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
+  final int displayDaysNumber;
 
   const CalendarCore({
     Key? key,
@@ -57,6 +58,7 @@ class CalendarCore extends StatelessWidget {
     this.tableBorder,
     this.tablePadding,
     this.scrollPhysics,
+    this.displayDaysNumber = 7,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -113,6 +115,7 @@ class CalendarCore extends StatelessWidget {
               child: weekNumberBuilder?.call(context, day),
             );
           },
+          displayDaysNumber: displayDaysNumber,
         );
       },
       onPageChanged: (index) {
