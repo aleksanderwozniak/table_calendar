@@ -32,6 +32,7 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final _OnCalendarPageChanged onPageChanged;
+  final bool pageSnapping;
 
   const CalendarCore({
     Key? key,
@@ -57,6 +58,7 @@ class CalendarCore extends StatelessWidget {
     this.tableBorder,
     this.tablePadding,
     this.scrollPhysics,
+    this.pageSnapping = true,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         super(key: key);
 
@@ -65,6 +67,7 @@ class CalendarCore extends StatelessWidget {
     return PageView.builder(
       controller: pageController,
       physics: scrollPhysics,
+      pageSnapping: pageSnapping,
       itemCount: _getPageCount(calendarFormat, firstDay, lastDay),
       itemBuilder: (context, index) {
         final baseDay = _getBaseDay(calendarFormat, index);
