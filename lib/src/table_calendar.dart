@@ -344,11 +344,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   void _onDayTapped(DateTime day) {
-    final isOutside = day.month != _focusedDay.value.month;
-    if (isOutside && _shouldBlockOutsideDays) {
-      return;
-    }
-
     if (_isDayDisabled(day)) {
       return widget.onDisabledDayTapped?.call(day);
     }
@@ -374,11 +369,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   void _onDayLongPressed(DateTime day) {
-    final isOutside = day.month != _focusedDay.value.month;
-    if (isOutside && _shouldBlockOutsideDays) {
-      return;
-    }
-
     if (_isDayDisabled(day)) {
       return widget.onDisabledDayLongPressed?.call(day);
     }
@@ -556,6 +546,14 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
+              final isOutside = day.month != focusedMonth.month;
+
+              if (isOutside && _shouldBlockOutsideDays) {
+                return ExcludeSemantics(
+                  child: Container(),
+                );
+              }
+
               return GestureDetector(
                 behavior: widget.dayHitTestBehavior,
                 onTap: () => _onDayTapped(day),
@@ -570,12 +568,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   Widget _buildCell(DateTime day, DateTime focusedDay) {
-    final isOutside = day.month != focusedDay.month;
-
-    if (isOutside && _shouldBlockOutsideDays) {
-      return Container();
-    }
-
     return LayoutBuilder(
       builder: (context, constraints) {
         final shorterSide = constraints.maxHeight > constraints.maxWidth
@@ -618,6 +610,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isToday = isSameDay(day, widget.currentDay);
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
+        final isOutside = day.month != focusedDay.month;
 
         Widget content = CellContent(
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
