@@ -46,6 +46,9 @@ class CalendarStyle {
   /// Margin of single event markers. Affects each marker dot.
   final EdgeInsets markerMargin;
 
+  /// Space to add at the bottom of the Calendar. Useful if you added a top margin to the Markers
+  final double? bottomSpace;
+
   /// Margin of each individual day cell.
   final EdgeInsets cellMargin;
 
@@ -227,6 +230,7 @@ class CalendarStyle {
     this.rowDecoration = const BoxDecoration(),
     this.tableBorder = const TableBorder(),
     this.tablePadding = const EdgeInsets.all(0),
+    this.bottomSpace,
   });
 }
 

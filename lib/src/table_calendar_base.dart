@@ -24,6 +24,7 @@ class TableCalendarBase extends StatefulWidget {
   final Decoration? rowDecoration;
   final TableBorder? tableBorder;
   final EdgeInsets? tablePadding;
+  final double? bottomSpace;
   final Duration formatAnimationDuration;
   final Curve formatAnimationCurve;
   final bool pageAnimationEnabled;
@@ -55,6 +56,7 @@ class TableCalendarBase extends StatefulWidget {
     this.rowDecoration,
     this.tableBorder,
     this.tablePadding,
+    this.bottomSpace,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
     this.pageAnimationEnabled = true,
@@ -194,13 +196,14 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
             builder: (context, value, child) {
               final height =
                   constraints.hasBoundedHeight ? constraints.maxHeight : value;
+              final bottomMargin = widget.bottomSpace ?? 0.0;
 
               return AnimatedSize(
                 duration: widget.formatAnimationDuration,
                 curve: widget.formatAnimationCurve,
                 alignment: Alignment.topCenter,
                 child: SizedBox(
-                  height: height,
+                  height: height + bottomMargin,
                   child: child,
                 ),
               );
