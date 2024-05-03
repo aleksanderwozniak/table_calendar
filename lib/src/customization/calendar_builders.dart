@@ -42,6 +42,15 @@ class CalendarBuilders<T> {
   /// Custom builder for day cells that fall within the currently selected range.
   final FocusedDayBuilder? withinRangeBuilder;
 
+  /// Custom builder for a day cell that is the start of one of the specified periods.
+  final FocusedDayBuilder? periodStartBuilder;
+
+  /// Custom builder for a day cell that is the end of one of the specified periods.
+  final FocusedDayBuilder? periodEndBuilder;
+
+  /// Custom builder for day cells that fall within one of the specified periods.
+  final FocusedDayBuilder? withinPeriodBuilder;
+
   /// Custom builder for day cells, of which the `day.month` is different than `focusedDay.month`.
   /// This will affect day cells that do not match the currently focused month.
   final FocusedDayBuilder? outsideBuilder;
@@ -61,6 +70,10 @@ class CalendarBuilders<T> {
   /// Custom builder for background highlight of range selection.
   /// If `isWithinRange` is true, then `day` is within the selected range.
   final HighlightBuilder? rangeHighlightBuilder;
+
+  /// Custom builder for background highlight of period.
+  /// If `isWithinRange` is true, then `day` is within a period.
+  final HighlightBuilder? periodHighlightBuilder;
 
   /// Custom builder for a single event marker. Each of those will be displayed in a `Row` above of the day cell.
   /// You can adjust markers' position with `CalendarStyle` properties.
@@ -100,5 +113,9 @@ class CalendarBuilders<T> {
     this.dowBuilder,
     this.headerTitleBuilder,
     this.weekNumberBuilder,
+    this.periodStartBuilder,
+    this.periodEndBuilder,
+    this.withinPeriodBuilder,
+    this.periodHighlightBuilder,
   });
 }

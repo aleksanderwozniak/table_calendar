@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:table_calendar/src/shared/period.dart';
 
 import 'customization/calendar_builders.dart';
 import 'customization/calendar_style.dart';
@@ -40,6 +41,9 @@ class TableCalendar<T> extends StatefulWidget {
 
   /// The end of the selected day range.
   final DateTime? rangeEndDay;
+
+  /// List of periods that will be highlighted.
+  final List<Period>? highlightedPeriods;
 
   /// DateTime that determines which days are currently visible and focused.
   final DateTime focusedDay;
@@ -214,6 +218,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.locale,
     this.rangeStartDay,
     this.rangeEndDay,
+    this.highlightedPeriods,
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
     this.calendarFormat = CalendarFormat.month,
     this.availableCalendarFormats = const {
@@ -584,23 +589,53 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final children = <Widget>[];
 
-        final isWithinRange = widget.rangeStartDay != null &&
+        // Handle display of periods of time
+        final consolidatedPeriods = widget.highlightedPeriods.mergeOverlappingPeriods();
+        final isPeriodWithinRange = _hasPeriodWithinRange(day,consolidatedPeriods);
+        final isPeriodRangeStart = _periodHasStartDateToday(day, consolidatedPeriods);
+        final isPeriodRangeEnd = _periodHasEndDateToday(day, consolidatedPeriods);
+
+        Widget? periodHighlight = widget.calendarBuilders.periodHighlightBuilder
+            ?.call(context, day, isPeriodWithinRange);
+
+        if (periodHighlight == null) {
+          if (isPeriodWithinRange) {
+            periodHighlight = Center(
+              child: Container(
+                margin: EdgeInsetsDirectional.only(
+                  start: isPeriodRangeStart ? constraints.maxWidth * 0.5 : 0.0,
+                  end: isPeriodRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
+                ),
+                height:
+                    (shorterSide - widget.calendarStyle.cellMargin.vertical) *
+                        widget.calendarStyle.periodHighlightScale,
+                color: widget.calendarStyle.periodHighlightColor,
+              ),
+            );
+          }
+        }
+
+        if (periodHighlight != null) {
+          children.add(periodHighlight);
+        }
+
+        // Handle Selection on multiple days
+        final isSelectWithinRange = widget.rangeStartDay != null &&
             widget.rangeEndDay != null &&
             _isWithinRange(day, widget.rangeStartDay!, widget.rangeEndDay!);
-
-        final isRangeStart = isSameDay(day, widget.rangeStartDay);
-        final isRangeEnd = isSameDay(day, widget.rangeEndDay);
+        final isSelectRangeStart = isSameDay(day, widget.rangeStartDay);
+        final isSelectRangeEnd = isSameDay(day, widget.rangeEndDay);
 
         Widget? rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder
-            ?.call(context, day, isWithinRange);
+            ?.call(context, day, isSelectWithinRange);
 
         if (rangeHighlight == null) {
-          if (isWithinRange) {
+          if (isSelectWithinRange) {
             rangeHighlight = Center(
               child: Container(
                 margin: EdgeInsetsDirectional.only(
-                  start: isRangeStart ? constraints.maxWidth * 0.5 : 0.0,
-                  end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
+                  start: isSelectRangeStart ? constraints.maxWidth * 0.5 : 0.0,
+                  end: isSelectRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
                 ),
                 height:
                     (shorterSide - widget.calendarStyle.cellMargin.vertical) *
@@ -611,7 +646,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           }
         }
 
-        if (rangeHighlight != null) {
+        if (rangeHighlight != null){
           children.add(rangeHighlight);
         }
 
@@ -628,9 +663,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isTodayHighlighted: widget.calendarStyle.isTodayHighlighted,
           isToday: isToday,
           isSelected: widget.selectedDayPredicate?.call(day) ?? false,
-          isRangeStart: isRangeStart,
-          isRangeEnd: isRangeEnd,
-          isWithinRange: isWithinRange,
+          isRangeStart: isSelectRangeStart,
+          isPeriodStart: isPeriodRangeStart,
+          isRangeEnd: isSelectRangeEnd,
+          isPeriodEnd: isPeriodRangeEnd,
+          isWithinRange: isSelectWithinRange,
+          isWithinPeriod: isPeriodWithinRange,
           isOutside: isOutside,
           isDisabled: isDisabled,
           isWeekend: isWeekend,
@@ -732,6 +770,20 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     return false;
   }
 
+  bool _hasPeriodWithinRange(DateTime day, List<Period>? highlightedPeriods) {
+    if (highlightedPeriods == null || highlightedPeriods.isEmpty) {
+      return false;
+    }
+
+    for (final period in highlightedPeriods) {
+      if (_isWithinRange(day, period.startDate, period.endDate)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   bool _isDayDisabled(DateTime day) {
     return day.isBefore(widget.firstDay) ||
         day.isAfter(widget.lastDay) ||
@@ -776,5 +828,33 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     List<int> weekendDays = const [DateTime.saturday, DateTime.sunday],
   }) {
     return weekendDays.contains(day.weekday);
+  }
+
+  bool _periodHasStartDateToday(DateTime day, List<Period>? highlightedPeriods) {
+    if (highlightedPeriods == null || highlightedPeriods.isEmpty) {
+      return false;
+    }
+
+    for (final period in highlightedPeriods) {
+      if (isSameDay(day, period.startDate)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool _periodHasEndDateToday(DateTime day, List<Period>? highlightedPeriods) {
+    if (highlightedPeriods == null || highlightedPeriods.isEmpty) {
+      return false;
+    }
+
+    for (final period in highlightedPeriods) {
+      if (isSameDay(day, period.endDate)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
