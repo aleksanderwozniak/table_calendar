@@ -63,6 +63,12 @@ class CalendarStyle {
   /// Color of range selection highlight.
   final Color rangeHighlightColor;
 
+  /// Proportion of period highlight size in relation to day cell size.
+  final double periodHighlightScale;
+
+  /// Color of period highlight.
+  final Color periodHighlightColor;
+
   /// Determines if day cells that do not match the currently focused month should be visible.
   ///
   /// Affects only `CalendarFormat.month`.
@@ -100,6 +106,24 @@ class CalendarStyle {
 
   /// Decoration for day cells that fall within the currently selected range.
   final Decoration withinRangeDecoration;
+
+  /// TextStyle for a day cell that is the start of a period.
+  final TextStyle periodStartTextStyle;
+
+  /// Decoration for a day cell that is the start of a period.
+  final Decoration periodStartDecoration;
+
+  /// TextStyle for a day cell that is the end of a period.
+  final TextStyle periodEndTextStyle;
+
+  /// Decoration for a day cell that is the end of a period.
+  final Decoration periodEndDecoration;
+
+  /// TextStyle for day cells that fall within the a period.
+  final TextStyle withinPeriodTextStyle;
+
+  /// Decoration for day cells that fall within the a period.
+  final Decoration withinPeriodDecoration;
 
   /// TextStyle for day cells, of which the `day.month` is different than `focusedDay.month`.
   /// This will affect day cells that do not match the currently focused month.
@@ -227,6 +251,29 @@ class CalendarStyle {
     this.rowDecoration = const BoxDecoration(),
     this.tableBorder = const TableBorder(),
     this.tablePadding = const EdgeInsets.all(0),
+    this.periodStartTextStyle = const TextStyle(
+      color: const Color(0xFF666666),
+      fontSize: 16.0,
+    ),
+    this.periodStartDecoration = const BoxDecoration(
+      color: const Color(0xFFBFD5FF),
+      shape: BoxShape.circle,
+    ),
+    this.periodEndTextStyle = const TextStyle(
+      color: const Color(0xFF666666),
+      fontSize: 16.0,
+    ),
+    this.periodEndDecoration = const BoxDecoration(
+      color: const Color(0xFFBFD5FF),
+      shape: BoxShape.circle,
+    ),
+    this.withinPeriodTextStyle = const TextStyle(
+      color: const Color(0xFF666666),
+      fontSize: 16.0,
+    ),
+    this.withinPeriodDecoration = const BoxDecoration(shape: BoxShape.circle),
+    this.periodHighlightScale = 1.0,
+    this.periodHighlightColor = const Color(0xFFBFD5FF),
   });
 }
 
