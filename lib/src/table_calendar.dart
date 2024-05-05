@@ -366,6 +366,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         } else if (day.isBefore(_firstSelectedDay!)) {
           widget.onRangeSelected!(day, _firstSelectedDay, _focusedDay.value);
           _firstSelectedDay = null;
+        } else {
+          widget.onRangeSelected!(day, day, _focusedDay.value);
+          _firstSelectedDay = null;
         }
       }
     } else {
