@@ -114,7 +114,8 @@ class CalendarCore extends StatelessWidget {
               height: constrainedRowHeight ?? rowHeight,
               child: weekNumberBuilder?.call(context, day),
             );
-          },
+          }, 
+          daysInWeek: onlyWeekDays == false ? 7 : 5,
         );
       },
       onPageChanged: (index) {

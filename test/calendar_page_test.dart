@@ -38,6 +38,7 @@ void main() {
               return Text('${day.day}');
             },
             dowVisible: false,
+            daysInWeek: 7,
           ),
         ),
       );
@@ -62,6 +63,7 @@ void main() {
               return Text('${day.weekday}');
             },
             dowHeight: 5,
+            daysInWeek: 7,
           ),
         ),
       );
@@ -88,6 +90,7 @@ void main() {
                 return Text('${day.day}');
               },
               dowVisible: true,
+              daysInWeek: 7,
             ),
           ),
         );
@@ -110,6 +113,7 @@ void main() {
               return Text('${day.weekday}');
             },
             dowHeight: 5,
+            daysInWeek: 7,
           ),
         ),
       );
@@ -139,6 +143,7 @@ void main() {
           weekNumberBuilder: (BuildContext context, DateTime day) {
             return Text(day.weekday.toString());
           },
+          daysInWeek: 7,
         ),
       ));
 
