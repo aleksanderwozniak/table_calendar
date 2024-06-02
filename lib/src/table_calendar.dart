@@ -35,6 +35,11 @@ class TableCalendar<T> extends StatefulWidget {
   /// If nothing is provided, a default locale will be used.
   final dynamic locale;
 
+  /// Locale to format day cell with, for example: `'en_US'`.
+  ///
+  /// If nothing is provided, [locale] will be used.
+  final dynamic dayLocale;
+
   /// The start of the selected day range.
   final DateTime? rangeStartDay;
 
@@ -212,6 +217,7 @@ class TableCalendar<T> extends StatefulWidget {
     required DateTime lastDay,
     DateTime? currentDay,
     this.locale,
+    this.dayLocale,
     this.rangeStartDay,
     this.rangeEndDay,
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
@@ -635,7 +641,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isDisabled: isDisabled,
           isWeekend: isWeekend,
           isHoliday: widget.holidayPredicate?.call(day) ?? false,
-          locale: widget.locale,
+          locale: widget.dayLocale ?? widget.locale,
         );
 
         children.add(content);

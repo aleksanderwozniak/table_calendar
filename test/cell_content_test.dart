@@ -22,6 +22,7 @@ Widget setupTestWidget(
   bool isHoliday = false,
   bool isTodayHighlighted = true,
   String? locale,
+  String? dayLocale,
 }) {
   final calendarStyle = CalendarStyle();
 
@@ -42,7 +43,7 @@ Widget setupTestWidget(
       isWithinRange: isWithinRange,
       isHoliday: isHoliday,
       isTodayHighlighted: isTodayHighlighted,
-      locale: locale,
+      locale: dayLocale ?? locale,
     ),
   );
 }
@@ -316,23 +317,24 @@ void main() {
   });
 
   group('CalendarBuilders Locale test:', () {
-    testWidgets('en locale', (tester) async {
-      final locale = 'en';
-      initializeDateFormatting(locale, null);
+    testWidgets('uses dayLocale for localization', (tester) async {
+      final dayLocale = 'ar';
+      initializeDateFormatting(dayLocale, null);
 
       final cellDay = DateTime.utc(2021, 7, 15);
       await tester.pumpWidget(
         setupTestWidget(
           cellDay,
-          locale: locale,
+          locale: 'en',
+          dayLocale: dayLocale,
         ),
       );
 
-      final dayFinder = find.text(DateFormat.d(locale).format(cellDay));
+      final dayFinder = find.text(DateFormat.d(dayLocale).format(cellDay));
       expect(dayFinder, findsOneWidget);
     });
 
-    testWidgets('ar locale', (tester) async {
+    testWidgets('uses locale if dayLocale is not passed', (tester) async {
       final locale = 'ar';
       initializeDateFormatting(locale, null);
 
