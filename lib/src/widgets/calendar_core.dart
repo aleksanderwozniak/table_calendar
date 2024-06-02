@@ -168,15 +168,15 @@ class CalendarCore extends StatelessWidget {
 
     switch (format) {
       case CalendarFormat.month:
-        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif);
+        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif).toLocal();
         break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
-            prevFocusedDay.day + pageDif * 14);
+            prevFocusedDay.day + pageDif * 14).toLocal();
         break;
       case CalendarFormat.week:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
-            prevFocusedDay.day + pageDif * 7);
+            prevFocusedDay.day + pageDif * 7).toLocal();
         break;
     }
 
@@ -194,15 +194,15 @@ class CalendarCore extends StatelessWidget {
 
     switch (format) {
       case CalendarFormat.month:
-        day = DateTime.utc(firstDay.year, firstDay.month + pageIndex);
+        day = DateTime.utc(firstDay.year, firstDay.month + pageIndex).toLocal();
         break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(
-            firstDay.year, firstDay.month, firstDay.day + pageIndex * 14);
+            firstDay.year, firstDay.month, firstDay.day + pageIndex * 14).toLocal();
         break;
       case CalendarFormat.week:
         day = DateTime.utc(
-            firstDay.year, firstDay.month, firstDay.day + pageIndex * 7);
+            firstDay.year, firstDay.month, firstDay.day + pageIndex * 7).toLocal();
         break;
     }
 
@@ -263,7 +263,7 @@ class CalendarCore extends StatelessWidget {
     final dayCount = last.difference(first).inDays + 1;
     return List.generate(
       dayCount,
-      (index) => DateTime.utc(first.year, first.month, first.day + index),
+      (index) => DateTime.utc(first.year, first.month, first.day + index).toLocal(),
     );
   }
 
@@ -273,13 +273,13 @@ class CalendarCore extends StatelessWidget {
   }
 
   DateTime _firstDayOfMonth(DateTime month) {
-    return DateTime.utc(month.year, month.month, 1);
+    return DateTime.utc(month.year, month.month, 1).toLocal();
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
     final date = month.month < 12
-        ? DateTime.utc(month.year, month.month + 1, 1)
-        : DateTime.utc(month.year + 1, 1, 1);
+        ? DateTime.utc(month.year, month.month + 1, 1).toLocal()
+        : DateTime.utc(month.year + 1, 1, 1).toLocal();
     return date.subtract(const Duration(days: 1));
   }
 
