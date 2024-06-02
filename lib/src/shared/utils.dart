@@ -40,7 +40,7 @@ int getWeekdayNumber(StartingDayOfWeek weekday) {
 
 /// Returns `date` in UTC format, without its time part.
 DateTime normalizeDate(DateTime date) {
-  return DateTime.utc(date.year, date.month, date.day);
+  return DateTime.utc(date.year, date.month, date.day).toLocal();
 }
 
 /// Checks if two DateTime objects are the same day.
