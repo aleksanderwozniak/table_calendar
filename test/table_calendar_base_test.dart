@@ -39,6 +39,8 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.month,
               startingDayOfWeek: StartingDayOfWeek.sunday,
+              weekendDays: [DateTime.saturday, DateTime.sunday],
+              onlyWeekDays: false,
             ),
           ),
         );
@@ -85,6 +87,8 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.twoWeeks,
               startingDayOfWeek: StartingDayOfWeek.sunday,
+              weekendDays: [DateTime.saturday, DateTime.sunday],
+              onlyWeekDays: false,
             ),
           ),
         );
@@ -131,6 +135,8 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.week,
               startingDayOfWeek: StartingDayOfWeek.sunday,
+              weekendDays: [DateTime.saturday, DateTime.sunday],
+              onlyWeekDays: false,
             ),
           ),
         );
@@ -177,6 +183,8 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.month,
               startingDayOfWeek: StartingDayOfWeek.monday,
+              weekendDays: [DateTime.saturday, DateTime.sunday],
+              onlyWeekDays: false,
             ),
           ),
         );
@@ -223,6 +231,8 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.twoWeeks,
               startingDayOfWeek: StartingDayOfWeek.monday,
+              weekendDays: [DateTime.saturday, DateTime.sunday],
+              onlyWeekDays: false,
             ),
           ),
         );
@@ -269,6 +279,8 @@ void main() {
               dowVisible: false,
               calendarFormat: CalendarFormat.week,
               startingDayOfWeek: StartingDayOfWeek.monday,
+              weekendDays: [DateTime.saturday, DateTime.sunday],
+              onlyWeekDays: false,
             ),
           ),
         );
@@ -327,6 +339,8 @@ void main() {
             },
             rowHeight: 52,
             dowVisible: false,
+            weekendDays: [DateTime.saturday, DateTime.sunday],
+            onlyWeekDays: false,
           ),
         ),
       );
@@ -372,6 +386,8 @@ void main() {
               dowBuilder: (context, day) {
                 return Text('${day.weekday}');
               },
+              weekendDays: [DateTime.saturday, DateTime.sunday],
+              onlyWeekDays: false,
             ),
           ),
         );
