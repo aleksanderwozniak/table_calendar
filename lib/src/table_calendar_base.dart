@@ -26,6 +26,7 @@ class TableCalendarBase extends StatefulWidget {
   final EdgeInsets? tablePadding;
   final Duration formatAnimationDuration;
   final Curve formatAnimationCurve;
+  final bool pageSnapping;
   final bool pageAnimationEnabled;
   final Duration pageAnimationDuration;
   final Curve pageAnimationCurve;
@@ -57,6 +58,7 @@ class TableCalendarBase extends StatefulWidget {
     this.tablePadding,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
+    this.pageSnapping = true,
     this.pageAnimationEnabled = true,
     this.pageAnimationDuration = const Duration(milliseconds: 300),
     this.pageAnimationCurve = Curves.easeOut,
@@ -211,6 +213,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               scrollPhysics: _canScrollHorizontally
                   ? PageScrollPhysics()
                   : NeverScrollableScrollPhysics(),
+              pageSnapping: widget.pageSnapping,
               firstDay: widget.firstDay,
               lastDay: widget.lastDay,
               startingDayOfWeek: widget.startingDayOfWeek,

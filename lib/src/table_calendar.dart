@@ -96,6 +96,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// if the currently visible calendar page is changed.
   final bool pageAnimationEnabled;
 
+  /// Set to false to disable horizontal page snapping, useful for custom scroll behavior.
+  final bool pageSnapping;
+
   /// When set to true, `CalendarFormat.month` will always display six weeks,
   /// even if the content would fit in less.
   final bool sixWeekMonthsEnforced;
@@ -225,6 +228,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.daysOfWeekVisible = true,
     this.pageJumpingEnabled = false,
     this.pageAnimationEnabled = true,
+    this.pageSnapping = true,
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
     this.weekNumbersVisible = false,
@@ -503,6 +507,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             pageAnimationCurve: widget.pageAnimationCurve,
             availableCalendarFormats: widget.availableCalendarFormats,
             simpleSwipeConfig: widget.simpleSwipeConfig,
+            pageSnapping: widget.pageSnapping,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
             onVerticalSwipe: _swipeCalendarFormat,
             onPageChanged: (focusedDay) {
