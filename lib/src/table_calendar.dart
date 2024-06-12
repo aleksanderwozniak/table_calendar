@@ -3,6 +3,7 @@
 
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -210,6 +211,7 @@ class TableCalendar<T> extends StatefulWidget {
     required DateTime focusedDay,
     required DateTime firstDay,
     required DateTime lastDay,
+    required this.headerStyle,
     DateTime? currentDay,
     this.locale,
     this.rangeStartDay,
@@ -241,7 +243,6 @@ class TableCalendar<T> extends StatefulWidget {
       verticalThreshold: 25.0,
       swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
     ),
-    this.headerStyle = const HeaderStyle(),
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.calendarStyle = const CalendarStyle(),
     this.calendarBuilders = const CalendarBuilders(),
@@ -556,11 +557,14 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
-              return GestureDetector(
-                behavior: widget.dayHitTestBehavior,
-                onTap: () => _onDayTapped(day),
-                onLongPress: () => _onDayLongPressed(day),
-                child: _buildCell(day, focusedMonth),
+              return Semantics(
+                excludeSemantics: _isDayDisabled(day),
+                child: GestureDetector(
+                  behavior: widget.dayHitTestBehavior,
+                  onTap: () => _onDayTapped(day),
+                  onLongPress: () => _onDayLongPressed(day),
+                  child: _buildCell(day, focusedMonth),
+                ),
               );
             },
           ),

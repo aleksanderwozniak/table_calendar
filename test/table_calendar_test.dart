@@ -31,6 +31,14 @@ Widget createTableCalendar({
 }) {
   return setupTestWidget(
     TableCalendar(
+      headerStyle: HeaderStyle(
+        leftChevronIcon: Icon(
+          Icons.chevron_left,
+        ),
+        rightChevronIcon: Icon(
+          Icons.chevron_right,
+        ),
+      ),
       focusedDay: focusedDay ?? initialFocusedDay,
       firstDay: firstDay,
       lastDay: lastDay,
@@ -425,6 +433,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -465,6 +481,14 @@ void main() {
       (tester) async {
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -489,6 +513,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: now,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -510,6 +542,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -535,6 +575,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -636,6 +684,14 @@ void main() {
 
       await tester.pumpWidget(setupTestWidget(
         TableCalendar(
+          headerStyle: HeaderStyle(
+            leftChevronIcon: Icon(
+              Icons.chevron_left,
+            ),
+            rightChevronIcon: Icon(
+              Icons.chevron_right,
+            ),
+          ),
           focusedDay: today,
           firstDay: firstDay,
           lastDay: lastDay,
@@ -661,6 +717,14 @@ void main() {
 
       await tester.pumpWidget(setupTestWidget(
         TableCalendar(
+          headerStyle: HeaderStyle(
+            leftChevronIcon: Icon(
+              Icons.chevron_left,
+            ),
+            rightChevronIcon: Icon(
+              Icons.chevron_right,
+            ),
+          ),
           focusedDay: today,
           firstDay: firstDay,
           lastDay: lastDay,
@@ -686,6 +750,14 @@ void main() {
 
       await tester.pumpWidget(setupTestWidget(
         TableCalendar(
+          headerStyle: HeaderStyle(
+            leftChevronIcon: Icon(
+              Icons.chevron_left,
+            ),
+            rightChevronIcon: Icon(
+              Icons.chevron_right,
+            ),
+          ),
           focusedDay: today,
           firstDay: firstDay,
           lastDay: lastDay,
@@ -715,6 +787,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -743,6 +823,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -772,6 +860,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -806,6 +902,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: DateTime.utc(2021, 8, 16),
             firstDay: firstDay,
             lastDay: lastDay,
@@ -841,6 +945,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -869,6 +981,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -898,6 +1018,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -932,6 +1060,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: DateTime.utc(2021, 8, 16),
             firstDay: firstDay,
             lastDay: lastDay,
@@ -969,6 +1105,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -1013,6 +1157,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -1058,6 +1210,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -1113,6 +1273,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -1168,6 +1336,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -1223,6 +1399,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -1278,6 +1462,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -1313,6 +1505,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
@@ -1348,6 +1548,14 @@ void main() {
 
         await tester.pumpWidget(setupTestWidget(
           TableCalendar(
+            headerStyle: HeaderStyle(
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+              ),
+            ),
             focusedDay: initialFocusedDay,
             firstDay: firstDay,
             lastDay: lastDay,
