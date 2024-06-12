@@ -161,6 +161,11 @@ class TableCalendar<T> extends StatefulWidget {
   /// * `RangeSelectionMode.enforced` - range selection is always on.
   final RangeSelectionMode rangeSelectionMode;
 
+  /// Allows to load events for days that are not enabled
+  /// If `true` it will ignore `enabledDayPredicate` when calling `eventLoader`.
+  /// If `false` then `enabledDayPredicate` will be used to check when to call `eventLoader`
+  final bool loadEventsForDisabledDays;
+
   /// Function that assigns a list of events to a specified day.
   final List<T> Function(DateTime day)? eventLoader;
 
@@ -248,6 +253,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.rangeSelectionMode = RangeSelectionMode.toggledOff,
     this.eventLoader,
     this.enabledDayPredicate,
+    this.loadEventsForDisabledDays = false,
     this.selectedDayPredicate,
     this.holidayPredicate,
     this.onRangeSelected,
@@ -640,7 +646,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         children.add(content);
 
-        if (!isDisabled) {
+        if (widget.loadEventsForDisabledDays || !isDisabled) {
           final events = widget.eventLoader?.call(day) ?? [];
           Widget? markerWidget =
               widget.calendarBuilders.markerBuilder?.call(context, day, events);
