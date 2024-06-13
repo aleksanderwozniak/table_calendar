@@ -36,6 +36,7 @@ class TableCalendarBase extends StatefulWidget {
   final SwipeCallback? onVerticalSwipe;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
+  final int displayDaysNumber;
 
   TableCalendarBase({
     Key? key,
@@ -74,6 +75,7 @@ class TableCalendarBase extends StatefulWidget {
     this.onVerticalSwipe,
     this.onPageChanged,
     this.onCalendarCreated,
+    this.displayDaysNumber=7,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
         assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay)),
@@ -206,6 +208,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               );
             },
             child: CalendarCore(
+              displayDaysNumber: widget.displayDaysNumber,
               constraints: constraints,
               pageController: _pageController,
               scrollPhysics: _canScrollHorizontally
