@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart';
-
 import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_page.dart';
 
@@ -54,7 +53,7 @@ class CalendarCore extends StatelessWidget {
     this.tableBorder,
     this.tablePadding,
     this.scrollPhysics,
-  })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null));
+  }) : assert(!dowVisible || (dowHeight != null && dowBuilder != null));
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +132,6 @@ class CalendarCore extends StatelessWidget {
         return _getTwoWeekCount(first, last) + 1;
       case CalendarFormat.week:
         return _getWeekCount(first, last) + 1;
-      default:
-        return _getMonthCount(first, last) + 1;
     }
   }
 
@@ -168,21 +165,18 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif);
-        break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(
           prevFocusedDay.year,
           prevFocusedDay.month,
           prevFocusedDay.day + pageDif * 14,
         );
-        break;
       case CalendarFormat.week:
         day = DateTime.utc(
           prevFocusedDay.year,
           prevFocusedDay.month,
           prevFocusedDay.day + pageDif * 7,
         );
-        break;
     }
 
     if (day.isBefore(firstDay)) {
@@ -200,21 +194,18 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(firstDay.year, firstDay.month + pageIndex);
-        break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(
           firstDay.year,
           firstDay.month,
           firstDay.day + pageIndex * 14,
         );
-        break;
       case CalendarFormat.week:
         day = DateTime.utc(
           firstDay.year,
           firstDay.month,
           firstDay.day + pageIndex * 7,
         );
-        break;
     }
 
     if (day.isBefore(firstDay)) {
@@ -234,8 +225,6 @@ class CalendarCore extends StatelessWidget {
         return _daysInTwoWeeks(focusedDay);
       case CalendarFormat.week:
         return _daysInWeek(focusedDay);
-      default:
-        return _daysInMonth(focusedDay);
     }
   }
 

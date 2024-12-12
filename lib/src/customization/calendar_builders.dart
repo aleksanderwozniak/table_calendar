@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
-
 import 'package:table_calendar/src/shared/utils.dart'
     show DayBuilder, FocusedDayBuilder;
 

@@ -4,7 +4,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:table_calendar/src/shared/utils.dart' show CalendarFormat;
 
 class FormatButton extends StatelessWidget {
