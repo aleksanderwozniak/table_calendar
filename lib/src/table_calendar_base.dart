@@ -5,7 +5,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-
 import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_core.dart';
 
@@ -286,8 +285,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         return _getTwoWeekCount(startDay, focusedDay);
       case CalendarFormat.week:
         return _getWeekCount(startDay, focusedDay);
-      default:
-        return _getMonthCount(startDay, focusedDay);
     }
   }
 
