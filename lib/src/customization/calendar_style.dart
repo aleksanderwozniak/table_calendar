@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 /// Class containing styling and configuration for `TableCalendar`'s content.
 class CalendarStyle {
@@ -151,6 +152,15 @@ class CalendarStyle {
   /// Padding for the internal `Table` widget.
   final EdgeInsets tablePadding;
 
+  /// Use to customize the text within each day cell.
+  /// Defaults to `'${date.day}'`, to show just the day number.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// dayTextFormatter: (date, locale) => DateFormat.d(locale).format(date),
+  /// ```
+  final TextFormatter? dayTextFormatter;
+
   /// Creates a `CalendarStyle` used by `TableCalendar` widget.
   const CalendarStyle({
     this.isTodayHighlighted = true,
@@ -227,6 +237,7 @@ class CalendarStyle {
     this.rowDecoration = const BoxDecoration(),
     this.tableBorder = const TableBorder(),
     this.tablePadding = EdgeInsets.zero,
+    this.dayTextFormatter,
   });
 }
 

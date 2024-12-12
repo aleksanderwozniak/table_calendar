@@ -3,12 +3,15 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:table_calendar/src/widgets/cell_content.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 Widget setupTestWidget(
   DateTime cellDay, {
   CalendarBuilders calendarBuilders = const CalendarBuilders(),
+  CalendarStyle calendarStyle = const CalendarStyle(),
   bool isDisabled = false,
   bool isToday = false,
   bool isWeekend = false,
@@ -19,9 +22,8 @@ Widget setupTestWidget(
   bool isWithinRange = false,
   bool isHoliday = false,
   bool isTodayHighlighted = true,
+  String? locale,
 }) {
-  const calendarStyle = CalendarStyle();
-
   return Directionality(
     textDirection: TextDirection.ltr,
     child: CellContent(
@@ -39,6 +41,7 @@ Widget setupTestWidget(
       isWithinRange: isWithinRange,
       isHoliday: isHoliday,
       isTodayHighlighted: isTodayHighlighted,
+      locale: locale,
     ),
   );
 }
@@ -309,5 +312,79 @@ void main() {
         expect(builderName, 'prioritizedBuilder');
       },
     );
+  });
+
+  group('CalendarBuilders Locale test:', () {
+    testWidgets('en locale with default dayTextFormatter', (tester) async {
+      final locale = 'en';
+      initializeDateFormatting(locale, null);
+
+      final cellDay = DateTime.utc(2021, 7, 15);
+      await tester.pumpWidget(
+        setupTestWidget(
+          cellDay,
+          locale: locale,
+        ),
+      );
+
+      final dayFinder = find.text('${cellDay.day}');
+      expect(dayFinder, findsOneWidget);
+    });
+
+    testWidgets('en locale with custom dayTextFormatter', (tester) async {
+      final locale = 'en';
+      initializeDateFormatting(locale, null);
+
+      final cellDay = DateTime.utc(2021, 7, 15);
+      await tester.pumpWidget(
+        setupTestWidget(
+          cellDay,
+          locale: locale,
+          calendarStyle: CalendarStyle(
+            dayTextFormatter: (date, locale) =>
+                DateFormat.d(locale).format(date),
+          ),
+        ),
+      );
+
+      final dayFinder = find.text(DateFormat.d(locale).format(cellDay));
+      expect(dayFinder, findsOneWidget);
+    });
+
+    testWidgets('ar locale with default dayTextFormatter', (tester) async {
+      final locale = 'ar';
+      initializeDateFormatting(locale, null);
+
+      final cellDay = DateTime.utc(2021, 7, 15);
+      await tester.pumpWidget(
+        setupTestWidget(
+          cellDay,
+          locale: locale,
+        ),
+      );
+
+      final dayFinder = find.text('${cellDay.day}');
+      expect(dayFinder, findsOneWidget);
+    });
+
+    testWidgets('ar locale with custom dayTextFormatter', (tester) async {
+      final locale = 'ar';
+      initializeDateFormatting(locale, null);
+
+      final cellDay = DateTime.utc(2021, 7, 15);
+      await tester.pumpWidget(
+        setupTestWidget(
+          cellDay,
+          locale: locale,
+          calendarStyle: CalendarStyle(
+            dayTextFormatter: (date, locale) =>
+                DateFormat.d(locale).format(date),
+          ),
+        ),
+      );
+
+      final dayFinder = find.text(DateFormat.d(locale).format(cellDay));
+      expect(dayFinder, findsOneWidget);
+    });
   });
 }

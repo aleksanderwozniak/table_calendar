@@ -1,3 +1,17 @@
+## [3.1.2]
+
+* Added dayTextFormatter property to CalendarStyle that allows to customize the text within day cells
+* Reverted the default day cell's text formatting to just the day's number
+
+## [3.1.1]
+
+* Added cell text localization based on current locale
+
+## [3.1.0]
+
+* Upgraded to Dart 3
+* Updated intl version to 0.19.0
+
 ## [3.0.9]
 
 * Updated intl version to 0.18.0

@@ -60,7 +60,8 @@ class CellContent extends StatelessWidget {
       );
     }
 
-    final text = '${day.day}';
+    final text =
+        calendarStyle.dayTextFormatter?.call(day, locale) ?? '${day.day}';
     final margin = calendarStyle.cellMargin;
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;
