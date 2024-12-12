@@ -65,7 +65,7 @@ class CalendarPage extends StatelessWidget {
           (index) => Expanded(
             child: weekNumberBuilder!(context, visibleDays[index * 7]),
           ),
-        )
+        ),
       ],
     );
   }

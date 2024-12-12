@@ -165,21 +165,18 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif);
-        break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(
           prevFocusedDay.year,
           prevFocusedDay.month,
           prevFocusedDay.day + pageDif * 14,
         );
-        break;
       case CalendarFormat.week:
         day = DateTime.utc(
           prevFocusedDay.year,
           prevFocusedDay.month,
           prevFocusedDay.day + pageDif * 7,
         );
-        break;
     }
 
     if (day.isBefore(firstDay)) {
@@ -197,21 +194,18 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(firstDay.year, firstDay.month + pageIndex);
-        break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(
           firstDay.year,
           firstDay.month,
           firstDay.day + pageIndex * 14,
         );
-        break;
       case CalendarFormat.week:
         day = DateTime.utc(
           firstDay.year,
           firstDay.month,
           firstDay.day + pageIndex * 7,
         );
-        break;
     }
 
     if (day.isBefore(firstDay)) {

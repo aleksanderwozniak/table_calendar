@@ -1,14 +1,11 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-// ignore_for_file: library_private_types_in_public_api
-
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-
 import 'package:table_calendar/src/customization/calendar_builders.dart';
 import 'package:table_calendar/src/customization/calendar_style.dart';
 import 'package:table_calendar/src/customization/days_of_week_style.dart';
@@ -281,7 +278,7 @@ class TableCalendar<T> extends StatefulWidget {
         currentDay = currentDay ?? DateTime.now();
 
   @override
-  _TableCalendarState<T> createState() => _TableCalendarState<T>();
+  State<TableCalendar<T>> createState() => _TableCalendarState<T>();
 }
 
 class _TableCalendarState<T> extends State<TableCalendar<T>> {

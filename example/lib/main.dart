@@ -3,18 +3,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
-import 'pages/basics_example.dart';
-import 'pages/complex_example.dart';
-import 'pages/events_example.dart';
-import 'pages/multi_example.dart';
-import 'pages/range_example.dart';
+import 'package:table_calendar_example/pages/basics_example.dart';
+import 'package:table_calendar_example/pages/complex_example.dart';
+import 'package:table_calendar_example/pages/events_example.dart';
+import 'package:table_calendar_example/pages/multi_example.dart';
+import 'package:table_calendar_example/pages/range_example.dart';
 
 void main() {
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+  initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,14 +23,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: StartPage(),
+      home: const StartPage(),
     );
   }
 }
 
 class StartPage extends StatefulWidget {
+  const StartPage({super.key});
+
   @override
-  _StartPageState createState() => _StartPageState();
+  State<StartPage> createState() => _StartPageState();
 }
 
 class _StartPageState extends State<StartPage> {
@@ -37,7 +40,7 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TableCalendar Example'),
+        title: const Text('TableCalendar Example'),
       ),
       body: Center(
         child: Column(
@@ -45,42 +48,42 @@ class _StartPageState extends State<StartPage> {
           children: [
             const SizedBox(height: 20.0),
             ElevatedButton(
-              child: Text('Basics'),
+              child: const Text('Basics'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => TableBasicsExample()),
+                MaterialPageRoute(builder: (_) => const TableBasicsExample()),
               ),
             ),
             const SizedBox(height: 12.0),
             ElevatedButton(
-              child: Text('Range Selection'),
+              child: const Text('Range Selection'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => TableRangeExample()),
+                MaterialPageRoute(builder: (_) => const TableRangeExample()),
               ),
             ),
             const SizedBox(height: 12.0),
             ElevatedButton(
-              child: Text('Events'),
+              child: const Text('Events'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => TableEventsExample()),
+                MaterialPageRoute(builder: (_) => const TableEventsExample()),
               ),
             ),
             const SizedBox(height: 12.0),
             ElevatedButton(
-              child: Text('Multiple Selection'),
+              child: const Text('Multiple Selection'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => TableMultiExample()),
+                MaterialPageRoute(builder: (_) => const TableMultiExample()),
               ),
             ),
             const SizedBox(height: 12.0),
             ElevatedButton(
-              child: Text('Complex'),
+              child: const Text('Complex'),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => TableComplexExample()),
+                MaterialPageRoute(builder: (_) => const TableComplexExample()),
               ),
             ),
             const SizedBox(height: 20.0),

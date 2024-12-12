@@ -1,8 +1,6 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:table_calendar/src/shared/utils.dart';
@@ -80,7 +78,7 @@ class TableCalendarBase extends StatefulWidget {
         assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay));
 
   @override
-  _TableCalendarBaseState createState() => _TableCalendarBaseState();
+  State<TableCalendarBase> createState() => _TableCalendarBaseState();
 }
 
 class _TableCalendarBaseState extends State<TableCalendarBase> {

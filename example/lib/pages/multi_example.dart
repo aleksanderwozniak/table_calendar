@@ -1,16 +1,19 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+// ignore_for_file: avoid_print
+
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import '../utils.dart';
+import 'package:table_calendar_example/utils.dart';
 
 class TableMultiExample extends StatefulWidget {
+  const TableMultiExample({super.key});
+
   @override
-  _TableMultiExampleState createState() => _TableMultiExampleState();
+  State<TableMultiExample> createState() => _TableMultiExampleState();
 }
 
 class _TableMultiExampleState extends State<TableMultiExample> {
@@ -62,7 +65,7 @@ class _TableMultiExampleState extends State<TableMultiExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TableCalendar - Multi'),
+        title: const Text('TableCalendar - Multi'),
       ),
       body: Column(
         children: [
@@ -90,7 +93,7 @@ class _TableMultiExampleState extends State<TableMultiExample> {
             },
           ),
           ElevatedButton(
-            child: Text('Clear selection'),
+            child: const Text('Clear selection'),
             onPressed: () {
               setState(() {
                 _selectedDays.clear();
