@@ -20,7 +20,7 @@ void main() {
     testWidgets(
       'Initial format month returns twoWeeks when tapped',
       (tester) async {
-        final headerStyle = HeaderStyle();
+        const headerStyle = HeaderStyle();
         CalendarFormat? calendarFormat;
 
         await tester.pumpWidget(
@@ -51,7 +51,7 @@ void main() {
     testWidgets(
       'Initial format twoWeeks returns week when tapped',
       (tester) async {
-        final headerStyle = HeaderStyle();
+        const headerStyle = HeaderStyle();
         CalendarFormat? calendarFormat;
 
         await tester.pumpWidget(
@@ -82,7 +82,7 @@ void main() {
     testWidgets(
       'Initial format week return month when tapped',
       (tester) async {
-        final headerStyle = HeaderStyle();
+        const headerStyle = HeaderStyle();
         CalendarFormat? calendarFormat;
 
         await tester.pumpWidget(
@@ -115,15 +115,15 @@ void main() {
     testWidgets(
       'true - display next calendar format',
       (tester) async {
-        final headerStyle = HeaderStyle(formatButtonShowsNext: true);
+        const headerStyle = HeaderStyle();
 
-        final currentFormatIndex = 0;
+        const currentFormatIndex = 0;
         final currentFormat =
             calendarFormatMap.keys.elementAt(currentFormatIndex);
         final currentFormatText =
             calendarFormatMap.values.elementAt(currentFormatIndex);
 
-        final nextFormatIndex = 1;
+        const nextFormatIndex = 1;
         final nextFormatText =
             calendarFormatMap.values.elementAt(nextFormatIndex);
 
@@ -152,9 +152,9 @@ void main() {
     testWidgets(
       'false - display current calendar format',
       (tester) async {
-        final headerStyle = HeaderStyle(formatButtonShowsNext: false);
+        const headerStyle = HeaderStyle(formatButtonShowsNext: false);
 
-        final currentFormatIndex = 0;
+        const currentFormatIndex = 0;
         final currentFormat =
             calendarFormatMap.keys.elementAt(currentFormatIndex);
         final currentFormatText =

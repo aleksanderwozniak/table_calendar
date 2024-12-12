@@ -1,29 +1,36 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
-import 'customization/calendar_builders.dart';
-import 'customization/calendar_style.dart';
-import 'customization/days_of_week_style.dart';
-import 'customization/header_style.dart';
-import 'shared/utils.dart';
-import 'table_calendar_base.dart';
-import 'widgets/calendar_header.dart';
-import 'widgets/cell_content.dart';
+import 'package:table_calendar/src/customization/calendar_builders.dart';
+import 'package:table_calendar/src/customization/calendar_style.dart';
+import 'package:table_calendar/src/customization/days_of_week_style.dart';
+import 'package:table_calendar/src/customization/header_style.dart';
+import 'package:table_calendar/src/shared/utils.dart';
+import 'package:table_calendar/src/table_calendar_base.dart';
+import 'package:table_calendar/src/widgets/calendar_header.dart';
+import 'package:table_calendar/src/widgets/cell_content.dart';
 
 /// Signature for `onDaySelected` callback. Contains the selected day and focused day.
 typedef OnDaySelected = void Function(
-    DateTime selectedDay, DateTime focusedDay);
+  DateTime selectedDay,
+  DateTime focusedDay,
+);
 
 /// Signature for `onRangeSelected` callback.
 /// Contains start and end of the selected range, as well as currently focused day.
 typedef OnRangeSelected = void Function(
-    DateTime? start, DateTime? end, DateTime focusedDay);
+  DateTime? start,
+  DateTime? end,
+  DateTime focusedDay,
+);
 
 /// Modes that range selection can operate in.
 enum RangeSelectionMode { disabled, toggledOff, toggledOn, enforced }
@@ -206,7 +213,7 @@ class TableCalendar<T> extends StatefulWidget {
 
   /// Creates a `TableCalendar` widget.
   TableCalendar({
-    Key? key,
+    super.key,
     required DateTime focusedDay,
     required DateTime firstDay,
     required DateTime lastDay,
@@ -262,15 +269,16 @@ class TableCalendar<T> extends StatefulWidget {
     this.onCalendarCreated,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
-        assert(weekendDays.isNotEmpty
-            ? weekendDays.every(
-                (day) => day >= DateTime.monday && day <= DateTime.sunday)
-            : true),
+        assert(
+          weekendDays.isNotEmpty &&
+              weekendDays.every(
+                (day) => day >= DateTime.monday && day <= DateTime.sunday,
+              ),
+        ),
         focusedDay = normalizeDate(focusedDay),
         firstDay = normalizeDate(firstDay),
         lastDay = normalizeDate(lastDay),
-        currentDay = currentDay ?? DateTime.now(),
-        super(key: key);
+        currentDay = currentDay ?? DateTime.now();
 
   @override
   _TableCalendarState<T> createState() => _TableCalendarState<T>();
@@ -512,22 +520,19 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             weekNumbersVisible: widget.weekNumbersVisible,
             weekNumberBuilder: (BuildContext context, DateTime day) {
               final weekNumber = _calculateWeekNumber(day);
-              Widget? cell = widget.calendarBuilders.weekNumberBuilder
+              final cell = widget.calendarBuilders.weekNumberBuilder
                   ?.call(context, weekNumber);
 
-              if (cell == null) {
-                cell = Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Center(
-                    child: Text(
-                      weekNumber.toString(),
-                      style: widget.calendarStyle.weekNumberTextStyle,
+              return cell ??
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Center(
+                      child: Text(
+                        weekNumber.toString(),
+                        style: widget.calendarStyle.weekNumberTextStyle,
+                      ),
                     ),
-                  ),
-                );
-              }
-
-              return cell;
+                  );
             },
             dowBuilder: (BuildContext context, DateTime day) {
               Widget? dowCell =
@@ -619,7 +624,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
-        Widget content = CellContent(
+        final content = CellContent(
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
           day: day,
           focusedDay: focusedDay,
@@ -686,10 +691,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         return Stack(
           alignment: widget.calendarStyle.markersAlignment,
-          children: children,
           clipBehavior: widget.calendarStyle.canMarkersOverflow
               ? Clip.none
               : Clip.hardEdge,
+          children: children,
         );
       },
     );
@@ -714,10 +719,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   int _dayOfYear(DateTime date) {
-    return normalizeDate(date)
-            .difference(DateTime.utc(date.year, 1, 1))
-            .inDays +
-        1;
+    return normalizeDate(date).difference(DateTime.utc(date.year)).inDays + 1;
   }
 
   bool _isWithinRange(DateTime day, DateTime start, DateTime end) {
@@ -739,19 +741,21 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   bool _isDayAvailable(DateTime day) {
-    return widget.enabledDayPredicate == null
-        ? true
-        : widget.enabledDayPredicate!(day);
+    if (widget.enabledDayPredicate == null) {
+      return true;
+    }
+
+    return widget.enabledDayPredicate!(day);
   }
 
   DateTime _firstDayOfMonth(DateTime month) {
-    return DateTime.utc(month.year, month.month, 1);
+    return DateTime.utc(month.year, month.month);
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
     final date = month.month < 12
-        ? DateTime.utc(month.year, month.month + 1, 1)
-        : DateTime.utc(month.year + 1, 1, 1);
+        ? DateTime.utc(month.year, month.month + 1)
+        : DateTime.utc(month.year + 1);
     return date.subtract(const Duration(days: 1));
   }
 
