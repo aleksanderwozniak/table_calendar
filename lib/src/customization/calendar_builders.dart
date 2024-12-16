@@ -11,6 +11,7 @@ typedef SingleMarkerBuilder<T> = Widget? Function(
   BuildContext context,
   DateTime day,
   T event,
+  double markerSize,
 );
 
 /// Signature for a function that creates an event marker for a given `day`.
