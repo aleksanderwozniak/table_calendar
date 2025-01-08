@@ -460,6 +460,50 @@ void main() {
     );
 
     testWidgets(
+      'Event loader is called for disabled days when loadEventForDisabledDays is set to true',
+      (tester) async {
+        final eventDay = DateTime.utc(2021, 7, 20);
+
+        await tester.pumpWidget(setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            loadEventsForDisabledDays: true,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            eventLoader: (day) {
+              if (day.day == eventDay.day && day.month == eventDay.month) {
+                return ['Event 1', 'Event 2', 'Event 3'];
+              }
+
+              return [];
+            },
+            enabledDayPredicate: (day) => false,
+          ),
+        ));
+
+        final eventDayKey = cellContentKey(eventDay);
+        final eventDayCellContent = find.byKey(eventDayKey);
+
+        final eventDayStack = find.ancestor(
+          of: eventDayCellContent,
+          matching: find.byType(Stack),
+        );
+
+        final eventMarkers = tester.widgetList(
+          find.descendant(
+            of: eventDayStack,
+            matching: find.byWidgetPredicate(
+              (Widget marker) => marker is Container && marker.child == null,
+            ),
+          ),
+        );
+
+        expect(eventMarkers.length, 3);
+      },
+    );
+
+    testWidgets(
       'currentDay correctly marks given day as today',
       (tester) async {
         await tester.pumpWidget(
