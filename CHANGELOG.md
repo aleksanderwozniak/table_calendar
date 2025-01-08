@@ -1,3 +1,9 @@
+## [3.2.0]
+
+* Added loadEventsForDisabledDays property to enable loading events for disabled days as well
+* Fixed empty weekendDays assertion issue
+* Updated intl version to 0.20.0
+
 ## [3.1.3]
 
 * Updated gradle config for example project
