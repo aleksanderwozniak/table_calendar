@@ -464,23 +464,25 @@ void main() {
       (tester) async {
         final eventDay = DateTime.utc(2021, 7, 20);
 
-        await tester.pumpWidget(setupTestWidget(
-          TableCalendar(
-            focusedDay: initialFocusedDay,
-            loadEventsForDisabledDays: true,
-            firstDay: firstDay,
-            lastDay: lastDay,
-            currentDay: today,
-            eventLoader: (day) {
-              if (day.day == eventDay.day && day.month == eventDay.month) {
-                return ['Event 1', 'Event 2', 'Event 3'];
-              }
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              loadEventsForDisabledDays: true,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              eventLoader: (day) {
+                if (day.day == eventDay.day && day.month == eventDay.month) {
+                  return ['Event 1', 'Event 2', 'Event 3'];
+                }
 
-              return [];
-            },
-            enabledDayPredicate: (day) => false,
+                return [];
+              },
+              enabledDayPredicate: (day) => false,
+            ),
           ),
-        ));
+        );
 
         final eventDayKey = cellContentKey(eventDay);
         final eventDayCellContent = find.byKey(eventDayKey);
