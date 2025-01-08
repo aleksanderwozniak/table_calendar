@@ -273,7 +273,7 @@ class TableCalendar<T> extends StatefulWidget {
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(
-          weekendDays.isNotEmpty &&
+          weekendDays.isEmpty ||
               weekendDays.every(
                 (day) => day >= DateTime.monday && day <= DateTime.sunday,
               ),
