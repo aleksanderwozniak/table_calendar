@@ -1,3 +1,14 @@
+## [3.2.0]
+
+* Added loadEventsForDisabledDays property to enable loading events for disabled days as well
+* Fixed empty weekendDays assertion issue
+* Updated intl version to 0.20.0
+
+## [3.1.3]
+
+* Updated gradle config for example project
+* Added and applied lint rules, refactored code
+
 ## [3.1.2]
 
 * Added dayTextFormatter property to CalendarStyle that allows to customize the text within day cells

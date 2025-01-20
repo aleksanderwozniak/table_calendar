@@ -3,9 +3,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-
-import 'shared/utils.dart';
-import 'widgets/calendar_core.dart';
+import 'package:table_calendar/src/shared/utils.dart';
+import 'package:table_calendar/src/widgets/calendar_core.dart';
 
 class TableCalendarBase extends StatefulWidget {
   final DateTime firstDay;
@@ -38,7 +37,7 @@ class TableCalendarBase extends StatefulWidget {
   final void Function(PageController pageController)? onCalendarCreated;
 
   TableCalendarBase({
-    Key? key,
+    super.key,
     required this.firstDay,
     required this.lastDay,
     required this.focusedDay,
@@ -76,11 +75,10 @@ class TableCalendarBase extends StatefulWidget {
     this.onCalendarCreated,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
-        assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay)),
-        super(key: key);
+        assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay));
 
   @override
-  _TableCalendarBaseState createState() => _TableCalendarBaseState();
+  State<TableCalendarBase> createState() => _TableCalendarBaseState();
 }
 
 class _TableCalendarBaseState extends State<TableCalendarBase> {
@@ -99,7 +97,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     _pageHeight = ValueNotifier(_getPageHeight(rowCount));
 
     final initialPage = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, _focusedDay);
+      widget.calendarFormat,
+      widget.firstDay,
+      _focusedDay,
+    );
 
     _pageController = PageController(initialPage: initialPage);
     widget.onCalendarCreated?.call(_pageController);
@@ -147,10 +148,16 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
   void _updatePage({bool shouldAnimate = false}) {
     final currentIndex = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, _focusedDay);
+      widget.calendarFormat,
+      widget.firstDay,
+      _focusedDay,
+    );
 
     final endIndex = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, widget.lastDay);
+      widget.calendarFormat,
+      widget.firstDay,
+      widget.lastDay,
+    );
 
     if (currentIndex != _previousIndex ||
         currentIndex == 0 ||
@@ -209,8 +216,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               constraints: constraints,
               pageController: _pageController,
               scrollPhysics: _canScrollHorizontally
-                  ? PageScrollPhysics()
-                  : NeverScrollableScrollPhysics(),
+                  ? const PageScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
               firstDay: widget.firstDay,
               lastDay: widget.lastDay,
               startingDayOfWeek: widget.startingDayOfWeek,
@@ -265,7 +272,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   }
 
   int _calculateFocusedPage(
-      CalendarFormat format, DateTime startDay, DateTime focusedDay) {
+    CalendarFormat format,
+    DateTime startDay,
+    DateTime focusedDay,
+  ) {
     switch (format) {
       case CalendarFormat.month:
         return _getMonthCount(startDay, focusedDay);
@@ -273,8 +283,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         return _getTwoWeekCount(startDay, focusedDay);
       case CalendarFormat.week:
         return _getWeekCount(startDay, focusedDay);
-      default:
-        return _getMonthCount(startDay, focusedDay);
     }
   }
 
@@ -319,12 +327,12 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   }
 
   int _getDaysAfter(DateTime lastDay) {
-    int invertedStartingWeekday =
+    final invertedStartingWeekday =
         8 - getWeekdayNumber(widget.startingDayOfWeek);
 
-    int daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7);
+    final daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7);
     if (daysAfter == 7) {
-      daysAfter = 0;
+      return 0;
     }
 
     return daysAfter;
@@ -336,13 +344,13 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   }
 
   DateTime _firstDayOfMonth(DateTime month) {
-    return DateTime.utc(month.year, month.month, 1);
+    return DateTime.utc(month.year, month.month);
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
     final date = month.month < 12
-        ? DateTime.utc(month.year, month.month + 1, 1)
-        : DateTime.utc(month.year + 1, 1, 1);
+        ? DateTime.utc(month.year, month.month + 1)
+        : DateTime.utc(month.year + 1);
     return date.subtract(const Duration(days: 1));
   }
 }

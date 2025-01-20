@@ -4,8 +4,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../shared/utils.dart' show CalendarFormat;
+import 'package:table_calendar/src/shared/utils.dart' show CalendarFormat;
 
 class FormatButton extends StatelessWidget {
   final CalendarFormat calendarFormat;
@@ -17,7 +16,7 @@ class FormatButton extends StatelessWidget {
   final Map<CalendarFormat, String> availableCalendarFormats;
 
   const FormatButton({
-    Key? key,
+    super.key,
     required this.calendarFormat,
     required this.onTap,
     required this.textStyle,
@@ -25,7 +24,7 @@ class FormatButton extends StatelessWidget {
     required this.padding,
     required this.showsNextFormat,
     required this.availableCalendarFormats,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

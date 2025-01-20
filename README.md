@@ -32,7 +32,7 @@ Add the following line to `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  table_calendar: ^3.1.2
+  table_calendar: ^3.2.0
 ```
 
 ### Basic setup

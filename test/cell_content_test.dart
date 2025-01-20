@@ -316,8 +316,8 @@ void main() {
 
   group('CalendarBuilders Locale test:', () {
     testWidgets('en locale with default dayTextFormatter', (tester) async {
-      final locale = 'en';
-      initializeDateFormatting(locale, null);
+      const locale = 'en';
+      initializeDateFormatting(locale);
 
       final cellDay = DateTime.utc(2021, 7, 15);
       await tester.pumpWidget(
@@ -332,8 +332,8 @@ void main() {
     });
 
     testWidgets('en locale with custom dayTextFormatter', (tester) async {
-      final locale = 'en';
-      initializeDateFormatting(locale, null);
+      const locale = 'en';
+      initializeDateFormatting(locale);
 
       final cellDay = DateTime.utc(2021, 7, 15);
       await tester.pumpWidget(
@@ -352,8 +352,8 @@ void main() {
     });
 
     testWidgets('ar locale with default dayTextFormatter', (tester) async {
-      final locale = 'ar';
-      initializeDateFormatting(locale, null);
+      const locale = 'ar';
+      initializeDateFormatting(locale);
 
       final cellDay = DateTime.utc(2021, 7, 15);
       await tester.pumpWidget(
@@ -368,8 +368,8 @@ void main() {
     });
 
     testWidgets('ar locale with custom dayTextFormatter', (tester) async {
-      final locale = 'ar';
-      initializeDateFormatting(locale, null);
+      const locale = 'ar';
+      initializeDateFormatting(locale);
 
       final cellDay = DateTime.utc(2021, 7, 15);
       await tester.pumpWidget(

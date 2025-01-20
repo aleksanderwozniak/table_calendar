@@ -9,7 +9,10 @@ typedef DayBuilder = Widget? Function(BuildContext context, DateTime day);
 /// Signature for a function that creates a widget for a given `day`.
 /// Additionally, contains the currently focused day.
 typedef FocusedDayBuilder = Widget? Function(
-    BuildContext context, DateTime day, DateTime focusedDay);
+  BuildContext context,
+  DateTime day,
+  DateTime focusedDay,
+);
 
 /// Signature for a function returning text that can be localized and formatted with `DateFormat`.
 typedef TextFormatter = String Function(DateTime date, dynamic locale);

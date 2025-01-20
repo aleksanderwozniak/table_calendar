@@ -2,8 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
-
-import '../shared/utils.dart' show TextFormatter;
+import 'package:table_calendar/src/shared/utils.dart' show TextFormatter;
 
 typedef DaysOfWeekStyleBuilder = TextStyle? Function(
     BuildContext context, DateTime day);
@@ -36,8 +35,8 @@ class DaysOfWeekStyle {
   const DaysOfWeekStyle({
     this.dowTextFormatter,
     this.decoration = const BoxDecoration(),
-    this.weekdayStyle = const TextStyle(color: const Color(0xFF4F4F4F)),
-    this.weekendStyle = const TextStyle(color: const Color(0xFF6A6A6A)),
+    this.weekdayStyle = const TextStyle(color: Color(0xFF4F4F4F)),
+    this.weekendStyle = const TextStyle(color: Color(0xFF6A6A6A)),
     this.daysOfWeekStyleBuilder,
   });
 }

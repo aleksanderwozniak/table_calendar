@@ -3,11 +3,11 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-
-import '../customization/header_style.dart';
-import '../shared/utils.dart' show CalendarFormat, DayBuilder;
-import 'custom_icon_button.dart';
-import 'format_button.dart';
+import 'package:table_calendar/src/customization/header_style.dart';
+import 'package:table_calendar/src/shared/utils.dart'
+    show CalendarFormat, DayBuilder;
+import 'package:table_calendar/src/widgets/custom_icon_button.dart';
+import 'package:table_calendar/src/widgets/format_button.dart';
 
 class CalendarHeader extends StatelessWidget {
   final dynamic locale;
@@ -23,7 +23,7 @@ class CalendarHeader extends StatelessWidget {
   final DayBuilder? headerTitleBuilder;
 
   const CalendarHeader({
-    Key? key,
+    super.key,
     this.locale,
     required this.focusedMonth,
     required this.calendarFormat,
@@ -35,7 +35,7 @@ class CalendarHeader extends StatelessWidget {
     required this.onFormatButtonTap,
     required this.availableCalendarFormats,
     this.headerTitleBuilder,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,6 @@ class CalendarHeader extends StatelessWidget {
       margin: headerStyle.headerMargin,
       padding: headerStyle.headerPadding,
       child: Row(
-        mainAxisSize: MainAxisSize.max,
         children: [
           if (headerStyle.leftChevronVisible)
             CustomIconButton(
