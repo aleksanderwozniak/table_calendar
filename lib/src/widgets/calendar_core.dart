@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:table_calendar/src/shared/utils.dart';
+import 'package:table_calendar/src/table_calendar_base.dart';
 import 'package:table_calendar/src/widgets/calendar_page.dart';
 
 class CalendarCore extends StatelessWidget {
@@ -28,6 +29,8 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final void Function(int, DateTime) onPageChanged;
+  final bool onlyWeekdays;
+  final List<int> weekendDays;
 
   const CalendarCore({
     super.key,
@@ -53,6 +56,8 @@ class CalendarCore extends StatelessWidget {
     this.tableBorder,
     this.tablePadding,
     this.scrollPhysics,
+    this.onlyWeekdays = false,
+    this.weekendDays = kDefaultWeekendDays,
   }) : assert(!dowVisible || (dowHeight != null && dowBuilder != null));
 
   @override
@@ -64,7 +69,9 @@ class CalendarCore extends StatelessWidget {
       itemBuilder: (context, index) {
         final baseDay = _getBaseDay(calendarFormat, index);
         final visibleRange = _getVisibleRange(calendarFormat, baseDay);
-        final visibleDays = _daysInRange(visibleRange.start, visibleRange.end);
+        final visibleDays = !onlyWeekdays
+            ? _daysInRange(visibleRange.start, visibleRange.end)
+            : _weekDaysInRange(visibleRange.start, visibleRange.end);
 
         final actualDowHeight = dowVisible ? dowHeight! : 0.0;
         final constrainedRowHeight = constraints.hasBoundedHeight
@@ -79,6 +86,9 @@ class CalendarCore extends StatelessWidget {
           rowDecoration: rowDecoration,
           tableBorder: tableBorder,
           tablePadding: tablePadding,
+          daysInWeek: !onlyWeekdays
+              ? DateTime.daysPerWeek
+              : DateTime.daysPerWeek - weekendDays.length,
           dowBuilder: (context, day) {
             return SizedBox(
               height: dowHeight,
@@ -265,6 +275,15 @@ class CalendarCore extends StatelessWidget {
       dayCount,
       (index) => DateTime.utc(first.year, first.month, first.day + index),
     );
+  }
+
+  List<DateTime> _weekDaysInRange(DateTime first, DateTime last) {
+    final dayCount = last.difference(first).inDays + 1;
+    final weekdays = List.generate(
+      dayCount,
+      (index) => DateTime.utc(first.year, first.month, first.day + index),
+    )..removeWhere((e) => weekendDays.contains(e.weekday));
+    return weekdays;
   }
 
   DateTime _firstDayOfWeek(DateTime week) {

@@ -110,6 +110,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Whether to display week numbers on calendar.
   final bool weekNumbersVisible;
 
+  /// Wether to display only weekdays, will exclude all days in [weekendDays].
+  final bool onlyWeekdays;
+
   /// Used for setting the height of `TableCalendar`'s rows.
   final double rowHeight;
 
@@ -223,13 +226,9 @@ class TableCalendar<T> extends StatefulWidget {
     this.locale,
     this.rangeStartDay,
     this.rangeEndDay,
-    this.weekendDays = const [DateTime.saturday, DateTime.sunday],
+    this.weekendDays = kDefaultWeekendDays,
     this.calendarFormat = CalendarFormat.month,
-    this.availableCalendarFormats = const {
-      CalendarFormat.month: 'Month',
-      CalendarFormat.twoWeeks: '2 weeks',
-      CalendarFormat.week: 'Week',
-    },
+    this.availableCalendarFormats = kDefaultAvailableCalendarFormats,
     this.headerVisible = true,
     this.daysOfWeekVisible = true,
     this.pageJumpingEnabled = false,
@@ -237,6 +236,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
     this.weekNumbersVisible = false,
+    this.onlyWeekdays = false,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
@@ -516,6 +516,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
             onVerticalSwipe: _swipeCalendarFormat,
+            onlyWeekdays: widget.onlyWeekdays,
+            weekendDays: widget.weekendDays,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
@@ -780,7 +782,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
   bool _isWeekend(
     DateTime day, {
-    List<int> weekendDays = const [DateTime.saturday, DateTime.sunday],
+    List<int> weekendDays = kDefaultWeekendDays,
   }) {
     return weekendDays.contains(day.weekday);
   }

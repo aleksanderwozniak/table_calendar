@@ -6,8 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'common.dart';
-
 Widget setupTestWidget(Widget child) {
   return Directionality(
     textDirection: TextDirection.ltr,
@@ -26,7 +24,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: calendarFormatMap,
+              availableCalendarFormats: kDefaultAvailableCalendarFormats,
               calendarFormat: CalendarFormat.month,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -57,7 +55,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: calendarFormatMap,
+              availableCalendarFormats: kDefaultAvailableCalendarFormats,
               calendarFormat: CalendarFormat.twoWeeks,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -88,7 +86,7 @@ void main() {
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: calendarFormatMap,
+              availableCalendarFormats: kDefaultAvailableCalendarFormats,
               calendarFormat: CalendarFormat.week,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -119,18 +117,18 @@ void main() {
 
         const currentFormatIndex = 0;
         final currentFormat =
-            calendarFormatMap.keys.elementAt(currentFormatIndex);
-        final currentFormatText =
-            calendarFormatMap.values.elementAt(currentFormatIndex);
+            kDefaultAvailableCalendarFormats.keys.elementAt(currentFormatIndex);
+        final currentFormatText = kDefaultAvailableCalendarFormats.values
+            .elementAt(currentFormatIndex);
 
         const nextFormatIndex = 1;
         final nextFormatText =
-            calendarFormatMap.values.elementAt(nextFormatIndex);
+            kDefaultAvailableCalendarFormats.values.elementAt(nextFormatIndex);
 
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: calendarFormatMap,
+              availableCalendarFormats: kDefaultAvailableCalendarFormats,
               calendarFormat: currentFormat,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,
@@ -156,14 +154,14 @@ void main() {
 
         const currentFormatIndex = 0;
         final currentFormat =
-            calendarFormatMap.keys.elementAt(currentFormatIndex);
-        final currentFormatText =
-            calendarFormatMap.values.elementAt(currentFormatIndex);
+            kDefaultAvailableCalendarFormats.keys.elementAt(currentFormatIndex);
+        final currentFormatText = kDefaultAvailableCalendarFormats.values
+            .elementAt(currentFormatIndex);
 
         await tester.pumpWidget(
           setupTestWidget(
             FormatButton(
-              availableCalendarFormats: calendarFormatMap,
+              availableCalendarFormats: kDefaultAvailableCalendarFormats,
               calendarFormat: currentFormat,
               decoration: headerStyle.formatButtonDecoration,
               padding: headerStyle.formatButtonPadding,

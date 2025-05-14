@@ -6,11 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:table_calendar/src/customization/header_style.dart';
 import 'package:table_calendar/src/shared/utils.dart';
+import 'package:table_calendar/src/table_calendar_base.dart';
 import 'package:table_calendar/src/widgets/calendar_header.dart';
 import 'package:table_calendar/src/widgets/custom_icon_button.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
-
-import 'common.dart';
 
 final focusedMonth = DateTime.utc(2021, 7, 15);
 
@@ -21,7 +20,8 @@ Widget setupTestWidget({
   VoidCallback? onHeaderTap,
   VoidCallback? onHeaderLongPress,
   Function(CalendarFormat)? onFormatButtonTap,
-  Map<CalendarFormat, String> availableCalendarFormats = calendarFormatMap,
+  Map<CalendarFormat, String> availableCalendarFormats =
+      kDefaultAvailableCalendarFormats,
 }) {
   return Directionality(
     textDirection: TextDirection.ltr,

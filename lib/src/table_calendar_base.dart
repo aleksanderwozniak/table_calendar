@@ -6,6 +6,13 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_core.dart';
 
+const kDefaultAvailableCalendarFormats = {
+  CalendarFormat.month: 'Month',
+  CalendarFormat.twoWeeks: '2 weeks',
+  CalendarFormat.week: 'Week',
+};
+const kDefaultWeekendDays = [DateTime.saturday, DateTime.sunday];
+
 class TableCalendarBase extends StatefulWidget {
   final DateTime firstDay;
   final DateTime lastDay;
@@ -35,6 +42,8 @@ class TableCalendarBase extends StatefulWidget {
   final SwipeCallback? onVerticalSwipe;
   final void Function(DateTime focusedDay)? onPageChanged;
   final void Function(PageController pageController)? onCalendarCreated;
+  final bool onlyWeekdays;
+  final List<int> weekendDays;
 
   TableCalendarBase({
     super.key,
@@ -65,14 +74,12 @@ class TableCalendarBase extends StatefulWidget {
       verticalThreshold: 25.0,
       swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
     ),
-    this.availableCalendarFormats = const {
-      CalendarFormat.month: 'Month',
-      CalendarFormat.twoWeeks: '2 weeks',
-      CalendarFormat.week: 'Week',
-    },
+    this.availableCalendarFormats = kDefaultAvailableCalendarFormats,
     this.onVerticalSwipe,
     this.onPageChanged,
     this.onCalendarCreated,
+    this.onlyWeekdays = false,
+    this.weekendDays = kDefaultWeekendDays,
   })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
         assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
         assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay));
@@ -258,6 +265,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               },
               dowBuilder: widget.dowBuilder,
               dayBuilder: widget.dayBuilder,
+              onlyWeekdays: widget.onlyWeekdays,
+              weekendDays: widget.weekendDays,
             ),
           ),
         );
