@@ -60,6 +60,11 @@ class TableCalendar<T> extends StatefulWidget {
   /// Days after it will use `disabledStyle` and trigger `onDisabledDayTapped` callback.
   final DateTime lastDay;
 
+  /// estimatedFirstDay is used to calculate the number of days before the first day of the month.
+  /// It's used when the first day of the month is not the same as the first day of the week.
+  /// Defaults to `firstDay`.
+  final int? estimatedFirstDate;
+
   /// DateTime that will be treated as today. Defaults to `DateTime.now()`.
   ///
   /// Overriding this property might be useful for testing.
@@ -103,6 +108,12 @@ class TableCalendar<T> extends StatefulWidget {
   /// When set to true, `CalendarFormat.month` will always display six weeks,
   /// even if the content would fit in less.
   final bool sixWeekMonthsEnforced;
+
+  /// Determines the mode of six-weeks display in `CalendarFormat.month` format.
+  /// Use `SixWeeksMode.start` to display the first week in the month,
+  /// and `SixWeeksMode.end` to display the last week in the month.
+  /// Defaults to sixWeeksMode.end.
+  final SixWeeksMode sixWeeksMode;
 
   /// When set to true, `TableCalendar` will fill available height.
   final bool shouldFillViewport;
@@ -220,6 +231,7 @@ class TableCalendar<T> extends StatefulWidget {
     required DateTime firstDay,
     required DateTime lastDay,
     DateTime? currentDay,
+    this.estimatedFirstDate,
     this.locale,
     this.rangeStartDay,
     this.rangeEndDay,
@@ -235,6 +247,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.pageJumpingEnabled = false,
     this.pageAnimationEnabled = true,
     this.sixWeekMonthsEnforced = false,
+    this.sixWeeksMode = SixWeeksMode.end,
     this.shouldFillViewport = false,
     this.weekNumbersVisible = false,
     this.rowHeight = 52.0,
@@ -499,6 +512,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             availableGestures: widget.availableGestures,
             firstDay: widget.firstDay,
             lastDay: widget.lastDay,
+            estimatedFirstDate: widget.estimatedFirstDate,
             startingDayOfWeek: widget.startingDayOfWeek,
             dowDecoration: widget.daysOfWeekStyle.decoration,
             rowDecoration: widget.calendarStyle.rowDecoration,
@@ -515,6 +529,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             availableCalendarFormats: widget.availableCalendarFormats,
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
+            sixWeeksMode: widget.sixWeeksMode,
             onVerticalSwipe: _swipeCalendarFormat,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
