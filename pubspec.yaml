@@ -11,12 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl: ^0.20.0
-  simple_gesture_detector: ^0.2.0
+  intl: ^0.20.2
+  simple_gesture_detector: ^0.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lint: ^2.0.1
+  lint: ^2.8.0
 
 flutter:
