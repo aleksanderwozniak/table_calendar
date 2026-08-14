@@ -1,9 +1,9 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:table_calendar/src/shared/utils.dart' show CalendarFormat;
 
 class FormatButton extends StatelessWidget {
@@ -31,10 +31,7 @@ class FormatButton extends StatelessWidget {
     final child = Container(
       decoration: decoration,
       padding: padding,
-      child: Text(
-        _formatButtonText,
-        style: textStyle,
-      ),
+      child: Text(_formatButtonText, style: textStyle),
     );
 
     final platform = Theme.of(context).platform;
@@ -47,8 +44,9 @@ class FormatButton extends StatelessWidget {
             child: child,
           )
         : InkWell(
-            borderRadius:
-                decoration.borderRadius?.resolve(Directionality.of(context)),
+            borderRadius: decoration.borderRadius?.resolve(
+              Directionality.of(context),
+            ),
             onTap: () => onTap(_nextFormat()),
             child: child,
           );

@@ -25,7 +25,8 @@ dependencies:
     sdk: flutter
  
   intl: any
-  table_calendar: 
+  material_ui: any
+  table_calendar:
     path: ../
 
 dev_dependencies:

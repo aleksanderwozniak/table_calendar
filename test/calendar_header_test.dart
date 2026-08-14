@@ -1,9 +1,9 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:material_ui/material_ui.dart';
 import 'package:table_calendar/src/customization/header_style.dart';
 import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_header.dart';
@@ -42,17 +42,16 @@ Widget setupTestWidget({
 }
 
 void main() {
-  testWidgets(
-    'Displays corrent month and year for given focusedMonth',
-    (tester) async {
-      await tester.pumpWidget(setupTestWidget());
+  testWidgets('Displays corrent month and year for given focusedMonth', (
+    tester,
+  ) async {
+    await tester.pumpWidget(setupTestWidget());
 
-      final headerText = intl.DateFormat.yMMMM().format(focusedMonth);
+    final headerText = intl.DateFormat.yMMMM().format(focusedMonth);
 
-      expect(find.byType(CalendarHeader), findsOneWidget);
-      expect(find.text(headerText), findsOneWidget);
-    },
-  );
+    expect(find.byType(CalendarHeader), findsOneWidget);
+    expect(find.text(headerText), findsOneWidget);
+  });
   testWidgets(
     'Ensure chevrons and FormatButton are visible by default, test onTap callbacks',
     (tester) async {
@@ -124,9 +123,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         setupTestWidget(
-          headerStyle: const HeaderStyle(
-            leftChevronVisible: false,
-          ),
+          headerStyle: const HeaderStyle(leftChevronVisible: false),
         ),
       );
 
@@ -150,9 +147,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         setupTestWidget(
-          headerStyle: const HeaderStyle(
-            rightChevronVisible: false,
-          ),
+          headerStyle: const HeaderStyle(rightChevronVisible: false),
         ),
       );
 

@@ -270,18 +270,18 @@ class TableCalendar<T> extends StatefulWidget {
     this.onPageChanged,
     this.onFormatChanged,
     this.onCalendarCreated,
-  })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
-        assert(availableCalendarFormats.length <= CalendarFormat.values.length),
-        assert(
-          weekendDays.isEmpty ||
-              weekendDays.every(
-                (day) => day >= DateTime.monday && day <= DateTime.sunday,
-              ),
-        ),
-        focusedDay = normalizeDate(focusedDay),
-        firstDay = normalizeDate(firstDay),
-        lastDay = normalizeDate(lastDay),
-        currentDay = currentDay ?? DateTime.now();
+  }) : assert(availableCalendarFormats.keys.contains(calendarFormat)),
+       assert(availableCalendarFormats.length <= CalendarFormat.values.length),
+       assert(
+         weekendDays.isEmpty ||
+             weekendDays.every(
+               (day) => day >= DateTime.monday && day <= DateTime.sunday,
+             ),
+       ),
+       focusedDay = normalizeDate(focusedDay),
+       firstDay = normalizeDate(firstDay),
+       lastDay = normalizeDate(lastDay),
+       currentDay = currentDay ?? DateTime.now();
 
   @override
   State<TableCalendar<T>> createState() => _TableCalendarState<T>();
@@ -523,8 +523,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             weekNumbersVisible: widget.weekNumbersVisible,
             weekNumberBuilder: (BuildContext context, DateTime day) {
               final weekNumber = _calculateWeekNumber(day);
-              final cell = widget.calendarBuilders.weekNumberBuilder
-                  ?.call(context, weekNumber);
+              final cell = widget.calendarBuilders.weekNumberBuilder?.call(
+                context,
+                weekNumber,
+              );
 
               return cell ??
                   Padding(
@@ -538,16 +540,23 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                   );
             },
             dowBuilder: (BuildContext context, DateTime day) {
-              Widget? dowCell =
-                  widget.calendarBuilders.dowBuilder?.call(context, day);
+              Widget? dowCell = widget.calendarBuilders.dowBuilder?.call(
+                context,
+                day,
+              );
 
               if (dowCell == null) {
-                final weekdayString = widget.daysOfWeekStyle.dowTextFormatter
-                        ?.call(day, widget.locale) ??
-                    DateFormat.E(widget.locale).format(day);
+                final weekdayString =
+                    widget.daysOfWeekStyle.dowTextFormatter?.call(
+                      day,
+                      widget.locale,
+                    ) ??
+                    DateFormat.E(widget.locale as String?).format(day);
 
-                final isWeekend =
-                    _isWeekend(day, weekendDays: widget.weekendDays);
+                final isWeekend = _isWeekend(
+                  day,
+                  weekendDays: widget.weekendDays,
+                );
 
                 dowCell = Center(
                   child: ExcludeSemantics(
@@ -592,7 +601,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         final children = <Widget>[];
 
-        final isWithinRange = widget.rangeStartDay != null &&
+        final isWithinRange =
+            widget.rangeStartDay != null &&
             widget.rangeEndDay != null &&
             _isWithinRange(day, widget.rangeStartDay!, widget.rangeEndDay!);
 
@@ -612,7 +622,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 ),
                 height:
                     (shorterSide - widget.calendarStyle.cellMargin.vertical) *
-                        widget.calendarStyle.rangeHighlightScale,
+                    widget.calendarStyle.rangeHighlightScale,
                 color: widget.calendarStyle.rangeHighlightColor,
               ),
             );
@@ -650,17 +660,22 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         if (widget.loadEventsForDisabledDays || !isDisabled) {
           final events = widget.eventLoader?.call(day) ?? [];
-          Widget? markerWidget =
-              widget.calendarBuilders.markerBuilder?.call(context, day, events);
+          Widget? markerWidget = widget.calendarBuilders.markerBuilder?.call(
+            context,
+            day,
+            events,
+          );
 
           if (events.isNotEmpty && markerWidget == null) {
             final center = constraints.maxHeight / 2;
 
-            final markerSize = widget.calendarStyle.markerSize ??
+            final markerSize =
+                widget.calendarStyle.markerSize ??
                 (shorterSide - widget.calendarStyle.cellMargin.vertical) *
                     widget.calendarStyle.markerSizeScale;
 
-            final markerAutoAlignmentTop = center +
+            final markerAutoAlignmentTop =
+                center +
                 (shorterSide - widget.calendarStyle.cellMargin.vertical) / 2 -
                 (markerSize * widget.calendarStyle.markersAnchor);
 
@@ -704,8 +719,11 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   Widget _buildSingleMarker(DateTime day, T event, double markerSize) {
-    return widget.calendarBuilders.singleMarkerBuilder
-            ?.call(context, day, event) ??
+    return widget.calendarBuilders.singleMarkerBuilder?.call(
+          context,
+          day,
+          event,
+        ) ??
         Container(
           width: markerSize,
           height: markerSize,
