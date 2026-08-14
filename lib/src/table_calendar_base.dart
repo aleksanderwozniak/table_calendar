@@ -1,7 +1,7 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_core.dart';
@@ -73,9 +73,9 @@ class TableCalendarBase extends StatefulWidget {
     this.onVerticalSwipe,
     this.onPageChanged,
     this.onCalendarCreated,
-  })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
-        assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
-        assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay));
+  }) : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
+       assert(isSameDay(focusedDay, firstDay) || focusedDay.isAfter(firstDay)),
+       assert(isSameDay(focusedDay, lastDay) || focusedDay.isBefore(lastDay));
 
   @override
   State<TableCalendarBase> createState() => _TableCalendarBaseState();
@@ -167,8 +167,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
     if (shouldAnimate && widget.pageAnimationEnabled) {
       if ((currentIndex - _previousIndex).abs() > 1) {
-        final jumpIndex =
-            currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
+        final jumpIndex = currentIndex > _previousIndex
+            ? currentIndex - 1
+            : currentIndex + 1;
 
         _pageController.jumpToPage(jumpIndex);
       }
@@ -199,17 +200,15 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
           child: ValueListenableBuilder<double>(
             valueListenable: _pageHeight,
             builder: (context, value, child) {
-              final height =
-                  constraints.hasBoundedHeight ? constraints.maxHeight : value;
+              final height = constraints.hasBoundedHeight
+                  ? constraints.maxHeight
+                  : value;
 
               return AnimatedSize(
                 duration: widget.formatAnimationDuration,
                 curve: widget.formatAnimationCurve,
                 alignment: Alignment.topCenter,
-                child: SizedBox(
-                  height: height,
-                  child: child,
-                ),
+                child: SizedBox(height: height, child: child),
               );
             },
             child: CalendarCore(

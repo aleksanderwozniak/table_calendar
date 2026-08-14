@@ -44,12 +44,15 @@ class CellContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dowLabel = DateFormat.EEEE(locale).format(day);
-    final dayLabel = DateFormat.yMMMMd(locale).format(day);
+    final dowLabel = DateFormat.EEEE(locale as String?).format(day);
+    final dayLabel = DateFormat.yMMMMd(locale as String?).format(day);
     final semanticsLabel = '$dowLabel, $dayLabel';
 
-    Widget? cell =
-        calendarBuilders.prioritizedBuilder?.call(context, day, focusedDay);
+    Widget? cell = calendarBuilders.prioritizedBuilder?.call(
+      context,
+      day,
+      focusedDay,
+    );
 
     if (cell != null) {
       return Semantics(
@@ -67,7 +70,8 @@ class CellContent extends StatelessWidget {
     const duration = Duration(milliseconds: 250);
 
     if (isDisabled) {
-      cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
+      cell =
+          calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
             margin: margin,
@@ -77,7 +81,8 @@ class CellContent extends StatelessWidget {
             child: Text(text, style: calendarStyle.disabledTextStyle),
           );
     } else if (isSelected) {
-      cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
+      cell =
+          calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
             margin: margin,
@@ -89,16 +94,17 @@ class CellContent extends StatelessWidget {
     } else if (isRangeStart) {
       cell =
           calendarBuilders.rangeStartBuilder?.call(context, day, focusedDay) ??
-              AnimatedContainer(
-                duration: duration,
-                margin: margin,
-                padding: padding,
-                decoration: calendarStyle.rangeStartDecoration,
-                alignment: alignment,
-                child: Text(text, style: calendarStyle.rangeStartTextStyle),
-              );
+          AnimatedContainer(
+            duration: duration,
+            margin: margin,
+            padding: padding,
+            decoration: calendarStyle.rangeStartDecoration,
+            alignment: alignment,
+            child: Text(text, style: calendarStyle.rangeStartTextStyle),
+          );
     } else if (isRangeEnd) {
-      cell = calendarBuilders.rangeEndBuilder?.call(context, day, focusedDay) ??
+      cell =
+          calendarBuilders.rangeEndBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
             margin: margin,
@@ -108,7 +114,8 @@ class CellContent extends StatelessWidget {
             child: Text(text, style: calendarStyle.rangeEndTextStyle),
           );
     } else if (isToday && isTodayHighlighted) {
-      cell = calendarBuilders.todayBuilder?.call(context, day, focusedDay) ??
+      cell =
+          calendarBuilders.todayBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
             margin: margin,
@@ -118,7 +125,8 @@ class CellContent extends StatelessWidget {
             child: Text(text, style: calendarStyle.todayTextStyle),
           );
     } else if (isHoliday) {
-      cell = calendarBuilders.holidayBuilder?.call(context, day, focusedDay) ??
+      cell =
+          calendarBuilders.holidayBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
             margin: margin,
@@ -130,16 +138,17 @@ class CellContent extends StatelessWidget {
     } else if (isWithinRange) {
       cell =
           calendarBuilders.withinRangeBuilder?.call(context, day, focusedDay) ??
-              AnimatedContainer(
-                duration: duration,
-                margin: margin,
-                padding: padding,
-                decoration: calendarStyle.withinRangeDecoration,
-                alignment: alignment,
-                child: Text(text, style: calendarStyle.withinRangeTextStyle),
-              );
+          AnimatedContainer(
+            duration: duration,
+            margin: margin,
+            padding: padding,
+            decoration: calendarStyle.withinRangeDecoration,
+            alignment: alignment,
+            child: Text(text, style: calendarStyle.withinRangeTextStyle),
+          );
     } else if (isOutside) {
-      cell = calendarBuilders.outsideBuilder?.call(context, day, focusedDay) ??
+      cell =
+          calendarBuilders.outsideBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
             margin: margin,
@@ -149,7 +158,8 @@ class CellContent extends StatelessWidget {
             child: Text(text, style: calendarStyle.outsideTextStyle),
           );
     } else {
-      cell = calendarBuilders.defaultBuilder?.call(context, day, focusedDay) ??
+      cell =
+          calendarBuilders.defaultBuilder?.call(context, day, focusedDay) ??
           AnimatedContainer(
             duration: duration,
             margin: margin,

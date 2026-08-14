@@ -7,6 +7,13 @@ include: package:lint/package.yaml # Use this for packages with public API
 # You might want to exclude auto-generated files from dart analysis
 analyzer:
   exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
     #- '**.freezed.dart'
     #- '**.g.dart'
 
