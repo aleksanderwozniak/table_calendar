@@ -213,6 +213,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the calendar is created. Exposes its PageController.
   final void Function(PageController pageController)? onCalendarCreated;
 
+  /// Rendered after table (can be used for a swipe marker, for example)
+  final Widget? bottomWidget;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar({
     super.key,
@@ -270,6 +273,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.onPageChanged,
     this.onFormatChanged,
     this.onCalendarCreated,
+    this.bottomWidget,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(
@@ -571,6 +575,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 child: _buildCell(day, focusedMonth),
               );
             },
+            bottomWidget: widget.bottomWidget,
           ),
         ),
       ],
