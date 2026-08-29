@@ -69,6 +69,7 @@ class TableCalendarBase extends StatefulWidget {
       CalendarFormat.month: 'Month',
       CalendarFormat.twoWeeks: '2 weeks',
       CalendarFormat.week: 'Week',
+      CalendarFormat.day: 'Day',
     },
     this.onVerticalSwipe,
     this.onPageChanged,
@@ -199,8 +200,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
           child: ValueListenableBuilder<double>(
             valueListenable: _pageHeight,
             builder: (context, value, child) {
-              final height =
-                  constraints.hasBoundedHeight ? constraints.maxHeight : value;
+              final height = widget.calendarFormat == CalendarFormat.day
+                  ? 0.0
+                  : constraints.hasBoundedHeight
+                      ? constraints.maxHeight
+                      : value;
 
               return AnimatedSize(
                 duration: widget.formatAnimationDuration,
@@ -283,6 +287,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         return _getTwoWeekCount(startDay, focusedDay);
       case CalendarFormat.week:
         return _getWeekCount(startDay, focusedDay);
+      case CalendarFormat.day:
+        //The start day is equal to the focused day - as there is only one day presented
+        return 0;
     }
   }
 

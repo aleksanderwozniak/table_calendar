@@ -229,6 +229,7 @@ class TableCalendar<T> extends StatefulWidget {
       CalendarFormat.month: 'Month',
       CalendarFormat.twoWeeks: '2 weeks',
       CalendarFormat.week: 'Week',
+      CalendarFormat.day: 'Day',
     },
     this.headerVisible = true,
     this.daysOfWeekVisible = true,
@@ -519,6 +520,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
+              if (widget.calendarFormat == CalendarFormat.day) {
+                _onDayTapped(_focusedDay.value);
+              }
             },
             weekNumbersVisible: widget.weekNumbersVisible,
             weekNumberBuilder: (BuildContext context, DateTime day) {

@@ -758,7 +758,7 @@ void main() {
 
       await tester.drag(find.byType(CellContent).first, const Offset(0, -500));
       await tester.pumpAndSettle();
-      expect(calendarFormat, CalendarFormat.week);
+      expect(calendarFormat, CalendarFormat.day);
 
       await tester.drag(find.byType(CellContent).first, const Offset(0, 500));
       await tester.pumpAndSettle();
