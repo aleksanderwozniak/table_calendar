@@ -298,6 +298,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     super.initState();
     _focusedDay = ValueNotifier(widget.focusedDay);
     _rangeSelectionMode = widget.rangeSelectionMode;
+
+    if (_isRangeSelectionOn && widget.onRangeSelected != null) {
+      if (widget.rangeStartDay != null && widget.rangeEndDay == null) {
+        _firstSelectedDay = widget.rangeStartDay;
+      }
+    }
   }
 
   @override
