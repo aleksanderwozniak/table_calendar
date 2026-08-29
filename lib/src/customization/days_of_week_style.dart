@@ -4,6 +4,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:table_calendar/src/shared/utils.dart' show TextFormatter;
 
+typedef DaysOfWeekStyleBuilder = TextStyle? Function(
+    BuildContext context, DateTime day);
+
 /// Class containing styling for `TableCalendar`'s days of week panel.
 class DaysOfWeekStyle {
   /// Use to customize days of week panel text (e.g. with different `DateFormat`).
@@ -25,11 +28,15 @@ class DaysOfWeekStyle {
   /// Style for weekend days on the top of calendar.
   final TextStyle weekendStyle;
 
+  /// Style builder for days of week on the top of calendar.
+  final DaysOfWeekStyleBuilder? daysOfWeekStyleBuilder;
+
   /// Creates a `DaysOfWeekStyle` used by `TableCalendar` widget.
   const DaysOfWeekStyle({
     this.dowTextFormatter,
     this.decoration = const BoxDecoration(),
     this.weekdayStyle = const TextStyle(color: Color(0xFF4F4F4F)),
     this.weekendStyle = const TextStyle(color: Color(0xFF6A6A6A)),
+    this.daysOfWeekStyleBuilder,
   });
 }
