@@ -20,7 +20,7 @@ Widget setupTestWidget({
   VoidCallback? onRightChevronTap,
   VoidCallback? onHeaderTap,
   VoidCallback? onHeaderLongPress,
-  Function(CalendarFormat)? onFormatButtonTap,
+  void Function(CalendarFormat)? onFormatButtonTap,
   Map<CalendarFormat, String> availableCalendarFormats = calendarFormatMap,
 }) {
   return Directionality(

@@ -24,13 +24,14 @@ dependencies:
   flutter:
     sdk: flutter
  
-  intl: any
+  intl: ">=0.20.3 <0.21.0"
   table_calendar: 
     path: ../
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
