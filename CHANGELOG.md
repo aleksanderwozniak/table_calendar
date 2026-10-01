@@ -1,3 +1,11 @@
+## [3.3.0]
+
+* Added explicit generic type to CellContent widget
+* Changed locale field type from dynamic to String? (matching intl 0.20.3)
+* Set intl dependency bounds to ">=0.20.3 <0.21.0"
+* Updated analyzer and linter rules
+* Updated tests
+
 ## [3.2.1]
 
 * Upgraded Android and iOS build config for the example project
