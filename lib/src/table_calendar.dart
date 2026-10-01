@@ -116,6 +116,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for setting the height of `TableCalendar`'s days of week row.
   final double daysOfWeekHeight;
 
+  /// used for setting the clipBehavior of `TableCalendar`'s clipping behavior (allowing overflow of shadows)
+  final Clip clipBehavior;
+
   /// Specifies the duration of size animation that takes place whenever `calendarFormat` is changed.
   final Duration formatAnimationDuration;
 
@@ -239,6 +242,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.weekNumbersVisible = false,
     this.rowHeight = 52.0,
     this.daysOfWeekHeight = 16.0,
+    this.clipBehavior = Clip.hardEdge,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
     this.pageAnimationDuration = const Duration(milliseconds: 300),
@@ -494,6 +498,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               _pageController = pageController;
               widget.onCalendarCreated?.call(pageController);
             },
+            clipBehavior: widget.clipBehavior,
             focusedDay: _focusedDay.value,
             calendarFormat: widget.calendarFormat,
             availableGestures: widget.availableGestures,

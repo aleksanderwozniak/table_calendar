@@ -28,6 +28,7 @@ class CalendarCore extends StatelessWidget {
   final PageController? pageController;
   final ScrollPhysics? scrollPhysics;
   final void Function(int, DateTime) onPageChanged;
+  final Clip? clipBehavior;
 
   const CalendarCore({
     super.key,
@@ -53,6 +54,7 @@ class CalendarCore extends StatelessWidget {
     this.tableBorder,
     this.tablePadding,
     this.scrollPhysics,
+    required this.clipBehavior,
   }) : assert(!dowVisible || (dowHeight != null && dowBuilder != null));
 
   @override
@@ -60,6 +62,7 @@ class CalendarCore extends StatelessWidget {
     return PageView.builder(
       controller: pageController,
       physics: scrollPhysics,
+      clipBehavior: clipBehavior!,
       itemCount: _getPageCount(calendarFormat, firstDay, lastDay),
       itemBuilder: (context, index) {
         final baseDay = _getBaseDay(calendarFormat, index);
