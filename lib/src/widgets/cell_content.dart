@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/src/customization/calendar_builders.dart';
 import 'package:table_calendar/src/customization/calendar_style.dart';
 
-class CellContent extends StatelessWidget {
+class CellContent<T> extends StatelessWidget {
   final DateTime day;
   final DateTime focusedDay;
   final String? locale;
@@ -21,7 +21,7 @@ class CellContent extends StatelessWidget {
   final bool isHoliday;
   final bool isWeekend;
   final CalendarStyle calendarStyle;
-  final CalendarBuilders calendarBuilders;
+  final CalendarBuilders<T> calendarBuilders;
 
   const CellContent({
     super.key,
