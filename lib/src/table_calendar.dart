@@ -37,7 +37,7 @@ class TableCalendar<T> extends StatefulWidget {
   /// Locale to format `TableCalendar` dates with, for example: `'en_US'`.
   ///
   /// If nothing is provided, a default locale will be used.
-  final dynamic locale;
+  final String? locale;
 
   /// The start of the selected day range.
   final DateTime? rangeStartDay;

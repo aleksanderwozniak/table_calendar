@@ -10,7 +10,7 @@ import 'package:table_calendar/src/widgets/custom_icon_button.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
 
 class CalendarHeader extends StatelessWidget {
-  final dynamic locale;
+  final String? locale;
   final DateTime focusedMonth;
   final CalendarFormat calendarFormat;
   final HeaderStyle headerStyle;

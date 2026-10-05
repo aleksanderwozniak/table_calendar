@@ -1,10 +1,3 @@
-# This file configures the analyzer to use the lint rule set from `package:lint`
-
-# include: package:lint/strict.yaml # For production apps
-# include: package:lint/casual.yaml # For code samples, hackathons and other non-production code
-include: package:lint/package.yaml # Use this for packages with public API
-
-# You might want to exclude auto-generated files from dart analysis
 analyzer:
   exclude:
     - build/**
@@ -23,10 +16,11 @@ linter:
   rules:
     # Util classes are awesome!
     # avoid_classes_with_only_static_members: false
+  language:
+    strict-casts: true
+    strict-raw-types: true
 
-    # Make constructors the first thing in every class
-    # sort_constructors_first: true
+include: package:flutter_lints/flutter.yaml
 
-    # Choose wisely, but you don't have to
-    # prefer_double_quotes: true
-    # prefer_single_quotes: true
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options

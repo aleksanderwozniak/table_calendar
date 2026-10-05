@@ -15,7 +15,7 @@ typedef FocusedDayBuilder = Widget? Function(
 );
 
 /// Signature for a function returning text that can be localized and formatted with `DateFormat`.
-typedef TextFormatter = String Function(DateTime date, dynamic locale);
+typedef TextFormatter = String Function(DateTime date, String? locale);
 
 /// Gestures available for the calendar.
 enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }

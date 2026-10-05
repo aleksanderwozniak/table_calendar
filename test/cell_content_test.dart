@@ -8,9 +8,9 @@ import 'package:intl/intl.dart' hide TextDirection;
 import 'package:table_calendar/src/widgets/cell_content.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-Widget setupTestWidget(
+Widget setupTestWidget<T>(
   DateTime cellDay, {
-  CalendarBuilders calendarBuilders = const CalendarBuilders(),
+  CalendarBuilders<T> calendarBuilders = const CalendarBuilders(),
   CalendarStyle calendarStyle = const CalendarStyle(),
   bool isDisabled = false,
   bool isToday = false,
