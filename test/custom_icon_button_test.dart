@@ -1,8 +1,8 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:table_calendar/src/widgets/custom_icon_button.dart';
 
 Widget setupTestWidget(Widget child) {

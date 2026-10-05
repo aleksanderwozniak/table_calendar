@@ -1,7 +1,7 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:table_calendar/src/shared/utils.dart' show TextFormatter;
 
 /// Class containing styling and configuration of `TableCalendar`'s header.
@@ -92,8 +92,10 @@ class HeaderStyle {
     ),
     this.headerMargin = EdgeInsets.zero,
     this.headerPadding = const EdgeInsets.symmetric(vertical: 8.0),
-    this.formatButtonPadding =
-        const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+    this.formatButtonPadding = const EdgeInsets.symmetric(
+      horizontal: 10.0,
+      vertical: 4.0,
+    ),
     this.leftChevronPadding = const EdgeInsets.all(12.0),
     this.rightChevronPadding = const EdgeInsets.all(12.0),
     this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),

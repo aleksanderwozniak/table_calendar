@@ -1,9 +1,9 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:material_ui/material_ui.dart';
 import 'package:table_calendar/src/widgets/calendar_header.dart';
 import 'package:table_calendar/src/widgets/cell_content.dart';
 import 'package:table_calendar/src/widgets/custom_icon_button.dart';
@@ -48,117 +48,112 @@ ValueKey<String> cellContentKey(DateTime date) {
 
 void main() {
   group('TableCalendar correctly displays:', () {
-    testWidgets(
-      'visible day cells for given focusedDay',
-      (tester) async {
-        await tester.pumpWidget(createTableCalendar());
+    testWidgets('visible day cells for given focusedDay', (tester) async {
+      await tester.pumpWidget(createTableCalendar());
 
-        final firstVisibleDay = DateTime.utc(2021, 6, 27);
-        final lastVisibleDay = DateTime.utc(2021, 7, 31);
+      final firstVisibleDay = DateTime.utc(2021, 6, 27);
+      final lastVisibleDay = DateTime.utc(2021, 7, 31);
 
-        final focusedDayKey = cellContentKey(initialFocusedDay);
-        final firstVisibleDayKey = cellContentKey(firstVisibleDay);
-        final lastVisibleDayKey = cellContentKey(lastVisibleDay);
+      final focusedDayKey = cellContentKey(initialFocusedDay);
+      final firstVisibleDayKey = cellContentKey(firstVisibleDay);
+      final lastVisibleDayKey = cellContentKey(lastVisibleDay);
 
-        final startOOBKey =
-            cellContentKey(firstVisibleDay.subtract(const Duration(days: 1)));
-        final endOOBKey =
-            cellContentKey(lastVisibleDay.add(const Duration(days: 1)));
+      final startOOBKey = cellContentKey(
+        firstVisibleDay.subtract(const Duration(days: 1)),
+      );
+      final endOOBKey = cellContentKey(
+        lastVisibleDay.add(const Duration(days: 1)),
+      );
 
-        expect(find.byKey(focusedDayKey), findsOneWidget);
-        expect(find.byKey(firstVisibleDayKey), findsOneWidget);
-        expect(find.byKey(lastVisibleDayKey), findsOneWidget);
+      expect(find.byKey(focusedDayKey), findsOneWidget);
+      expect(find.byKey(firstVisibleDayKey), findsOneWidget);
+      expect(find.byKey(lastVisibleDayKey), findsOneWidget);
 
-        expect(find.byKey(startOOBKey), findsNothing);
-        expect(find.byKey(endOOBKey), findsNothing);
-      },
-    );
+      expect(find.byKey(startOOBKey), findsNothing);
+      expect(find.byKey(endOOBKey), findsNothing);
+    });
 
-    testWidgets(
-      'visible day cells after swipe right when in week format',
-      (tester) async {
-        DateTime? updatedFocusedDay;
+    testWidgets('visible day cells after swipe right when in week format', (
+      tester,
+    ) async {
+      DateTime? updatedFocusedDay;
 
-        await tester.pumpWidget(
-          createTableCalendar(
-            calendarFormat: CalendarFormat.week,
-            onPageChanged: (focusedDay) {
-              updatedFocusedDay = focusedDay;
-            },
-          ),
-        );
+      await tester.pumpWidget(
+        createTableCalendar(
+          calendarFormat: CalendarFormat.week,
+          onPageChanged: (focusedDay) {
+            updatedFocusedDay = focusedDay;
+          },
+        ),
+      );
 
-        await tester.drag(
-          find.byType(CellContent).first,
-          const Offset(500, 0),
-        );
-        await tester.pumpAndSettle();
+      await tester.drag(find.byType(CellContent).first, const Offset(500, 0));
+      await tester.pumpAndSettle();
 
-        expect(updatedFocusedDay, isNotNull);
+      expect(updatedFocusedDay, isNotNull);
 
-        final firstVisibleDay = DateTime.utc(2021, 7, 4);
-        final lastVisibleDay = DateTime.utc(2021, 7, 10);
+      final firstVisibleDay = DateTime.utc(2021, 7, 4);
+      final lastVisibleDay = DateTime.utc(2021, 7, 10);
 
-        final focusedDayKey = cellContentKey(updatedFocusedDay!);
-        final firstVisibleDayKey = cellContentKey(firstVisibleDay);
-        final lastVisibleDayKey = cellContentKey(lastVisibleDay);
+      final focusedDayKey = cellContentKey(updatedFocusedDay!);
+      final firstVisibleDayKey = cellContentKey(firstVisibleDay);
+      final lastVisibleDayKey = cellContentKey(lastVisibleDay);
 
-        final startOOBKey =
-            cellContentKey(firstVisibleDay.subtract(const Duration(days: 1)));
-        final endOOBKey =
-            cellContentKey(lastVisibleDay.add(const Duration(days: 1)));
+      final startOOBKey = cellContentKey(
+        firstVisibleDay.subtract(const Duration(days: 1)),
+      );
+      final endOOBKey = cellContentKey(
+        lastVisibleDay.add(const Duration(days: 1)),
+      );
 
-        expect(find.byKey(focusedDayKey), findsOneWidget);
-        expect(find.byKey(firstVisibleDayKey), findsOneWidget);
-        expect(find.byKey(lastVisibleDayKey), findsOneWidget);
+      expect(find.byKey(focusedDayKey), findsOneWidget);
+      expect(find.byKey(firstVisibleDayKey), findsOneWidget);
+      expect(find.byKey(lastVisibleDayKey), findsOneWidget);
 
-        expect(find.byKey(startOOBKey), findsNothing);
-        expect(find.byKey(endOOBKey), findsNothing);
-      },
-    );
+      expect(find.byKey(startOOBKey), findsNothing);
+      expect(find.byKey(endOOBKey), findsNothing);
+    });
 
-    testWidgets(
-      'visible day cells after swipe left when in week format',
-      (tester) async {
-        DateTime? updatedFocusedDay;
+    testWidgets('visible day cells after swipe left when in week format', (
+      tester,
+    ) async {
+      DateTime? updatedFocusedDay;
 
-        await tester.pumpWidget(
-          createTableCalendar(
-            calendarFormat: CalendarFormat.week,
-            onPageChanged: (focusedDay) {
-              updatedFocusedDay = focusedDay;
-            },
-          ),
-        );
+      await tester.pumpWidget(
+        createTableCalendar(
+          calendarFormat: CalendarFormat.week,
+          onPageChanged: (focusedDay) {
+            updatedFocusedDay = focusedDay;
+          },
+        ),
+      );
 
-        await tester.drag(
-          find.byType(CellContent).first,
-          const Offset(-500, 0),
-        );
-        await tester.pumpAndSettle();
+      await tester.drag(find.byType(CellContent).first, const Offset(-500, 0));
+      await tester.pumpAndSettle();
 
-        expect(updatedFocusedDay, isNotNull);
+      expect(updatedFocusedDay, isNotNull);
 
-        final firstVisibleDay = DateTime.utc(2021, 7, 18);
-        final lastVisibleDay = DateTime.utc(2021, 7, 24);
+      final firstVisibleDay = DateTime.utc(2021, 7, 18);
+      final lastVisibleDay = DateTime.utc(2021, 7, 24);
 
-        final focusedDayKey = cellContentKey(updatedFocusedDay!);
-        final firstVisibleDayKey = cellContentKey(firstVisibleDay);
-        final lastVisibleDayKey = cellContentKey(lastVisibleDay);
+      final focusedDayKey = cellContentKey(updatedFocusedDay!);
+      final firstVisibleDayKey = cellContentKey(firstVisibleDay);
+      final lastVisibleDayKey = cellContentKey(lastVisibleDay);
 
-        final startOOBKey =
-            cellContentKey(firstVisibleDay.subtract(const Duration(days: 1)));
-        final endOOBKey =
-            cellContentKey(lastVisibleDay.add(const Duration(days: 1)));
+      final startOOBKey = cellContentKey(
+        firstVisibleDay.subtract(const Duration(days: 1)),
+      );
+      final endOOBKey = cellContentKey(
+        lastVisibleDay.add(const Duration(days: 1)),
+      );
 
-        expect(find.byKey(focusedDayKey), findsOneWidget);
-        expect(find.byKey(firstVisibleDayKey), findsOneWidget);
-        expect(find.byKey(lastVisibleDayKey), findsOneWidget);
+      expect(find.byKey(focusedDayKey), findsOneWidget);
+      expect(find.byKey(firstVisibleDayKey), findsOneWidget);
+      expect(find.byKey(lastVisibleDayKey), findsOneWidget);
 
-        expect(find.byKey(startOOBKey), findsNothing);
-        expect(find.byKey(endOOBKey), findsNothing);
-      },
-    );
+      expect(find.byKey(startOOBKey), findsNothing);
+      expect(find.byKey(endOOBKey), findsNothing);
+    });
 
     testWidgets(
       'visible day cells after swipe right when in two weeks format',
@@ -174,10 +169,7 @@ void main() {
           ),
         );
 
-        await tester.drag(
-          find.byType(CellContent).first,
-          const Offset(500, 0),
-        );
+        await tester.drag(find.byType(CellContent).first, const Offset(500, 0));
         await tester.pumpAndSettle();
 
         expect(updatedFocusedDay, isNotNull);
@@ -189,10 +181,12 @@ void main() {
         final firstVisibleDayKey = cellContentKey(firstVisibleDay);
         final lastVisibleDayKey = cellContentKey(lastVisibleDay);
 
-        final startOOBKey =
-            cellContentKey(firstVisibleDay.subtract(const Duration(days: 1)));
-        final endOOBKey =
-            cellContentKey(lastVisibleDay.add(const Duration(days: 1)));
+        final startOOBKey = cellContentKey(
+          firstVisibleDay.subtract(const Duration(days: 1)),
+        );
+        final endOOBKey = cellContentKey(
+          lastVisibleDay.add(const Duration(days: 1)),
+        );
 
         expect(find.byKey(focusedDayKey), findsOneWidget);
         expect(find.byKey(firstVisibleDayKey), findsOneWidget);
@@ -203,96 +197,77 @@ void main() {
       },
     );
 
-    testWidgets(
-      'visible day cells after swipe left when in two weeks format',
-      (tester) async {
-        DateTime? updatedFocusedDay;
+    testWidgets('visible day cells after swipe left when in two weeks format', (
+      tester,
+    ) async {
+      DateTime? updatedFocusedDay;
 
-        await tester.pumpWidget(
-          createTableCalendar(
-            calendarFormat: CalendarFormat.twoWeeks,
-            onPageChanged: (focusedDay) {
-              updatedFocusedDay = focusedDay;
-            },
-          ),
-        );
+      await tester.pumpWidget(
+        createTableCalendar(
+          calendarFormat: CalendarFormat.twoWeeks,
+          onPageChanged: (focusedDay) {
+            updatedFocusedDay = focusedDay;
+          },
+        ),
+      );
 
-        await tester.drag(
-          find.byType(CellContent).first,
-          const Offset(-500, 0),
-        );
-        await tester.pumpAndSettle();
+      await tester.drag(find.byType(CellContent).first, const Offset(-500, 0));
+      await tester.pumpAndSettle();
 
-        expect(updatedFocusedDay, isNotNull);
+      expect(updatedFocusedDay, isNotNull);
 
-        final firstVisibleDay = DateTime.utc(2021, 7, 18);
-        final lastVisibleDay = DateTime.utc(2021, 7, 31);
+      final firstVisibleDay = DateTime.utc(2021, 7, 18);
+      final lastVisibleDay = DateTime.utc(2021, 7, 31);
 
-        final focusedDayKey = cellContentKey(updatedFocusedDay!);
-        final firstVisibleDayKey = cellContentKey(firstVisibleDay);
-        final lastVisibleDayKey = cellContentKey(lastVisibleDay);
+      final focusedDayKey = cellContentKey(updatedFocusedDay!);
+      final firstVisibleDayKey = cellContentKey(firstVisibleDay);
+      final lastVisibleDayKey = cellContentKey(lastVisibleDay);
 
-        final startOOBKey =
-            cellContentKey(firstVisibleDay.subtract(const Duration(days: 1)));
-        final endOOBKey =
-            cellContentKey(lastVisibleDay.add(const Duration(days: 1)));
+      final startOOBKey = cellContentKey(
+        firstVisibleDay.subtract(const Duration(days: 1)),
+      );
+      final endOOBKey = cellContentKey(
+        lastVisibleDay.add(const Duration(days: 1)),
+      );
 
-        expect(find.byKey(focusedDayKey), findsOneWidget);
-        expect(find.byKey(firstVisibleDayKey), findsOneWidget);
-        expect(find.byKey(lastVisibleDayKey), findsOneWidget);
+      expect(find.byKey(focusedDayKey), findsOneWidget);
+      expect(find.byKey(firstVisibleDayKey), findsOneWidget);
+      expect(find.byKey(lastVisibleDayKey), findsOneWidget);
 
-        expect(find.byKey(startOOBKey), findsNothing);
-        expect(find.byKey(endOOBKey), findsNothing);
-      },
-    );
+      expect(find.byKey(startOOBKey), findsNothing);
+      expect(find.byKey(endOOBKey), findsNothing);
+    });
 
-    testWidgets(
-      '7 day cells in week format',
-      (tester) async {
-        await tester.pumpWidget(
-          createTableCalendar(
-            calendarFormat: CalendarFormat.week,
-          ),
-        );
+    testWidgets('7 day cells in week format', (tester) async {
+      await tester.pumpWidget(
+        createTableCalendar(calendarFormat: CalendarFormat.week),
+      );
 
-        final dayCells = tester.widgetList(find.byType(CellContent));
-        expect(dayCells.length, 7);
-      },
-    );
+      final dayCells = tester.widgetList(find.byType(CellContent));
+      expect(dayCells.length, 7);
+    });
 
-    testWidgets(
-      '14 day cells in two weeks format',
-      (tester) async {
-        await tester.pumpWidget(
-          createTableCalendar(
-            calendarFormat: CalendarFormat.twoWeeks,
-          ),
-        );
+    testWidgets('14 day cells in two weeks format', (tester) async {
+      await tester.pumpWidget(
+        createTableCalendar(calendarFormat: CalendarFormat.twoWeeks),
+      );
 
-        final dayCells = tester.widgetList(find.byType(CellContent));
-        expect(dayCells.length, 14);
-      },
-    );
+      final dayCells = tester.widgetList(find.byType(CellContent));
+      expect(dayCells.length, 14);
+    });
 
-    testWidgets(
-      '35 day cells in month format for July 2021',
-      (tester) async {
-        await tester.pumpWidget(
-          createTableCalendar(),
-        );
+    testWidgets('35 day cells in month format for July 2021', (tester) async {
+      await tester.pumpWidget(createTableCalendar());
 
-        final dayCells = tester.widgetList(find.byType(CellContent));
-        expect(dayCells.length, 35);
-      },
-    );
+      final dayCells = tester.widgetList(find.byType(CellContent));
+      expect(dayCells.length, 35);
+    });
 
     testWidgets(
       '42 day cells in month format for July 2021, when sixWeekMonthsEnforced is set to true',
       (tester) async {
         await tester.pumpWidget(
-          createTableCalendar(
-            sixWeekMonthsEnforced: true,
-          ),
+          createTableCalendar(sixWeekMonthsEnforced: true),
         );
 
         final dayCells = tester.widgetList(find.byType(CellContent));
@@ -385,10 +360,7 @@ void main() {
         expect(find.byType(CalendarHeader), findsOneWidget);
         expect(find.text(headerText), findsOneWidget);
 
-        await tester.drag(
-          find.byType(CellContent).first,
-          const Offset(500, 0),
-        );
+        await tester.drag(find.byType(CellContent).first, const Offset(500, 0));
         await tester.pumpAndSettle();
 
         expect(updatedFocusedDay, isNotNull);
@@ -400,10 +372,7 @@ void main() {
 
         updatedFocusedDay = null;
 
-        await tester.drag(
-          find.byType(CellContent).first,
-          const Offset(500, 0),
-        );
+        await tester.drag(find.byType(CellContent).first, const Offset(500, 0));
         await tester.pumpAndSettle();
 
         expect(updatedFocusedDay, isNotNull);
@@ -505,106 +474,98 @@ void main() {
       },
     );
 
-    testWidgets(
-      'currentDay correctly marks given day as today',
-      (tester) async {
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-            ),
+    testWidgets('currentDay correctly marks given day as today', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
           ),
-        );
+        ),
+      );
 
-        final currentDayKey = cellContentKey(today);
-        final currentDayCellContent =
-            tester.widget(find.byKey(currentDayKey)) as CellContent;
+      final currentDayKey = cellContentKey(today);
+      final currentDayCellContent =
+          tester.widget(find.byKey(currentDayKey)) as CellContent;
 
-        expect(currentDayCellContent.isToday, true);
-      },
-    );
+      expect(currentDayCellContent.isToday, true);
+    });
 
-    testWidgets(
-      'if currentDay is absent, DateTime.now() is marked as today',
-      (tester) async {
-        final now = DateTime.now();
-        final firstDay = DateTime.utc(now.year, now.month - 3, now.day);
-        final lastDay = DateTime.utc(now.year, now.month + 3, now.day);
+    testWidgets('if currentDay is absent, DateTime.now() is marked as today', (
+      tester,
+    ) async {
+      final now = DateTime.now();
+      final firstDay = DateTime.utc(now.year, now.month - 3, now.day);
+      final lastDay = DateTime.utc(now.year, now.month + 3, now.day);
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: now,
-              firstDay: firstDay,
-              lastDay: lastDay,
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(focusedDay: now, firstDay: firstDay, lastDay: lastDay),
+        ),
+      );
+
+      final currentDayKey = cellContentKey(now);
+      final currentDayCellContent =
+          tester.widget(find.byKey(currentDayKey)) as CellContent;
+
+      expect(currentDayCellContent.isToday, true);
+    });
+
+    testWidgets('selectedDayPredicate correctly marks given day as selected', (
+      tester,
+    ) async {
+      final selectedDay = DateTime.utc(2021, 7, 20);
+
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            selectedDayPredicate: (day) {
+              return isSameDay(day, selectedDay);
+            },
           ),
-        );
+        ),
+      );
 
-        final currentDayKey = cellContentKey(now);
-        final currentDayCellContent =
-            tester.widget(find.byKey(currentDayKey)) as CellContent;
+      final selectedDayKey = cellContentKey(selectedDay);
+      final selectedDayCellContent =
+          tester.widget(find.byKey(selectedDayKey)) as CellContent;
 
-        expect(currentDayCellContent.isToday, true);
-      },
-    );
+      expect(selectedDayCellContent.isSelected, true);
+    });
 
-    testWidgets(
-      'selectedDayPredicate correctly marks given day as selected',
-      (tester) async {
-        final selectedDay = DateTime.utc(2021, 7, 20);
+    testWidgets('holidayPredicate correctly marks given day as holiday', (
+      tester,
+    ) async {
+      final holiday = DateTime.utc(2021, 7, 20);
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              selectedDayPredicate: (day) {
-                return isSameDay(day, selectedDay);
-              },
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            holidayPredicate: (day) {
+              return isSameDay(day, holiday);
+            },
           ),
-        );
+        ),
+      );
 
-        final selectedDayKey = cellContentKey(selectedDay);
-        final selectedDayCellContent =
-            tester.widget(find.byKey(selectedDayKey)) as CellContent;
+      final holidayKey = cellContentKey(holiday);
+      final holidayCellContent =
+          tester.widget(find.byKey(holidayKey)) as CellContent;
 
-        expect(selectedDayCellContent.isSelected, true);
-      },
-    );
-
-    testWidgets(
-      'holidayPredicate correctly marks given day as holiday',
-      (tester) async {
-        final holiday = DateTime.utc(2021, 7, 20);
-
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              holidayPredicate: (day) {
-                return isSameDay(day, holiday);
-              },
-            ),
-          ),
-        );
-
-        final holidayKey = cellContentKey(holiday);
-        final holidayCellContent =
-            tester.widget(find.byKey(holidayKey)) as CellContent;
-
-        expect(holidayCellContent.isHoliday, true);
-      },
-    );
+      expect(holidayCellContent.isHoliday, true);
+    });
   });
 
   group('CalendarHeader chevrons test:', () {
@@ -627,24 +588,23 @@ void main() {
       },
     );
 
-    testWidgets(
-      'tapping on a right chevron navigates to next calendar page',
-      (tester) async {
-        await tester.pumpWidget(createTableCalendar());
+    testWidgets('tapping on a right chevron navigates to next calendar page', (
+      tester,
+    ) async {
+      await tester.pumpWidget(createTableCalendar());
 
-        expect(find.text('July 2021'), findsOneWidget);
+      expect(find.text('July 2021'), findsOneWidget);
 
-        final rightChevron = find.widgetWithIcon(
-          CustomIconButton,
-          Icons.chevron_right,
-        );
+      final rightChevron = find.widgetWithIcon(
+        CustomIconButton,
+        Icons.chevron_right,
+      );
 
-        await tester.tap(rightChevron);
-        await tester.pumpAndSettle();
+      await tester.tap(rightChevron);
+      await tester.pumpAndSettle();
 
-        expect(find.text('August 2021'), findsOneWidget);
-      },
-    );
+      expect(find.text('August 2021'), findsOneWidget);
+    });
   });
 
   group('Scrolling boundaries are set up properly:', () {
@@ -767,65 +727,59 @@ void main() {
   });
 
   group('onDaySelected callback test:', () {
-    testWidgets(
-      'selects correct day when tapped',
-      (tester) async {
-        DateTime? selectedDay;
+    testWidgets('selects correct day when tapped', (tester) async {
+      DateTime? selectedDay;
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              onDaySelected: (selected, focused) {
-                selectedDay = selected;
-              },
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            onDaySelected: (selected, focused) {
+              selectedDay = selected;
+            },
           ),
-        );
+        ),
+      );
 
-        expect(selectedDay, isNull);
+      expect(selectedDay, isNull);
 
-        final tappedDay = DateTime.utc(2021, 7, 18);
-        final tappedDayKey = cellContentKey(tappedDay);
+      final tappedDay = DateTime.utc(2021, 7, 18);
+      final tappedDayKey = cellContentKey(tappedDay);
 
-        await tester.tap(find.byKey(tappedDayKey));
-        await tester.pumpAndSettle();
-        expect(selectedDay, tappedDay);
-      },
-    );
+      await tester.tap(find.byKey(tappedDayKey));
+      await tester.pumpAndSettle();
+      expect(selectedDay, tappedDay);
+    });
 
-    testWidgets(
-      'focuses correct day when tapped',
-      (tester) async {
-        DateTime? focusedDay;
+    testWidgets('focuses correct day when tapped', (tester) async {
+      DateTime? focusedDay;
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              onDaySelected: (selected, focused) {
-                focusedDay = focused;
-              },
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            onDaySelected: (selected, focused) {
+              focusedDay = focused;
+            },
           ),
-        );
+        ),
+      );
 
-        expect(focusedDay, isNull);
+      expect(focusedDay, isNull);
 
-        final tappedDay = DateTime.utc(2021, 7, 18);
-        final tappedDayKey = cellContentKey(tappedDay);
+      final tappedDay = DateTime.utc(2021, 7, 18);
+      final tappedDayKey = cellContentKey(tappedDay);
 
-        await tester.tap(find.byKey(tappedDayKey));
-        await tester.pumpAndSettle();
-        expect(focusedDay, tappedDay);
-      },
-    );
+      await tester.tap(find.byKey(tappedDayKey));
+      await tester.pumpAndSettle();
+      expect(focusedDay, tappedDay);
+    });
 
     testWidgets(
       'properly selects and focuses on outside cell tap - previous month (when in month format)',
@@ -901,65 +855,59 @@ void main() {
   });
 
   group('onDayLongPressed callback test:', () {
-    testWidgets(
-      'selects correct day when long pressed',
-      (tester) async {
-        DateTime? selectedDay;
+    testWidgets('selects correct day when long pressed', (tester) async {
+      DateTime? selectedDay;
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              onDayLongPressed: (selected, focused) {
-                selectedDay = selected;
-              },
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            onDayLongPressed: (selected, focused) {
+              selectedDay = selected;
+            },
           ),
-        );
+        ),
+      );
 
-        expect(selectedDay, isNull);
+      expect(selectedDay, isNull);
 
-        final longPressedDay = DateTime.utc(2021, 7, 18);
-        final longPressedDayKey = cellContentKey(longPressedDay);
+      final longPressedDay = DateTime.utc(2021, 7, 18);
+      final longPressedDayKey = cellContentKey(longPressedDay);
 
-        await tester.longPress(find.byKey(longPressedDayKey));
-        await tester.pumpAndSettle();
-        expect(selectedDay, longPressedDay);
-      },
-    );
+      await tester.longPress(find.byKey(longPressedDayKey));
+      await tester.pumpAndSettle();
+      expect(selectedDay, longPressedDay);
+    });
 
-    testWidgets(
-      'focuses correct day when long pressed',
-      (tester) async {
-        DateTime? focusedDay;
+    testWidgets('focuses correct day when long pressed', (tester) async {
+      DateTime? focusedDay;
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              onDayLongPressed: (selected, focused) {
-                focusedDay = focused;
-              },
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            onDayLongPressed: (selected, focused) {
+              focusedDay = focused;
+            },
           ),
-        );
+        ),
+      );
 
-        expect(focusedDay, isNull);
+      expect(focusedDay, isNull);
 
-        final longPressedDay = DateTime.utc(2021, 7, 18);
-        final longPressedDayKey = cellContentKey(longPressedDay);
+      final longPressedDay = DateTime.utc(2021, 7, 18);
+      final longPressedDayKey = cellContentKey(longPressedDay);
 
-        await tester.longPress(find.byKey(longPressedDayKey));
-        await tester.pumpAndSettle();
-        expect(focusedDay, longPressedDay);
-      },
-    );
+      await tester.longPress(find.byKey(longPressedDayKey));
+      await tester.pumpAndSettle();
+      expect(focusedDay, longPressedDay);
+    });
 
     testWidgets(
       'properly selects and focuses on outside cell long press - previous month (when in month format)',
@@ -1238,193 +1186,189 @@ void main() {
       },
     );
 
-    testWidgets(
-      'rangeSelectionMode.enforced disables onDaySelected callback',
-      (tester) async {
-        DateTime? rangeStart;
-        DateTime? rangeEnd;
-        DateTime? focusedDay;
-        DateTime? selectedDay;
+    testWidgets('rangeSelectionMode.enforced disables onDaySelected callback', (
+      tester,
+    ) async {
+      DateTime? rangeStart;
+      DateTime? rangeEnd;
+      DateTime? focusedDay;
+      DateTime? selectedDay;
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              rangeSelectionMode: RangeSelectionMode.enforced,
-              onDaySelected: (selected, focused) {
-                selectedDay = selected;
-                focusedDay = focused;
-              },
-              onRangeSelected: (start, end, focused) {
-                rangeStart = start;
-                rangeEnd = end;
-                focusedDay = focused;
-              },
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            rangeSelectionMode: RangeSelectionMode.enforced,
+            onDaySelected: (selected, focused) {
+              selectedDay = selected;
+              focusedDay = focused;
+            },
+            onRangeSelected: (start, end, focused) {
+              rangeStart = start;
+              rangeEnd = end;
+              focusedDay = focused;
+            },
           ),
-        );
+        ),
+      );
 
-        expect(rangeStart, isNull);
-        expect(rangeEnd, isNull);
-        expect(focusedDay, isNull);
-        expect(selectedDay, isNull);
+      expect(rangeStart, isNull);
+      expect(rangeEnd, isNull);
+      expect(focusedDay, isNull);
+      expect(selectedDay, isNull);
 
-        final firstTappedDay = DateTime.utc(2021, 7, 8);
-        final secondTappedDay = DateTime.utc(2021, 7, 21);
+      final firstTappedDay = DateTime.utc(2021, 7, 8);
+      final secondTappedDay = DateTime.utc(2021, 7, 21);
 
-        final firstTappedDayKey = cellContentKey(firstTappedDay);
-        final secondTappedDayKey = cellContentKey(secondTappedDay);
+      final firstTappedDayKey = cellContentKey(firstTappedDay);
+      final secondTappedDayKey = cellContentKey(secondTappedDay);
 
-        final expectedFocusedDay = secondTappedDay;
+      final expectedFocusedDay = secondTappedDay;
 
-        await tester.longPress(find.byKey(firstTappedDayKey));
-        await tester.pumpAndSettle();
+      await tester.longPress(find.byKey(firstTappedDayKey));
+      await tester.pumpAndSettle();
 
-        await tester.tap(find.byKey(firstTappedDayKey));
-        await tester.pumpAndSettle();
-        await tester.tap(find.byKey(secondTappedDayKey));
-        await tester.pumpAndSettle();
-        expect(rangeStart, firstTappedDay);
-        expect(rangeEnd, secondTappedDay);
-        expect(focusedDay, expectedFocusedDay);
-        expect(selectedDay, isNull);
-      },
-    );
+      await tester.tap(find.byKey(firstTappedDayKey));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(secondTappedDayKey));
+      await tester.pumpAndSettle();
+      expect(rangeStart, firstTappedDay);
+      expect(rangeEnd, secondTappedDay);
+      expect(focusedDay, expectedFocusedDay);
+      expect(selectedDay, isNull);
+    });
 
-    testWidgets(
-      'rangeSelectionMode.disabled enforces onDaySelected callback',
-      (tester) async {
-        DateTime? rangeStart;
-        DateTime? rangeEnd;
-        DateTime? focusedDay;
-        DateTime? selectedDay;
+    testWidgets('rangeSelectionMode.disabled enforces onDaySelected callback', (
+      tester,
+    ) async {
+      DateTime? rangeStart;
+      DateTime? rangeEnd;
+      DateTime? focusedDay;
+      DateTime? selectedDay;
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              rangeSelectionMode: RangeSelectionMode.disabled,
-              onDaySelected: (selected, focused) {
-                selectedDay = selected;
-                focusedDay = focused;
-              },
-              onRangeSelected: (start, end, focused) {
-                rangeStart = start;
-                rangeEnd = end;
-                focusedDay = focused;
-              },
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            rangeSelectionMode: RangeSelectionMode.disabled,
+            onDaySelected: (selected, focused) {
+              selectedDay = selected;
+              focusedDay = focused;
+            },
+            onRangeSelected: (start, end, focused) {
+              rangeStart = start;
+              rangeEnd = end;
+              focusedDay = focused;
+            },
           ),
-        );
+        ),
+      );
 
-        expect(rangeStart, isNull);
-        expect(rangeEnd, isNull);
-        expect(focusedDay, isNull);
-        expect(selectedDay, isNull);
+      expect(rangeStart, isNull);
+      expect(rangeEnd, isNull);
+      expect(focusedDay, isNull);
+      expect(selectedDay, isNull);
 
-        final firstTappedDay = DateTime.utc(2021, 7, 8);
-        final secondTappedDay = DateTime.utc(2021, 7, 21);
+      final firstTappedDay = DateTime.utc(2021, 7, 8);
+      final secondTappedDay = DateTime.utc(2021, 7, 21);
 
-        final firstTappedDayKey = cellContentKey(firstTappedDay);
-        final secondTappedDayKey = cellContentKey(secondTappedDay);
+      final firstTappedDayKey = cellContentKey(firstTappedDay);
+      final secondTappedDayKey = cellContentKey(secondTappedDay);
 
-        final expectedFocusedDay = secondTappedDay;
+      final expectedFocusedDay = secondTappedDay;
 
-        await tester.longPress(find.byKey(firstTappedDayKey));
-        await tester.pumpAndSettle();
+      await tester.longPress(find.byKey(firstTappedDayKey));
+      await tester.pumpAndSettle();
 
-        await tester.tap(find.byKey(firstTappedDayKey));
-        await tester.pumpAndSettle();
-        await tester.tap(find.byKey(secondTappedDayKey));
-        await tester.pumpAndSettle();
-        expect(rangeStart, isNull);
-        expect(rangeEnd, isNull);
-        expect(focusedDay, expectedFocusedDay);
-        expect(selectedDay, secondTappedDay);
-      },
-    );
+      await tester.tap(find.byKey(firstTappedDayKey));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(secondTappedDayKey));
+      await tester.pumpAndSettle();
+      expect(rangeStart, isNull);
+      expect(rangeEnd, isNull);
+      expect(focusedDay, expectedFocusedDay);
+      expect(selectedDay, secondTappedDay);
+    });
   });
 
   group('Range selection test:', () {
-    testWidgets(
-      'range selection has correct start and end point',
-      (tester) async {
-        final rangeStart = DateTime.utc(2021, 7, 8);
-        final rangeEnd = DateTime.utc(2021, 7, 21);
+    testWidgets('range selection has correct start and end point', (
+      tester,
+    ) async {
+      final rangeStart = DateTime.utc(2021, 7, 8);
+      final rangeEnd = DateTime.utc(2021, 7, 21);
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              rangeStartDay: rangeStart,
-              rangeEndDay: rangeEnd,
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            rangeStartDay: rangeStart,
+            rangeEndDay: rangeEnd,
           ),
-        );
+        ),
+      );
 
-        final rangeStartKey = cellContentKey(rangeStart);
-        final rangeStartCellContent =
-            tester.widget(find.byKey(rangeStartKey)) as CellContent;
+      final rangeStartKey = cellContentKey(rangeStart);
+      final rangeStartCellContent =
+          tester.widget(find.byKey(rangeStartKey)) as CellContent;
 
-        expect(rangeStartCellContent.isRangeStart, true);
-        expect(rangeStartCellContent.isRangeEnd, false);
-        expect(rangeStartCellContent.isWithinRange, true);
+      expect(rangeStartCellContent.isRangeStart, true);
+      expect(rangeStartCellContent.isRangeEnd, false);
+      expect(rangeStartCellContent.isWithinRange, true);
 
-        final rangeEndKey = cellContentKey(rangeEnd);
-        final rangeEndCellContent =
-            tester.widget(find.byKey(rangeEndKey)) as CellContent;
+      final rangeEndKey = cellContentKey(rangeEnd);
+      final rangeEndCellContent =
+          tester.widget(find.byKey(rangeEndKey)) as CellContent;
 
-        expect(rangeEndCellContent.isRangeStart, false);
-        expect(rangeEndCellContent.isRangeEnd, true);
-        expect(rangeEndCellContent.isWithinRange, true);
-      },
-    );
+      expect(rangeEndCellContent.isRangeStart, false);
+      expect(rangeEndCellContent.isRangeEnd, true);
+      expect(rangeEndCellContent.isWithinRange, true);
+    });
 
-    testWidgets(
-      'days within range selection are marked as inWithinRange',
-      (tester) async {
-        final rangeStart = DateTime.utc(2021, 7, 8);
-        final rangeEnd = DateTime.utc(2021, 7, 13);
+    testWidgets('days within range selection are marked as inWithinRange', (
+      tester,
+    ) async {
+      final rangeStart = DateTime.utc(2021, 7, 8);
+      final rangeEnd = DateTime.utc(2021, 7, 13);
 
-        await tester.pumpWidget(
-          setupTestWidget(
-            TableCalendar(
-              focusedDay: initialFocusedDay,
-              firstDay: firstDay,
-              lastDay: lastDay,
-              currentDay: today,
-              rangeStartDay: rangeStart,
-              rangeEndDay: rangeEnd,
-            ),
+      await tester.pumpWidget(
+        setupTestWidget(
+          TableCalendar(
+            focusedDay: initialFocusedDay,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            currentDay: today,
+            rangeStartDay: rangeStart,
+            rangeEndDay: rangeEnd,
           ),
-        );
+        ),
+      );
 
-        final dayCount = rangeEnd.difference(rangeStart).inDays - 1;
-        expect(dayCount, 4);
+      final dayCount = rangeEnd.difference(rangeStart).inDays - 1;
+      expect(dayCount, 4);
 
-        for (int i = 1; i <= dayCount; i++) {
-          final testDay = rangeStart.add(Duration(days: i));
+      for (int i = 1; i <= dayCount; i++) {
+        final testDay = rangeStart.add(Duration(days: i));
 
-          expect(testDay.isAfter(rangeStart), true);
-          expect(testDay.isBefore(rangeEnd), true);
+        expect(testDay.isAfter(rangeStart), true);
+        expect(testDay.isBefore(rangeEnd), true);
 
-          final testDayKey = cellContentKey(testDay);
-          final testDayCellContent =
-              tester.widget(find.byKey(testDayKey)) as CellContent;
+        final testDayKey = cellContentKey(testDay);
+        final testDayCellContent =
+            tester.widget(find.byKey(testDayKey)) as CellContent;
 
-          expect(testDayCellContent.isWithinRange, true);
-        }
-      },
-    );
+        expect(testDayCellContent.isWithinRange, true);
+      }
+    });
 
     testWidgets(
       'days outside range selection are not marked as inWithinRange',
