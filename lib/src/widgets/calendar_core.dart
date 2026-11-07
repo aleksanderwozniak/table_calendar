@@ -72,6 +72,9 @@ class CalendarCore extends StatelessWidget {
                 _getRowCount(calendarFormat, baseDay)
             : null;
 
+        if (calendarFormat == CalendarFormat.day) {
+          return const SizedBox();
+        }
         return CalendarPage(
           visibleDays: visibleDays,
           dowVisible: dowVisible,
@@ -132,6 +135,8 @@ class CalendarCore extends StatelessWidget {
         return _getTwoWeekCount(first, last) + 1;
       case CalendarFormat.week:
         return _getWeekCount(first, last) + 1;
+      case CalendarFormat.day:
+        return last.difference(first).inDays + 1;
     }
   }
 
@@ -177,6 +182,12 @@ class CalendarCore extends StatelessWidget {
           prevFocusedDay.month,
           prevFocusedDay.day + pageDif * 7,
         );
+      case CalendarFormat.day:
+        day = DateTime.utc(
+          prevFocusedDay.year,
+          prevFocusedDay.month,
+          prevFocusedDay.day + pageDif, // Adjust by one day per page
+        );
     }
 
     if (day.isBefore(firstDay)) {
@@ -206,6 +217,12 @@ class CalendarCore extends StatelessWidget {
           firstDay.month,
           firstDay.day + pageIndex * 7,
         );
+      case CalendarFormat.day:
+        day = DateTime.utc(
+          firstDay.year,
+          firstDay.month,
+          firstDay.day + pageIndex, // Move forward or backward by one day
+        );
     }
 
     if (day.isBefore(firstDay)) {
@@ -225,7 +242,13 @@ class CalendarCore extends StatelessWidget {
         return _daysInTwoWeeks(focusedDay);
       case CalendarFormat.week:
         return _daysInWeek(focusedDay);
+      case CalendarFormat.day:
+        return _singleDayRange(focusedDay);
     }
+  }
+
+  DateTimeRange _singleDayRange(DateTime focusedDay) {
+    return DateTimeRange(start: focusedDay, end: focusedDay);
   }
 
   DateTimeRange _daysInWeek(DateTime focusedDay) {
@@ -286,7 +309,7 @@ class CalendarCore extends StatelessWidget {
   int _getRowCount(CalendarFormat format, DateTime focusedDay) {
     if (format == CalendarFormat.twoWeeks) {
       return 2;
-    } else if (format == CalendarFormat.week) {
+    } else if (format == CalendarFormat.week || format == CalendarFormat.day) {
       return 1;
     } else if (sixWeekMonthsEnforced) {
       return 6;
