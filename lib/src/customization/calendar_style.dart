@@ -62,7 +62,7 @@ class CalendarStyle {
   final double rangeHighlightScale;
 
   /// Color of range selection highlight.
-  final Color rangeHighlightColor;
+  final BoxDecoration rangeHighlightDecoration;
 
   /// Determines if day cells that do not match the currently focused month should be visible.
   ///
@@ -178,7 +178,9 @@ class CalendarStyle {
     this.cellPadding = EdgeInsets.zero,
     this.cellAlignment = Alignment.center,
     this.markersOffset = const PositionedOffset(),
-    this.rangeHighlightColor = const Color(0xFFBBDDFF),
+    this.rangeHighlightDecoration = const BoxDecoration(
+      color: Color(0xFFBBDDFF)
+    ),
     this.markerDecoration = const BoxDecoration(
       color: Color(0xFF263238),
       shape: BoxShape.circle,
