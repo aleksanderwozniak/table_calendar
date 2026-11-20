@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:table_calendar/src/widgets/calendar_header.dart';
@@ -44,6 +45,18 @@ Widget createTableCalendar({
 
 ValueKey<String> cellContentKey(DateTime date) {
   return dateToKey(date, prefix: 'CellContent-');
+}
+
+SemanticsNode daySemantics(WidgetTester tester, DateTime day) {
+  return tester.getSemantics(find.byKey(cellContentKey(day)));
+}
+
+bool hasTap(SemanticsNode node) {
+  return node.getSemanticsData().hasAction(SemanticsAction.tap);
+}
+
+bool hasLongPress(SemanticsNode node) {
+  return node.getSemanticsData().hasAction(SemanticsAction.longPress);
 }
 
 void main() {
@@ -1458,6 +1471,281 @@ void main() {
 
         expect(oobStartCellContent.isWithinRange, false);
         expect(oobEndCellContent.isWithinRange, false);
+      },
+    );
+  });
+
+  group('Day cell semantics test:', () {
+    final day = DateTime.utc(2021, 7, 15);
+    final outsideDay = DateTime.utc(2021, 6, 30);
+
+    testWidgets(
+      'enabled day with onDaySelected is one node with its label and tap',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              onDaySelected: (selected, focused) {},
+            ),
+          ),
+        );
+
+        final node = daySemantics(tester, day);
+        expect(node.label, 'Thursday, July 15, 2021');
+        expect(node.childrenCount, 0);
+        expect(hasTap(node), isTrue);
+        expect(hasLongPress(node), isFalse);
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'onDayLongPressed alone gives long press and no tap',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              onDayLongPressed: (selected, focused) {},
+            ),
+          ),
+        );
+
+        final node = daySemantics(tester, day);
+        expect(hasTap(node), isFalse);
+        expect(hasLongPress(node), isTrue);
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'day without any effective callback has neither tap nor long press',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(createTableCalendar());
+
+        final node = daySemantics(tester, day);
+        expect(node.label, 'Thursday, July 15, 2021');
+        expect(hasTap(node), isFalse);
+        expect(hasLongPress(node), isFalse);
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'disabled day exposes only the disabled day actions',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              enabledDayPredicate: (date) => !isSameDay(date, day),
+              onDaySelected: (selected, focused) {},
+              onDayLongPressed: (selected, focused) {},
+              onDisabledDayTapped: (date) {},
+            ),
+          ),
+        );
+
+        final disabledNode = daySemantics(tester, day);
+        expect(hasTap(disabledNode), isTrue);
+        expect(hasLongPress(disabledNode), isFalse);
+
+        final enabledNode = daySemantics(tester, DateTime.utc(2021, 7, 16));
+        expect(hasTap(enabledNode), isTrue);
+        expect(hasLongPress(enabledNode), isTrue);
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'hidden outside days have no semantics node or action',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              headerVisible: false,
+              calendarStyle: const CalendarStyle(outsideDaysVisible: false),
+              onDaySelected: (selected, focused) {},
+              onDayLongPressed: (selected, focused) {},
+            ),
+          ),
+        );
+
+        final unlabeledActions = find.semantics.byPredicate(
+          (node) => node.label.isEmpty && (hasTap(node) || hasLongPress(node)),
+        );
+        final dayActions = find.semantics.byPredicate(
+          (node) => node.label.contains('2021') && hasTap(node),
+        );
+
+        expect(find.byKey(cellContentKey(outsideDay)), findsNothing);
+        expect(unlabeledActions, findsNothing);
+        expect(dayActions, findsExactly(31));
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'visible outside day keeps its selection and focus tap actions',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        DateTime? selectedDay;
+
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              onDaySelected: (selected, focused) => selectedDay = selected,
+            ),
+          ),
+        );
+
+        expect(hasTap(daySemantics(tester, outsideDay)), isTrue);
+        tester.semantics
+            .tap(find.semantics.byLabel('Wednesday, June 30, 2021'));
+        expect(selectedDay, outsideDay);
+
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              pageJumpingEnabled: true,
+            ),
+          ),
+        );
+
+        expect(hasTap(daySemantics(tester, outsideDay)), isTrue);
+        expect(find.text('July 2021'), findsOneWidget);
+
+        tester.semantics
+            .tap(find.semantics.byLabel('Wednesday, June 30, 2021'));
+        await tester.pumpAndSettle();
+        expect(find.text('June 2021'), findsOneWidget);
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'toggledOff range mode with only onRangeSelected offers tap after a long press',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        DateTime? rangeStart;
+        DateTime? rangeEnd;
+
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              rangeSelectionMode: RangeSelectionMode.toggledOff,
+              onRangeSelected: (start, end, focused) {
+                rangeStart = start;
+                rangeEnd = end;
+              },
+            ),
+          ),
+        );
+
+        final rangeEndDay = DateTime.utc(2021, 7, 21);
+
+        expect(hasTap(daySemantics(tester, day)), isFalse);
+        expect(hasLongPress(daySemantics(tester, day)), isTrue);
+
+        await tester.longPress(find.byKey(cellContentKey(day)));
+        await tester.pump();
+
+        expect(rangeStart, day);
+        expect(hasTap(daySemantics(tester, rangeEndDay)), isTrue);
+
+        await tester.tap(find.byKey(cellContentKey(rangeEndDay)));
+        await tester.pump();
+
+        expect(rangeStart, day);
+        expect(rangeEnd, rangeEndDay);
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'enabledDayPredicate is called once per visible day cell build',
+      (tester) async {
+        final calls = <DateTime, int>{};
+
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              enabledDayPredicate: (date) {
+                calls[date] = (calls[date] ?? 0) + 1;
+                return true;
+              },
+            ),
+          ),
+        );
+
+        expect(calls.length, 35);
+        expect(calls.values.every((count) => count == 1), isTrue);
+      },
+    );
+
+    testWidgets(
+      'physical tap still updates focus when the day has no tap semantics',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          setupTestWidget(
+            TableCalendar(
+              focusedDay: initialFocusedDay,
+              firstDay: firstDay,
+              lastDay: lastDay,
+              currentDay: today,
+              calendarBuilders: CalendarBuilders(
+                headerTitleBuilder: (context, focused) =>
+                    Text('Focused ${focused.day}'),
+              ),
+            ),
+          ),
+        );
+
+        final tappedDay = DateTime.utc(2021, 7, 20);
+        expect(hasTap(daySemantics(tester, tappedDay)), isFalse);
+        expect(find.text('Focused 15'), findsOneWidget);
+
+        await tester.tap(find.byKey(cellContentKey(tappedDay)));
+        await tester.pump();
+
+        expect(find.text('Focused 20'), findsOneWidget);
+        handle.dispose();
       },
     );
   });

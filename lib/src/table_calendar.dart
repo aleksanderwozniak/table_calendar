@@ -435,11 +435,13 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   void _toggleRangeSelection() {
-    if (_rangeSelectionMode == RangeSelectionMode.toggledOn) {
-      _rangeSelectionMode = RangeSelectionMode.toggledOff;
-    } else {
-      _rangeSelectionMode = RangeSelectionMode.toggledOn;
-    }
+    setState(() {
+      if (_rangeSelectionMode == RangeSelectionMode.toggledOn) {
+        _rangeSelectionMode = RangeSelectionMode.toggledOff;
+      } else {
+        _rangeSelectionMode = RangeSelectionMode.toggledOn;
+      }
+    });
   }
 
   void _onLeftChevronTap() {
@@ -564,11 +566,41 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               return dowCell;
             },
             dayBuilder: (context, day, focusedMonth) {
-              return GestureDetector(
-                behavior: widget.dayHitTestBehavior,
-                onTap: () => _onDayTapped(day),
-                onLongPress: () => _onDayLongPressed(day),
-                child: _buildCell(day, focusedMonth),
+              final isOutside = day.month != focusedMonth.month;
+
+              if (isOutside && _shouldBlockOutsideDays) {
+                return Container();
+              }
+
+              final isDisabled = _isDayDisabled(day);
+
+              // Only expose semantic actions that reach a callback, so screen
+              // readers do not announce actions that do nothing. Pointer
+              // gestures stay unconditional, as they also update focus.
+              final canTap = isDisabled
+                  ? widget.onDisabledDayTapped != null
+                  : widget.onDaySelected != null ||
+                      (widget.onRangeSelected != null && _isRangeSelectionOn) ||
+                      widget.pageJumpingEnabled;
+              final canLongPress = isDisabled
+                  ? widget.onDisabledDayLongPressed != null
+                  : widget.onDayLongPressed != null ||
+                      (widget.onRangeSelected != null &&
+                          _isRangeSelectionToggleable);
+
+              return MergeSemantics(
+                child: Semantics(
+                  onTap: canTap ? () => _onDayTapped(day) : null,
+                  onLongPress:
+                      canLongPress ? () => _onDayLongPressed(day) : null,
+                  child: GestureDetector(
+                    excludeFromSemantics: true,
+                    behavior: widget.dayHitTestBehavior,
+                    onTap: () => _onDayTapped(day),
+                    onLongPress: () => _onDayLongPressed(day),
+                    child: _buildCell(day, focusedMonth, isOutside, isDisabled),
+                  ),
+                ),
               );
             },
           ),
@@ -577,13 +609,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     );
   }
 
-  Widget _buildCell(DateTime day, DateTime focusedDay) {
-    final isOutside = day.month != focusedDay.month;
-
-    if (isOutside && _shouldBlockOutsideDays) {
-      return Container();
-    }
-
+  Widget _buildCell(
+    DateTime day,
+    DateTime focusedDay,
+    bool isOutside,
+    bool isDisabled,
+  ) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final shorterSide = constraints.maxHeight > constraints.maxWidth
@@ -624,7 +655,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         }
 
         final isToday = isSameDay(day, widget.currentDay);
-        final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
         final content = CellContent(
