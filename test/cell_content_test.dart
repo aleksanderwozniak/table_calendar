@@ -387,4 +387,114 @@ void main() {
       expect(dayFinder, findsOneWidget);
     });
   });
+
+  group('Semantics test:', () {
+    const fullDateLabel = 'Thursday, July 15, 2021';
+    final cellDay = DateTime.utc(2021, 7, 15);
+
+    String cellLabel(WidgetTester tester) {
+      return tester.getSemantics(find.byType(CellContent<dynamic>)).label;
+    }
+
+    testWidgets('default cell keeps the full date label', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(setupTestWidget(cellDay));
+
+      expect(cellLabel(tester), fullDateLabel);
+      handle.dispose();
+    });
+
+    testWidgets(
+      'prioritizedBuilder keeps the full date label when semanticLabelBuilder is null',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          setupTestWidget(
+            cellDay,
+            calendarBuilders: CalendarBuilders(
+              prioritizedBuilder: (context, day, focusedDay) => Semantics(
+                label: 'Custom label',
+                child: Text('${day.day}'),
+              ),
+            ),
+          ),
+        );
+
+        expect(cellLabel(tester), fullDateLabel);
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'semanticLabelBuilder string replaces the full date label',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          setupTestWidget(
+            cellDay,
+            calendarBuilders: CalendarBuilders(
+              prioritizedBuilder: (context, day, focusedDay) => Semantics(
+                label: 'Custom label',
+                child: Text('${day.day}'),
+              ),
+              semanticLabelBuilder: (context, day, focusedDay) =>
+                  'July ${day.day}, 2 doses',
+            ),
+          ),
+        );
+
+        expect(cellLabel(tester), 'July 15, 2 doses');
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'semanticLabelBuilder null keeps the semantics of the built cell',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          setupTestWidget(
+            cellDay,
+            calendarBuilders: CalendarBuilders(
+              prioritizedBuilder: (context, day, focusedDay) => Semantics(
+                label: 'Custom label',
+                child: const SizedBox(),
+              ),
+              semanticLabelBuilder: (context, day, focusedDay) => null,
+            ),
+          ),
+        );
+
+        expect(cellLabel(tester), 'Custom label');
+        handle.dispose();
+      },
+    );
+
+    testWidgets(
+      'semanticLabelBuilder applies to todayBuilder and defaultBuilder cells',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        final calendarBuilders = CalendarBuilders(
+          todayBuilder: (context, day, focusedDay) => Text('${day.day}'),
+          defaultBuilder: (context, day, focusedDay) => Text('${day.day}'),
+          semanticLabelBuilder: (context, day, focusedDay) => 'Hook ${day.day}',
+        );
+
+        await tester.pumpWidget(
+          setupTestWidget(
+            cellDay,
+            calendarBuilders: calendarBuilders,
+            isToday: true,
+          ),
+        );
+        expect(cellLabel(tester), 'Hook 15');
+
+        await tester.pumpWidget(
+          setupTestWidget(cellDay, calendarBuilders: calendarBuilders),
+        );
+        expect(cellLabel(tester), 'Hook 15');
+        handle.dispose();
+      },
+    );
+  });
 }

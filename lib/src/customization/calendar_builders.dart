@@ -31,6 +31,13 @@ typedef HighlightBuilder = Widget? Function(
   bool isWithinRange,
 );
 
+/// Signature for a function that returns the screen reader label for a given `day` cell.
+typedef SemanticLabelBuilder = String? Function(
+  BuildContext context,
+  DateTime day,
+  DateTime focusedDay,
+);
+
 /// Class containing all custom builders for `TableCalendar`.
 class CalendarBuilders<T> {
   /// Custom builder for day cells, with a priority over any other builder.
@@ -91,6 +98,22 @@ class CalendarBuilders<T> {
   final Widget? Function(BuildContext context, int weekNumber)?
       weekNumberBuilder;
 
+  /// Custom screen reader label for day cells.
+  ///
+  /// By default, each day cell is announced with its localized full date
+  /// (e.g. "Thursday, July 15, 2021") and the semantics of the built cell are
+  /// excluded. This applies to every day builder, including `prioritizedBuilder`.
+  ///
+  /// If this returns a `String`, that string is used as the label instead, and
+  /// the semantics of the built cell are still excluded.
+  /// If this returns `null`, the built cell keeps its own semantics.
+  ///
+  /// Each day cell is a single screen reader node that also holds its tap and
+  /// long press actions. Labels and semantic actions from the cell's
+  /// descendants, including custom cells and event markers, are merged into
+  /// that node, so their actions may conflict with the day's own actions.
+  final SemanticLabelBuilder? semanticLabelBuilder;
+
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({
     this.prioritizedBuilder,
@@ -109,5 +132,6 @@ class CalendarBuilders<T> {
     this.dowBuilder,
     this.headerTitleBuilder,
     this.weekNumberBuilder,
+    this.semanticLabelBuilder,
   });
 }
