@@ -1,3 +1,5 @@
+include: package:flutter_lints/flutter.yaml
+
 analyzer:
   exclude:
     - build/**
@@ -9,18 +11,20 @@ analyzer:
     - linux/**
     #- '**.freezed.dart'
     #- '**.g.dart'
-
-# You can customize the lint rules set to your own liking. A list of all rules
-# can be found at https://dart-lang.github.io/linter/lints/options/options.html
-linter:
-  rules:
-    # Util classes are awesome!
-    # avoid_classes_with_only_static_members: false
   language:
     strict-casts: true
     strict-raw-types: true
 
-include: package:flutter_lints/flutter.yaml
+# You can customize the lint rules set to your own liking. A list of all rules
+# can be found at https://dart.dev/tools/linter-rules
+linter:
+  rules:
+    # Util classes are awesome!
+    # avoid_classes_with_only_static_members: false
+
+formatter:
+  page_width: 120
+  trailing_commas: preserve
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
