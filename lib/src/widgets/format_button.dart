@@ -36,8 +36,7 @@ class FormatButton extends StatelessWidget {
 
     final platform = Theme.of(context).platform;
 
-    return !kIsWeb &&
-            (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS)
+    return !kIsWeb && (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS)
         ? CupertinoButton(
             onPressed: () => onTap(_nextFormat()),
             padding: EdgeInsets.zero,
@@ -52,9 +51,8 @@ class FormatButton extends StatelessWidget {
           );
   }
 
-  String get _formatButtonText => showsNextFormat
-      ? availableCalendarFormats[_nextFormat()]!
-      : availableCalendarFormats[calendarFormat]!;
+  String get _formatButtonText =>
+      showsNextFormat ? availableCalendarFormats[_nextFormat()]! : availableCalendarFormats[calendarFormat]!;
 
   CalendarFormat _nextFormat() {
     final formats = availableCalendarFormats.keys.toList();

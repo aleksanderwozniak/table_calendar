@@ -489,8 +489,7 @@ void main() {
       );
 
       final currentDayKey = cellContentKey(today);
-      final currentDayCellContent =
-          tester.widget(find.byKey(currentDayKey)) as CellContent;
+      final currentDayCellContent = tester.widget(find.byKey(currentDayKey)) as CellContent;
 
       expect(currentDayCellContent.isToday, true);
     });
@@ -509,8 +508,7 @@ void main() {
       );
 
       final currentDayKey = cellContentKey(now);
-      final currentDayCellContent =
-          tester.widget(find.byKey(currentDayKey)) as CellContent;
+      final currentDayCellContent = tester.widget(find.byKey(currentDayKey)) as CellContent;
 
       expect(currentDayCellContent.isToday, true);
     });
@@ -535,8 +533,7 @@ void main() {
       );
 
       final selectedDayKey = cellContentKey(selectedDay);
-      final selectedDayCellContent =
-          tester.widget(find.byKey(selectedDayKey)) as CellContent;
+      final selectedDayCellContent = tester.widget(find.byKey(selectedDayKey)) as CellContent;
 
       expect(selectedDayCellContent.isSelected, true);
     });
@@ -561,8 +558,7 @@ void main() {
       );
 
       final holidayKey = cellContentKey(holiday);
-      final holidayCellContent =
-          tester.widget(find.byKey(holidayKey)) as CellContent;
+      final holidayCellContent = tester.widget(find.byKey(holidayKey)) as CellContent;
 
       expect(holidayCellContent.isHoliday, true);
     });
@@ -1318,16 +1314,14 @@ void main() {
       );
 
       final rangeStartKey = cellContentKey(rangeStart);
-      final rangeStartCellContent =
-          tester.widget(find.byKey(rangeStartKey)) as CellContent;
+      final rangeStartCellContent = tester.widget(find.byKey(rangeStartKey)) as CellContent;
 
       expect(rangeStartCellContent.isRangeStart, true);
       expect(rangeStartCellContent.isRangeEnd, false);
       expect(rangeStartCellContent.isWithinRange, true);
 
       final rangeEndKey = cellContentKey(rangeEnd);
-      final rangeEndCellContent =
-          tester.widget(find.byKey(rangeEndKey)) as CellContent;
+      final rangeEndCellContent = tester.widget(find.byKey(rangeEndKey)) as CellContent;
 
       expect(rangeEndCellContent.isRangeStart, false);
       expect(rangeEndCellContent.isRangeEnd, true);
@@ -1363,8 +1357,7 @@ void main() {
         expect(testDay.isBefore(rangeEnd), true);
 
         final testDayKey = cellContentKey(testDay);
-        final testDayCellContent =
-            tester.widget(find.byKey(testDayKey)) as CellContent;
+        final testDayCellContent = tester.widget(find.byKey(testDayKey)) as CellContent;
 
         expect(testDayCellContent.isWithinRange, true);
       }
@@ -1393,12 +1386,10 @@ void main() {
         final oobEnd = rangeEnd.add(const Duration(days: 1));
 
         final oobStartKey = cellContentKey(oobStart);
-        final oobStartCellContent =
-            tester.widget(find.byKey(oobStartKey)) as CellContent;
+        final oobStartCellContent = tester.widget(find.byKey(oobStartKey)) as CellContent;
 
         final oobEndKey = cellContentKey(oobEnd);
-        final oobEndCellContent =
-            tester.widget(find.byKey(oobEndKey)) as CellContent;
+        final oobEndCellContent = tester.widget(find.byKey(oobEndKey)) as CellContent;
 
         expect(oobStartCellContent.isWithinRange, false);
         expect(oobEndCellContent.isWithinRange, false);

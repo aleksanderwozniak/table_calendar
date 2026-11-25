@@ -62,8 +62,7 @@ class CellContent<T> extends StatelessWidget {
       );
     }
 
-    final text =
-        calendarStyle.dayTextFormatter?.call(day, locale) ?? '${day.day}';
+    final text = calendarStyle.dayTextFormatter?.call(day, locale) ?? '${day.day}';
     final margin = calendarStyle.cellMargin;
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;
@@ -164,15 +163,11 @@ class CellContent<T> extends StatelessWidget {
             duration: duration,
             margin: margin,
             padding: padding,
-            decoration: isWeekend
-                ? calendarStyle.weekendDecoration
-                : calendarStyle.defaultDecoration,
+            decoration: isWeekend ? calendarStyle.weekendDecoration : calendarStyle.defaultDecoration,
             alignment: alignment,
             child: Text(
               text,
-              style: isWeekend
-                  ? calendarStyle.weekendTextStyle
-                  : calendarStyle.defaultTextStyle,
+              style: isWeekend ? calendarStyle.weekendTextStyle : calendarStyle.defaultTextStyle,
             ),
           );
     }

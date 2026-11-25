@@ -332,8 +332,7 @@ void main() {
           cellDay,
           locale: locale,
           calendarStyle: CalendarStyle(
-            dayTextFormatter: (date, locale) =>
-                DateFormat.d(locale).format(date),
+            dayTextFormatter: (date, locale) => DateFormat.d(locale).format(date),
           ),
         ),
       );
@@ -363,8 +362,7 @@ void main() {
           cellDay,
           locale: locale,
           calendarStyle: CalendarStyle(
-            dayTextFormatter: (date, locale) =>
-                DateFormat.d(locale).format(date),
+            dayTextFormatter: (date, locale) => DateFormat.d(locale).format(date),
           ),
         ),
       );

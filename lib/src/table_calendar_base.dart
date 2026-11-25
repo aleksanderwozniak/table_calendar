@@ -143,8 +143,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
       widget.availableGestures == AvailableGestures.horizontalSwipe;
 
   bool get _canScrollVertically =>
-      widget.availableGestures == AvailableGestures.all ||
-      widget.availableGestures == AvailableGestures.verticalSwipe;
+      widget.availableGestures == AvailableGestures.all || widget.availableGestures == AvailableGestures.verticalSwipe;
 
   void _updatePage({bool shouldAnimate = false}) {
     final currentIndex = _calculateFocusedPage(
@@ -159,17 +158,13 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
       widget.lastDay,
     );
 
-    if (currentIndex != _previousIndex ||
-        currentIndex == 0 ||
-        currentIndex == endIndex) {
+    if (currentIndex != _previousIndex || currentIndex == 0 || currentIndex == endIndex) {
       _pageCallbackDisabled = true;
     }
 
     if (shouldAnimate && widget.pageAnimationEnabled) {
       if ((currentIndex - _previousIndex).abs() > 1) {
-        final jumpIndex = currentIndex > _previousIndex
-            ? currentIndex - 1
-            : currentIndex + 1;
+        final jumpIndex = currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
 
         _pageController.jumpToPage(jumpIndex);
       }
@@ -200,9 +195,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
           child: ValueListenableBuilder<double>(
             valueListenable: _pageHeight,
             builder: (context, value, child) {
-              final height = constraints.hasBoundedHeight
-                  ? constraints.maxHeight
-                  : value;
+              final height = constraints.hasBoundedHeight ? constraints.maxHeight : value;
 
               return AnimatedSize(
                 duration: widget.formatAnimationDuration,
@@ -214,9 +207,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
             child: CalendarCore(
               constraints: constraints,
               pageController: _pageController,
-              scrollPhysics: _canScrollHorizontally
-                  ? const PageScrollPhysics()
-                  : const NeverScrollableScrollPhysics(),
+              scrollPhysics: _canScrollHorizontally ? const PageScrollPhysics() : const NeverScrollableScrollPhysics(),
               firstDay: widget.firstDay,
               lastDay: widget.lastDay,
               startingDayOfWeek: widget.startingDayOfWeek,
@@ -321,13 +312,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   }
 
   int _getDaysBefore(DateTime firstDay) {
-    return (firstDay.weekday + 7 - getWeekdayNumber(widget.startingDayOfWeek)) %
-        7;
+    return (firstDay.weekday + 7 - getWeekdayNumber(widget.startingDayOfWeek)) % 7;
   }
 
   int _getDaysAfter(DateTime lastDay) {
-    final invertedStartingWeekday =
-        8 - getWeekdayNumber(widget.startingDayOfWeek);
+    final invertedStartingWeekday = 8 - getWeekdayNumber(widget.startingDayOfWeek);
 
     final daysAfter = 7 - ((lastDay.weekday + invertedStartingWeekday) % 7);
     if (daysAfter == 7) {
@@ -347,9 +336,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
-    final date = month.month < 12
-        ? DateTime.utc(month.year, month.month + 1)
-        : DateTime.utc(month.year + 1);
+    final date = month.month < 12 ? DateTime.utc(month.year, month.month + 1) : DateTime.utc(month.year + 1);
     return date.subtract(const Duration(days: 1));
   }
 }

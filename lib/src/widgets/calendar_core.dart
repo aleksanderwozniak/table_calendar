@@ -68,8 +68,7 @@ class CalendarCore extends StatelessWidget {
 
         final actualDowHeight = dowVisible ? dowHeight! : 0.0;
         final constrainedRowHeight = constraints.hasBoundedHeight
-            ? (constraints.maxHeight - actualDowHeight) /
-                  _getRowCount(calendarFormat, baseDay)
+            ? (constraints.maxHeight - actualDowHeight) / _getRowCount(calendarFormat, baseDay)
             : null;
 
         return CalendarPage(
@@ -280,9 +279,7 @@ class CalendarCore extends StatelessWidget {
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
-    final date = month.month < 12
-        ? DateTime.utc(month.year, month.month + 1)
-        : DateTime.utc(month.year + 1);
+    final date = month.month < 12 ? DateTime.utc(month.year, month.month + 1) : DateTime.utc(month.year + 1);
     return date.subtract(const Duration(days: 1));
   }
 

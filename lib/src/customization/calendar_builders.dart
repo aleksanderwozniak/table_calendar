@@ -2,8 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
-import 'package:table_calendar/src/shared/utils.dart'
-    show DayBuilder, FocusedDayBuilder;
+import 'package:table_calendar/src/shared/utils.dart' show DayBuilder, FocusedDayBuilder;
 
 /// Signature for a function that creates a single event marker for a given `day`.
 /// Contains a single `event` associated with that `day`.
@@ -88,8 +87,7 @@ class CalendarBuilders<T> {
   final DayBuilder? headerTitleBuilder;
 
   /// Custom builder for number of the week labels.
-  final Widget? Function(BuildContext context, int weekNumber)?
-  weekNumberBuilder;
+  final Widget? Function(BuildContext context, int weekNumber)? weekNumberBuilder;
 
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({

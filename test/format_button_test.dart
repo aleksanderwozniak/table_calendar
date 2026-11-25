@@ -118,14 +118,17 @@ void main() {
         const headerStyle = HeaderStyle();
 
         const currentFormatIndex = 0;
-        final currentFormat =
-            calendarFormatMap.keys.elementAt(currentFormatIndex);
-        final currentFormatText =
-            calendarFormatMap.values.elementAt(currentFormatIndex);
+        final currentFormat = calendarFormatMap.keys.elementAt(
+          currentFormatIndex,
+        );
+        final currentFormatText = calendarFormatMap.values.elementAt(
+          currentFormatIndex,
+        );
 
         const nextFormatIndex = 1;
-        final nextFormatText =
-            calendarFormatMap.values.elementAt(nextFormatIndex);
+        final nextFormatText = calendarFormatMap.values.elementAt(
+          nextFormatIndex,
+        );
 
         await tester.pumpWidget(
           setupTestWidget(
@@ -155,10 +158,12 @@ void main() {
         const headerStyle = HeaderStyle(formatButtonShowsNext: false);
 
         const currentFormatIndex = 0;
-        final currentFormat =
-            calendarFormatMap.keys.elementAt(currentFormatIndex);
-        final currentFormatText =
-            calendarFormatMap.values.elementAt(currentFormatIndex);
+        final currentFormat = calendarFormatMap.keys.elementAt(
+          currentFormatIndex,
+        );
+        final currentFormatText = calendarFormatMap.values.elementAt(
+          currentFormatIndex,
+        );
 
         await tester.pumpWidget(
           setupTestWidget(

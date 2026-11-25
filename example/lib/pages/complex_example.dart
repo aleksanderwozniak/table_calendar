@@ -46,8 +46,7 @@ class _TableComplexExampleState extends State<TableComplexExample> {
     super.dispose();
   }
 
-  bool get canClearSelection =>
-      _selectedDays.isNotEmpty || _rangeStart != null || _rangeEnd != null;
+  bool get canClearSelection => _selectedDays.isNotEmpty || _rangeStart != null || _rangeEnd != null;
 
   List<Event> _getEventsForDay(DateTime day) {
     return kEvents[day] ?? [];
