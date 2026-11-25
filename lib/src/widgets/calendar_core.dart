@@ -1,7 +1,7 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:table_calendar/src/shared/utils.dart';
 import 'package:table_calendar/src/widgets/calendar_page.dart';
 
@@ -69,7 +69,7 @@ class CalendarCore extends StatelessWidget {
         final actualDowHeight = dowVisible ? dowHeight! : 0.0;
         final constrainedRowHeight = constraints.hasBoundedHeight
             ? (constraints.maxHeight - actualDowHeight) /
-                _getRowCount(calendarFormat, baseDay)
+                  _getRowCount(calendarFormat, baseDay)
             : null;
 
         return CalendarPage(
@@ -91,8 +91,11 @@ class CalendarCore extends StatelessWidget {
             if (previousFocusedDay == null || previousIndex == null) {
               baseDay = _getBaseDay(calendarFormat, index);
             } else {
-              baseDay =
-                  _getFocusedDay(calendarFormat, previousFocusedDay, index);
+              baseDay = _getFocusedDay(
+                calendarFormat,
+                previousFocusedDay,
+                index,
+              );
             }
 
             return SizedBox(

@@ -89,7 +89,7 @@ class CalendarBuilders<T> {
 
   /// Custom builder for number of the week labels.
   final Widget? Function(BuildContext context, int weekNumber)?
-      weekNumberBuilder;
+  weekNumberBuilder;
 
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({

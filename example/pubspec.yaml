@@ -24,8 +24,9 @@ dependencies:
   flutter:
     sdk: flutter
  
+  material_ui: ^1.11.1
   intl: ">=0.20.3 <0.21.0"
-  table_calendar: 
+  table_calendar:
     path: ../
 
 dev_dependencies:

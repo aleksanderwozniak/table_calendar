@@ -4,12 +4,14 @@ version: 3.3.0
 homepage: https://github.com/aleksanderwozniak/table_calendar
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.13.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
+  material_ui: ^1.11.1
+  cupertino_ui: ^1.1.7
   intl: ">=0.20.3 <0.21.0"
   simple_gesture_detector: ^0.2.0
 

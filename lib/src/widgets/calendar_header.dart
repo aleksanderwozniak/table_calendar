@@ -39,7 +39,8 @@ class CalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
+    final text =
+        headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
         DateFormat.yMMMM(locale).format(focusedMonth);
 
     return Container(
@@ -56,7 +57,8 @@ class CalendarHeader extends StatelessWidget {
               padding: headerStyle.leftChevronPadding,
             ),
           Expanded(
-            child: headerTitleBuilder?.call(context, focusedMonth) ??
+            child:
+                headerTitleBuilder?.call(context, focusedMonth) ??
                 GestureDetector(
                   onTap: onHeaderTap,
                   onLongPress: onHeaderLongPress,

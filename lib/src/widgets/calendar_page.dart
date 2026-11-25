@@ -29,8 +29,8 @@ class CalendarPage extends StatelessWidget {
     this.dowVisible = true,
     this.weekNumberVisible = false,
     this.dowHeight,
-  })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
-        assert(!weekNumberVisible || weekNumberBuilder != null);
+  }) : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
+       assert(!weekNumberVisible || weekNumberBuilder != null);
 
   @override
   Widget build(BuildContext context) {
