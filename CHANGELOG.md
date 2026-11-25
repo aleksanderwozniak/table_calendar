@@ -1,3 +1,9 @@
+## [4.0.0-dev.1]
+
+* Migrated to standalone material_ui / cupertino_ui packages
+* Updated formatter rules
+* Requires Flutter: ">=3.47.0" and Dart: ">=3.13.0 <4.0.0"
+  
 ## [3.3.0]
 
 * Added explicit generic type to CellContent widget
