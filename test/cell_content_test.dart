@@ -333,7 +333,7 @@ void main() {
           locale: locale,
           calendarStyle: CalendarStyle(
             dayTextFormatter: (date, locale) =>
-                DateFormat.d(locale as String?).format(date),
+                DateFormat.d(locale).format(date),
           ),
         ),
       );
@@ -364,7 +364,7 @@ void main() {
           locale: locale,
           calendarStyle: CalendarStyle(
             dayTextFormatter: (date, locale) =>
-                DateFormat.d(locale as String?).format(date),
+                DateFormat.d(locale).format(date),
           ),
         ),
       );

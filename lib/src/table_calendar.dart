@@ -551,7 +551,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                       day,
                       widget.locale,
                     ) ??
-                    DateFormat.E(widget.locale as String?).format(day);
+                    DateFormat.E(widget.locale).format(day);
 
                 final isWeekend = _isWeekend(
                   day,

@@ -44,8 +44,8 @@ class CellContent<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dowLabel = DateFormat.EEEE(locale as String?).format(day);
-    final dayLabel = DateFormat.yMMMMd(locale as String?).format(day);
+    final dowLabel = DateFormat.EEEE(locale).format(day);
+    final dayLabel = DateFormat.yMMMMd(locale).format(day);
     final semanticsLabel = '$dowLabel, $dayLabel';
 
     Widget? cell = calendarBuilders.prioritizedBuilder?.call(
