@@ -15,6 +15,9 @@
 *.iws
 .idea/
 
+# VSCode related
+.vscode/settings.json
+
 # Flutter/Dart/Pub related
 **/doc/api/
 .dart_tool/
